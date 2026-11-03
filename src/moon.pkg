@@ -1,2 +1,2 @@
-// What this package implements, and a first-hand link to the specification it
-// implements. A package without that link is not finished.
+// The module root. It re-exports the types of the packages beside it and holds no
+// implementation of its own; the package layout is in docs/design/interface.md.
