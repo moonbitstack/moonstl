@@ -850,7 +850,6 @@ there.
 4. **`phf` is in the first implementation round**, with a moonast generator over
    `PhfBuilder`. If the generator turns out not to be available, the runtime
    `PhfBuilder::build` path is still specified, so the package ships either way.
-
 5. **`Rope`, `RopeView` and `RopeBuilder` move to `text`.** The brief put the rope in
    `seq`; it moves because it is the one type there that is not parameterised over an
    element — `String` chunks, `Char` indices, line arithmetic — and because `text`
