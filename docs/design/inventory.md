@@ -593,10 +593,10 @@ one row, with the method names spelled out.
 | ego-tree | `Tree` (`new`, `with_capacity`, `append`, `insert_after`, `insert_before`, `prepend`, `detach`, `remove`, `node`, `node_mut`, `root`, `get`, `get_mut`, `contains`, `len`, `is_empty`, `sort_by`, `sort_by_key`, `clear`) | arena tree addressed by node id | O(1) link, O(k) subtree ops | MIT OR Apache-2.0 | tree: `ArenaTree` |
 | ego-tree | `NodeId`, `Node`, `NodeMut`, `Cursor`, `Edge` (`Parent`, `PreviousSibling`, `NextSibling`, `FirstChild`, `LastChild`) | node handles and navigation | O(1) step | MIT OR Apache-2.0 | tree: `TreeId`, `ArenaTree::node`, `ArenaTree::children` |
 | ego-tree | `Ancestors`, `Children`, `Descendants`, `Predecessors`, `Siblings`, `Traverse`, `TraverseMut` | iteration in tree order | O(1)* step, O(n) traversal | MIT OR Apache-2.0 | tree: `ArenaTree::ancestors`, `descendants`, `siblings`, `preorder` |
-| ropey | `Rope` (`new`, `from_str`, `len_chars`, `len_bytes`, `len_lines`, `char`, `byte`, `line`, `slice`, `insert`, `insert_char`, `remove`, `append`, `append_char`, `write_to`, `to_string`, `chunk_at_byte`, `chunk_at_char`, `byte_to_char`, `char_to_byte`, `byte_to_line`, `line_to_byte`, `edit`, `split_off`, `clone`) | text rope over chunked strings | O(log n) edit, O(log n + k) slice | MIT | seq: `Rope` |
-| ropey | `RopeSlice` (`len_chars`, `len_bytes`, `char`, `slice`, `chars`, `bytes`, `lines`, `chunks`, `chunks_at_char`, `as_str`, `to_string`, `line_of_char`, `char_to_line`) | borrowed window into a rope | O(1) create | MIT | seq: `RopeView` |
-| ropey | `RopeBuilder` (`new`, `append`, `append_char`, `finish`) | incremental rope construction | O(n) | MIT | seq: `RopeBuilder` |
-| ropey | `Chars`, `Bytes`, `Lines`, `LinesWithEnding`, `Chunks`, `CharIndices`, `CharsAt` | rope iterators | O(1)* step | MIT | seq: `Rope::chars`, `bytes`, `lines`, `chunks` |
+| ropey | `Rope` (`new`, `from_str`, `len_chars`, `len_bytes`, `len_lines`, `char`, `byte`, `line`, `slice`, `insert`, `insert_char`, `remove`, `append`, `append_char`, `write_to`, `to_string`, `chunk_at_byte`, `chunk_at_char`, `byte_to_char`, `char_to_byte`, `byte_to_line`, `line_to_byte`, `edit`, `split_off`, `clone`) | text rope over chunked strings | O(log n) edit, O(log n + k) slice | MIT | text: `Rope` |
+| ropey | `RopeSlice` (`len_chars`, `len_bytes`, `char`, `slice`, `chars`, `bytes`, `lines`, `chunks`, `chunks_at_char`, `as_str`, `to_string`, `line_of_char`, `char_to_line`) | borrowed window into a rope | O(1) create | MIT | text: `RopeView` |
+| ropey | `RopeBuilder` (`new`, `append`, `append_char`, `finish`) | incremental rope construction | O(n) | MIT | text: `RopeBuilder` |
+| ropey | `Chars`, `Bytes`, `Lines`, `LinesWithEnding`, `Chunks`, `CharIndices`, `CharsAt` | rope iterators | O(1)* step | MIT | text: `Rope::chars`, `bytes`, `lines`, `chunks` |
 
 ### Small crates named by the task
 
@@ -685,12 +685,12 @@ that was read from its published documentation rather than its source.
 |:--|--:|
 | MoonBit core already has it | 80 |
 | `algo` | 69 |
-| `seq` | 28 |
+| `seq` | 24 |
 | `map` | 23 |
 | `heap` | 14 |
 | `phf` | 11 |
 | `sketch` | 8 |
-| `text` | 7 |
+| `text` | 11 |
 | `cache` | 7 |
 | `tree` | 8 |
 | `moongraph` | 25 |
@@ -851,14 +851,12 @@ there.
    `PhfBuilder`. If the generator turns out not to be available, the runtime
    `PhfBuilder::build` path is still specified, so the package ships either way.
 
-## Still open
-
-**Where `Rope` lives.** The brief puts it in `seq` and this list follows the brief.
-A rope is a text buffer in every reference — `ropey` and the editors behind it — and
-our `Rope` is not parameterised over its chunk type, so it is the only type in `seq`
-that is not generic over an element. Moving it to `text` would make `seq` uniform
-("containers over any element") and let `text` algorithms take a `RopeView` without
-depending on `seq`. Against: `GapBuffer` is the same kind of buffer in the same
-package, and it *is* generic, so moving one and not the other breaks the symmetry the
-brief had. The discussion is in the review thread; the table follows whichever way it
-lands, and the change is a package name in the interface draft.
+5. **`Rope`, `RopeView` and `RopeBuilder` move to `text`.** The brief put the rope in
+   `seq`; it moves because it is the one type there that is not parameterised over an
+   element — `String` chunks, `Char` indices, line arithmetic — and because `text`
+   holds the matchers that want to read one. With the rope in `text`, a matcher can
+   take a `RopeView` without `text` depending on `seq`; with it in `seq` that edge
+   would appear the first time anyone searched a document in place. `GapBuffer[T]`
+   stays in `seq`: it is generic, and being useful to an editor is not the same as
+   being about text. The counts move with it — `seq` 28 → 24, `text` 7 → 11 — and the
+   root package re-exports the three types from `text`.

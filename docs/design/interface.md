@@ -5,14 +5,21 @@ signatures are MoonBit syntax and are meant to be read, not compiled — there i
 implementation behind them yet. The judgment to make here is about shape: which types,
 which methods, which parameters, and what each one costs.
 
-The layering in the task brief is kept as written. Two alternatives were considered and
-rejected:
+The layering in the task brief is kept, with one exception taken at review: `Rope`,
+`RopeView` and `RopeBuilder` live in `text`, not in `seq`. The rule behind the move is
+that a type belongs to the package of the domain it is specific to. A rope's chunks are
+`String`s, its indices are `Char` positions, and a third of its surface (`lines`,
+`byte_to_line`, `line_of_char`) only makes sense for text; it is also the only type in
+the brief's `seq` table that carries no element parameter, so `seq` becomes uniform
+("containers over any `T`") once it leaves. The move also removes a dependency edge
+before it exists: `Kmp`, `AhoCorasick` and `SuffixArray` take `StringView` today, and
+with `RopeView` in the same package they can accept a rope window without `text`
+reaching into `seq`, which is what would have happened had the rope stayed. `GapBuffer`
+stays in `seq` — it is `GapBuffer[T]`, generic over the element, and a text editor's use
+of it is one caller among others.
 
-- **Move `GapBuffer` and `Rope` into `text`.** They are text buffers in every reference
-  that ships one. They stay in `seq` because both are indexed sequences with the same
-  method vocabulary as `RingBuffer` (`length`, `get`, `at`, `set`, `insert`, `remove`),
-  and `text` is about searching and comparing text, not storing it. `Rope` keeps a
-  `String`-specific surface anyway.
+Two other alternatives were considered and rejected:
+
 - **Merge `map` and `tree`.** `tree` holds structures whose identity is a shape
   (segments, intervals, prefixes, nodes), while `map` holds associative containers with
   one ordering. Merging them would put `SegmentTree` next to `FlatMap` for no gain, and
@@ -119,8 +126,10 @@ read-only view type (`RopeView`, `FlatMap`'s key and value views). Core's `Deque
 
 ## `seq`
 
-Sequence containers: a fixed-capacity ring, two address-by-handle stores, a gap
-buffer and a rope, the bit containers, a sparse set, and a doubly linked list.
+Sequence containers, every one of them parameterised over the element type: a
+fixed-capacity ring, two address-by-handle stores, a gap buffer, the bit containers, a
+sparse set, and a doubly linked list. Text storage is in `text`, because a rope is not
+generic over its contents.
 
 | Type | Backing structure | Invariant |
 |:--|:--|:--|
@@ -130,7 +139,6 @@ buffer and a rope, the bit containers, a sparse set, and a doubly linked list.
 | `DenseSlotMap[T]` | slot map plus a dense order array | iteration follows insertion order; removal swaps the last element in |
 | `SecondaryMap[T]` | value array indexed by slot | holds values for keys owned by a `SlotMap`; does not create or free slots |
 | `GapBuffer[T]` | array with a hole | text before the hole, text after it; moving the hole is the only O(n) operation |
-| `Rope` | balanced tree of `String` chunks | `len_chars`, `len_bytes` and `len_lines` agree with the concatenation |
 | `BitVec` | `Array[UInt64]` plus bit length | bit `i` lives in word `i / 64` at bit `i % 64` |
 | `BitSet` | `Array[UInt64]` | the highest set bit determines the word count |
 | `SparseSet[T]` | dense array plus sparse index | membership is O(1) and iteration is dense |
@@ -216,28 +224,6 @@ no value.
 | `LinkedList::append` / `split_off` | `append(LinkedList[T]) -> Unit`, `split_off(Int32) -> LinkedList[T]` | O(1) |
 | `LinkedList::insert_at` / `remove_at` | `insert_at(Int32, T) -> Unit`, `remove_at(Int32) -> T?` | O(n) |
 | `LinkedList::iter` / `rev_iter` / `to_array` / `length` / `is_empty` / `clear` | as core | O(n) |
-
-### `Rope`, `RopeView`, `RopeBuilder`
-
-| Method | Signature | Cost |
-|:--|:--|:--|
-| `Rope::new` | `fn Rope::new() -> Rope` | O(1) |
-| `Rope::from_str` | `fn Rope::from_str(StringView) -> Rope` | O(n) |
-| `Rope::slice` | `fn Rope::slice(Rope, start~ : Int32, end~ : Int32) -> RopeView` | O(log n) |
-| `Rope::insert` | `fn Rope::insert(Rope, char_index : Int32, StringView) -> Unit` | O(log n) |
-| `Rope::insert_char` | `fn Rope::insert_char(Rope, char_index : Int32, Char) -> Unit` | O(log n) |
-| `Rope::remove` | `fn Rope::remove(Rope, start~ : Int32, end~ : Int32) -> Unit` | O(log n + k) |
-| `Rope::append` | `fn Rope::append(Rope, StringView) -> Unit` | O(log n) |
-| `Rope::edit` | `fn Rope::edit(Rope, start~ : Int32, end~ : Int32, StringView) -> Unit` | O(log n + k) |
-| `Rope::char_at` / `byte_at` | `-> Char?` / `-> Byte?` | O(log n) |
-| `Rope::len_chars` / `len_bytes` / `len_lines` | `-> Int32` | O(1) |
-| `Rope::char_to_byte` / `byte_to_char` / `byte_to_line` / `line_to_byte` | `-> Int32` | O(log n) |
-| `Rope::line_of_char` | `fn Rope::line_of_char(Rope, Int32) -> (Int32, Int32)` | O(log n) |
-| `Rope::chars` / `bytes` / `lines` / `chunks` | `Iter[Char]`, `Iter[Byte]`, `Iter[StringView]`, `Iter[StringView]` | O(1)* step |
-| `Rope::to_string` / `write_to` | `-> String` / `StringBuilder` append | O(n) |
-| `Rope::split_off` / `copy` / `clear` | as the reference | O(log n) / O(n) |
-| `RopeView::slice` / `to_string` / `chars` / `lines` / `len_chars` / `len_bytes` | as the reference | O(1) create |
-| `RopeBuilder::new` / `append` / `append_char` / `finish` | `finish() -> Rope` | O(n) |
 
 ### `BitVec`, `BitSet`, `SparseSet[T]`
 
@@ -704,6 +690,7 @@ its reference implementation use.
 | `SuffixArray` | every occurrence of a pattern | O(n log n) | O(m log n) |
 | `SuffixAutomaton` | substring queries, longest common substring | O(n) | O(m) |
 | `SequenceMatcher` | what changed between two runs | O(n·m) worst | per block |
+| `Rope`, `RopeView` | text a matcher can read without flattening it | O(n) | O(log n) index and edit |
 
 | Method | Signature | Cost |
 |:--|:--|:--|
@@ -755,6 +742,33 @@ pub(all) struct Match {
 an element that appears in more than 1% of the sequence is treated as junk. Turning it
 off gives the textbook diff, which is slower on repetitive input and usually looks
 better.
+
+### Text storage: `Rope`, `RopeView`, `RopeBuilder`
+
+The matchers above read a `StringView`. A document that changes between reads is kept in
+a rope and handed over as a `RopeView`, which is why the storage types sit here: the two
+are used together, and neither is generic over its contents. `Rope` is what `seq` was
+not: a sequence whose chunk type and indices are fixed by the text domain.
+
+| Method | Signature | Cost |
+|:--|:--|:--|
+| `Rope::new` | `fn Rope::new() -> Rope` | O(1) |
+| `Rope::from_str` | `fn Rope::from_str(StringView) -> Rope` | O(n) |
+| `Rope::slice` | `fn Rope::slice(Rope, start~ : Int32, end~ : Int32) -> RopeView` | O(log n) |
+| `Rope::insert` | `fn Rope::insert(Rope, char_index : Int32, StringView) -> Unit` | O(log n) |
+| `Rope::insert_char` | `fn Rope::insert_char(Rope, char_index : Int32, Char) -> Unit` | O(log n) |
+| `Rope::remove` | `fn Rope::remove(Rope, start~ : Int32, end~ : Int32) -> Unit` | O(log n + k) |
+| `Rope::append` | `fn Rope::append(Rope, StringView) -> Unit` | O(log n) |
+| `Rope::edit` | `fn Rope::edit(Rope, start~ : Int32, end~ : Int32, StringView) -> Unit` | O(log n + k) |
+| `Rope::char_at` / `byte_at` | `-> Char?` / `-> Byte?` | O(log n) |
+| `Rope::len_chars` / `len_bytes` / `len_lines` | `-> Int32` | O(1) |
+| `Rope::char_to_byte` / `byte_to_char` / `byte_to_line` / `line_to_byte` | `-> Int32` | O(log n) |
+| `Rope::line_of_char` | `fn Rope::line_of_char(Rope, Int32) -> (Int32, Int32)` | O(log n) |
+| `Rope::chars` / `bytes` / `lines` / `chunks` | `Iter[Char]`, `Iter[Byte]`, `Iter[StringView]`, `Iter[StringView]` | O(1)* step |
+| `Rope::to_string` / `write_to` | `-> String` / `StringBuilder` append | O(n) |
+| `Rope::split_off` / `copy` / `clear` | as the reference | O(log n) / O(n) |
+| `RopeView::slice` / `to_string` / `chars` / `lines` / `len_chars` / `len_bytes` | as the reference | O(1) create |
+| `RopeBuilder::new` / `append` / `append_char` / `finish` | `finish() -> Rope` | O(n) |
 
 ## `phf`
 
@@ -963,13 +977,13 @@ what `itertools::permutations` does; without it, all n! arrangements.
 The root package only re-exports; it carries no implementation.
 
 ```mbt
-pub using @seq {type RingBuffer, type SlotMap, type SlotKey, type Slab, type GapBuffer, type Rope, type BitVec, type BitSet, type SparseSet, type LinkedList}
+pub using @seq {type RingBuffer, type SlotMap, type SlotKey, type Slab, type GapBuffer, type BitVec, type BitSet, type SparseSet, type LinkedList}
 pub using @map {type IndexMap, type IndexSet, type MultiMap, type MultiSet, type SortedMultiMap, type SortedMultiSet, type BiMap, type Counter, type DefaultMap, type ChainMap, type FlatMap, type FlatSet, type RangeMap, type RangeSet, type Trie, type RadixTree}
 pub using @heap {type DaryHeap, type IndexHeap, type PairingHeap, type FibonacciHeap, type MinMaxHeap, type RadixHeap}
 pub using @tree {type DisjointSet, type DisjointSetMap, type SegmentTree, type Fenwick, type IntervalTree, type OrderStatisticTree, type SkipList, type Treap, type ArenaTree, type TreeId}
 pub using @cache {type LruCache, type LfuCache, type ArcCache, type ExpiringCache}
 pub using @sketch {type BloomFilter, type CuckooFilter, type CountMinSketch, type HyperLogLog, type ThetaSketch, type TDigest}
-pub using @text {type Kmp, type BoyerMoore, type AhoCorasick, type SuffixArray, type SuffixAutomaton, type SequenceMatcher}
+pub using @text {type Kmp, type BoyerMoore, type AhoCorasick, type SuffixArray, type SuffixAutomaton, type SequenceMatcher, type Rope, type RopeView, type RopeBuilder}
 pub using @phf {type PhfMap, type PhfSet, type PhfBuilder}
 ```
 
@@ -987,8 +1001,6 @@ core's iterator methods.
 - **The exact JSON shape of the containers.** The convention is decided (a map becomes
   a JSON object only with string keys, otherwise an array of pairs); the field names are
   not. They belong in the implementation, where `moon test` can check them.
-- **`Rope`'s package.** It is in `seq` here because the brief puts it there; whether a
-  text-only buffer belongs in `text` is still open, and under discussion.
 - **The default capacity of the containers that take one optionally.** Zero means "grow
   from nothing", which is what the tables say; if a first implementation round shows
   that most callers pass a capacity anyway, the preset changes in one place.

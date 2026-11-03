@@ -17,14 +17,14 @@ The interface is drafted and under review. No implementation has landed yet.
 
 | Package | Carries |
 |:--|:--|
-| `seq` | `RingBuffer`, `Slab`, `SlotMap`, `DenseSlotMap`, `SecondaryMap`, `GapBuffer`, `Rope`, `BitVec`, `BitSet`, `SparseSet`, `LinkedList` |
+| `seq` | `RingBuffer`, `Slab`, `SlotMap`, `DenseSlotMap`, `SecondaryMap`, `GapBuffer`, `BitVec`, `BitSet`, `SparseSet`, `LinkedList` |
 | `map` | `IndexMap`, `IndexSet`, `MultiMap`, `SortedMultiMap`, `BiMap`, `Counter`, `DefaultMap`, `ChainMap`, `FlatMap`, `FlatSet`, `RangeMap`, `RangeSet`, `Trie`, `RadixTree` |
 | `heap` | `DaryHeap`, `IndexHeap`, `PairingHeap`, `FibonacciHeap`, `MinMaxHeap`, `RadixHeap` |
 | `tree` | `DisjointSet`, `SegmentTree`, `Fenwick`, `IntervalTree`, `OrderStatisticTree`, `SkipList`, `Treap`, `ArenaTree` |
 | `cache` | `LruCache`, `LfuCache`, `ArcCache`, `ExpiringCache` |
 | `sketch` | `BloomFilter`, `CuckooFilter`, `CountMinSketch`, `HyperLogLog`, `ThetaSketch`, `TDigest` |
 | `algo` | searching, ordering, partitioning, merging, and lazy combinatorics over `ArrayView` and `Iter` |
-| `text` | `Kmp`, `BoyerMoore`, `AhoCorasick`, `SuffixArray`, `SuffixAutomaton`, `SequenceMatcher` |
+| `text` | `Rope`, `RopeView`, `Kmp`, `BoyerMoore`, `AhoCorasick`, `SuffixArray`, `SuffixAutomaton`, `SequenceMatcher` |
 | `phf` | `PhfMap`, `PhfSet`, `PhfBuilder` — tables whose hash is computed once for a fixed key set |
 
 The root package re-exports the types, so naming one costs a single import. It carries
