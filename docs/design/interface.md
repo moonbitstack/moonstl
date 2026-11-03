@@ -34,9 +34,14 @@ MoonBit style (`appendleft` → `push_front`, `swap_remove` stays `swap_remove`)
 element does, `Show` and `Debug`, and `Default` when a default instance makes sense.
 `ToJson` and `FromJson` are implemented where the element is convertible and the
 container has an unambiguous JSON shape (a map becomes an object only when the key is
-a string; otherwise an array of pairs). Ordered containers require `T : Compare` and
-also offer a `_by` constructor taking `(T, T) -> Int32`. Hashed containers require
-`K : Hash + Eq` and take a `hash_seed`.
+a string; otherwise an array of pairs). Hashed containers require `K : Hash + Eq` and
+take a `hash_seed`.
+
+Ordered containers require `T : Compare`, and every one of them also has a
+`new_by(cmp~ : (T, T) -> Int32)` constructor plus `_by` forms of the methods that
+compare, so a caller with an ordering the trait cannot express (a case-insensitive
+key, a descending priority) does not have to wrap the element. Those forms are stated
+once here and not repeated in every table below.
 
 **The hash seed.** Hashed containers take `hash_seed~ : Int32 = hash_seed_default`,
 where `pub let hash_seed_default : Int32 = 0`. Zero keeps iteration order and any
@@ -956,7 +961,7 @@ core's iterator methods.
 Four passes, in this order:
 
 1. **Types and packages.** Is anything in the wrong package, or missing entirely? The
-   inventory's "What the union adds up to" table is the checklist: 167 rows have to
+   inventory's "What the union adds up to" table is the checklist: 175 rows have to
    land somewhere in these packages.
 2. **Constructors and knobs.** Every `raise Refused` and every preset. A policy number
    without a stated source is a bug in this document.

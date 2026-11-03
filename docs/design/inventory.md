@@ -105,7 +105,7 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 |:--|:--|:--|:--|:--|:--|
 | C++ | `all_of`, `any_of`, `none_of` | predicate over a run | O(n) | GPL-3.0+exception | core: `Iter::all`, `Iter::any` |
 | C++ | `for_each`, `for_each_n` | visit every element | O(n) | GPL-3.0+exception | core: `Array::each`, `Iter::each` |
-| C++ | `count`, `count_if` | count matches | O(n) | GPL-3.0+exception | core: `Array::count`; algo: `count_if` |
+| C++ | `count`, `count_if` | count matches (also algo: `count_if`) | O(n) | GPL-3.0+exception | core: `Array::count` |
 | C++ | `mismatch` | first differing position | O(n) | GPL-3.0+exception | algo: `mismatch` |
 | C++ | `find`, `find_if`, `find_if_not`, `find_last`, `find_last_if`, `find_last_if_not` | linear search | O(n) | GPL-3.0+exception | algo: `find_*` |
 | C++ | `find_end`, `find_first_of`, `adjacent_find` | subsequence and neighbour search | O(n·m) | GPL-3.0+exception | algo: `find_*` |
@@ -128,12 +128,12 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 | C++ | `partial_sort`, `partial_sort_copy` | sort the first k | O(n log k) | GPL-3.0+exception | algo: `partial_sort_in_place` |
 | C++ | `nth_element` | k-th element in place | O(n) expected | GPL-3.0+exception | algo: `nth_element_in_place` |
 | C++ | `is_sorted`, `is_sorted_until` | order check | O(n) | GPL-3.0+exception | algo: `is_sorted`, `is_sorted_until` |
-| C++ | `lower_bound`, `upper_bound`, `equal_range`, `binary_search` | binary search on a sorted run | O(log n) | GPL-3.0+exception | algo: `bisect_left`, `bisect_right`, `equal_range`; core: `Array::binary_search` |
+| C++ | `lower_bound`, `upper_bound`, `equal_range`, `binary_search` | binary search on a sorted run (also core: `Array::binary_search`) | O(log n) | GPL-3.0+exception | algo: `bisect_left`, `bisect_right`, `equal_range` |
 | C++ | `merge`, `inplace_merge` | merge sorted runs | O(n+m) | GPL-3.0+exception | algo: `merge`, `merge_in_place` |
 | C++ | `includes`, `set_difference`, `set_intersection`, `set_symmetric_difference`, `set_union` | sorted set algebra | O(n+m) | GPL-3.0+exception | algo: `set_*` over sorted views |
-| C++ | `make_heap`, `push_heap`, `pop_heap`, `sort_heap`, `is_heap`, `is_heap_until` | heap over a run | O(log n), O(n) make_heap | GPL-3.0+exception | core: `PriorityQueue`; heap: `d_ary` over a run |
-| C++ | `min`, `max`, `minmax`, `clamp` | extrema of values | O(1) | GPL-3.0+exception | core: `@cmp.minimum`, `@cmp.maximum`, `@cmp.minmax`; algo: `clamp` |
-| C++ | `min_element`, `max_element`, `minmax_element` | extrema of a run | O(n) | GPL-3.0+exception | core: `Array::iter` fold; algo: `min_max_element` |
+| C++ | `make_heap`, `push_heap`, `pop_heap`, `sort_heap`, `is_heap`, `is_heap_until` | heap over a run (the d-ary form lives in `heap`) | O(log n), O(n) make_heap | GPL-3.0+exception | core: `PriorityQueue` |
+| C++ | `min`, `max`, `minmax`, `clamp` | extrema of values (also algo: `clamp`) | O(1) | GPL-3.0+exception | core: `@cmp.minimum`, `@cmp.maximum`, `@cmp.minmax` |
+| C++ | `min_element`, `max_element`, `minmax_element` | extrema of a run (also algo: `min_max_element`) | O(n) | GPL-3.0+exception | core: `Array::iter` fold |
 | C++ | `equal`, `lexicographical_compare`, `lexicographical_compare_three_way` | run comparison | O(n) | GPL-3.0+exception | algo: `equal`, `lexicographical_compare` |
 | C++ | `next_permutation`, `prev_permutation` | next or previous arrangement | O(n) | GPL-3.0+exception | algo: `next_permutation_in_place`, `prev_permutation_in_place` |
 | C++ | `ranges::*` (C++20) | the same algorithms over ranges | as above | GPL-3.0+exception | drop: `ArrayView` plus the plain functions already accept a run; a ranges layer would duplicate every signature |
@@ -147,7 +147,7 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 | C++ | `accumulate`, `reduce`, `fold_left`, `fold_right` | fold a run | O(n) | GPL-3.0+exception | core: `Array::fold`, `Iter::fold` |
 | C++ | `inner_product` | dot product | O(n) | GPL-3.0+exception | moonmath |
 | C++ | `adjacent_difference` | differences of neighbours | O(n) | GPL-3.0+exception | algo: `adjacent_difference` |
-| C++ | `partial_sum`, `inclusive_scan`, `exclusive_scan` | prefix sums | O(n) | GPL-3.0+exception | tree: `Fenwick` for repeated queries; algo: `prefix_sum` |
+| C++ | `partial_sum`, `inclusive_scan`, `exclusive_scan` | prefix sums (also algo: `prefix_sum`) | O(n) | GPL-3.0+exception | tree: `Fenwick` for repeated queries |
 | C++ | `transform_reduce`, `transform_inclusive_scan`, `transform_exclusive_scan` | fold with a mapping | O(n) | GPL-3.0+exception | algo: `map_reduce` |
 | C++ | `gcd`, `lcm` | integer arithmetic | O(log min) | GPL-3.0+exception | moonmath |
 | C++ | `midpoint` | overflow-safe middle | O(1) | GPL-3.0+exception | moonmath |
@@ -172,7 +172,7 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 | Boost.Container | `adaptive_pool`, `node_allocator`, `scoped_allocator_adaptor`, `pmr::*`, `allocator_traits`, `uses_allocator` | allocation plumbing | — | BSL-1.0 | drop: allocation is the runtime's |
 | Boost.Container | `container::pmr::monotonic_buffer_resource` | arena allocation | O(1)* | BSL-1.0 | drop: same reason |
 | Boost.Container | `hub` (`hub_options`) | shared structure for copying containers cheaply | copy O(1) on first copy | BSL-1.0 | drop: no copy-on-write containers in this library; `core immut` covers cheap sharing |
-| Boost.Container | `erase_if`, `container::copy`, `container::equal` | helpers over containers | O(n) | BSL-1.0 | core: `retain`; algo: `equal` |
+| Boost.Container | `erase_if`, `container::copy`, `container::equal` | helpers over containers (also algo: `equal`) | O(n) | BSL-1.0 | core: `retain` |
 | Boost.Container | `segmented_iterator` | iterator over segmented storage | O(1) | BSL-1.0 | drop: iterator machinery, not a container |
 | Boost.Container | `scoped_allocator_adaptor` | propagate allocators to elements | — | BSL-1.0 | drop: allocation is the runtime's |
 
@@ -197,7 +197,7 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 | Boost.Heap | `skew_heap` | self-adjusting meldable heap | O(log n)* meld | BSL-1.0 | drop: same asymptotics as the pairing heap with a simpler implementation to get wrong; one meldable heap without handles is enough |
 | Boost.Heap | `mutable_` (interface of `d_ary_heap`, `pairing_heap`, `fibonacci_heap`) | handle-based key update and erase | O(log n), O(1)* decrease-key | BSL-1.0 | heap: `IndexHeap`, `PairingHeap`, `FibonacciHeap` (`insert` returns a handle) |
 | Boost.Heap | `heap_merge`, `heap_algorithms` (`heap_merge`, `heap_union`, `heap_contains`, `heap_is_permutation`, `heap_is_heap`, `heap_erase_and_update`) | merge and inspect heaps | O(n) | BSL-1.0 | heap: methods on the meldable heaps |
-| Boost.Heap | `compare`, `stability`, `arity`, `allocator`, `mutable` policies | heap tuning | — | BSL-1.0 | heap: `DaryHeap` arity parameter; the rest have no MoonBit counterpart |
+| Boost.Heap | `compare`, `stability`, `arity`, `allocator`, `mutable` policies | heap tuning (of the policy knobs, only arity has a counterpart here) | — | BSL-1.0 | heap: `DaryHeap` arity parameter |
 
 ### Boost.Bimap
 
@@ -235,20 +235,20 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 
 | Ref | Name | What it does | Cost | Licence | Home |
 |:--|:--|:--|:--|:--|:--|
-| Boost.Unordered | `unordered_map`, `unordered_set`, `unordered_multimap`, `unordered_multiset` | hashed containers | O(1)* | BSL-1.0 | core: `HashMap`, `HashSet`; map: `MultiMap`, `MultiSet` |
+| Boost.Unordered | `unordered_map`, `unordered_set`, `unordered_multimap`, `unordered_multiset` | hashed containers (also map: `MultiMap`, `MultiSet`) | O(1)* | BSL-1.0 | core: `HashMap`, `HashSet` |
 | Boost.Unordered | `unordered_flat_map`, `unordered_flat_set`, `unordered_node_map`, `unordered_node_set`, `unordered_map` (flat default) | open-addressing and node-based variants | O(1)* | BSL-1.0 | drop: core's `HashMap` is already an open-addressing table; a second table with the same interface would only add a tuning surface |
 | Boost.Unordered | `concurrent_flat_map`, `concurrent_flat_set`, `concurrent_node_map`, `concurrent_node_set` | containers safe across threads | O(1)* | BSL-1.0 | drop: no shared-memory threads |
 | Boost.Unordered | `dense_map`, `dense_set` (Boost 1.81) | index table plus dense value array | O(1)* | BSL-1.0 | drop: same reason as the flat variants |
 | Boost.Unordered | `hash_traits`, `hash_is_avalanching`, `is_transparent`, `heterogeneous lookup` (`find`, `contains`, `erase` with a different key type) | hashing policy and heterogeneous lookup | O(1)* | BSL-1.0 | drop: `Hash + Eq` on one key type only; heterogeneous lookup would need a second trait on core's `Hash` |
-| Boost.Unordered | `bucket_count`, `load_factor`, `rehash`, `reserve` | table control | O(n) | BSL-1.0 | core: `HashMap::capacity`; `reserve_capacity` on this library's tables |
+| Boost.Unordered | `bucket_count`, `load_factor`, `rehash`, `reserve` | table control (also `reserve_capacity` on this library's tables) | O(n) | BSL-1.0 | core: `HashMap::capacity` |
 
 ### Boost.Algorithm
 
 | Ref | Name | What it does | Cost | Licence | Home |
 |:--|:--|:--|:--|:--|:--|
-| Boost.Algorithm | `all_of`, `any_of`, `none_of`, `one_of` | predicate over a run | O(n) | BSL-1.0 | core: `Iter::all`, `Iter::any`; algo: `one_of` |
+| Boost.Algorithm | `all_of`, `any_of`, `none_of`, `one_of` | predicate over a run (also algo: `one_of`) | O(n) | BSL-1.0 | core: `Iter::all`, `Iter::any` |
 | Boost.Algorithm | `clamp`, `is_clamped` | bound a value | O(1) | BSL-1.0 | algo: `clamp`, `is_clamped` |
-| Boost.Algorithm | `copy_if`, `copy_until`, `copy_n`, `copy_while` | conditional copy | O(n) | BSL-1.0 | core: `Array::blit_to`; algo: `copy_if` |
+| Boost.Algorithm | `copy_if`, `copy_until`, `copy_n`, `copy_while` | conditional copy (also algo: `copy_if`) | O(n) | BSL-1.0 | core: `Array::blit_to` |
 | Boost.Algorithm | `find_not`, `find_backward`, `find_if_not` | search from the ends | O(n) | BSL-1.0 | algo: `find_*` |
 | Boost.Algorithm | `gather` | move matching elements into one place | O(n) | BSL-1.0 | algo: `gather_in_place` |
 | Boost.Algorithm | `hex`, `unhex` | hex encode and decode a run | O(n) | BSL-1.0 | drop: belongs with the encoding library, and that library has it |
@@ -268,9 +268,9 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 
 | Ref | Name | What it does | Cost | Licence | Home |
 |:--|:--|:--|:--|:--|:--|
-| EASTL | `vector`, `deque`, `list`, `slist`, `map`, `multimap`, `set`, `multiset`, `basic_string`, `span`, `array`, `bitset`, `bitvector` | the std containers without exceptions | as std | BSD-3-Clause | core: `Array`, `Deque`, `List`, `SortedMap`, `SortedSet`, `String`, `ArrayView`, `FixedArray`; seq: `BitVec`, `BitSet`; map: `SortedMultiMap`, `SortedMultiSet` |
-| EASTL | `hash_map`, `hash_set`, `hash_multimap`, `hash_multiset` | hashed containers | O(1)* | BSD-3-Clause | core: `HashMap`, `HashSet`; map: `MultiMap`, `MultiSet` |
-| EASTL | `fixed_vector`, `fixed_list`, `fixed_slist`, `fixed_map`, `fixed_multimap`, `fixed_set`, `fixed_multiset`, `fixed_hash_map`, `fixed_hash_set`, `fixed_hash_multimap`, `fixed_hash_multiset`, `fixed_string`, `fixed_substring` | containers with a compile-time capacity | O(1) push | BSD-3-Clause | seq: `RingBuffer` with `overflow = refuse` for the sequence ones; drop for the rest: a fixed capacity is a constructor argument here, not a type |
+| EASTL | `vector`, `deque`, `list`, `slist`, `map`, `multimap`, `set`, `multiset`, `basic_string`, `span`, `array`, `bitset`, `bitvector` | the std containers without exceptions (also seq: `BitVec`, `BitSet`; map: `SortedMultiMap`, `SortedMultiSet`) | as std | BSD-3-Clause | core: `Array`, `Deque`, `List`, `SortedMap`, `SortedSet`, `String`, `ArrayView`, `FixedArray` |
+| EASTL | `hash_map`, `hash_set`, `hash_multimap`, `hash_multiset` | hashed containers (also map: `MultiMap`, `MultiSet`) | O(1)* | BSD-3-Clause | core: `HashMap`, `HashSet` |
+| EASTL | `fixed_vector`, `fixed_list`, `fixed_slist`, `fixed_map`, `fixed_multimap`, `fixed_set`, `fixed_multiset`, `fixed_hash_map`, `fixed_hash_set`, `fixed_hash_multimap`, `fixed_hash_multiset`, `fixed_string`, `fixed_substring` | containers with a compile-time capacity (also drop for the rest: a fixed capacity is a constructor argument here, not a type) | O(1) push | BSD-3-Clause | seq: `RingBuffer` with `overflow = refuse` for the sequence ones |
 | EASTL | `vector_map`, `vector_multimap`, `vector_set`, `vector_multiset` | sorted contiguous containers | O(log n) lookup | BSD-3-Clause | map: `FlatMap`, `FlatMultiMap`, `FlatSet`, `FlatMultiSet` |
 | EASTL | `segmented_vector` | vector over segments | O(1) index | BSD-3-Clause | drop: like `segtor`; stable addresses are not a problem here |
 | EASTL | `intrusive_list`, `intrusive_slist`, `intrusive_hash_map`, `intrusive_hash_set`, `intrusive_ptr`, `linked_ptr`, `safe_ptr`, `scoped_ptr`, `shared_ptr`, `unique_ptr`, `weak_ptr`, `scoped_array`, `shared_array`, `linked_array` | smart pointers and intrusive containers | — | BSD-3-Clause | drop: garbage collected; intrusive containers need layout control |
@@ -291,9 +291,9 @@ parameter here, as with EASTL.
 
 | Ref | Name | What it does | Cost | Licence | Home |
 |:--|:--|:--|:--|:--|:--|
-| ETL | `vector`, `deque`, `list`, `forward_list`, `array`, `basic_string`, `string_view`, `span`, `bitset` | the std containers with a capacity bound | as std | MIT | core: `Array`, `Deque`, `List`, `String`, `StringView`, `ArrayView`, `FixedArray`; seq: `BitSet` |
-| ETL | `map`, `multimap`, `set`, `multiset`, `flat_map`, `flat_multimap`, `flat_set`, `flat_multiset` | ordered containers | O(log n) | MIT | core: `SortedMap`, `SortedSet`; map: `SortedMultiMap`, `SortedMultiSet`, `FlatMap`, `FlatSet` |
-| ETL | `unordered_map`, `unordered_multimap`, `unordered_set`, `unordered_multiset`, `unordered_map` bucket storage | hashed containers | O(1)* | MIT | core: `HashMap`, `HashSet`; map: `MultiMap`, `MultiSet` |
+| ETL | `vector`, `deque`, `list`, `forward_list`, `array`, `basic_string`, `string_view`, `span`, `bitset` | the std containers with a capacity bound (also seq: `BitSet`) | as std | MIT | core: `Array`, `Deque`, `List`, `String`, `StringView`, `ArrayView`, `FixedArray` |
+| ETL | `map`, `multimap`, `set`, `multiset`, `flat_map`, `flat_multimap`, `flat_set`, `flat_multiset` | ordered containers (also map: `SortedMultiMap`, `SortedMultiSet`, `FlatMap`, `FlatSet`) | O(log n) | MIT | core: `SortedMap`, `SortedSet` |
+| ETL | `unordered_map`, `unordered_multimap`, `unordered_set`, `unordered_multiset`, `unordered_map` bucket storage | hashed containers (also map: `MultiMap`, `MultiSet`) | O(1)* | MIT | core: `HashMap`, `HashSet` |
 | ETL | `circular_buffer` | fixed-capacity ring buffer | O(1) | MIT | seq: `RingBuffer` |
 | ETL | `priority_queue`, `queue`, `stack` | adaptors with a capacity | O(log n), O(1), O(1) | MIT | core: `PriorityQueue`, `Queue`, `Array` |
 | ETL | `intrusive_list`, `intrusive_links`, `intrusive_queue`, `intrusive_stack` | intrusive containers | O(1) | MIT | drop: intrusive needs layout control |
@@ -305,7 +305,7 @@ parameter here, as with EASTL.
 | ETL | `bit_stream`, `byte_stream`, `endianness` | bit-level I/O | O(1) | MIT | drop: belongs to a wire-format library |
 | ETL | `error_handler`, `exception`, `assert` | error plumbing | — | MIT | core: `Error`, `abort` |
 | ETL | `container` (`etl::container`) helpers: `assign`, `insert`, `erase`, `push`, `pop` | generic element access | O(1) | MIT | drop: methods already exist per container |
-| ETL | `iterator` adaptors: `insert_iterator`, `back_insert_iterator`, `front_insert_iterator`, `move_iterator`, `reverse_iterator`, `counting_iterator`, `transform_iterator`, `filter_iterator`, `zip_iterator` | iterator glue | — | MIT | algo: the lazy adaptors that have a MoonBit equivalent (`transform`, `filter`, `zip`, `rev`, `enumerate`); drop for the insert iterators |
+| ETL | `iterator` adaptors: `insert_iterator`, `back_insert_iterator`, `front_insert_iterator`, `move_iterator`, `reverse_iterator`, `counting_iterator`, `transform_iterator`, `filter_iterator`, `zip_iterator` | iterator glue (also drop for the insert iterators) | — | MIT | algo: the lazy adaptors that have a MoonBit equivalent (`transform`, `filter`, `zip`, `rev`, `enumerate`) |
 
 ## Abseil
 
@@ -346,7 +346,7 @@ same algorithms as the C++ rows above, so they are listed once, in one row.
 | Folly | `vector_bool`, `std::bitset` helpers | bit-packed containers | O(1) index | Apache-2.0 | seq: `BitVec`, `BitSet` |
 | Folly | `IntrusiveList`, `IntrusiveHeap` | intrusive containers | O(1), O(log n) | Apache-2.0 | drop: intrusive needs layout control |
 | Folly | `AtomicHashMap`, `ConcurrentHashMap`, `ConcurrentSkipList`, `ConcurrentSkipListMap`, `ConcurrentSkipListSet` | lock-free and concurrent tables | O(1)*, O(log n) | Apache-2.0 | drop: no shared-memory threads |
-| Folly | `merge`, `map_util` (`get_ref_default`, `get_ptr`, `get_default`, `try_get`), `reserve`, `CollectionUtil` (`contains`, `get_ptr`, `get_ref_default`, `get_default`), `Enumerate`, `irange`, `Foreach`, `MapUtil`, `Reserve`, `StringKeyedMap`, `StringKeyedUnorderedMap` | map utilities and iteration helpers | O(1) | Apache-2.0 | core: `HashMap::get_or_default`, `HashMap::get`; drop for the rest (macros and views) |
+| Folly | `merge`, `map_util` (`get_ref_default`, `get_ptr`, `get_default`, `try_get`), `reserve`, `CollectionUtil` (`contains`, `get_ptr`, `get_ref_default`, `get_default`), `Enumerate`, `irange`, `Foreach`, `MapUtil`, `Reserve`, `StringKeyedMap`, `StringKeyedUnorderedMap` | map utilities and iteration helpers (the macro and view helpers are not built) | O(1) | Apache-2.0 | core: `HashMap::get_or_default`, `HashMap::get` |
 | Folly | `Access`, `Array`, `BitIterator`, `HeterogeneousAccess`, `RangeTraits`, `View`, `WeightedEvictingCacheMap::WeightFn` | adaptors and access helpers | — | Apache-2.0 | drop: helper plumbing for the C++ containers above |
 
 ## GTL
@@ -358,7 +358,7 @@ same algorithms as the C++ rows above, so they are listed once, in one row.
 | GTL | `btree`, `btree_map`, `btree_set`, `btree_multimap`, `btree_multiset` | B-tree with a configurable node size | O(log n) | Apache-2.0 | drop: core's `SortedMap` is a B-tree already |
 | GTL | `lru_cache` | fixed-capacity LRU over a hash table | O(1)* | Apache-2.0 | cache: `LruCache` |
 | GTL | `small_vector` | vector with inline storage | O(1) index | Apache-2.0 | drop: no inline storage |
-| GTL | `vector`, `soa` (structure of arrays), `bit_vector`, `bits` | contiguous containers and bit helpers | O(1) index | Apache-2.0 | core: `Array`; seq: `BitVec` |
+| GTL | `vector`, `soa` (structure of arrays), `bit_vector`, `bits` | contiguous containers and bit helpers (also seq: `BitVec`) | O(1) index | Apache-2.0 | core: `Array` |
 | GTL | `memoize`, `combinators`, `utils`, `vec_utils`, `stopwatch`, `meminfo`, `intrusive` | function memoisation, combinator plumbing | O(1)* | Apache-2.0 | drop: a memoising wrapper is a `HashMap` plus a closure the caller writes |
 | GTL | `phmap_dump`, `phmap_utils`, `gtl_base`, `gtl_config`, `phmap_fwd_decl` | serialisation and configuration plumbing | — | Apache-2.0 | drop: plumbing |
 
@@ -386,7 +386,7 @@ indexes, which are ordinary trees.
 | CGAL | `Delaunay_triangulation_2`, `Delaunay_triangulation_3`, `Regular_triangulation_2/3`, `Constrained_Delaunay_triangulation_2`, `Triangulation_2`, `Triangulation_3`, `Periodic_2_triangulation_2` | triangulations | O(log n) insert | GPL-3.0+/LGPL-3.0/commercial | moonmath |
 | CGAL | `Polygon_2`, `Polygon_set_2`, `General_polygon_set_2`, `Polyhedron_3`, `Surface_mesh`, `Linear_cell_complex`, `Combinatorial_map`, `Generalized_map`, `HalfedgeDS` | polygon and mesh data structures | — | GPL-3.0+/LGPL-3.0/commercial | moonmath |
 | CGAL | `Arrangement_2`, `Arrangement_on_surface_2`, `Boolean_set_operations_2`, `Nef_polyhedron_2`, `Nef_polyhedron_3`, `Minkowski_sum_2`, `Minkowski_sum_3`, `Straight_skeleton_2` | arrangements and boolean geometry | O(n log n) | GPL-3.0+/LGPL-3.0/commercial | moonmath |
-| CGAL | `AABB_tree`, `AABB_traits`, `Surface_mesh_shortest_path`, `Polyhedron_distance`, `point_to_triangle_distance` | axis-aligned bounding volume hierarchies | O(log n) query | GPL-3.0+/LGPL-3.0/commercial | moonmath (the 1-D case is tree: `IntervalTree`) |
+| CGAL | `AABB_tree`, `AABB_traits`, `Surface_mesh_shortest_path`, `Polyhedron_distance`, `point_to_triangle_distance` | axis-aligned bounding volume hierarchies (the one-dimensional case is the interval tree in `tree`) | O(log n) query | GPL-3.0+/LGPL-3.0/commercial | moonmath |
 | CGAL | `Kd_tree`, `Orthogonal_k_neighbor_search`, `Incremental_neighbor_search`, `Fuzzy_sphere`, `Fuzzy_iso_box`, `Search_traits` | k-d trees and nearest-neighbour search | O(log n) query | GPL-3.0+/LGPL-3.0/commercial | moonmath |
 | CGAL | `spatial_sort`, `Hilbert_sort`, `Median_cut`, `Spatial_lock_grid_3` | spatial ordering | O(n log n) | GPL-3.0+/LGPL-3.0/commercial | moonmath |
 | CGAL | `Alpha_shape_2`, `Alpha_shape_3`, `Poisson_surface_reconstruction`, `advancing_front_surface_reconstruction`, `jet_smoothing`, `wlop_simplify`, `grid_simplify` | shape reconstruction | — | GPL-3.0+/LGPL-3.0/commercial | moonmath |
@@ -395,7 +395,7 @@ indexes, which are ordinary trees.
 | CGAL | `Surface_mesh_parameterization`, `Surface_mesh_deformation`, `Surface_mesh_skeletonization`, `Surface_mesh_segmentation`, `Heat_method` | parameterisation and deformation | — | GPL-3.0+/LGPL-3.0/commercial | moonmath |
 | CGAL | `snap_rounding_2`, `partition_2`, `partition_3`, `interpolation`, `Bounding_volumes`, `Optimal_bounding_box`, `Kinetic_data_structures` | geometric utilities | — | GPL-3.0+/LGPL-3.0/commercial | moonmath |
 | CGAL | `Range_tree`, `Segment_tree`, `Interval_tree`, `Orthogonal_incremental_neighbor_search` (1-D forms) | interval and segment indexes | O(log n + k) | GPL-3.0+/LGPL-3.0/commercial | tree |
-| CGAL | `number types`: `Gmpz`, `Gmpq`, `MP_Float`, `Lazy_exact_nt`, `Quotient`, `Sqrt_extension`, `Interval_nt`, `CORE::BigRat` | exact arithmetic | — | GPL-3.0+/LGPL-3.0/commercial | moonmath (core: `BigInt`) |
+| CGAL | `number types`: `Gmpz`, `Gmpq`, `MP_Float`, `Lazy_exact_nt`, `Quotient`, `Sqrt_extension`, `Interval_nt`, `CORE::BigRat` | exact arithmetic (`BigInt` itself is core's) | — | GPL-3.0+/LGPL-3.0/commercial | moonmath |
 
 ## Python
 
@@ -403,8 +403,8 @@ indexes, which are ordinary trees.
 
 | Ref | Name | What it does | Cost | Licence | Home |
 |:--|:--|:--|:--|:--|:--|
-| Python | `deque` (`appendleft`, `popleft`, `extendleft`, `rotate`, `maxlen`, `insert`, `remove`, `copy`, `index`) | double-ended queue with an optional bound | O(1) both ends | PSF-2.0 | core: `Deque`; algo: `rotate_in_place` |
-| Python | `OrderedDict` (`move_to_end`, `popitem(last=)`, `reversed`) | map that remembers insertion order | O(1)* | PSF-2.0 | core: `Map`; map: `IndexMap` (`move_index`) |
+| Python | `deque` (`appendleft`, `popleft`, `extendleft`, `rotate`, `maxlen`, `insert`, `remove`, `copy`, `index`) | double-ended queue with an optional bound (also algo: `rotate_in_place`) | O(1) both ends | PSF-2.0 | core: `Deque` |
+| Python | `OrderedDict` (`move_to_end`, `popitem(last=)`, `reversed`) | map that remembers insertion order (also map: `IndexMap` (`move_index`)) | O(1)* | PSF-2.0 | core: `Map` |
 | Python | `defaultdict` (`default_factory`, `__missing__`) | map that inserts a default on a missing key | O(1)* | PSF-2.0 | map: `DefaultMap` |
 | Python | `Counter` (`most_common`, `elements`, `subtract`, `total`, `update`, `+`, `-`, `&`, `\|`) | multiset that counts keys | O(1)* count, O(n log n) most_common | PSF-2.0 | map: `Counter` |
 | Python | `ChainMap` (`maps`, `new_child`, `parents`) | several maps read as one | O(depth) lookup | PSF-2.0 | map: `ChainMap` |
@@ -473,7 +473,7 @@ indexes, which are ordinary trees.
 
 | Ref | Name | What it does | Cost | Licence | Home |
 |:--|:--|:--|:--|:--|:--|
-| Python | `Queue` (`put`, `get`, `task_done`, `join`, `qsize`, `maxsize`) | bounded FIFO with blocking | O(1) | PSF-2.0 | core: `Queue`; the blocking forms are `moonbitlang/async`'s queue |
+| Python | `Queue` (`put`, `get`, `task_done`, `join`, `qsize`, `maxsize`) | bounded FIFO with blocking (also the blocking forms are `moonbitlang/async`'s queue) | O(1) | PSF-2.0 | core: `Queue` |
 | Python | `LifoQueue` | bounded LIFO | O(1) | PSF-2.0 | core: `Array` (`push`/`pop`) |
 | Python | `PriorityQueue` | heap-ordered queue | O(log n) | PSF-2.0 | core: `PriorityQueue` |
 | Python | `SimpleQueue` | lock-free unbounded FIFO | O(1)* | PSF-2.0 | core: `Queue` |
@@ -516,17 +516,17 @@ indexes, which are ordinary trees.
 | Rust | `VecDeque` | ring-buffer deque with `make_contiguous` | O(1) both ends | MIT OR Apache-2.0 | core: `Deque` |
 | Rust | `LinkedList` (`push_front`, `push_back`, `pop_front`, `pop_back`, `append`, `split_off`, `Cursor`, `CursorMut`) | doubly linked list with cursors | O(1) splice | MIT OR Apache-2.0 | seq: `LinkedList` |
 | Rust | `BTreeMap`, `BTreeSet` | ordered map and set over a B-tree | O(log n) | MIT OR Apache-2.0 | core: `SortedMap`, `SortedSet` |
-| Rust | `BinaryHeap` (`push`, `pop`, `peek`, `peek_mut`, `into_sorted_vec`, `append`, `drain`, `retain`, `rebuild`, `into_vec`) | binary max-heap | O(log n) push/pop | MIT OR Apache-2.0 | core: `PriorityQueue`; heap: `IndexHeap` for `peek_mut` |
-| Rust | `HashMap`, `HashSet` | hash table with `RandomState` | O(1)* | MIT OR Apache-2.0 | core: `HashMap`, `HashSet`; the seed is a constructor parameter here |
-| Rust | `hash_map::Entry`, `btree_map::Entry` (`or_insert`, `or_insert_with`, `or_default`, `and_modify`, `or_insert_with_key`, `key`, `and_replace_entry_with`) | update-in-place entry API | O(1) | MIT OR Apache-2.0 | core: `HashMap::get_or_init`; map: `IndexMap::entry` |
-| Rust | `BTreeMap::range`, `range_mut`, `first_key_value`, `last_key_value`, `pop_first`, `pop_last`, `append`, `split_off`, `retain`, `extract_if` | ordered map operations | O(log n), O(k) | MIT OR Apache-2.0 | core: `SortedMap`; map: `RangeMap` for range queries |
-| Rust | `VecDeque::make_contiguous`, `rotate_left`, `rotate_right`, `splice`, `split_off`, `insert`, `remove`, `range`, `binary_search` | deque operations | O(n), O(log n) | MIT OR Apache-2.0 | core: `Deque`; seq: `RingBuffer` (linear view) |
-| Rust | `Vec::sort_unstable`, `sort_unstable_by`, `sort_unstable_by_key`, `select_nth_unstable`, `partition_dedup`, `dedup`, `retain`, `rotate_left`, `rotate_right`, `swap_remove`, `truncate`, `splice`, `drain`, `split_off`, `resize`, `extend_from_slice`, `fill`, `copy_within`, `binary_search_by` | vector algorithms in place | O(n log n), O(n) | MIT OR Apache-2.0 | core: `Array::sort`; algo: `nth_element_in_place`, `dedup_in_place`, `rotate_in_place` |
-| Rust | `slice::windows`, `chunks`, `chunks_exact`, `rchunks`, `split`, `splitn`, `split_first`, `split_last`, `split_at`, `starts_with`, `ends_with`, `strip_prefix`, `strip_suffix`, `concat`, `join`, `repeat`, `array_chunks`, `as_chunks`, `first_chunk`, `last_chunk` | views and splitting | O(1) create, O(n) | MIT OR Apache-2.0 | algo: `windows`, `chunks`, `split_at`; core: `ArrayView` |
+| Rust | `BinaryHeap` (`push`, `pop`, `peek`, `peek_mut`, `into_sorted_vec`, `append`, `drain`, `retain`, `rebuild`, `into_vec`) | binary max-heap (also heap: `IndexHeap` for `peek_mut`) | O(log n) push/pop | MIT OR Apache-2.0 | core: `PriorityQueue` |
+| Rust | `HashMap`, `HashSet` | hash table with `RandomState` (also the seed is a constructor parameter here) | O(1)* | MIT OR Apache-2.0 | core: `HashMap`, `HashSet` |
+| Rust | `hash_map::Entry`, `btree_map::Entry` (`or_insert`, `or_insert_with`, `or_default`, `and_modify`, `or_insert_with_key`, `key`, `and_replace_entry_with`) | update-in-place entry API (also map: `IndexMap::entry`) | O(1) | MIT OR Apache-2.0 | core: `HashMap::get_or_init` |
+| Rust | `BTreeMap::range`, `range_mut`, `first_key_value`, `last_key_value`, `pop_first`, `pop_last`, `append`, `split_off`, `retain`, `extract_if` | ordered map operations (also map: `RangeMap` for range queries) | O(log n), O(k) | MIT OR Apache-2.0 | core: `SortedMap` |
+| Rust | `VecDeque::make_contiguous`, `rotate_left`, `rotate_right`, `splice`, `split_off`, `insert`, `remove`, `range`, `binary_search` | deque operations (also seq: `RingBuffer` (linear view)) | O(n), O(log n) | MIT OR Apache-2.0 | core: `Deque` |
+| Rust | `Vec::sort_unstable`, `sort_unstable_by`, `sort_unstable_by_key`, `select_nth_unstable`, `partition_dedup`, `dedup`, `retain`, `rotate_left`, `rotate_right`, `swap_remove`, `truncate`, `splice`, `drain`, `split_off`, `resize`, `extend_from_slice`, `fill`, `copy_within`, `binary_search_by` | vector algorithms in place (also algo: `nth_element_in_place`, `dedup_in_place`, `rotate_in_place`) | O(n log n), O(n) | MIT OR Apache-2.0 | core: `Array::sort` |
+| Rust | `slice::windows`, `chunks`, `chunks_exact`, `rchunks`, `split`, `splitn`, `split_first`, `split_last`, `split_at`, `starts_with`, `ends_with`, `strip_prefix`, `strip_suffix`, `concat`, `join`, `repeat`, `array_chunks`, `as_chunks`, `first_chunk`, `last_chunk` | views and splitting (also core: `ArrayView`) | O(1) create, O(n) | MIT OR Apache-2.0 | algo: `windows`, `chunks`, `split_at` |
 | Rust | `Vec::Drain`, `Vec::Splice`, `Vec::IntoIter`, `vec::IntoIter::as_slice` | removal iterators | O(n) | MIT OR Apache-2.0 | drop: `drain`/`extract_if` return the removed elements directly here |
 | Rust | `binary_heap::PeekMut`, `binary_heap::Drain`, `binary_heap::IntoIterSorted` | heap accessors | O(log n), O(n) | MIT OR Apache-2.0 | heap: `IndexHeap::peek_entry`, `IndexHeap::into_sorted_array` |
 | Rust | `collections::TryReserveError`, `alloc::AllocError` | allocation failure | — | MIT OR Apache-2.0 | drop: allocation failure is not observable |
-| Rust | `hash_map::RandomState`, `DefaultHasher`, `BuildHasher` | hashing state | — | MIT OR Apache-2.0 | core: `Hasher`; hash seed is a constructor parameter here |
+| Rust | `hash_map::RandomState`, `DefaultHasher`, `BuildHasher` | hashing state (also hash seed is a constructor parameter here) | — | MIT OR Apache-2.0 | core: `Hasher` |
 
 ## Rust crates
 
@@ -546,17 +546,17 @@ one row, with the method names spelled out.
 | itertools | `cartesian_product`, `multi_cartesian_product` | Cartesian products | O(n·m) | MIT OR Apache-2.0 | algo: `product`, `multi_product` |
 | itertools | `coalesce`, `dedup`, `dedup_by`, `dedup_with_count`, `dedup_by_with_count`, `duplicates`, `duplicates_by`, `duplicates_with_hasher`, `unique`, `unique_by`, `unique_with_hasher` | collapse or find repeats | O(n), O(n) with a set | MIT OR Apache-2.0 | algo: `dedup_in_place`, `duplicates`, `unique` |
 | itertools | `tuple_combinations`, `array_combinations`, `combinations`, `combinations_with_replacement`, `array_combinations_with_replacement`, `permutations`, `powerset` | combinatorial enumeration | O(k) per item | MIT OR Apache-2.0 | algo: `combinations`, `combinations_with_replacement`, `permutations`, `powerset` |
-| itertools | `pad_using`, `with_position`, `positions`, `update`, `next_array`, `collect_array`, `next_tuple`, `collect_tuple` | fill, annotate, and collect positions | O(n) | MIT OR Apache-2.0 | algo: `pad_using`, `with_position`, `positions`; drop for the tuple collectors (array literals) |
+| itertools | `pad_using`, `with_position`, `positions`, `update`, `next_array`, `collect_array`, `next_tuple`, `collect_tuple` | fill, annotate, and collect positions (the tuple collectors are not built: array literals do that) | O(n) | MIT OR Apache-2.0 | algo: `pad_using`, `with_position`, `positions` |
 | itertools | `find_position`, `find_or_last`, `find_or_first`, `contains`, `position_max`, `position_max_by`, `position_max_by_key`, `position_min`, `position_min_by`, `position_min_by_key`, `position_minmax`, `position_minmax_by`, `position_minmax_by_key` | position-returning searches | O(n) | MIT OR Apache-2.0 | algo: `find_position`, `position_min`, `position_max`, `position_min_max` |
 | itertools | `all_equal`, `all_unique`, `exactly_one`, `at_most_one` | cardinality tests | O(n) | MIT OR Apache-2.0 | algo: `all_equal`, `all_unique`, `exactly_one`, `at_most_one` |
-| itertools | `dropping`, `dropping_back`, `tail`, `take`, `skip`, `take_while`, `skip_while`, `step_by`, `chain`, `rev`, `enumerate` | the plain iterator adaptors | O(n) | MIT OR Apache-2.0 | core: `Iter::take`, `Iter::take_while`; algo: `skip`, `chain`, `rev`, `enumerate`, `step_by` |
-| itertools | `concat`, `collect_vec`, `set_from`, `join`, `format`, `format_with` | collect into a container or a string | O(n) | MIT OR Apache-2.0 | core: `Iter::to_array`, `Array::join`; algo: `format_with` |
+| itertools | `dropping`, `dropping_back`, `tail`, `take`, `skip`, `take_while`, `skip_while`, `step_by`, `chain`, `rev`, `enumerate` | the plain iterator adaptors (also algo: `skip`, `chain`, `rev`, `enumerate`, `step_by`) | O(n) | MIT OR Apache-2.0 | core: `Iter::take`, `Iter::take_while` |
+| itertools | `concat`, `collect_vec`, `set_from`, `join`, `format`, `format_with` | collect into a container or a string (also algo: `format_with`) | O(n) | MIT OR Apache-2.0 | core: `Iter::to_array`, `Array::join` |
 | itertools | `fold1`, `tree_reduce`, `tree_fold1`, `fold_while`, `sum1`, `product1` | folds without an initial value | O(n) | MIT OR Apache-2.0 | algo: `fold_first`, `fold_while`, `tree_reduce` |
 | itertools | `sorted`, `sorted_by`, `sorted_by_key`, `sorted_by_cached_key`, `sorted_unstable`, `sorted_unstable_by`, `sorted_unstable_by_key`, `k_smallest`, `k_smallest_by`, `k_smallest_by_key`, `k_smallest_relaxed`, `k_largest`, `k_largest_by`, `k_largest_by_key`, `k_largest_relaxed` | sort or select into a new run | O(n log n), O(n log k) | MIT OR Apache-2.0 | algo: `sorted`, `k_smallest`, `k_largest` |
-| itertools | `partition_map`, `partition_result`, `into_group_map`, `into_group_map_by`, `into_grouping_map`, `into_grouping_map_by` | partition and group into maps | O(n) | MIT OR Apache-2.0 | map: `MultiMap`, `Counter`; algo: `partition_map` |
+| itertools | `partition_map`, `partition_result`, `into_group_map`, `into_group_map_by`, `into_grouping_map`, `into_grouping_map_by` | partition and group into maps (also algo: `partition_map`) | O(n) | MIT OR Apache-2.0 | map: `MultiMap`, `Counter` |
 | itertools | `min_set`, `min_set_by`, `min_set_by_key`, `max_set`, `max_set_by`, `max_set_by_key`, `minmax`, `minmax_by_key`, `minmax_by` | all extrema, not just one | O(n) | MIT OR Apache-2.0 | algo: `min_set`, `max_set`, `min_max` |
 | itertools | `counts`, `counts_by`, `counts_with_hasher` | count occurrences | O(n) | MIT OR Apache-2.0 | map: `Counter::from_iter` |
-| itertools | `multiunzip`, `unzip`, `try_len`, `strip_prefix`, `strip_prefix_by` | unzip and prefix stripping | O(n) | MIT OR Apache-2.0 | algo: `strip_prefix`; drop for `multiunzip` and `try_len` (known length, no trait to report it) |
+| itertools | `multiunzip`, `unzip`, `try_len`, `strip_prefix`, `strip_prefix_by` | unzip and prefix stripping (`multiunzip` and `try_len` are not built: a run's length is known here) | O(n) | MIT OR Apache-2.0 | algo: `strip_prefix` |
 | itertools | `equal`, `assert_equal`, `partition` (free functions) | compare and partition two runs | O(n) | MIT OR Apache-2.0 | algo: `equal`, `partition_pair` |
 
 ### `indexmap` 2.14
@@ -628,11 +628,11 @@ are built on.
 | NetworkX | `Graph`, `DiGraph`, `MultiGraph`, `MultiDiGraph`, `SubGraph`, `ReverseView`, `to_undirected`, `to_directed` | graph containers and views | O(1) node, O(1) edge | BSD-3-Clause | moongraph |
 | NetworkX | `UnionFind`, `nx.utils.UnionFind` (`union`, `find`, `to_sets`, `parents`, `weights`) | disjoint sets | O(α(n)) | BSD-3-Clause | tree: `DisjointSet` |
 | NetworkX | `algorithms.traversal` (`bfs_edges`, `bfs_tree`, `bfs_predecessors`, `dfs_edges`, `dfs_tree`, `dfs_predecessors`, `edge_dfs`) | traversal | O(V+E) | BSD-3-Clause | moongraph |
-| NetworkX | `algorithms.shortest_paths` (`dijkstra_path`, `bellman_ford_path`, `floyd_warshall`, `astar_path`, `johnson`, `bidirectional_dijkstra`, `all_pairs_dijkstra`, `single_source_shortest_path`) | shortest paths | O(E log V), O(VE), O(V³) | BSD-3-Clause | moongraph (built on heap: `DaryHeap`, `FibonacciHeap`) |
+| NetworkX | `algorithms.shortest_paths` (`dijkstra_path`, `bellman_ford_path`, `floyd_warshall`, `astar_path`, `johnson`, `bidirectional_dijkstra`, `all_pairs_dijkstra`, `single_source_shortest_path`) | shortest paths (built on the heaps in `heap`) | O(E log V), O(VE), O(V³) | BSD-3-Clause | moongraph |
 | NetworkX | `algorithms.components`, `algorithms.connectivity` (`connected_components`, `strongly_connected_components`, `articulation_points`, `bridges`, `node_connectivity`, `edge_connectivity`, `minimum_node_cut`) | connectivity and cuts | O(V+E), O(V·E) for cuts | BSD-3-Clause | moongraph |
 | NetworkX | `algorithms.flow` (`maximum_flow`, `minimum_cut`, `preflow_push`, `shortest_augmenting_path`, `edmonds_karp`, `dinitz`, `gomory_hu_tree`) | flows and cuts | O(V²E) and better | BSD-3-Clause | moongraph |
 | NetworkX | `algorithms.matching` (`max_weight_matching`, `maximal_matching`, `min_weight_matching`, `hopcroft_karp_matching`, `eppstein_matching`) | matchings | O(V³) weighted | BSD-3-Clause | moongraph |
-| NetworkX | `algorithms.tree.mst` (`minimum_spanning_tree`, `maximum_spanning_tree`, `minimum_spanning_edges`, `random_spanning_tree`) | spanning trees | O(E log V) | BSD-3-Clause | moongraph (built on tree: `DisjointSet`) |
+| NetworkX | `algorithms.tree.mst` (`minimum_spanning_tree`, `maximum_spanning_tree`, `minimum_spanning_edges`, `random_spanning_tree`) | spanning trees (built on the disjoint sets in `tree`) | O(E log V) | BSD-3-Clause | moongraph |
 | NetworkX | `algorithms.centrality` (`betweenness_centrality`, `closeness_centrality`, `degree_centrality`, `eigenvector_centrality`, `pagerank`, `hits`, `katz_centrality`, `load_centrality`, `edge_betweenness_centrality`) | centrality and link analysis | O(V·E), O(V+E) per iteration | BSD-3-Clause | moongraph |
 | NetworkX | `algorithms.community` (`louvain_communities`, `greedy_modularity_communities`, `label_propagation_communities`, `asyn_lpa_communities`, `modularity`, `partition_quality`) | community detection | O(V+E) per pass | BSD-3-Clause | moongraph |
 | NetworkX | `algorithms.clique`, `algorithms.chordal`, `algorithms.isomorphism` (`find_cliques`, `graph_clique_number`, `is_chordal`, `is_isomorphic`, `could_be_isomorphic`, `vf2pp_is_isomorphic`) | cliques and isomorphism | exponential worst case | BSD-3-Clause | moongraph |
@@ -666,33 +666,33 @@ that was read from its published documentation rather than its source.
 | DataSketches 5.x | `update_theta_sketch`, `compact_theta_sketch`, `theta_union`, `theta_intersection`, `theta_a_not_b` | distinct counting with set algebra | O(1) per item, O(k) estimate | Apache-2.0 | sketch: `ThetaSketch` |
 | DataSketches 5.x | `hll_sketch`, `hll_union`, `cpc_sketch`, `cpc_union` | cardinality estimation | O(1) per item | Apache-2.0 | sketch: `HyperLogLog` |
 | DataSketches 5.x | `frequent_items_sketch`, `frequent_strings_sketch`, `row_sketch`, `frequency_merge` | heavy hitters over a stream, Count-Min style | O(1) per item | Apache-2.0 | sketch: `CountMinSketch`, `FrequentItems` |
-| DataSketches 5.x | `kll_sketch`, `req_sketch`, `quantiles_sketch`, `kll_merge`, `req_merge` | quantile estimation | O(1)* per item, O(1) query | Apache-2.0 | sketch: `TDigest` (t-digest keeps tighter tails; see the dedup notes) |
+| DataSketches 5.x | `kll_sketch`, `req_sketch`, `quantiles_sketch`, `kll_merge`, `req_merge` | quantile estimation (t-digest keeps tighter tails; see the dedup notes) | O(1)* per item, O(1) query | Apache-2.0 | sketch: `TDigest` (t-digest keeps tighter tails |
 | t-digest (tdunning) 5.x | `TDigest`, `MergingDigest`, `AVLTreeDigest`, `add`, `merge`, `quantile`, `cdf`, `compress` | quantile sketch with accurate tails | O(1)* per item, O(1) query | Apache-2.0 | sketch: `TDigest` |
 | go-zero 1.9 | `collection.Cache` (`Add`, `AddWithExpire`, `Get`, `Take`, `TakeWithExpire`, `Del`, `SetExpire`, `size`), `collection.LRU` | cache with LFU eviction by access count and per-entry expiry | O(1)* | MIT | cache: `LfuCache`, `ExpiringCache` |
-| Megiddo & Modha 2003 (ARC), PostgreSQL 17 `shared_buffer` ARC | adaptive replacement cache balancing recency and frequency | O(1)* | paper / PostgreSQL licence (interface only) | cache: `ArcCache` |
-| Bentley 1977 (segment tree), Fenwick 1994 (binary indexed tree) | range query and prefix-sum structures | O(log n) update and query | paper | tree: `SegmentTree`, `Fenwick` |
-| Briggs & Torczon 1993 (sparse set) | dense array plus sparse index for O(1) membership and dense iteration | O(1) | paper | seq: `SparseSet` |
-| Emacs gap buffer, `GapBuffer` in text editors | a movable gap in a contiguous buffer, cheap insertion at a point | O(1)* insert at the gap, O(n) move | paper / public-domain lineage | seq: `GapBuffer` |
-| Leis, Kemper & Neumann 2013 (ART), `Trie` in Bentley & Sedgewick 1997 | radix tree and prefix trie | O(k) per key of length k | paper | map: `Trie`, `RadixTree` |
+| ARC (Megiddo & Modha 2003), PostgreSQL 17 `shared_buffer` | `cache` with adaptive recency and frequency lists | adaptive replacement cache balancing recency and frequency | O(1)* | paper / PostgreSQL licence (interface only) | cache: `ArcCache` |
+| Segment tree (Bentley 1977), binary indexed tree (Fenwick 1994) | range queries and prefix sums over an array | range query and prefix-sum structures | O(log n) update and query | paper | tree: `SegmentTree`, `Fenwick` |
+| Sparse set (Briggs & Torczon 1993) | `SparseSet` | dense array plus sparse index for O(1) membership and dense iteration | O(1) | paper | seq: `SparseSet` |
+| Gap buffer (Emacs and the editors that followed) | `GapBuffer` | a movable gap in a contiguous buffer, cheap insertion at a point | O(1)* insert at the gap, O(n) move | paper / public-domain lineage | seq: `GapBuffer` |
+| ART (Leis, Kemper & Neumann 2013), trie (Bentley & Sedgewick 1997) | `RadixTree`, `Trie` | radix tree and prefix trie | O(k) per key of length k | paper | map: `Trie`, `RadixTree` |
 | Boost.ICL 1.92 | `interval_map`, `interval_set`, `split_interval_map`, `interval_base_map`, `interval_base_set`, `discrete_interval`, `continuous_interval` | maps keyed by intervals, with overlap queries | O(log n) | BSL-1.0 | map: `RangeMap`, `RangeSet` |
-| CLRS, `IntervalTree` in Boost.Intrusive and CGAL | interval tree with overlap queries | O(log n + k) | — | tree: `IntervalTree` |
+| Interval tree (CLRS; also Boost.Intrusive and CGAL) | `IntervalTree` | interval tree with overlap queries | O(log n + k) | — | tree: `IntervalTree` |
 
 ## What the union adds up to
 
-389 rows, one per capability. Where each capability lands:
+395 rows, one per capability. Where each capability lands:
 
 | Home | Rows |
 |:--|--:|
-| MoonBit core already has it | 82 |
-| `algo` | 67 |
-| `seq` | 26 |
-| `map` | 22 |
+| MoonBit core already has it | 80 |
+| `algo` | 69 |
+| `seq` | 28 |
+| `map` | 23 |
 | `heap` | 14 |
 | `phf` | 11 |
 | `sketch` | 8 |
 | `text` | 7 |
-| `cache` | 6 |
-| `tree` | 6 |
+| `cache` | 7 |
+| `tree` | 8 |
 | `moongraph` | 25 |
 | `moonmath` | 22 |
 | Not built, with the reason in the row | 93 |
@@ -712,11 +712,11 @@ Rows per reference, counting a row once under the library it was read from:
 | Rust standard library | 15 |
 | EASTL | 14 |
 | Abseil | 10 |
-| Structures with no reference implementation | 10 |
+| Structures with no reference implementation | 16 |
 | GTL | 8 |
 | STXXL | 5 |
 
-The nine packages carry 167 rows, so the average package is about 18 rows of
+The nine packages carry 175 rows, so the average package is about 19 rows of
 reference material behind it.
 
 ## Where the libraries disagree, and which way this library goes
