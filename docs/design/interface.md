@@ -132,10 +132,19 @@ buffer and a rope, the bit containers, a sparse set, and a doubly linked list.
 | `linearize` | `fn[T] RingBuffer::linearize(RingBuffer[T]) -> Unit` | O(n) |
 | `iter`, `rev_iter`, `to_array`, `copy`, `clear` | as core | O(n) |
 
-`push_back` returns the element that was dropped when the buffer is full and the
-option is `Overwrite`, and `None` otherwise. `RingBufferOptions` carries one field,
-`overflow : Overflow` with `Overwrite | Grow | Refuse`; `Grow` stops at the capacity,
-where `Refuse` raises `Refused::TooManyElements`.
+```mbt
+pub(all) struct RingBufferOptions {
+  overflow : Overflow
+}
+pub let ring_buffer_options : RingBufferOptions = { overflow: Overwrite }
+pub(all) enum Overflow { Overwrite; Refuse }
+```
+
+`push_back` returns the element it dropped when the buffer is full and the option is
+`Overwrite`, and `None` otherwise. `Refuse` raises `Refused::TooManyElements` instead
+of dropping anything, which is the fixed-capacity vector's behaviour. Storage starts
+empty and grows up to the capacity on demand, so a capacity is a ceiling rather than an
+up-front allocation.
 
 ### `SlotMap[T]`, `DenseSlotMap[T]`, `SecondaryMap[T]`, `Slab[T]`
 

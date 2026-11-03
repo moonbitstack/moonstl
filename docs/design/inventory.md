@@ -181,7 +181,7 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 | Ref | Name | What it does | Cost | Licence | Home |
 |:--|:--|:--|:--|:--|:--|
 | Boost.CircularBuffer | `circular_buffer` | fixed-capacity ring buffer that overwrites the oldest element | O(1) push, pop, index | BSL-1.0 | seq: `RingBuffer` |
-| Boost.CircularBuffer | `circular_buffer_space_optimized` | ring buffer that grows its storage on demand up to the capacity | O(1)* push | BSL-1.0 | seq: `RingBuffer` (`overflow = grow`, capacity as the ceiling) |
+| Boost.CircularBuffer | `circular_buffer_space_optimized` | ring buffer that grows its storage on demand up to the capacity | O(1)* push | BSL-1.0 | seq: `RingBuffer` (storage grows to the capacity on demand, then overwrites) |
 | Boost.CircularBuffer | `circular_buffer::array_one`, `array_two`, `linearize`, `is_linearized`, `rotate`, `rerase`, `rresize` | two-run view of ring storage | O(1) view, O(n) linearise | BSL-1.0 | seq: `RingBuffer::as_views`, `RingBuffer::linearize` |
 | Boost.CircularBuffer | `circular_buffer::capacity`, `resize`, `set_capacity` | size control | O(1), O(n) | BSL-1.0 | seq: `RingBuffer::capacity`, `RingBuffer::resize_capacity` |
 
@@ -766,8 +766,9 @@ what callers actually ask for.
 `folly::FixedCapacityRingQueue`, Rust's `VecDeque` and `boost::container::devector`
 overlap. The split kept here: core's `Deque` for the unbounded case, `seq: RingBuffer`
 for the fixed-capacity case where the oldest element is overwritten. The ring
-buffer's `overflow` option covers `circular_buffer_space_optimized` (grow until the
-capacity) and `static_vector` (refuse) without a second type. `devector` and `segtor`
+buffer's `overflow` option covers `static_vector` (refuse) directly;
+`circular_buffer_space_optimized` differs only in allocating its storage lazily, which
+is how `RingBuffer` behaves already, so it needs no second type. `devector` and `segtor`
 are dropped: their selling point is stable element addresses, which the runtime
 gives for free.
 
