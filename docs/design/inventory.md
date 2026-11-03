@@ -105,7 +105,7 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 |:--|:--|:--|:--|:--|:--|
 | C++ | `all_of`, `any_of`, `none_of` | predicate over a run | O(n) | GPL-3.0+exception | core: `Iter::all`, `Iter::any` |
 | C++ | `for_each`, `for_each_n` | visit every element | O(n) | GPL-3.0+exception | core: `Array::each`, `Iter::each` |
-| C++ | `count`, `count_if` | count matches | O(n) | GPL-3.0+exception | core: `Array::count` |
+| C++ | `count`, `count_if` | count matches | O(n) | GPL-3.0+exception | core: `Array::count`; algo: `count_if` |
 | C++ | `mismatch` | first differing position | O(n) | GPL-3.0+exception | algo: `mismatch` |
 | C++ | `find`, `find_if`, `find_if_not`, `find_last`, `find_last_if`, `find_last_if_not` | linear search | O(n) | GPL-3.0+exception | algo: `find_*` |
 | C++ | `find_end`, `find_first_of`, `adjacent_find` | subsequence and neighbour search | O(n·m) | GPL-3.0+exception | algo: `find_*` |
@@ -132,7 +132,7 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 | C++ | `merge`, `inplace_merge` | merge sorted runs | O(n+m) | GPL-3.0+exception | algo: `merge`, `merge_in_place` |
 | C++ | `includes`, `set_difference`, `set_intersection`, `set_symmetric_difference`, `set_union` | sorted set algebra | O(n+m) | GPL-3.0+exception | algo: `set_*` over sorted views |
 | C++ | `make_heap`, `push_heap`, `pop_heap`, `sort_heap`, `is_heap`, `is_heap_until` | heap over a run | O(log n), O(n) make_heap | GPL-3.0+exception | core: `PriorityQueue`; heap: `d_ary` over a run |
-| C++ | `min`, `max`, `minmax`, `clamp` | extrema of values | O(1) | GPL-3.0+exception | core: `@cmp.min`, `@cmp.max`, `@cmp.clamp` |
+| C++ | `min`, `max`, `minmax`, `clamp` | extrema of values | O(1) | GPL-3.0+exception | core: `@cmp.minimum`, `@cmp.maximum`, `@cmp.minmax`; algo: `clamp` |
 | C++ | `min_element`, `max_element`, `minmax_element` | extrema of a run | O(n) | GPL-3.0+exception | core: `Array::iter` fold; algo: `min_max_element` |
 | C++ | `equal`, `lexicographical_compare`, `lexicographical_compare_three_way` | run comparison | O(n) | GPL-3.0+exception | algo: `equal`, `lexicographical_compare` |
 | C++ | `next_permutation`, `prev_permutation` | next or previous arrangement | O(n) | GPL-3.0+exception | algo: `next_permutation_in_place`, `prev_permutation_in_place` |
@@ -247,7 +247,7 @@ igraph, graph-tool, JGraphT) were read for their interface only.
 | Ref | Name | What it does | Cost | Licence | Home |
 |:--|:--|:--|:--|:--|:--|
 | Boost.Algorithm | `all_of`, `any_of`, `none_of`, `one_of` | predicate over a run | O(n) | BSL-1.0 | core: `Iter::all`, `Iter::any`; algo: `one_of` |
-| Boost.Algorithm | `clamp`, `is_clamped` | bound a value | O(1) | BSL-1.0 | core: `@cmp.clamp` |
+| Boost.Algorithm | `clamp`, `is_clamped` | bound a value | O(1) | BSL-1.0 | algo: `clamp`, `is_clamped` |
 | Boost.Algorithm | `copy_if`, `copy_until`, `copy_n`, `copy_while` | conditional copy | O(n) | BSL-1.0 | core: `Array::blit_to`; algo: `copy_if` |
 | Boost.Algorithm | `find_not`, `find_backward`, `find_if_not` | search from the ends | O(n) | BSL-1.0 | algo: `find_*` |
 | Boost.Algorithm | `gather` | move matching elements into one place | O(n) | BSL-1.0 | algo: `gather_in_place` |
@@ -455,7 +455,7 @@ indexes, which are ordinary trees.
 
 | Ref | Name | What it does | Cost | Licence | Home |
 |:--|:--|:--|:--|:--|:--|
-| Python | `chain`, `chain.from_iterable` | concatenate runs | O(1) create | PSF-2.0 | core: `Iter::chain`; algo: `chain`, `flatten` |
+| Python | `chain`, `chain.from_iterable` | concatenate runs | O(1) create | PSF-2.0 | algo: `chain`, `flatten` |
 | Python | `combinations`, `combinations_with_replacement`, `permutations`, `product` | combinatorial enumeration | O(k) per item | PSF-2.0 | algo: `combinations`, `combinations_with_replacement`, `permutations`, `product` |
 | Python | `accumulate` (`func`, `initial`) | running fold | O(n) | PSF-2.0 | algo: `scan`, `scan_in_place` |
 | Python | `batched` | fixed-size batches | O(n) | PSF-2.0 | algo: `chunks` |
@@ -549,7 +549,7 @@ one row, with the method names spelled out.
 | itertools | `pad_using`, `with_position`, `positions`, `update`, `next_array`, `collect_array`, `next_tuple`, `collect_tuple` | fill, annotate, and collect positions | O(n) | MIT OR Apache-2.0 | algo: `pad_using`, `with_position`, `positions`; drop for the tuple collectors (array literals) |
 | itertools | `find_position`, `find_or_last`, `find_or_first`, `contains`, `position_max`, `position_max_by`, `position_max_by_key`, `position_min`, `position_min_by`, `position_min_by_key`, `position_minmax`, `position_minmax_by`, `position_minmax_by_key` | position-returning searches | O(n) | MIT OR Apache-2.0 | algo: `find_position`, `position_min`, `position_max`, `position_min_max` |
 | itertools | `all_equal`, `all_unique`, `exactly_one`, `at_most_one` | cardinality tests | O(n) | MIT OR Apache-2.0 | algo: `all_equal`, `all_unique`, `exactly_one`, `at_most_one` |
-| itertools | `dropping`, `dropping_back`, `tail`, `take`, `skip`, `take_while`, `skip_while`, `step_by`, `chain`, `rev`, `enumerate` | the plain iterator adaptors | O(n) | MIT OR Apache-2.0 | core: `Iter::take`, `skip`, `take_while`, `chain`, `rev`, `enumerate` |
+| itertools | `dropping`, `dropping_back`, `tail`, `take`, `skip`, `take_while`, `skip_while`, `step_by`, `chain`, `rev`, `enumerate` | the plain iterator adaptors | O(n) | MIT OR Apache-2.0 | core: `Iter::take`, `Iter::take_while`; algo: `skip`, `chain`, `rev`, `enumerate`, `step_by` |
 | itertools | `concat`, `collect_vec`, `set_from`, `join`, `format`, `format_with` | collect into a container or a string | O(n) | MIT OR Apache-2.0 | core: `Iter::to_array`, `Array::join`; algo: `format_with` |
 | itertools | `fold1`, `tree_reduce`, `tree_fold1`, `fold_while`, `sum1`, `product1` | folds without an initial value | O(n) | MIT OR Apache-2.0 | algo: `fold_first`, `fold_while`, `tree_reduce` |
 | itertools | `sorted`, `sorted_by`, `sorted_by_key`, `sorted_by_cached_key`, `sorted_unstable`, `sorted_unstable_by`, `sorted_unstable_by_key`, `k_smallest`, `k_smallest_by`, `k_smallest_by_key`, `k_smallest_relaxed`, `k_largest`, `k_largest_by`, `k_largest_by_key`, `k_largest_relaxed` | sort or select into a new run | O(n log n), O(n log k) | MIT OR Apache-2.0 | algo: `sorted`, `k_smallest`, `k_largest` |
@@ -702,7 +702,7 @@ Rows per reference, counting a row once under the library it was read from:
 | Reference | Rows |
 |:--|--:|
 | C++ standard library | 71 |
-| Boost (8 submodules plus Boost.Bloom and Boost.ICL) | 69 |
+| Boost (8 submodules) | 69 |
 | Rust crates (`itertools`, `indexmap`, `phf`, `slotmap`, `bit-set`, `ego-tree`, `ropey`, the small ones) | 58 |
 | Python | 56 |
 | Graph libraries | 24 |
@@ -721,7 +721,7 @@ reference material behind it.
 
 ## Where the libraries disagree, and which way this library goes
 
-**Hash tables.** Five references ship one and all of them differ in the details:
+**Hash tables.** Six references ship one and all of them differ in the details:
 `std::unordered_map` (node-based, chained), Abseil's flat table, Folly's F14
 (SIMD probe), GTL's phmap, EASTL's `hash_map`, ETL's fixed-capacity table. MoonBit
 core already has `HashMap` as an open-addressing table with `Hash + Eq`, and `Map`

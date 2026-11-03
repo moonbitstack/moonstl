@@ -549,20 +549,12 @@ so the parameter would only get in the way of storing ids in other containers.
 | `ArcCache[K, V]` | adaptive, recency vs frequency | four lists `T1`, `T2`, `B1`, `B2` | by the ARC replacement rule |
 | `ExpiringCache[K, V]` | time to live over any policy | a cache plus an expiry index | on read, on insert, and on `purge` |
 
-All four take a capacity and a clock. The clock is a parameter, `now~ : () -> Int64`,
-so that a test can move time and the cache stays deterministic:
-
-```mbt
-pub(all) struct CacheOptions {
-  capacity : Int32
-  now : () -> Int64
-}
-pub let cache_options : CacheOptions = { capacity: 128, now: fn() { 0L } }
-```
-
-A capacity is required: there is no sensible default for a bound, and every reference
-that ships a cache requires one too. `capacity: 128` is the preset for
-`ExpiringCache` only, where the capacity is a safety bound rather than the policy.
+All four take a capacity. `ExpiringCache` also takes a clock, `now~ : () -> Int64`, so
+that a test can move time and the cache stays deterministic; the other three are
+policy-only and need no clock. A capacity is required: there is no sensible default
+for a bound, and every cache in the references requires one too. `capacity: 128` is the
+default on `ExpiringCache` alone, where the capacity is a safety bound rather than the
+policy being tested.
 
 | Method | Signature | Cost |
 |:--|:--|:--|
@@ -759,6 +751,11 @@ pub(all) struct PhfOptions {
 pub let phf_options : PhfOptions = { build: Search, seed: 0 }
 pub(all) enum PhfBuild { Search; Quick; Minimal }
 
+pub(all) enum MapEntry[K, V] {
+  Occupied(K, V)
+  Vacant
+}
+
 pub(open) trait PhfKey {
   to_bytes(Self) -> Bytes
 }
@@ -811,6 +808,7 @@ structs with `next() -> ...?` and `iter()`.
 | `equal` | `fn[T : Eq] (ArrayView[T], ArrayView[T]) -> Bool` | O(n) |
 | `lexicographical_compare` | `fn[T : Compare] (ArrayView[T], ArrayView[T]) -> Int32` — three-way | O(n) |
 | `strip_prefix` | `fn[T : Eq] (ArrayView[T], ArrayView[T]) -> ArrayView[T]?` | O(m) |
+| `clamp` / `is_clamped` | `fn[T : Compare] (T, low~ : T, high~ : T) -> T` / `-> Bool` | O(1) |
 
 ### Ordering and selection
 
@@ -884,8 +882,9 @@ structs with `next() -> ...?` and `iter()`.
 | `fold_while` | `fn[A, B] (Iter[A], init~ : B, (B, A) -> Result[B, B]) -> B` | O(n) |
 | `tree_reduce` | `fn[T] (Iter[T], (T, T) -> T) -> T?` — pairwise, keeps the tree shape | O(n) |
 | `with_position` | `fn[T] (Iter[T]) -> Iter[(Position, T)]` | O(1)* per item |
-| `interleave_shortest` | as `interleave` | O(1) per item |
 | `chain` / `flatten` | `fn[T] (Iter[T], Iter[T]) -> Iter[T]`; `fn[T] (Iter[Iter[T]]) -> Iter[T]` | O(1) per item |
+| `skip` / `step_by` | `fn[T] (Iter[T], Int32) -> Iter[T]` | O(n) skip, O(1) per step |
+| `rev` / `enumerate` | `fn[T] (Iter[T]) -> Iter[T]`; `fn[T] (Iter[T]) -> Iter[(Int32, T)]` | O(1) per item |
 
 ### Combinatoric generators
 
