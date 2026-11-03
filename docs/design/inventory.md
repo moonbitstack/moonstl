@@ -829,29 +829,36 @@ outside (0, 1) or a capacity that cannot hold the given elements. Out-of-range
 index reads return `Option` instead, and only `op_get` aborts, because core aborts
 there.
 
-## Open questions for the team
+## Settled at review
 
-1. **`seq: LinkedList` is not in the brief's `seq` table.** It is here because
-   `std::list`, `boost::container::list`, EASTL's `list` and Rust's `LinkedList`
-   are doubly linked with O(1) splice, and core's `List` is a persistent singly
-   linked list that cannot do that. Keeping it means one more type in `seq`;
-   dropping it means `list` and `LinkedList` rows are covered by core's `List` with
-   a note that splice is O(n). Please rule.
-2. **`MultiSet` and `SortedMultiSet` are aliases, not types.** `MultiSet[K]` is
-   `MultiMap[K, Unit]`. Two aliases are cheaper to read than four types, but they
-   do bring the `Unit` values into the API (`get(key)` returns `Array[Unit]`). If
-   that reads badly, they become real types.
-3. **Where `Rope` lives.** The brief puts it in `seq`, and this list follows the
-   brief, but a rope is a text buffer: every reference (ropey, and the editors that
-   inspire it) is text-specific. If `Rope` should sit in `text` instead, the move
-   is a rename of the package in the interface table, nothing else.
-4. **The hash-seed preset.** The interface table adds `hash_seed~ : Int32 = 0` to
-   every hashed container. Zero keeps iteration order and serialised output
-   reproducible, which tests and generated vectors want; a random seed is what you
-   want against adversarial keys. If the organisation's API note already fixes a
-   different default, that value wins.
-5. **`phf` needs a code generator.** The build/annotation path assumes moonast can
-   run a generator over a key list. If that is not available to us, the fallback is
-   a runtime `PhfBuilder` that callers invoke once at startup, which loses the
-   "no work at run time" property. This decides whether `phf` ships in the first
-   implementation round at all.
+1. **`seq: LinkedList` stays.** Core's `List` is a persistent singly linked list, so
+   splice and split are O(n) there; a doubly linked list with O(1) splice is a
+   capability, not a duplicate. It is one more type in `seq`, and the two rows that
+   need it (`std::list`, Rust's `LinkedList`) now point at something real.
+2. **`MultiSet` and `SortedMultiSet` stay aliases.** `MultiSet[K]` is
+   `MultiMap[K, Unit]` and `SortedMultiSet[K]` is `SortedMultiMap[K, Unit]`, both
+   re-exported from the root package. Four types would be four sets of doc comments
+   over two implementations.
+3. **The default hash seed is drawn from the organisation's entropy path**, not a
+   constant: `@moonseed.bytes(32, @moonseed.system.source)` through
+   `@moonrand.seeded`, one 32-bit draw. Per-process variation is the point — it is
+   what stops a caller's key set from being laid out to collide. Reproducibility
+   moves to the call: generated vectors and cross-checked fixtures pass
+   `hash_seed=0` explicitly. `tree` uses the same seed for skip list levels and
+   treap priorities; `phf` keeps a fixed seed because its generated table is
+   checked in and compared byte for byte.
+4. **`phf` is in the first implementation round**, with a moonast generator over
+   `PhfBuilder`. If the generator turns out not to be available, the runtime
+   `PhfBuilder::build` path is still specified, so the package ships either way.
+
+## Still open
+
+**Where `Rope` lives.** The brief puts it in `seq` and this list follows the brief.
+A rope is a text buffer in every reference — `ropey` and the editors behind it — and
+our `Rope` is not parameterised over its chunk type, so it is the only type in `seq`
+that is not generic over an element. Moving it to `text` would make `seq` uniform
+("containers over any element") and let `text` algorithms take a `RopeView` without
+depending on `seq`. Against: `GapBuffer` is the same kind of buffer in the same
+package, and it *is* generic, so moving one and not the other breaks the symmetry the
+brief had. The discussion is in the review thread; the table follows whichever way it
+lands, and the change is a package name in the interface draft.

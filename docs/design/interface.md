@@ -18,8 +18,8 @@ rejected:
   one ordering. Merging them would put `SegmentTree` next to `FlatMap` for no gain, and
   would make the package dependency graph worse: `RangeMap` needs the interval tree.
 
-One package was added to the brief's table: `seq::LinkedList`. The reasons, and the
-question of whether to keep it, are in `inventory.md` under open questions.
+One package was added to the brief's table and kept after review: `seq::LinkedList`,
+for the O(1) splice and split that core's persistent singly linked `List` cannot do.
 
 ## Conventions that apply to every package
 
@@ -43,11 +43,34 @@ compare, so a caller with an ordering the trait cannot express (a case-insensiti
 key, a descending priority) does not have to wrap the element. Those forms are stated
 once here and not repeated in every table below.
 
-**The hash seed.** Hashed containers take `hash_seed~ : Int32 = hash_seed_default`,
-where `pub let hash_seed_default : Int32 = 0`. Zero keeps iteration order and any
-serialised output reproducible across runs, which generated test vectors need. A caller
-holding adversarial keys passes a random seed. The seed is combined through core's
-`Hasher`, so a container's bucket for a key is reproducible when the seed is the same.
+**The hash seed.** Hashed containers take `hash_seed~ : Int32 = hash_seed_default`.
+The default is drawn once per process from the organisation's entropy path: 32 bytes
+from `@moonseed.bytes(32, @moonseed.system.source)` fed to `@moonrand.seeded`, with one
+32-bit draw taken as the seed. Every process therefore lays its tables out
+differently, which is what stops a key set chosen to collide from colliding.
+
+```mbt
+pub let hash_seed_default : Int32
+pub let hash_seed_is_random : Bool
+pub fn hash_seed_from(bytes : BytesView) -> Int32
+```
+
+`hash_seed_is_random` is `false` only where the platform offers no entropy
+(`@moonseed.Unavailable::Platform` — a wasm host without WASI); the default is then
+zero and every container still works. `hash_seed_from` derives a seed from bytes the
+caller already holds, which is how a service reproduces its tables across restarts.
+
+Reproducibility is per call, not per process: pass `hash_seed=0` — or any fixed value —
+and iteration order, bucket layout and serialised output stay identical across runs.
+Generated vectors and cross-checked fixtures always pass a seed explicitly.
+
+The seed goes through core's `Hasher`, so a key's bucket is a pure function of the key
+and the seed, and nothing else.
+
+**Dependencies.** Core, `moonbitstack/moonrand` for the generator, `moonbitstack/moonseed`
+and its `system` package for the entropy, and nothing else. The seed path is the only
+reason a package here imports another module; `tree` and `heap` also use it, for skip
+list levels and treap priorities, which want the same kind of per-process variation.
 
 **Errors.** Invalid input is `Refused` and nothing else:
 
@@ -502,7 +525,7 @@ reference defaults to; `max: true` reverses the comparator without a new type.
 | `OrderStatisticTree::rank` | `fn[T] OrderStatisticTree::rank(OrderStatisticTree[T], T) -> Int32` — number of elements below | O(log n) |
 | `OrderStatisticTree::count_less` / `count_range` | `-> Int32` | O(log n) |
 | `OrderStatisticTree::first` / `last` / `range` / `iter` / `length` / `clear` | as core `SortedSet` | O(log n) / O(n) |
-| `SkipList::new` | `fn[T : Compare] SkipList::new(skip_list_options~ : SkipListOptions = skip_list_options, rand~ : (Int32) -> Int32 = ...) -> SkipList[T]` | O(1) |
+| `SkipList::new` | `fn[T : Compare] SkipList::new(skip_list_options~ : SkipListOptions = skip_list_options) -> SkipList[T]` | O(1) |
 | `SkipList::insert` / `remove` / `contains` / `rank` / `select` / `range` / `first` / `last` / `iter` / `length` | as `OrderStatisticTree` | O(log n) expected |
 | `Treap::new` | `fn[K : Compare, V] Treap::new(treap_options~ : TreapOptions = treap_options) -> Treap[K, V]` | O(1) |
 | `Treap::set` / `get` / `remove` | `set(K, V) -> V?`, `get(K) -> V?` | O(log n) expected |
@@ -513,18 +536,21 @@ reference defaults to; `max: true` reverses the comparator without a new type.
 pub(all) struct SkipListOptions {
   probability : Double
   max_level : Int32
+  seed : Int32
 }
-pub let skip_list_options : SkipListOptions = { probability: 0.25, max_level: 32 }
+pub let skip_list_options : SkipListOptions = { probability: 0.25, max_level: 32, seed: hash_seed_default }
 
 pub(all) struct TreapOptions {
   seed : Int32
 }
-pub let treap_options : TreapOptions = { seed: 0 }
+pub let treap_options : TreapOptions = { seed: hash_seed_default }
 ```
 
 `probability: 0.25` and `max_level: 32` are Redis's skip-list parameters, which give
-O(log n) with a smaller expected level than the classic 1/2. `seed: 0` makes a treap's
-shape reproducible; a random seed defends against inputs built to degenerate it.
+O(log n) with a smaller expected level than the classic 1/2. `seed` defaults to the
+per-process seed the hash tables use and drives a `@moonrand.seeded` generator, so a
+skip list's levels and a treap's priorities cannot be predicted from the input; passing
+a fixed seed makes the shape reproducible for a test.
 
 ### `ArenaTree[T]`
 
@@ -779,7 +805,9 @@ pub(open) trait PhfKey {
 stores the displacement table (the `phf` crate's default), `Quick` accepts a slightly
 larger table to avoid the search (`quickphf`), `Minimal` stores the smallest possible
 index and a rank structure instead of a displacement table (`entropy-map`). `seed: 0`
-is the fixed seed `phf` uses, so a generated table is reproducible.
+is deliberately fixed here, unlike the hash containers: the generated source is checked
+in, and CI compares it byte for byte, so the search has to start from the same place on
+every machine.
 
 ## `algo`
 
@@ -956,14 +984,14 @@ core's iterator methods.
 
 ## What this draft does not decide
 
-- **Whether `LinkedList` stays.** See open question 1 in `inventory.md`. If it goes,
-  `seq` loses one row of the table and nothing else.
 - **The exact JSON shape of the containers.** The convention is decided (a map becomes
   a JSON object only with string keys, otherwise an array of pairs); the field names are
   not. They belong in the implementation, where `moon test` can check them.
-- **`Rope`'s package.** It is in `seq` here because the brief puts it there.
-- **The `phf` build path.** Whether the table is generated by an annotation at build
-  time or built by `PhfBuilder` at start-up depends on what moonast can do.
+- **`Rope`'s package.** It is in `seq` here because the brief puts it there; whether a
+  text-only buffer belongs in `text` is still open, and under discussion.
+- **The default capacity of the containers that take one optionally.** Zero means "grow
+  from nothing", which is what the tables say; if a first implementation round shows
+  that most callers pass a capacity anyway, the preset changes in one place.
 
 ## How to review this document
 

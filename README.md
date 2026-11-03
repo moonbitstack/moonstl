@@ -38,9 +38,10 @@ pulls in only the caches.
 
 Method names follow the core library: `new`, `from_array`, `from_iter`, `length`,
 `is_empty`, `clear`, `copy`, `iter`, `get` returning `Option`, `at` aborting. Ordered
-containers take `Compare`; hashed containers take `Hash + Eq` and a seed. Bad input —
-a capacity of zero, a rate outside (0, 1) — is refused with one error type rather than
-per-type errors.
+containers take `Compare`; hashed containers take `Hash + Eq` and a seed that is drawn
+per process, so a table cannot be laid out for a key set an attacker chose — pin the
+seed and iteration order becomes reproducible. Bad input — a capacity of zero, a rate
+outside (0, 1) — is refused with one error type rather than per-type errors.
 
 ## Checks
 
