@@ -1,0 +1,210 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbitstack/moonstl/cache"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitstack/moonstl/map",
+  "moonbitstack/moonstl/spec",
+}
+
+// Values
+pub fn[K : Hash + Eq, V] memoize((K) -> V, capacity~ : Int32) -> ((K) -> V) raise @spec.Refused
+
+// Errors
+
+// Types and methods
+pub struct ArcCache[K, V] {
+  index : @map.IndexMap[K, Int32]
+  slots : Array[ArcNode[K, V]?]
+  free : Array[Int32]
+  heads : Array[Int32]
+  tails : Array[Int32]
+  sizes : Array[Int32]
+  capacity : Int32
+  mut recent_target : Int32
+  mut hits : Int64
+  mut misses : Int64
+  mut evictions : Int64
+  on_evict : ((K, V) -> Unit)?
+}
+pub fn[K, V] ArcCache::capacity(Self[K, V]) -> Int32
+pub fn[K, V] ArcCache::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] ArcCache::contains(Self[K, V], K) -> Bool
+pub fn[K, V] ArcCache::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Hash + Eq, V : Eq] ArcCache::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Hash + Eq, V] ArcCache::get(Self[K, V], K) -> V?
+pub fn[K, V] ArcCache::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] ArcCache::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] ArcCache::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] ArcCache::length(Self[K, V]) -> Int32
+pub fn[K, V] ArcCache::lists(Self[K, V]) -> (Int32, Int32, Int32, Int32)
+pub fn[K, V] ArcCache::new(capacity~ : Int32, on_evict? : (K, V) -> Unit, hash_seed? : Int32) -> Self[K, V] raise @spec.Refused
+pub fn[K : Hash + Eq, V : Eq] ArcCache::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] ArcCache::output(Self[K, V], &Logger) -> Unit
+pub fn[K : Hash + Eq, V] ArcCache::remove(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] ArcCache::set(Self[K, V], K, V) -> (K, V)?
+pub fn[K, V] ArcCache::stats(Self[K, V]) -> CacheStats
+pub fn[K : Show, V : Show] ArcCache::to_string(Self[K, V]) -> String
+pub fn[K, V] ArcCache::values(Self[K, V]) -> Iter[V]
+pub impl[K : Hash + Eq, V : Eq] Eq for ArcCache[K, V]
+pub impl[K : Show, V : Show] Show for ArcCache[K, V]
+
+pub struct ArcNode[K, V] {
+  key : K
+  mut value : V?
+  mut list : Int32
+  mut prev : Int32
+  mut next : Int32
+}
+
+#derive(Eq, @debug.Debug)
+pub(all) struct CacheStats {
+  hits : Int64
+  misses : Int64
+  evictions : Int64
+}
+pub fn CacheStats::equal(Self, Self) -> Bool
+pub fn CacheStats::hit_rate(Self) -> Double
+pub fn CacheStats::not_equal(Self, Self) -> Bool
+pub fn CacheStats::output(Self, &Logger) -> Unit
+pub fn CacheStats::to_repr(Self) -> @debug.Repr
+pub fn CacheStats::to_string(Self) -> String
+pub impl Show for CacheStats
+
+pub struct ExpNode[K, V] {
+  key : K
+  mut value : V
+  mut expire_at : Int64
+  mut stamp : Int32
+  mut prev : Int32
+  mut next : Int32
+}
+
+pub struct ExpiringCache[K, V] {
+  index : @map.IndexMap[K, Int32]
+  slots : Array[ExpNode[K, V]?]
+  free : Array[Int32]
+  capacity : Int32
+  ttl : Int64
+  now : () -> Int64
+  mut head : Int32
+  mut tail : Int32
+  heap : Array[(Int64, Int32, Int32)]
+  mut stamp_counter : Int32
+  mut evictions : Int64
+}
+pub fn[K, V] ExpiringCache::capacity(Self[K, V]) -> Int32
+pub fn[K, V] ExpiringCache::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] ExpiringCache::contains(Self[K, V], K) -> Bool
+pub fn[K : Hash + Eq, V] ExpiringCache::expire_at(Self[K, V], K) -> Int64?
+pub fn[K : Hash + Eq, V] ExpiringCache::get(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] ExpiringCache::is_empty(Self[K, V]) -> Bool
+pub fn[K : Hash + Eq, V] ExpiringCache::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K : Hash + Eq, V] ExpiringCache::keys(Self[K, V]) -> Iter[K]
+pub fn[K : Hash + Eq, V] ExpiringCache::length(Self[K, V]) -> Int32
+pub fn[K, V] ExpiringCache::new(ttl~ : Int64, capacity~ : Int32, now~ : () -> Int64, hash_seed? : Int32) -> Self[K, V] raise @spec.Refused
+pub fn[K : Hash + Eq + Show, V : Show] ExpiringCache::output(Self[K, V], &Logger) -> Unit
+pub fn[K : Hash + Eq, V] ExpiringCache::purge(Self[K, V]) -> Int32
+pub fn[K : Hash + Eq, V] ExpiringCache::remove(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] ExpiringCache::set(Self[K, V], K, V, ttl? : Int64) -> (K, V)?
+pub fn[K : Hash + Eq, V] ExpiringCache::set_expire(Self[K, V], K, Int64) -> Bool
+pub fn[K, V] ExpiringCache::stats(Self[K, V]) -> CacheStats
+pub fn[K : Hash + Eq + Show, V : Show] ExpiringCache::to_string(Self[K, V]) -> String
+pub fn[K : Hash + Eq, V] ExpiringCache::values(Self[K, V]) -> Iter[V]
+pub impl[K : Hash + Eq + Show, V : Show] Show for ExpiringCache[K, V]
+
+pub struct LfuBucket {
+  mut head : Int32
+  mut tail : Int32
+}
+
+pub struct LfuCache[K, V] {
+  index : @map.IndexMap[K, Int32]
+  slots : Array[LfuNode[K, V]?]
+  free : Array[Int32]
+  buckets : Array[LfuBucket]
+  mut capacity : Int32
+  mut min_freq : Int32
+  mut hits : Int64
+  mut misses : Int64
+  mut evictions : Int64
+  on_evict : ((K, V) -> Unit)?
+}
+pub fn[K, V] LfuCache::capacity(Self[K, V]) -> Int32
+pub fn[K, V] LfuCache::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] LfuCache::contains(Self[K, V], K) -> Bool
+pub fn[K, V] LfuCache::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Hash + Eq, V : Eq] LfuCache::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Hash + Eq, V] LfuCache::frequency(Self[K, V], K) -> Int32?
+pub fn[K : Hash + Eq, V] LfuCache::get(Self[K, V], K) -> V?
+pub fn[K, V] LfuCache::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] LfuCache::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] LfuCache::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] LfuCache::length(Self[K, V]) -> Int32
+pub fn[K, V] LfuCache::new(capacity~ : Int32, on_evict? : (K, V) -> Unit, hash_seed? : Int32) -> Self[K, V] raise @spec.Refused
+pub fn[K : Hash + Eq, V : Eq] LfuCache::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] LfuCache::output(Self[K, V], &Logger) -> Unit
+pub fn[K : Hash + Eq, V] LfuCache::peek(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] LfuCache::remove(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] LfuCache::resize_capacity(Self[K, V], capacity~ : Int32) -> Unit raise @spec.Refused
+pub fn[K : Hash + Eq, V] LfuCache::set(Self[K, V], K, V) -> (K, V)?
+pub fn[K, V] LfuCache::stats(Self[K, V]) -> CacheStats
+pub fn[K : Hash + Eq, V] LfuCache::take(Self[K, V], K) -> V?
+pub fn[K : Show, V : Show] LfuCache::to_string(Self[K, V]) -> String
+pub fn[K, V] LfuCache::values(Self[K, V]) -> Iter[V]
+pub impl[K : Hash + Eq, V : Eq] Eq for LfuCache[K, V]
+pub impl[K : Show, V : Show] Show for LfuCache[K, V]
+
+pub struct LfuNode[K, V] {
+  key : K
+  mut value : V
+  mut freq : Int32
+  mut prev : Int32
+  mut next : Int32
+}
+
+pub struct LruCache[K, V] {
+  index : @map.IndexMap[K, Int32]
+  slots : Array[LruNode[K, V]?]
+  free : Array[Int32]
+  mut capacity : Int32
+  mut head : Int32
+  mut tail : Int32
+  mut hits : Int64
+  mut misses : Int64
+  mut evictions : Int64
+  on_evict : ((K, V) -> Unit)?
+}
+pub fn[K, V] LruCache::capacity(Self[K, V]) -> Int32
+pub fn[K, V] LruCache::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] LruCache::contains(Self[K, V], K) -> Bool
+pub fn[K, V] LruCache::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Hash + Eq, V : Eq] LruCache::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Hash + Eq, V] LruCache::get(Self[K, V], K) -> V?
+pub fn[K, V] LruCache::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] LruCache::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] LruCache::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] LruCache::length(Self[K, V]) -> Int32
+pub fn[K, V] LruCache::new(capacity~ : Int32, on_evict? : (K, V) -> Unit, hash_seed? : Int32) -> Self[K, V] raise @spec.Refused
+pub fn[K : Hash + Eq, V : Eq] LruCache::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] LruCache::output(Self[K, V], &Logger) -> Unit
+pub fn[K : Hash + Eq, V] LruCache::peek(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] LruCache::remove(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] LruCache::resize_capacity(Self[K, V], capacity~ : Int32) -> Unit raise @spec.Refused
+pub fn[K : Hash + Eq, V] LruCache::set(Self[K, V], K, V) -> (K, V)?
+pub fn[K, V] LruCache::stats(Self[K, V]) -> CacheStats
+pub fn[K : Show, V : Show] LruCache::to_string(Self[K, V]) -> String
+pub fn[K, V] LruCache::values(Self[K, V]) -> Iter[V]
+pub impl[K : Hash + Eq, V : Eq] Eq for LruCache[K, V]
+pub impl[K : Show, V : Show] Show for LruCache[K, V]
+
+pub struct LruNode[K, V] {
+  key : K
+  mut value : V
+  mut prev : Int32
+  mut next : Int32
+}
+
+// Type aliases
+
+// Traits

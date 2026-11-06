@@ -1,0 +1,11 @@
+import {
+  "moonbitstack/moonstl/spec",
+}
+
+import {
+  "moonbitstack/moonstl/map",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"
