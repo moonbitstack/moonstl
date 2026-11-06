@@ -1,0 +1,482 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbitstack/moonstl/map"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "moonbitstack/moonstl/spec",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct BiMap[K, V] {
+  forward : IndexMap[K, V]
+  backward : IndexMap[V, K]
+}
+pub fn[K, V] BiMap::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] BiMap::contains_key(Self[K, V], K) -> Bool
+pub fn[K, V : Hash + Eq] BiMap::contains_value(Self[K, V], V) -> Bool
+pub fn[K, V] BiMap::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Eq, V : Eq] BiMap::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Hash + Eq, V] BiMap::get(Self[K, V], K) -> V?
+pub fn[K, V : Hash + Eq] BiMap::get_key(Self[K, V], V) -> K?
+pub fn[K, V] BiMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] BiMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] BiMap::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] BiMap::length(Self[K, V]) -> Int32
+pub fn[K, V] BiMap::new(capacity? : Int32, hash_seed? : Int32) -> Self[K, V]
+pub fn[K : Eq, V : Eq] BiMap::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] BiMap::output(Self[K, V], &Logger) -> Unit
+pub fn[K : Hash + Eq, V : Hash + Eq] BiMap::remove_key(Self[K, V], K) -> (K, V)?
+pub fn[K : Hash + Eq, V : Hash + Eq] BiMap::remove_value(Self[K, V], V) -> (K, V)?
+pub fn[K : Hash + Eq, V : Hash + Eq] BiMap::set(Self[K, V], K, V) -> (K, V)?
+pub fn[K : Hash + Eq, V : Hash + Eq] BiMap::set_new(Self[K, V], K, V) -> Unit raise @spec.Refused
+pub fn[K : Show, V : Show] BiMap::to_string(Self[K, V]) -> String
+pub fn[K, V] BiMap::values(Self[K, V]) -> Iter[V]
+pub impl[K : Eq, V : Eq] Eq for BiMap[K, V]
+pub impl[K : Show, V : Show] Show for BiMap[K, V]
+
+pub struct ChainMap[K, V] {
+  chain : Array[Map[K, V]]
+}
+pub fn[K : Hash + Eq, V] ChainMap::contains(Self[K, V], K) -> Bool
+pub fn[K, V] ChainMap::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Hash + Eq, V] ChainMap::flatten(Self[K, V]) -> Map[K, V]
+pub fn[K : Hash + Eq, V] ChainMap::get(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] ChainMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K : Hash + Eq, V] ChainMap::length(Self[K, V]) -> Int32
+pub fn[K, V] ChainMap::maps(Self[K, V]) -> Array[Map[K, V]]
+pub fn[K, V] ChainMap::new(Array[Map[K, V]]) -> Self[K, V]
+pub fn[K : Hash + Eq, V] ChainMap::new_child(Self[K, V]) -> Self[K, V]
+pub fn[K, V] ChainMap::parent(Self[K, V]) -> Self[K, V]?
+pub fn[K : Hash + Eq, V] ChainMap::remove(Self[K, V], K) -> Unit
+pub fn[K : Hash + Eq, V] ChainMap::set(Self[K, V], K, V) -> Unit
+
+pub struct Counter[K] {
+  map : IndexMap[K, Int32]
+  mut total_count : Int64
+}
+pub fn[K : Hash + Eq] Counter::add(Self[K], Self[K]) -> Self[K]
+pub fn[K] Counter::clear(Self[K]) -> Unit
+pub fn[K] Counter::copy(Self[K]) -> Self[K]
+pub fn[K : Hash + Eq] Counter::decr(Self[K], K) -> Int32
+pub fn[K : Hash + Eq] Counter::decr_by(Self[K], K, Int32) -> Int32
+pub fn[K] Counter::elements(Self[K]) -> Iter[K]
+pub fn[K : Eq] Counter::equal(Self[K], Self[K]) -> Bool
+pub fn[K : Hash + Eq] Counter::get(Self[K], K) -> Int32
+pub fn[K : Hash + Eq] Counter::incr(Self[K], K) -> Int32
+pub fn[K : Hash + Eq] Counter::incr_by(Self[K], K, Int32) -> Int32
+pub fn[K] Counter::is_empty(Self[K]) -> Bool
+pub fn[K] Counter::iter(Self[K]) -> Iter[(K, Int32)]
+pub fn[K] Counter::keys(Self[K]) -> Iter[K]
+pub fn[K] Counter::length(Self[K]) -> Int32
+pub fn[K] Counter::most_common(Self[K], n~ : Int32) -> Array[(K, Int32)]
+pub fn[K] Counter::new(capacity? : Int32, hash_seed? : Int32) -> Self[K]
+pub fn[K : Eq] Counter::not_equal(Self[K], Self[K]) -> Bool
+pub fn[K : Show] Counter::output(Self[K], &Logger) -> Unit
+pub fn[K : Hash + Eq] Counter::retain(Self[K], (K, Int32) -> Bool) -> Unit
+pub fn[K : Hash + Eq] Counter::subtract_in_place(Self[K], Self[K]) -> Unit
+pub fn[K] Counter::to_array(Self[K]) -> Array[(K, Int32)]
+pub fn[K : Show] Counter::to_string(Self[K]) -> String
+pub fn[K] Counter::total(Self[K]) -> Int64
+pub impl[K : Eq] Eq for Counter[K]
+pub impl[K : Show] Show for Counter[K]
+
+pub struct DefaultMap[K, V] {
+  map : IndexMap[K, V]
+  factory : (K) -> V
+}
+pub fn[K, V] DefaultMap::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] DefaultMap::contains(Self[K, V], K) -> Bool
+pub fn[K, V] DefaultMap::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Eq, V : Eq] DefaultMap::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Hash + Eq, V] DefaultMap::get(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] DefaultMap::get_or_init(Self[K, V], K) -> V
+pub fn[K, V] DefaultMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] DefaultMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] DefaultMap::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] DefaultMap::length(Self[K, V]) -> Int32
+pub fn[K, V] DefaultMap::new(factory~ : (K) -> V, capacity? : Int32, hash_seed? : Int32) -> Self[K, V]
+pub fn[K : Eq, V : Eq] DefaultMap::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] DefaultMap::output(Self[K, V], &Logger) -> Unit
+pub fn[K : Hash + Eq, V] DefaultMap::remove(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] DefaultMap::set(Self[K, V], K, V) -> V?
+pub fn[K : Show, V : Show] DefaultMap::to_string(Self[K, V]) -> String
+pub fn[K, V] DefaultMap::values(Self[K, V]) -> Iter[V]
+pub impl[K : Eq, V : Eq] Eq for DefaultMap[K, V]
+pub impl[K : Show, V : Show] Show for DefaultMap[K, V]
+
+pub struct FlatMap[K, V] {
+  keys : Array[K]
+  values : Array[V]
+}
+pub fn[K, V] FlatMap::capacity(Self[K, V]) -> Int32
+pub fn[K, V] FlatMap::clear(Self[K, V]) -> Unit
+pub fn[K : Compare, V] FlatMap::contains(Self[K, V], K) -> Bool
+pub fn[K, V] FlatMap::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Eq, V : Eq] FlatMap::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K, V] FlatMap::first(Self[K, V]) -> (K, V)?
+pub fn[K : Compare, V] FlatMap::from_array(ArrayView[(K, V)]) -> Self[K, V]
+pub fn[K : Compare, V] FlatMap::get(Self[K, V], K) -> V?
+pub fn[K, V] FlatMap::get_index(Self[K, V], Int32) -> (K, V)?
+pub fn[K : Compare, V] FlatMap::index_of(Self[K, V], K) -> Result[Int32, Int32]
+pub fn[K, V] FlatMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] FlatMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] FlatMap::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] FlatMap::last(Self[K, V]) -> (K, V)?
+pub fn[K, V] FlatMap::length(Self[K, V]) -> Int32
+pub fn[K, V] FlatMap::new(capacity? : Int32) -> Self[K, V]
+pub fn[K : Eq, V : Eq] FlatMap::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] FlatMap::output(Self[K, V], &Logger) -> Unit
+pub fn[K, V] FlatMap::pop_first(Self[K, V]) -> (K, V)?
+pub fn[K, V] FlatMap::pop_last(Self[K, V]) -> (K, V)?
+pub fn[K : Compare, V] FlatMap::range(Self[K, V], start~ : K, end~ : K) -> Iter[(K, V)]
+pub fn[K : Compare, V] FlatMap::remove(Self[K, V], K) -> V?
+pub fn[K, V] FlatMap::reserve_capacity(Self[K, V], capacity~ : Int32) -> Unit
+pub fn[K : Compare, V] FlatMap::set(Self[K, V], K, V) -> V?
+pub fn[K, V] FlatMap::shrink_to_fit(Self[K, V]) -> Unit
+pub fn[K : Show, V : Show] FlatMap::to_string(Self[K, V]) -> String
+pub fn[K, V] FlatMap::values(Self[K, V]) -> Iter[V]
+pub impl[K : Eq, V : Eq] Eq for FlatMap[K, V]
+pub impl[K : Show, V : Show] Show for FlatMap[K, V]
+
+pub struct FlatMultiMap[K, V] {
+  entries : Array[(K, V)]
+}
+pub fn[K, V] FlatMultiMap::clear(Self[K, V]) -> Unit
+pub fn[K : Compare, V] FlatMultiMap::contains(Self[K, V], K) -> Bool
+pub fn[K, V] FlatMultiMap::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Compare, V] FlatMultiMap::count(Self[K, V], K) -> Int32
+pub fn[K : Eq, V : Eq] FlatMultiMap::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K, V] FlatMultiMap::first(Self[K, V]) -> (K, V)?
+pub fn[K : Compare, V] FlatMultiMap::get(Self[K, V], K) -> Array[V]
+pub fn[K : Compare, V : Compare] FlatMultiMap::insert(Self[K, V], K, V) -> Unit
+pub fn[K, V] FlatMultiMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] FlatMultiMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K : Compare, V] FlatMultiMap::key_count(Self[K, V]) -> Int32
+pub fn[K, V] FlatMultiMap::last(Self[K, V]) -> (K, V)?
+pub fn[K, V] FlatMultiMap::length(Self[K, V]) -> Int32
+pub fn[K, V] FlatMultiMap::new(capacity? : Int32) -> Self[K, V]
+pub fn[K : Eq, V : Eq] FlatMultiMap::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] FlatMultiMap::output(Self[K, V], &Logger) -> Unit
+pub fn[K, V] FlatMultiMap::pop_first(Self[K, V]) -> (K, V)?
+pub fn[K, V] FlatMultiMap::pop_last(Self[K, V]) -> (K, V)?
+pub fn[K : Compare, V] FlatMultiMap::range(Self[K, V], start~ : K, end~ : K) -> Iter[(K, V)]
+pub fn[K : Compare, V] FlatMultiMap::remove(Self[K, V], K) -> Array[V]
+pub fn[K : Compare, V : Compare] FlatMultiMap::remove_entry(Self[K, V], K, V) -> Bool
+pub fn[K, V] FlatMultiMap::to_array(Self[K, V]) -> Array[(K, V)]
+pub fn[K : Show, V : Show] FlatMultiMap::to_string(Self[K, V]) -> String
+pub impl[K : Eq, V : Eq] Eq for FlatMultiMap[K, V]
+pub impl[K : Show, V : Show] Show for FlatMultiMap[K, V]
+
+pub struct FlatSet[K] {
+  keys : Array[K]
+}
+pub fn[K] FlatSet::capacity(Self[K]) -> Int32
+pub fn[K] FlatSet::clear(Self[K]) -> Unit
+pub fn[K : Compare] FlatSet::contains(Self[K], K) -> Bool
+pub fn[K] FlatSet::copy(Self[K]) -> Self[K]
+pub fn[K : Eq] FlatSet::equal(Self[K], Self[K]) -> Bool
+pub fn[K] FlatSet::first(Self[K]) -> K?
+pub fn[K : Compare] FlatSet::from_array(ArrayView[K]) -> Self[K]
+pub fn[K] FlatSet::get_index(Self[K], Int32) -> K?
+pub fn[K : Compare] FlatSet::index_of(Self[K], K) -> Result[Int32, Int32]
+pub fn[K : Compare] FlatSet::insert(Self[K], K) -> Bool
+pub fn[K] FlatSet::is_empty(Self[K]) -> Bool
+pub fn[K] FlatSet::iter(Self[K]) -> Iter[K]
+pub fn[K] FlatSet::last(Self[K]) -> K?
+pub fn[K] FlatSet::length(Self[K]) -> Int32
+pub fn[K] FlatSet::new(capacity? : Int32) -> Self[K]
+pub fn[K : Eq] FlatSet::not_equal(Self[K], Self[K]) -> Bool
+pub fn[K : Show] FlatSet::output(Self[K], &Logger) -> Unit
+pub fn[K] FlatSet::pop_first(Self[K]) -> K?
+pub fn[K] FlatSet::pop_last(Self[K]) -> K?
+pub fn[K : Compare] FlatSet::range(Self[K], start~ : K, end~ : K) -> Iter[K]
+pub fn[K : Compare] FlatSet::remove(Self[K], K) -> Bool
+pub fn[K] FlatSet::reserve_capacity(Self[K], capacity~ : Int32) -> Unit
+pub fn[K] FlatSet::shrink_to_fit(Self[K]) -> Unit
+pub fn[K] FlatSet::to_array(Self[K]) -> Array[K]
+pub fn[K : Show] FlatSet::to_string(Self[K]) -> String
+pub impl[K : Eq] Eq for FlatSet[K]
+pub impl[K : Show] Show for FlatSet[K]
+
+pub struct IndexMap[K, V] {
+  mut entries : Array[(K, V)]
+  mut hashes : Array[Int32]
+  mut slots : Array[Int32]
+  mut slot_of : Array[Int32]
+  mut live : Int32
+  mut graves : Int32
+  seed : Int32
+}
+pub fn[K, V] IndexMap::capacity(Self[K, V]) -> Int32
+pub fn[K, V] IndexMap::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::contains(Self[K, V], K) -> Bool
+pub fn[K, V] IndexMap::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Eq, V : Eq] IndexMap::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Hash + Eq, V] IndexMap::from_array(ArrayView[(K, V)], hash_seed? : Int32) -> Self[K, V]
+pub fn[K : Hash + Eq, V] IndexMap::from_iter(Iter[(K, V)], hash_seed? : Int32) -> Self[K, V]
+pub fn[K : Hash + Eq + @json.FromJson, V : @json.FromJson] IndexMap::from_json(@json.Json, @json.JsonPath) -> Self[K, V] raise @json.JsonDecodeError
+pub fn[K : Hash + Eq, V] IndexMap::get(Self[K, V], K) -> V?
+pub fn[K : Hash + Eq, V] IndexMap::get_full(Self[K, V], K) -> (Int32, K, V)?
+pub fn[K, V] IndexMap::get_index(Self[K, V], Int32) -> (K, V)?
+pub fn[K : Hash + Eq, V] IndexMap::get_index_of(Self[K, V], K) -> Int32?
+pub fn[K : Hash + Eq, V] IndexMap::get_key_value(Self[K, V], K) -> (K, V)?
+pub fn[K : Hash, V : Hash] IndexMap::hash(Self[K, V]) -> Int32
+pub fn[K : Hash, V : Hash] IndexMap::hash_combine(Self[K, V], Hasher) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::insert_full(Self[K, V], K, V) -> (Int32, V?)
+pub fn[K, V] IndexMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] IndexMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] IndexMap::iter2(Self[K, V]) -> Iter2[K, V]
+pub fn[K, V] IndexMap::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] IndexMap::length(Self[K, V]) -> Int32
+pub fn[K, V] IndexMap::move_index(Self[K, V], Int32, Int32) -> Unit
+pub fn[K, V] IndexMap::new(capacity? : Int32, hash_seed? : Int32) -> Self[K, V]
+pub fn[K : Eq, V : Eq] IndexMap::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] IndexMap::output(Self[K, V], &Logger) -> Unit
+pub fn[K, V] IndexMap::range(Self[K, V], start~ : Int32, len~ : Int32) -> Iter[(K, V)]
+pub fn[K : Hash + Eq, V] IndexMap::remove(Self[K, V], K) -> V?
+pub fn[K, V] IndexMap::reserve_capacity(Self[K, V], capacity~ : Int32) -> Unit
+pub fn[K, V] IndexMap::retain(Self[K, V], (K, V) -> Bool) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::set(Self[K, V], K, V) -> V?
+pub fn[K : Hash + Eq, V] IndexMap::set_default(Self[K, V], K, V) -> V
+pub fn[K : Hash + Eq, V] IndexMap::shift_remove(Self[K, V], K) -> V?
+pub fn[K, V] IndexMap::shift_remove_index(Self[K, V], Int32) -> (K, V)?
+pub fn[K, V] IndexMap::shrink_to_fit(Self[K, V]) -> Unit
+pub fn[K, V] IndexMap::sort_by(Self[K, V], ((K, V), (K, V)) -> Int32) -> Unit
+pub fn[K, V, R : Compare] IndexMap::sort_by_key(Self[K, V], project~ : (K) -> R) -> Unit
+pub fn[K : Compare, V] IndexMap::sort_keys(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::split_off(Self[K, V], Int32) -> Self[K, V]
+pub fn[K, V] IndexMap::swap_indices(Self[K, V], Int32, Int32) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::swap_remove(Self[K, V], K) -> V?
+pub fn[K, V] IndexMap::swap_remove_index(Self[K, V], Int32) -> (K, V)?
+pub fn[K, V] IndexMap::to_array(Self[K, V]) -> Array[(K, V)]
+pub fn[K : @json.ToJson, V : @json.ToJson] IndexMap::to_json(Self[K, V]) -> @json.Json
+pub fn[K : Show, V : Show] IndexMap::to_string(Self[K, V]) -> String
+pub fn[K, V] IndexMap::truncate(Self[K, V], Int32) -> Unit
+pub fn[K : Hash + Eq, V] IndexMap::update(Self[K, V], K, (V) -> V) -> Bool
+pub fn[K, V] IndexMap::values(Self[K, V]) -> Iter[V]
+pub impl[K : Eq, V : Eq] Eq for IndexMap[K, V]
+pub impl[K : Hash, V : Hash] Hash for IndexMap[K, V]
+pub impl[K : Show, V : Show] Show for IndexMap[K, V]
+pub impl[K : Hash + Eq + @json.FromJson, V : @json.FromJson] @json.FromJson for IndexMap[K, V]
+pub impl[K : @json.ToJson, V : @json.ToJson] @json.ToJson for IndexMap[K, V]
+
+pub struct IndexSet[K] {
+  map : IndexMap[K, Unit]
+}
+pub fn[K] IndexSet::capacity(Self[K]) -> Int32
+pub fn[K] IndexSet::clear(Self[K]) -> Unit
+pub fn[K : Hash + Eq] IndexSet::contains(Self[K], K) -> Bool
+pub fn[K] IndexSet::copy(Self[K]) -> Self[K]
+pub fn[K : Hash + Eq] IndexSet::difference(Self[K], Self[K]) -> Self[K]
+pub fn[K : Eq] IndexSet::equal(Self[K], Self[K]) -> Bool
+pub fn[K] IndexSet::first(Self[K]) -> K?
+pub fn[K : Hash + Eq] IndexSet::from_array(ArrayView[K], hash_seed? : Int32) -> Self[K]
+pub fn[K : Hash + Eq] IndexSet::from_iter(Iter[K], hash_seed? : Int32) -> Self[K]
+pub fn[K] IndexSet::get_index(Self[K], Int32) -> K?
+pub fn[K : Hash + Eq] IndexSet::get_index_of(Self[K], K) -> Int32?
+pub fn[K : Hash] IndexSet::hash(Self[K]) -> Int32
+pub fn[K : Hash] IndexSet::hash_combine(Self[K], Hasher) -> Unit
+pub fn[K : Hash + Eq] IndexSet::insert(Self[K], K) -> (Int32, Bool)
+pub fn[K : Hash + Eq] IndexSet::intersection(Self[K], Self[K]) -> Self[K]
+pub fn[K : Hash + Eq] IndexSet::is_disjoint(Self[K], Self[K]) -> Bool
+pub fn[K] IndexSet::is_empty(Self[K]) -> Bool
+pub fn[K : Hash + Eq] IndexSet::is_subset(Self[K], Self[K]) -> Bool
+pub fn[K : Hash + Eq] IndexSet::is_superset(Self[K], Self[K]) -> Bool
+pub fn[K] IndexSet::iter(Self[K]) -> Iter[K]
+pub fn[K] IndexSet::last(Self[K]) -> K?
+pub fn[K] IndexSet::length(Self[K]) -> Int32
+pub fn[K] IndexSet::move_index(Self[K], Int32, Int32) -> Unit
+pub fn[K] IndexSet::new(capacity? : Int32, hash_seed? : Int32) -> Self[K]
+pub fn[K : Eq] IndexSet::not_equal(Self[K], Self[K]) -> Bool
+pub fn[K : Show] IndexSet::output(Self[K], &Logger) -> Unit
+pub fn[K] IndexSet::range(Self[K], start~ : Int32, len~ : Int32) -> Iter[K]
+pub fn[K : Hash + Eq] IndexSet::remove(Self[K], K) -> Bool
+pub fn[K] IndexSet::retain(Self[K], (K) -> Bool) -> Unit
+pub fn[K : Hash + Eq] IndexSet::shift_remove(Self[K], K) -> Bool
+pub fn[K] IndexSet::sort_by(Self[K], (K, K) -> Int32) -> Unit
+pub fn[K : Compare] IndexSet::sort_keys(Self[K]) -> Unit
+pub fn[K] IndexSet::swap_indices(Self[K], Int32, Int32) -> Unit
+pub fn[K : Hash + Eq] IndexSet::swap_remove(Self[K], K) -> Bool
+pub fn[K : Hash + Eq] IndexSet::symmetric_difference(Self[K], Self[K]) -> Self[K]
+pub fn[K] IndexSet::to_array(Self[K]) -> Array[K]
+pub fn[K : Show] IndexSet::to_string(Self[K]) -> String
+pub fn[K : Hash + Eq] IndexSet::union(Self[K], Self[K]) -> Self[K]
+pub impl[K : Eq] Eq for IndexSet[K]
+pub impl[K : Hash] Hash for IndexSet[K]
+pub impl[K : Show] Show for IndexSet[K]
+
+pub struct MultiMap[K, V] {
+  map : IndexMap[K, Array[V]]
+  mut total : Int32
+}
+pub fn[K, V] MultiMap::clear(Self[K, V]) -> Unit
+pub fn[K : Hash + Eq, V] MultiMap::contains(Self[K, V], K) -> Bool
+pub fn[K : Hash + Eq, V : Eq] MultiMap::contains_entry(Self[K, V], K, V) -> Bool
+pub fn[K : Hash + Eq, V] MultiMap::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Eq, V : Eq] MultiMap::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Hash + Eq, V] MultiMap::get(Self[K, V], K) -> Array[V]
+pub fn[K : Hash + Eq, V] MultiMap::insert(Self[K, V], K, V) -> Unit
+pub fn[K, V] MultiMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] MultiMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] MultiMap::iter2(Self[K, V]) -> Iter2[K, V]
+pub fn[K : Hash + Eq, V] MultiMap::iter_values(Self[K, V], K) -> Iter[V]
+pub fn[K, V] MultiMap::key_count(Self[K, V]) -> Int32
+pub fn[K, V] MultiMap::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] MultiMap::length(Self[K, V]) -> Int32
+pub fn[K, V] MultiMap::new(capacity? : Int32, hash_seed? : Int32) -> Self[K, V]
+pub fn[K : Eq, V : Eq] MultiMap::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] MultiMap::output(Self[K, V], &Logger) -> Unit
+pub fn[K : Hash + Eq, V] MultiMap::remove(Self[K, V], K) -> Array[V]
+pub fn[K : Hash + Eq, V : Eq] MultiMap::remove_entry(Self[K, V], K, V) -> Bool
+pub fn[K : Show, V : Show] MultiMap::to_string(Self[K, V]) -> String
+pub impl[K : Eq, V : Eq] Eq for MultiMap[K, V]
+pub impl[K : Show, V : Show] Show for MultiMap[K, V]
+
+#derive(Eq, @debug.Debug)
+pub(all) enum Overlap {
+  Overwrite
+  Refuse
+  KeepFirst
+}
+pub fn Overlap::equal(Self, Self) -> Bool
+pub fn Overlap::not_equal(Self, Self) -> Bool
+pub fn Overlap::output(Self, &Logger) -> Unit
+pub fn Overlap::to_repr(Self) -> @debug.Repr
+pub fn Overlap::to_string(Self) -> String
+pub impl Show for Overlap
+
+pub struct RadixTree[T] {
+  labels : Array[Array[Char]]
+  children : Array[Map[Char, Int32]]
+  values : Array[T?]
+  mut entries : Int32
+}
+pub fn[T] RadixTree::clear(Self[T]) -> Unit
+pub fn[T] RadixTree::contains(Self[T], StringView) -> Bool
+pub fn[T] RadixTree::contains_prefix(Self[T], StringView) -> Bool
+pub fn[T] RadixTree::copy(Self[T]) -> Self[T]
+pub fn[T] RadixTree::get(Self[T], StringView) -> T?
+pub fn[T] RadixTree::get_ancestor_keys(Self[T], StringView) -> Array[String]
+pub fn[T] RadixTree::insert(Self[T], StringView, T) -> T?
+pub fn[T] RadixTree::is_empty(Self[T]) -> Bool
+pub fn[T] RadixTree::iter(Self[T]) -> Iter[(String, T)]
+pub fn[T] RadixTree::iter_prefix(Self[T], StringView) -> Iter[(String, T)]
+pub fn[T] RadixTree::keys_with_prefix(Self[T], StringView) -> Array[String]
+pub fn[T] RadixTree::length(Self[T]) -> Int32
+pub fn[T] RadixTree::longest_prefix(Self[T], StringView) -> (String, T)?
+pub fn[T] RadixTree::new() -> Self[T]
+pub fn[T : Show] RadixTree::output(Self[T], &Logger) -> Unit
+pub fn[T] RadixTree::prefix_count(Self[T], StringView) -> Int32
+pub fn[T] RadixTree::remove(Self[T], StringView) -> T?
+pub fn[T] RadixTree::to_array(Self[T]) -> Array[(String, T)]
+pub fn[T : Show] RadixTree::to_string(Self[T]) -> String
+pub impl[T : Show] Show for RadixTree[T]
+
+pub struct RangeMap[K, V] {
+  mut ranges : Array[(K, K, V)]
+  overlap : Overlap
+}
+pub fn[K, V] RangeMap::clear(Self[K, V]) -> Unit
+pub fn[K, V] RangeMap::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Eq, V : Eq] RangeMap::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K, V] RangeMap::gaps(Self[K, V]) -> Iter[(K, K)]
+pub fn[K : Compare, V] RangeMap::get(Self[K, V], K) -> V?
+pub fn[K : Compare, V] RangeMap::get_range(Self[K, V], K) -> (K, K, V)?
+pub fn[K : Compare, V : Eq] RangeMap::insert(Self[K, V], start~ : K, end~ : K, V) -> Unit raise @spec.Refused
+pub fn[K, V] RangeMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] RangeMap::length(Self[K, V]) -> Int32
+pub fn[K, V] RangeMap::new(overlap? : Overlap) -> Self[K, V]
+pub fn[K : Eq, V : Eq] RangeMap::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] RangeMap::output(Self[K, V], &Logger) -> Unit
+pub fn[K : Compare, V] RangeMap::overlapping(Self[K, V], start~ : K, end~ : K) -> Array[(K, K, V)]
+pub fn[K, V] RangeMap::ranges(Self[K, V]) -> Iter[(K, K, V)]
+pub fn[K : Compare, V] RangeMap::remove(Self[K, V], start~ : K, end~ : K) -> Unit
+pub fn[K : Show, V : Show] RangeMap::to_string(Self[K, V]) -> String
+pub impl[K : Eq, V : Eq] Eq for RangeMap[K, V]
+pub impl[K : Show, V : Show] Show for RangeMap[K, V]
+
+pub struct RangeSet[K] {
+  mut ranges : Array[(K, K)]
+  overlap : Overlap
+}
+pub fn[K] RangeSet::clear(Self[K]) -> Unit
+pub fn[K : Compare] RangeSet::contains(Self[K], K) -> Bool
+pub fn[K] RangeSet::copy(Self[K]) -> Self[K]
+pub fn[K : Eq] RangeSet::equal(Self[K], Self[K]) -> Bool
+pub fn[K] RangeSet::gaps(Self[K]) -> Iter[(K, K)]
+pub fn[K : Compare] RangeSet::insert(Self[K], start~ : K, end~ : K) -> Unit raise @spec.Refused
+pub fn[K] RangeSet::is_empty(Self[K]) -> Bool
+pub fn[K] RangeSet::length(Self[K]) -> Int32
+pub fn[K] RangeSet::new(overlap? : Overlap) -> Self[K]
+pub fn[K : Eq] RangeSet::not_equal(Self[K], Self[K]) -> Bool
+pub fn[K : Show] RangeSet::output(Self[K], &Logger) -> Unit
+pub fn[K : Compare] RangeSet::overlapping(Self[K], start~ : K, end~ : K) -> Array[(K, K)]
+pub fn[K] RangeSet::ranges(Self[K]) -> Iter[(K, K)]
+pub fn[K : Compare] RangeSet::remove(Self[K], start~ : K, end~ : K) -> Unit
+pub fn[K : Show] RangeSet::to_string(Self[K]) -> String
+pub impl[K : Eq] Eq for RangeSet[K]
+pub impl[K : Show] Show for RangeSet[K]
+
+pub struct SortedMultiMap[K, V] {
+  entries : Array[(K, V)]
+}
+pub fn[K, V] SortedMultiMap::clear(Self[K, V]) -> Unit
+pub fn[K : Compare, V] SortedMultiMap::contains(Self[K, V], K) -> Bool
+pub fn[K, V] SortedMultiMap::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : Eq, V : Eq] SortedMultiMap::equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K, V] SortedMultiMap::first(Self[K, V]) -> (K, V)?
+pub fn[K : Compare, V] SortedMultiMap::get(Self[K, V], K) -> Array[V]
+pub fn[K : Compare, V : Compare] SortedMultiMap::insert(Self[K, V], K, V) -> Unit
+pub fn[K, V] SortedMultiMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] SortedMultiMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K : Compare, V] SortedMultiMap::key_count(Self[K, V]) -> Int32
+pub fn[K, V] SortedMultiMap::last(Self[K, V]) -> (K, V)?
+pub fn[K, V] SortedMultiMap::length(Self[K, V]) -> Int32
+pub fn[K, V] SortedMultiMap::new() -> Self[K, V]
+pub fn[K : Eq, V : Eq] SortedMultiMap::not_equal(Self[K, V], Self[K, V]) -> Bool
+pub fn[K : Show, V : Show] SortedMultiMap::output(Self[K, V], &Logger) -> Unit
+pub fn[K, V] SortedMultiMap::pop_first(Self[K, V]) -> (K, V)?
+pub fn[K, V] SortedMultiMap::pop_last(Self[K, V]) -> (K, V)?
+pub fn[K : Compare, V] SortedMultiMap::range(Self[K, V], start~ : K, end~ : K) -> Iter[(K, V)]
+pub fn[K : Compare, V] SortedMultiMap::remove(Self[K, V], K) -> Array[V]
+pub fn[K, V] SortedMultiMap::to_array(Self[K, V]) -> Array[(K, V)]
+pub fn[K : Show, V : Show] SortedMultiMap::to_string(Self[K, V]) -> String
+pub impl[K : Eq, V : Eq] Eq for SortedMultiMap[K, V]
+pub impl[K : Show, V : Show] Show for SortedMultiMap[K, V]
+
+pub struct Trie[T] {
+  children : Array[Map[Char, Int32]]
+  values : Array[T?]
+  mut entries : Int32
+}
+pub fn[T] Trie::clear(Self[T]) -> Unit
+pub fn[T] Trie::contains(Self[T], StringView) -> Bool
+pub fn[T] Trie::contains_prefix(Self[T], StringView) -> Bool
+pub fn[T] Trie::copy(Self[T]) -> Self[T]
+pub fn[T] Trie::get(Self[T], StringView) -> T?
+pub fn[T] Trie::insert(Self[T], StringView, T) -> T?
+pub fn[T] Trie::is_empty(Self[T]) -> Bool
+pub fn[T] Trie::iter(Self[T]) -> Iter[(String, T)]
+pub fn[T] Trie::keys_with_prefix(Self[T], StringView) -> Array[String]
+pub fn[T] Trie::length(Self[T]) -> Int32
+pub fn[T] Trie::longest_prefix(Self[T], StringView) -> (String, T)?
+pub fn[T] Trie::new() -> Self[T]
+pub fn[T : Show] Trie::output(Self[T], &Logger) -> Unit
+pub fn[T] Trie::remove(Self[T], StringView) -> T?
+pub fn[T] Trie::to_array(Self[T]) -> Array[(String, T)]
+pub fn[T : Show] Trie::to_string(Self[T]) -> String
+pub impl[T : Show] Show for Trie[T]
+
+// Type aliases
+pub type FlatMultiSet[K] = FlatMultiMap[K, Unit]
+
+pub type MultiSet[K] = MultiMap[K, Unit]
+
+pub type SortedMultiSet[K] = SortedMultiMap[K, Unit]
+
+// Traits

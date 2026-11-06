@@ -1,0 +1,12 @@
+// Associative containers: insertion order, key order, intervals and prefixes.
+import {
+  "moonbitstack/moonstl/spec",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"
+
+import {
+  "moonbitlang/core/json",
+} for "test"
