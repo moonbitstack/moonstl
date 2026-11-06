@@ -15,8 +15,36 @@ keywords = [
   "containers",
   "stl",
   "moonbit",
+  "index-map",
+  "index-set",
+  "multimap",
+  "bimap",
+  "counter",
+  "flat-map",
+  "sorted-map",
+  "range-map",
+  "trie",
+  "radix-tree",
+  "lru-cache",
+  "lfu-cache",
+  "arc-cache",
+  "expiring-cache",
+  "memoize",
+  "sorting",
+  "selection",
+  "bisect",
+  "binary-search",
+  "permutations",
+  "combinations",
+  "powerset",
+  "partition",
+  "merge",
 ]
 
-description = "Data structures and algorithms for MoonBit."
+description = "Data structures and algorithms the MoonBit core library leaves out."
 
 source = "src"
+
+import {
+  "moonbitstack/moonseed@0.1.1",
+}

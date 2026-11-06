@@ -1,0 +1,13 @@
+// The module's shared vocabulary: the one error type and the process-wide hash
+// seed. Every other package depends on this one and on core.
+import {
+  "moonbitstack/moonseed",
+}
+
+import {
+  "moonbitstack/moonseed/system",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"
