@@ -13,6 +13,10 @@ import {
 }
 
 import {
+  "moonbitstack/moonstl/tree",
+}
+
+import {
   "moonbitstack/moonstl/map",
 }
 

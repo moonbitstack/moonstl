@@ -8,6 +8,7 @@ import {
   "moonbitstack/moonstl/map",
   "moonbitstack/moonstl/seq",
   "moonbitstack/moonstl/spec",
+  "moonbitstack/moonstl/tree",
 }
 
 // Values
@@ -18,6 +19,8 @@ import {
 
 // Type aliases
 pub using @cache {type ArcCache}
+
+pub using @tree {type ArenaTree}
 
 pub using @map {type BiMap}
 
@@ -41,7 +44,13 @@ pub using @map {type DefaultMap}
 
 pub using @seq {type DenseSlotMap}
 
+pub using @tree {type DisjointSet}
+
+pub using @tree {type DisjointSetMap}
+
 pub using @cache {type ExpiringCache}
+
+pub using @tree {type Fenwick}
 
 pub using @heap {type FibonacciHeap}
 
@@ -65,7 +74,13 @@ pub using @map {type IndexMap}
 
 pub using @map {type IndexSet}
 
+pub using @tree {type IntervalKey}
+
+pub using @tree {type IntervalTree}
+
 pub using @algo {type JoinEntry}
+
+pub using @tree {type LazySegmentTree}
 
 pub using @cache {type LfuCache}
 
@@ -80,6 +95,8 @@ pub using @map {type MultiMap}
 pub type MultiSet[K] = @map.MultiMap[K, Unit]
 
 pub using @heap {type Order}
+
+pub using @tree {type OrderStatisticTree}
 
 pub using @seq {type Overflow}
 
@@ -109,6 +126,12 @@ pub using @seq {type RingBuffer}
 
 pub using @seq {type SecondaryMap}
 
+pub using @tree {type SegmentTree}
+
+pub using @tree {type SkipList}
+
+pub using @tree {type SkipListOptions}
+
 pub using @seq {type Slab}
 
 pub using @seq {type SlotKey}
@@ -120,6 +143,10 @@ pub using @map {type SortedMultiMap}
 pub type SortedMultiSet[K] = @map.SortedMultiMap[K, Unit]
 
 pub using @seq {type SparseSet}
+
+pub using @tree {type Treap}
+
+pub using @tree {type TreeId}
 
 pub using @map {type Trie}
 

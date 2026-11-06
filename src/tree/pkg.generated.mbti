@@ -1,0 +1,274 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbitstack/moonstl/tree"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub let skip_list_options : SkipListOptions
+
+// Errors
+
+// Types and methods
+pub struct ArenaTree[T] {
+  values : Array[T?]
+  generations : Array[UInt32]
+  free : Array[Int32]
+  parents : Array[Int32]
+  first_child : Array[Int32]
+  last_child : Array[Int32]
+  previous : Array[Int32]
+  next : Array[Int32]
+  mut root : Int32
+  mut len : Int32
+}
+pub fn[T] ArenaTree::add(Self[T], T) -> TreeId
+pub fn[T] ArenaTree::add_child(Self[T], TreeId, T) -> TreeId
+pub fn[T] ArenaTree::ancestors(Self[T], TreeId) -> Iter[TreeId]
+pub fn[T] ArenaTree::children(Self[T], TreeId) -> Array[TreeId]
+pub fn[T] ArenaTree::clear(Self[T]) -> Unit
+pub fn[T] ArenaTree::contains(Self[T], TreeId) -> Bool
+pub fn[T] ArenaTree::copy(Self[T]) -> Self[T]
+pub fn[T] ArenaTree::descendants(Self[T], TreeId) -> Iter[TreeId]
+pub fn[T] ArenaTree::detach(Self[T], TreeId) -> Self[T]?
+pub fn[T] ArenaTree::first_child(Self[T], TreeId) -> TreeId?
+pub fn[T] ArenaTree::get(Self[T], TreeId) -> T?
+pub fn[T] ArenaTree::insert_after(Self[T], TreeId, T) -> TreeId
+pub fn[T] ArenaTree::insert_before(Self[T], TreeId, T) -> TreeId
+pub fn[T] ArenaTree::is_empty(Self[T]) -> Bool
+pub fn[T] ArenaTree::length(Self[T]) -> Int32
+pub fn[T] ArenaTree::new() -> Self[T]
+pub fn[T] ArenaTree::next_sibling(Self[T], TreeId) -> TreeId?
+pub fn[T] ArenaTree::parent(Self[T], TreeId) -> TreeId?
+pub fn[T] ArenaTree::postorder(Self[T], TreeId) -> Iter[TreeId]
+pub fn[T] ArenaTree::preorder(Self[T], TreeId) -> Iter[TreeId]
+pub fn[T] ArenaTree::prepend_child(Self[T], TreeId, T) -> TreeId
+pub fn[T] ArenaTree::previous_sibling(Self[T], TreeId) -> TreeId?
+pub fn[T] ArenaTree::remove(Self[T], TreeId) -> T?
+pub fn[T] ArenaTree::set(Self[T], TreeId, T) -> Bool
+pub fn[T] ArenaTree::siblings(Self[T], TreeId) -> Array[TreeId]
+pub fn[T] ArenaTree::sort_children(Self[T], TreeId, (T, T) -> Int32) -> Unit
+
+pub struct DisjointSet {
+  parents : Array[Int32]
+  sizes : Array[Int32]
+  mut sets : Int32
+}
+pub fn DisjointSet::add(Self) -> Int32
+pub fn DisjointSet::component_size(Self, Int32) -> Int32
+pub fn DisjointSet::connected(Self, Int32, Int32) -> Bool
+pub fn DisjointSet::find(Self, Int32) -> Int32
+pub fn DisjointSet::length(Self) -> Int32
+pub fn DisjointSet::new() -> Self
+pub fn DisjointSet::set_count(Self) -> Int32
+pub fn DisjointSet::set_size(Self, Int32) -> Int32
+pub fn DisjointSet::to_sets(Self) -> Array[Array[Int32]]
+pub fn DisjointSet::union(Self, Int32, Int32) -> Bool
+
+pub struct DisjointSetMap[K] {
+  indices : Map[K, Int32]
+  sets : DisjointSet
+  keys : Array[K]
+}
+pub fn[K : Hash + Eq] DisjointSetMap::component_size(Self[K], K) -> Int32
+pub fn[K : Hash + Eq] DisjointSetMap::connected(Self[K], K, K) -> Bool
+pub fn[K : Hash + Eq] DisjointSetMap::find(Self[K], K) -> K?
+pub fn[K : Hash + Eq] DisjointSetMap::intern(Self[K], K) -> Int32
+pub fn[K] DisjointSetMap::length(Self[K]) -> Int32
+pub fn[K : Hash + Eq] DisjointSetMap::new() -> Self[K]
+pub fn[K] DisjointSetMap::set_count(Self[K]) -> Int32
+pub fn[K] DisjointSetMap::to_sets(Self[K]) -> Array[Array[K]]
+pub fn[K : Hash + Eq] DisjointSetMap::union(Self[K], K, K) -> Bool
+
+pub struct Fenwick[T] {
+  tree : Array[T]
+  values : Array[T]
+  length_ : Int32
+}
+pub fn[T : Add] Fenwick::add(Self[T], Int32, T) -> Unit
+pub fn[T : Add + Sub + Default] Fenwick::from_array(ArrayView[T]) -> Self[T]
+pub fn[T] Fenwick::get(Self[T], Int32) -> T?
+pub fn[T] Fenwick::length(Self[T]) -> Int32
+pub fn[T : Sub + Compare] Fenwick::lower_bound(Self[T], T) -> Int32?
+pub fn[T : Default] Fenwick::new(length~ : Int32) -> Self[T]
+pub fn[T : Add + Default] Fenwick::prefix_sum(Self[T], Int32) -> T
+pub fn[T : Add + Sub + Default] Fenwick::range_sum(Self[T], Int32, Int32) -> T
+pub fn[T : Add + Sub] Fenwick::set(Self[T], Int32, T) -> Bool
+
+#derive(Eq, Hash, @debug.Debug)
+pub(all) struct IntervalKey[K] {
+  index : Int32
+  generation : UInt32
+}
+pub fn[K : Eq] IntervalKey::equal(Self[K], Self[K]) -> Bool
+pub fn[K : Hash] IntervalKey::hash(Self[K]) -> Int32
+pub fn[K : Hash] IntervalKey::hash_combine(Self[K], Hasher) -> Unit
+pub fn[K : Eq] IntervalKey::not_equal(Self[K], Self[K]) -> Bool
+pub fn[K : @debug.Debug] IntervalKey::to_repr(Self[K]) -> @debug.Repr
+
+pub struct IntervalTree[K, V] {
+  cmp : (K, K) -> Int32
+  starts : Array[K?]
+  ends : Array[K?]
+  values : Array[V?]
+  generations : Array[UInt32]
+  free : Array[Int32]
+  order : Array[Int32]
+  mut max_ends : Array[K?]
+  mut len : Int32
+}
+pub fn[K, V] IntervalTree::clear(Self[K, V]) -> Unit
+pub fn[K, V] IntervalTree::copy(Self[K, V]) -> Self[K, V]
+pub fn[K, V] IntervalTree::get(Self[K, V], IntervalKey[K]) -> (K, K, V)?
+pub fn[K, V] IntervalTree::insert(Self[K, V], start~ : K, end~ : K, V) -> IntervalKey[K]
+pub fn[K, V] IntervalTree::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] IntervalTree::iter(Self[K, V]) -> Iter[(K, K, V)]
+pub fn[K, V] IntervalTree::length(Self[K, V]) -> Int32
+pub fn[K : Compare, V] IntervalTree::new() -> Self[K, V]
+pub fn[K, V] IntervalTree::new_by(cmp~ : (K, K) -> Int32) -> Self[K, V]
+pub fn[K, V] IntervalTree::query_overlap(Self[K, V], start~ : K, end~ : K) -> Array[(K, K, V)]
+pub fn[K, V] IntervalTree::query_point(Self[K, V], K) -> Array[(K, K, V)]
+pub fn[K, V] IntervalTree::remove(Self[K, V], IntervalKey[K]) -> (K, K, V)?
+
+pub struct LazySegmentTree[T, F] {
+  op : (T, T) -> T
+  identity : T
+  apply : (F, T, Int32) -> T
+  compose : (F, F) -> F
+  none : F
+  size : Int32
+  nodes : Array[T]
+  tags : Array[F]
+}
+pub fn[T, F] LazySegmentTree::from_array(ArrayView[T], op~ : (T, T) -> T, identity~ : T, apply~ : (F, T, Int32) -> T, compose~ : (F, F) -> F, none~ : F) -> Self[T, F]
+pub fn[T, F] LazySegmentTree::get(Self[T, F], Int32) -> T?
+pub fn[T, F] LazySegmentTree::new(length~ : Int32, op~ : (T, T) -> T, identity~ : T, apply~ : (F, T, Int32) -> T, compose~ : (F, F) -> F, none~ : F) -> Self[T, F]
+pub fn[T, F] LazySegmentTree::query(Self[T, F], Int32, Int32) -> T
+pub fn[T, F] LazySegmentTree::range_update(Self[T, F], Int32, Int32, F) -> Unit
+pub fn[T, F] LazySegmentTree::set(Self[T, F], Int32, T) -> Bool
+
+pub struct OrderStatisticTree[T] {
+  cmp : (T, T) -> Int32
+  keys : Array[T?]
+  left : Array[Int32]
+  right : Array[Int32]
+  sizes : Array[Int32]
+  priorities : Array[UInt64]
+  mut root : Int32
+  mut len : Int32
+  mut seed : UInt64
+}
+pub fn[T] OrderStatisticTree::clear(Self[T]) -> Unit
+pub fn[T] OrderStatisticTree::contains(Self[T], T) -> Bool
+pub fn[T] OrderStatisticTree::copy(Self[T]) -> Self[T]
+pub fn[T] OrderStatisticTree::count_less(Self[T], T) -> Int32
+pub fn[T] OrderStatisticTree::count_range(Self[T], T, T) -> Int32
+pub fn[T] OrderStatisticTree::first(Self[T]) -> T?
+pub fn[T] OrderStatisticTree::insert(Self[T], T) -> Bool
+pub fn[T] OrderStatisticTree::is_empty(Self[T]) -> Bool
+pub fn[T] OrderStatisticTree::iter(Self[T]) -> Iter[T]
+pub fn[T] OrderStatisticTree::last(Self[T]) -> T?
+pub fn[T] OrderStatisticTree::length(Self[T]) -> Int32
+pub fn[T : Compare] OrderStatisticTree::new() -> Self[T]
+pub fn[T] OrderStatisticTree::new_by(cmp~ : (T, T) -> Int32) -> Self[T]
+pub fn[T] OrderStatisticTree::range(Self[T], T, T) -> Iter[T]
+pub fn[T] OrderStatisticTree::rank(Self[T], T) -> Int32
+pub fn[T] OrderStatisticTree::remove(Self[T], T) -> Bool
+pub fn[T] OrderStatisticTree::select(Self[T], Int32) -> T?
+pub fn[T] OrderStatisticTree::to_array(Self[T]) -> Array[T]
+
+pub struct SegmentTree[T] {
+  op : (T, T) -> T
+  identity : T
+  size : Int32
+  nodes : Array[T]
+}
+pub fn[T] SegmentTree::copy(Self[T]) -> Self[T]
+pub fn[T] SegmentTree::first_where(Self[T], (T) -> Bool) -> Int32?
+pub fn[T] SegmentTree::from_array(ArrayView[T], op~ : (T, T) -> T, identity~ : T) -> Self[T]
+pub fn[T] SegmentTree::get(Self[T], Int32) -> T?
+pub fn[T] SegmentTree::length(Self[T]) -> Int32
+pub fn[T] SegmentTree::new(length~ : Int32, op~ : (T, T) -> T, identity~ : T) -> Self[T]
+pub fn[T] SegmentTree::query(Self[T], Int32, Int32) -> T
+pub fn[T] SegmentTree::query_all(Self[T]) -> T
+pub fn[T] SegmentTree::set(Self[T], Int32, T) -> Bool
+pub fn[T] SegmentTree::to_array(Self[T]) -> Array[T]
+
+pub struct SkipList[T] {
+  cmp : (T, T) -> Int32
+  options : SkipListOptions
+  mut values : Array[T?]
+  mut nexts : Array[Array[Int32]]
+  mut spans : Array[Array[Int32]]
+  mut len : Int32
+  mut rng : UInt64
+}
+pub fn[T] SkipList::clear(Self[T]) -> Unit
+pub fn[T] SkipList::contains(Self[T], T) -> Bool
+pub fn[T] SkipList::first(Self[T]) -> T?
+pub fn[T] SkipList::insert(Self[T], T) -> Bool
+pub fn[T] SkipList::is_empty(Self[T]) -> Bool
+pub fn[T] SkipList::iter(Self[T]) -> Iter[T]
+pub fn[T] SkipList::last(Self[T]) -> T?
+pub fn[T] SkipList::length(Self[T]) -> Int32
+pub fn[T : Compare] SkipList::new(skip_list_options? : SkipListOptions) -> Self[T]
+pub fn[T] SkipList::new_by(cmp~ : (T, T) -> Int32, skip_list_options? : SkipListOptions) -> Self[T]
+pub fn[T] SkipList::range(Self[T], T, T) -> Iter[T]
+pub fn[T] SkipList::rank(Self[T], T) -> Int32
+pub fn[T] SkipList::remove(Self[T], T) -> Bool
+pub fn[T] SkipList::select(Self[T], Int32) -> T?
+pub fn[T] SkipList::to_array(Self[T]) -> Array[T]
+
+#derive(Eq, @debug.Debug)
+pub(all) struct SkipListOptions {
+  probability : Double
+  max_level : Int32
+  seed : Int32
+}
+pub fn SkipListOptions::equal(Self, Self) -> Bool
+pub fn SkipListOptions::not_equal(Self, Self) -> Bool
+pub fn SkipListOptions::to_repr(Self) -> @debug.Repr
+
+pub struct Treap[K, V] {
+  cmp : (K, K) -> Int32
+  keys : Array[K?]
+  values : Array[V?]
+  left : Array[Int32]
+  right : Array[Int32]
+  priorities : Array[UInt64]
+  mut root : Int32
+  mut len : Int32
+  mut seed : UInt64
+}
+pub fn[K, V] Treap::clear(Self[K, V]) -> Unit
+pub fn[K, V] Treap::contains(Self[K, V], K) -> Bool
+pub fn[K, V] Treap::first(Self[K, V]) -> (K, V)?
+pub fn[K, V] Treap::get(Self[K, V], K) -> V?
+pub fn[K, V] Treap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] Treap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] Treap::last(Self[K, V]) -> (K, V)?
+pub fn[K, V] Treap::length(Self[K, V]) -> Int32
+pub fn[K, V] Treap::merge(Self[K, V], Self[K, V]) -> Unit
+pub fn[K : Compare, V] Treap::new() -> Self[K, V]
+pub fn[K, V] Treap::new_by(cmp~ : (K, K) -> Int32) -> Self[K, V]
+pub fn[K, V] Treap::range(Self[K, V], K, K) -> Iter[(K, V)]
+pub fn[K, V] Treap::remove(Self[K, V], K) -> V?
+pub fn[K, V] Treap::set(Self[K, V], K, V) -> V?
+pub fn[K, V] Treap::split(Self[K, V], K) -> (Self[K, V], Self[K, V])
+pub fn[K, V] Treap::to_array(Self[K, V]) -> Array[(K, V)]
+
+#derive(Eq, Hash, @debug.Debug)
+pub(all) struct TreeId {
+  index : Int32
+  generation : UInt32
+}
+pub fn TreeId::equal(Self, Self) -> Bool
+pub fn TreeId::hash(Self) -> Int32
+pub fn TreeId::hash_combine(Self, Hasher) -> Unit
+pub fn TreeId::not_equal(Self, Self) -> Bool
+pub fn TreeId::to_repr(Self) -> @debug.Repr
+
+// Type aliases
+
+// Traits

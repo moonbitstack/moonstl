@@ -31,6 +31,23 @@ pub using @heap {
 }
 
 ///|
+pub using @tree {
+  type DisjointSet,
+  type DisjointSetMap,
+  type SegmentTree,
+  type LazySegmentTree,
+  type Fenwick,
+  type IntervalTree,
+  type IntervalKey,
+  type OrderStatisticTree,
+  type SkipList,
+  type SkipListOptions,
+  type Treap,
+  type ArenaTree,
+  type TreeId,
+}
+
+///|
 pub using @map {
   type IndexMap,
   type IndexSet,

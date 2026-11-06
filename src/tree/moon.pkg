@@ -1,0 +1,10 @@
+// Trees and the structures built on them: union-find, segment trees, a Fenwick
+// tree, interval and order-statistic trees, a skip list, a treap and a tree
+// addressed by node id.
+import {
+  "moonbitstack/moonstl/spec",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"
