@@ -73,6 +73,22 @@ pub using @phf {
 }
 
 ///|
+pub using @text {
+  type Kmp,
+  type BoyerMoore,
+  type AhoCorasick,
+  type SuffixArray,
+  type SuffixAutomaton,
+  type SequenceMatcher,
+  type SequenceMatcherOptions,
+  type Match,
+  type Opcode,
+  type Rope,
+  type RopeView,
+  type RopeBuilder,
+}
+
+///|
 pub using @map {
   type IndexMap,
   type IndexSet,

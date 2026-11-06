@@ -10,6 +10,7 @@ import {
   "moonbitstack/moonstl/seq",
   "moonbitstack/moonstl/sketch",
   "moonbitstack/moonstl/spec",
+  "moonbitstack/moonstl/text",
   "moonbitstack/moonstl/tree",
 }
 
@@ -20,6 +21,8 @@ import {
 // Types and methods
 
 // Type aliases
+pub using @text {type AhoCorasick}
+
 pub using @cache {type ArcCache}
 
 pub using @tree {type ArenaTree}
@@ -33,6 +36,8 @@ pub using @seq {type BitVec}
 pub using @sketch {type BloomFilter}
 
 pub using @sketch {type BloomOptions}
+
+pub using @text {type BoyerMoore}
 
 pub using @cache {type CacheStats}
 
@@ -96,6 +101,8 @@ pub using @tree {type IntervalTree}
 
 pub using @algo {type JoinEntry}
 
+pub using @text {type Kmp}
+
 pub using @tree {type LazySegmentTree}
 
 pub using @cache {type LfuCache}
@@ -104,11 +111,15 @@ pub using @seq {type LinkedList}
 
 pub using @cache {type LruCache}
 
+pub using @text {type Match}
+
 pub using @heap {type MinMaxHeap}
 
 pub using @map {type MultiMap}
 
 pub type MultiSet[K] = @map.MultiMap[K, Unit]
+
+pub using @text {type Opcode}
 
 pub using @heap {type Order}
 
@@ -156,9 +167,19 @@ pub using @spec {type Refused}
 
 pub using @seq {type RingBuffer}
 
+pub using @text {type Rope}
+
+pub using @text {type RopeBuilder}
+
+pub using @text {type RopeView}
+
 pub using @seq {type SecondaryMap}
 
 pub using @tree {type SegmentTree}
+
+pub using @text {type SequenceMatcher}
+
+pub using @text {type SequenceMatcherOptions}
 
 pub using @tree {type SkipList}
 
@@ -175,6 +196,10 @@ pub using @map {type SortedMultiMap}
 pub type SortedMultiSet[K] = @map.SortedMultiMap[K, Unit]
 
 pub using @seq {type SparseSet}
+
+pub using @text {type SuffixArray}
+
+pub using @text {type SuffixAutomaton}
 
 pub using @sketch {type TDigest}
 

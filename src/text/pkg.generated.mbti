@@ -1,0 +1,192 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbitstack/moonstl/text"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn context_diff(StringView, StringView, fromfile? : StringView, tofile? : StringView, n? : Int32) -> String
+
+pub fn get_close_matches(StringView, ArrayView[StringView], n? : Int32, cutoff? : Double) -> Array[StringView]
+
+pub fn is_character_junk(Char) -> Bool
+
+pub fn is_line_junk(StringView) -> Bool
+
+pub fn lines_of(StringView) -> Array[StringView]
+
+pub fn longest_palindrome(StringView) -> (Int32, Int32)
+
+pub fn ndiff(StringView, StringView) -> String
+
+pub fn restore(StringView) -> String
+
+pub fn[T] sequence_matcher_options() -> SequenceMatcherOptions[T]
+
+pub fn unified_diff(StringView, StringView, fromfile? : StringView, tofile? : StringView, n? : Int32) -> String
+
+pub fn z_function(StringView) -> Array[Int32]
+
+// Errors
+
+// Types and methods
+pub struct AhoCorasick {
+  lengths : Array[Int32]
+  next : Map[(Int32, Int32), Int32]
+  children : Array[Array[(Int32, Int32)]]
+  fail : Array[Int32]
+  out_head : Array[Int32]
+  out_tail : Array[Int32]
+  out_next : Array[Int32]
+  dict : Array[Int32]
+  mut built : Bool
+}
+pub fn AhoCorasick::add(Self, StringView) -> Int32
+pub fn AhoCorasick::build(Self) -> Unit
+pub fn AhoCorasick::is_match(Self, StringView) -> Bool
+pub fn AhoCorasick::new(Array[StringView]) -> Self
+pub fn AhoCorasick::search_all(Self, StringView) -> Iter[(Int32, Int32)]
+
+pub struct BoyerMoore {
+  pattern : String
+  bad : Map[Int32, Int32]
+  good : Array[Int32]
+}
+pub fn BoyerMoore::new(StringView) -> Self
+pub fn BoyerMoore::search(Self, StringView) -> Int32?
+pub fn BoyerMoore::search_all(Self, StringView) -> Iter[Int32]
+
+pub struct Kmp {
+  pattern : String
+  fail : Array[Int32]
+}
+pub fn Kmp::new(StringView) -> Self
+pub fn Kmp::search(Self, StringView) -> Int32?
+pub fn Kmp::search_all(Self, StringView) -> Iter[Int32]
+
+#derive(Eq, @debug.Debug)
+pub(all) struct Match {
+  a_start : Int32
+  b_start : Int32
+  size : Int32
+}
+pub fn Match::equal(Self, Self) -> Bool
+pub fn Match::not_equal(Self, Self) -> Bool
+pub fn Match::to_repr(Self) -> @debug.Repr
+
+#derive(Eq, @debug.Debug)
+pub(all) enum Opcode {
+  Equal(a1~ : Int32, a2~ : Int32, b1~ : Int32, b2~ : Int32)
+  Replace(a1~ : Int32, a2~ : Int32, b1~ : Int32, b2~ : Int32)
+  Delete(a1~ : Int32, a2~ : Int32, b1~ : Int32, b2~ : Int32)
+  Insert(a1~ : Int32, a2~ : Int32, b1~ : Int32, b2~ : Int32)
+}
+pub fn Opcode::a1(Self) -> Int32
+pub fn Opcode::a2(Self) -> Int32
+pub fn Opcode::b1(Self) -> Int32
+pub fn Opcode::b2(Self) -> Int32
+pub fn Opcode::equal(Self, Self) -> Bool
+pub fn Opcode::not_equal(Self, Self) -> Bool
+pub fn Opcode::tag(Self) -> String
+pub fn Opcode::to_repr(Self) -> @debug.Repr
+
+pub struct Rope {
+  chunks : Array[String]
+  mut starts : Array[Int32]
+}
+pub fn Rope::append(Self, StringView) -> Unit
+pub fn Rope::char_at(Self, Int32) -> Char?
+pub fn Rope::char_length(Self) -> Int32
+pub fn Rope::chars(Self) -> Iter[Char]
+pub fn Rope::chunks(Self) -> Iter[StringView]
+pub fn Rope::clear(Self) -> Unit
+pub fn Rope::copy(Self) -> Self
+pub fn Rope::edit(Self, start~ : Int32, end~ : Int32, StringView) -> Unit
+pub fn Rope::from_string(StringView) -> Self
+pub fn Rope::insert(Self, Int32, StringView) -> Unit
+pub fn Rope::is_empty(Self) -> Bool
+pub fn Rope::length(Self) -> Int32
+pub fn Rope::line_at(Self, Int32) -> Int32
+pub fn Rope::line_count(Self) -> Int32
+pub fn Rope::line_start(Self, Int32) -> Int32
+pub fn Rope::line_starts(Self) -> Array[Int32]
+pub fn Rope::lines(Self) -> Iter[StringView]
+pub fn Rope::new() -> Self
+pub fn Rope::remove(Self, start~ : Int32, end~ : Int32) -> Unit
+pub fn Rope::slice(Self, start~ : Int32, end~ : Int32) -> RopeView
+pub fn Rope::split_off(Self, Int32) -> Self
+pub fn Rope::to_string(Self) -> String
+pub fn Rope::write_to(Self, StringBuilder) -> Unit
+
+pub struct RopeBuilder {
+  chunks : Array[String]
+}
+pub fn RopeBuilder::append(Self, StringView) -> Unit
+pub fn RopeBuilder::finish(Self) -> Rope
+pub fn RopeBuilder::new() -> Self
+
+pub struct RopeView {
+  rope : Rope
+  start : Int32
+  end : Int32
+}
+pub fn RopeView::char_length(Self) -> Int32
+pub fn RopeView::chars(Self) -> Iter[Char]
+pub fn RopeView::length(Self) -> Int32
+pub fn RopeView::lines(Self) -> Iter[StringView]
+pub fn RopeView::slice(Self, start~ : Int32, end~ : Int32) -> Self
+pub fn RopeView::to_rope(Self) -> Rope
+pub fn RopeView::to_string(Self) -> String
+
+pub struct SequenceMatcher[T] {
+  a : Array[T]
+  b : Array[T]
+  options : SequenceMatcherOptions[T]
+  mut b2j : Map[T, Array[Int32]]
+  mut bjunk : Array[Bool]
+  mut bpopular : Map[T, Unit]
+}
+pub fn[T : Hash + Eq] SequenceMatcher::find_longest_match(Self[T], Int32, Int32, Int32, Int32) -> Match
+pub fn[T : Hash + Eq] SequenceMatcher::get_matching_blocks(Self[T]) -> Array[Match]
+pub fn[T : Hash + Eq] SequenceMatcher::get_opcodes(Self[T]) -> Array[Opcode]
+pub fn[T : Hash + Eq] SequenceMatcher::new(ArrayView[T], ArrayView[T], options? : SequenceMatcherOptions[T]) -> Self[T]
+pub fn[T : Hash + Eq] SequenceMatcher::quick_ratio(Self[T]) -> Double
+pub fn[T : Hash + Eq] SequenceMatcher::ratio(Self[T]) -> Double
+pub fn[T] SequenceMatcher::real_quick_ratio(Self[T]) -> Double
+
+pub(all) struct SequenceMatcherOptions[T] {
+  autojunk : Bool
+  junk : (T) -> Bool
+}
+
+pub struct SuffixArray {
+  text_ : String
+  order : Array[Int32]
+  ranks : Array[Int32]
+}
+pub fn SuffixArray::lcp_array(Self) -> Array[Int32]
+pub fn SuffixArray::length(Self) -> Int32
+pub fn SuffixArray::new(StringView) -> Self
+pub fn SuffixArray::search(Self, StringView) -> Array[Int32]
+pub fn SuffixArray::text(Self) -> String
+pub fn SuffixArray::to_array(Self) -> Array[Int32]
+
+pub struct SuffixAutomaton {
+  text_ : String
+  next : Map[(Int32, Int32), Int32]
+  link : Array[Int32]
+  length : Array[Int32]
+  occurrences : Array[Int32]
+  mut last : Int32
+}
+pub fn SuffixAutomaton::contains(Self, StringView) -> Bool
+pub fn SuffixAutomaton::count_occurrences(Self, StringView) -> Int32
+pub fn SuffixAutomaton::length(Self) -> Int32
+pub fn SuffixAutomaton::longest_common_substring(Self, StringView) -> (Int32, Int32)
+pub fn SuffixAutomaton::new(StringView) -> Self
+pub fn SuffixAutomaton::text(Self) -> String
+
+// Type aliases
+
+// Traits

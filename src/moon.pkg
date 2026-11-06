@@ -25,6 +25,10 @@ import {
 }
 
 import {
+  "moonbitstack/moonstl/text",
+}
+
+import {
   "moonbitstack/moonstl/map",
 }
 
