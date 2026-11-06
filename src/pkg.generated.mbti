@@ -1,6 +1,13 @@
 // Generated using `moon info`, DON'T EDIT IT
 package "moonbitstack/moonstl"
 
+import {
+  "moonbitstack/moonstl/algo",
+  "moonbitstack/moonstl/cache",
+  "moonbitstack/moonstl/map",
+  "moonbitstack/moonstl/spec",
+}
+
 // Values
 
 // Errors
@@ -8,5 +15,70 @@ package "moonbitstack/moonstl"
 // Types and methods
 
 // Type aliases
+pub using @cache {type ArcCache}
+
+pub using @map {type BiMap}
+
+pub using @cache {type CacheStats}
+
+pub using @map {type ChainMap}
+
+pub using @algo {type Combinations}
+
+pub using @algo {type CombinationsWithReplacement}
+
+pub using @map {type Counter}
+
+pub using @map {type DefaultMap}
+
+pub using @cache {type ExpiringCache}
+
+pub using @map {type FlatMap}
+
+pub using @map {type FlatMultiMap}
+
+pub type FlatMultiSet[K] = @map.FlatMultiMap[K, Unit]
+
+pub using @map {type FlatSet}
+
+pub using @algo {type GrayCode}
+
+pub using @map {type IndexMap}
+
+pub using @map {type IndexSet}
+
+pub using @algo {type JoinEntry}
+
+pub using @cache {type LfuCache}
+
+pub using @cache {type LruCache}
+
+pub using @map {type MultiMap}
+
+pub type MultiSet[K] = @map.MultiMap[K, Unit]
+
+pub using @map {type Overlap}
+
+pub using @algo {type Permutations}
+
+pub using @algo {type Position}
+
+pub using @algo {type Powerset}
+
+pub using @algo {type Product}
+
+pub using @map {type RadixTree}
+
+pub using @map {type RangeMap}
+
+pub using @map {type RangeSet}
+
+pub using @spec {type Refused}
+
+pub using @map {type SortedMultiMap}
+
+pub type SortedMultiSet[K] = @map.SortedMultiMap[K, Unit]
+
+pub using @map {type Trie}
 
 // Traits

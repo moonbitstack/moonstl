@@ -1,2 +1,21 @@
-// The module root. It re-exports the types of the packages beside it and holds no
-// implementation of its own; the package layout is in docs/design/interface.md.
+// The module root. It re-exports the types a reader reaches for first and holds
+// no implementation of its own.
+import {
+  "moonbitstack/moonstl/spec",
+}
+
+import {
+  "moonbitstack/moonstl/map",
+}
+
+import {
+  "moonbitstack/moonstl/cache",
+}
+
+import {
+  "moonbitstack/moonstl/algo",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"
