@@ -1,0 +1,190 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbitstack/moonstl/sketch"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitstack/moonstl/spec",
+}
+
+// Values
+pub let bloom_options : BloomOptions
+
+pub let cuckoo_options : CuckooOptions
+
+// Errors
+
+// Types and methods
+pub struct BloomFilter[T] {
+  hash_seed : Int32
+  hashes : Int32
+  expected_items : Int32
+  false_positive_rate : Double
+  growth : Growth
+  layers : Array[BloomLayer]
+  mut items : Int64
+}
+pub fn[T] BloomFilter::bit_count(Self[T]) -> Int32
+pub fn[T] BloomFilter::capacity(Self[T]) -> Int32
+pub fn[T] BloomFilter::clear(Self[T]) -> Unit
+pub fn[T] BloomFilter::copy(Self[T]) -> Self[T]
+pub fn[T] BloomFilter::decode(BytesView) -> Self[T] raise @spec.Refused
+pub fn[T] BloomFilter::encode(Self[T]) -> Bytes
+pub fn[T] BloomFilter::equal(Self[T], Self[T]) -> Bool
+pub fn[T] BloomFilter::estimated_false_positive_rate(Self[T]) -> Double
+pub fn[T] BloomFilter::hash(Self[T]) -> Int32
+pub fn[T] BloomFilter::hash_combine(Self[T], Hasher) -> Unit
+pub fn[T : Hash] BloomFilter::insert(Self[T], T) -> Bool
+pub fn[T] BloomFilter::intersection(Self[T], Self[T]) -> Self[T] raise @spec.Refused
+pub fn[T] BloomFilter::is_empty(Self[T]) -> Bool
+pub fn[T] BloomFilter::length(Self[T]) -> Int64
+pub fn[T : Hash] BloomFilter::may_contain(Self[T], T) -> Bool
+pub fn[T] BloomFilter::new(expected_items~ : Int32, bloom_options? : BloomOptions, hash_seed? : Int32) -> Self[T] raise @spec.Refused
+pub fn[T] BloomFilter::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T] BloomFilter::output(Self[T], &Logger) -> Unit
+pub fn[T] BloomFilter::to_string(Self[T]) -> String
+pub fn[T] BloomFilter::union(Self[T], Self[T]) -> Self[T] raise @spec.Refused
+pub impl[T] Eq for BloomFilter[T]
+pub impl[T] Hash for BloomFilter[T]
+pub impl[T] Show for BloomFilter[T]
+
+pub struct BloomLayer {
+  words : Array[UInt64]
+  bit_count : Int32
+  capacity : Int32
+  mut items : Int64
+  rate : Double
+}
+
+#derive(Eq, @debug.Debug)
+pub(all) struct BloomOptions {
+  false_positive_rate : Double
+  growth : Growth
+}
+pub fn BloomOptions::equal(Self, Self) -> Bool
+pub fn BloomOptions::not_equal(Self, Self) -> Bool
+pub fn BloomOptions::to_repr(Self) -> @debug.Repr
+
+pub struct CountMinSketch[T] {
+  seed : Int32
+  width : Int32
+  depth : Int32
+  counters : Array[Int32]
+  mut total : Int64
+}
+pub fn[T] CountMinSketch::clear(Self[T]) -> Unit
+pub fn[T] CountMinSketch::copy(Self[T]) -> Self[T]
+pub fn[T] CountMinSketch::decode(BytesView) -> Self[T] raise @spec.Refused
+pub fn[T] CountMinSketch::depth(Self[T]) -> Int32
+pub fn[T] CountMinSketch::encode(Self[T]) -> Bytes
+pub fn[T : Hash] CountMinSketch::estimate(Self[T], T) -> Int32
+pub fn[T : Hash] CountMinSketch::insert(Self[T], T) -> Unit
+pub fn[T : Hash] CountMinSketch::insert_by(Self[T], T, Int32) -> Unit
+pub fn[T] CountMinSketch::is_empty(Self[T]) -> Bool
+pub fn[T] CountMinSketch::merge(Self[T], Self[T]) -> Unit raise @spec.Refused
+pub fn[T] CountMinSketch::new(epsilon? : Double, confidence? : Double, hash_seed? : Int32) -> Self[T] raise @spec.Refused
+pub fn[T] CountMinSketch::total(Self[T]) -> Int64
+pub fn[T] CountMinSketch::width(Self[T]) -> Int32
+
+pub struct CuckooFilter[T] {
+  seed : Int32
+  slots : Array[Int32]
+  buckets : Int32
+  bucket_size : Int32
+  bits : Int32
+  mask : UInt64
+  mut items : Int64
+}
+pub fn[T] CuckooFilter::capacity(Self[T]) -> Int32
+pub fn[T] CuckooFilter::clear(Self[T]) -> Unit
+pub fn[T] CuckooFilter::copy(Self[T]) -> Self[T]
+pub fn[T] CuckooFilter::decode(BytesView) -> Self[T] raise @spec.Refused
+pub fn[T] CuckooFilter::encode(Self[T]) -> Bytes
+pub fn[T] CuckooFilter::estimated_false_positive_rate(Self[T]) -> Double
+pub fn[T : Hash] CuckooFilter::insert(Self[T], T) -> Bool
+pub fn[T] CuckooFilter::is_empty(Self[T]) -> Bool
+pub fn[T] CuckooFilter::length(Self[T]) -> Int64
+pub fn[T : Hash] CuckooFilter::may_contain(Self[T], T) -> Bool
+pub fn[T] CuckooFilter::new(expected_items~ : Int32, cuckoo_options? : CuckooOptions, hash_seed? : Int32) -> Self[T] raise @spec.Refused
+pub fn[T : Hash] CuckooFilter::remove(Self[T], T) -> Bool
+
+#derive(Eq, @debug.Debug)
+pub(all) struct CuckooOptions {
+  fingerprint_bits : Int32
+  bucket_size : Int32
+}
+pub fn CuckooOptions::equal(Self, Self) -> Bool
+pub fn CuckooOptions::not_equal(Self, Self) -> Bool
+pub fn CuckooOptions::to_repr(Self) -> @debug.Repr
+
+#derive(Eq, @debug.Debug)
+pub(all) enum Growth {
+  Fixed
+  Scalable
+}
+pub fn Growth::equal(Self, Self) -> Bool
+pub fn Growth::not_equal(Self, Self) -> Bool
+pub fn Growth::to_repr(Self) -> @debug.Repr
+
+pub struct HyperLogLog[T] {
+  seed : Int32
+  precision : Int32
+  registers : Array[Int32]
+}
+pub fn[T : Hash] HyperLogLog::add(Self[T], T) -> Unit
+pub fn[T] HyperLogLog::clear(Self[T]) -> Unit
+pub fn[T] HyperLogLog::copy(Self[T]) -> Self[T]
+pub fn[T] HyperLogLog::decode(BytesView) -> Self[T] raise @spec.Refused
+pub fn[T] HyperLogLog::encode(Self[T]) -> Bytes
+pub fn[T] HyperLogLog::estimate(Self[T]) -> Double
+pub fn[T] HyperLogLog::is_empty(Self[T]) -> Bool
+pub fn[T] HyperLogLog::merge(Self[T], Self[T]) -> Unit raise @spec.Refused
+pub fn[T] HyperLogLog::new(precision? : Int32, hash_seed? : Int32) -> Self[T] raise @spec.Refused
+pub fn[T] HyperLogLog::precision(Self[T]) -> Int32
+
+pub struct TDigest {
+  compression : Double
+  mut means : Array[Double]
+  mut weights : Array[Double]
+  buffer : Array[Double]
+  mut count_ : Double
+  mut minimum : Double
+  mut maximum : Double
+}
+pub fn TDigest::add(Self, Double) -> Unit
+pub fn TDigest::add_weighted(Self, Double, Double) -> Unit
+pub fn TDigest::cdf(Self, Double) -> Double
+pub fn TDigest::clear(Self) -> Unit
+pub fn TDigest::compress(Self) -> Unit
+pub fn TDigest::copy(Self) -> Self
+pub fn TDigest::count(Self) -> Double
+pub fn TDigest::decode(BytesView) -> Self raise @spec.Refused
+pub fn TDigest::encode(Self) -> Bytes
+pub fn TDigest::is_empty(Self) -> Bool
+pub fn TDigest::maximum(Self) -> Double
+pub fn TDigest::merge(Self, Self) -> Unit
+pub fn TDigest::minimum(Self) -> Double
+pub fn TDigest::new(compression? : Double) -> Self raise @spec.Refused
+pub fn TDigest::quantile(Self, Double) -> Double
+
+pub struct ThetaSketch[T] {
+  seed : Int32
+  nominal : Int32
+  hashes : Array[UInt64]
+  mut theta : UInt64
+}
+pub fn[T] ThetaSketch::a_not_b(Self[T], Self[T]) -> Self[T]
+pub fn[T : Hash] ThetaSketch::add(Self[T], T) -> Unit
+pub fn[T] ThetaSketch::copy(Self[T]) -> Self[T]
+pub fn[T] ThetaSketch::decode(BytesView) -> Self[T] raise @spec.Refused
+pub fn[T] ThetaSketch::encode(Self[T]) -> Bytes
+pub fn[T] ThetaSketch::estimate(Self[T]) -> Double
+pub fn[T] ThetaSketch::intersection(Self[T], Self[T]) -> Self[T]
+pub fn[T] ThetaSketch::is_empty(Self[T]) -> Bool
+pub fn[T] ThetaSketch::new(nominal_entries? : Int32, hash_seed? : Int32) -> Self[T] raise @spec.Refused
+pub fn[T] ThetaSketch::nominal_entries(Self[T]) -> Int32
+pub fn[T] ThetaSketch::theta(Self[T]) -> UInt64
+pub fn[T] ThetaSketch::union(Self[T], Self[T]) -> Self[T]
+
+// Type aliases
+
+// Traits

@@ -17,6 +17,10 @@ import {
 }
 
 import {
+  "moonbitstack/moonstl/sketch",
+}
+
+import {
   "moonbitstack/moonstl/map",
 }
 

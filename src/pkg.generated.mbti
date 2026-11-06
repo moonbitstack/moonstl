@@ -7,6 +7,7 @@ import {
   "moonbitstack/moonstl/heap",
   "moonbitstack/moonstl/map",
   "moonbitstack/moonstl/seq",
+  "moonbitstack/moonstl/sketch",
   "moonbitstack/moonstl/spec",
   "moonbitstack/moonstl/tree",
 }
@@ -28,6 +29,10 @@ pub using @seq {type BitSet}
 
 pub using @seq {type BitVec}
 
+pub using @sketch {type BloomFilter}
+
+pub using @sketch {type BloomOptions}
+
 pub using @cache {type CacheStats}
 
 pub using @map {type ChainMap}
@@ -36,7 +41,13 @@ pub using @algo {type Combinations}
 
 pub using @algo {type CombinationsWithReplacement}
 
+pub using @sketch {type CountMinSketch}
+
 pub using @map {type Counter}
+
+pub using @sketch {type CuckooFilter}
+
+pub using @sketch {type CuckooOptions}
 
 pub using @heap {type DaryHeap}
 
@@ -66,7 +77,11 @@ pub using @seq {type GapBuffer}
 
 pub using @algo {type GrayCode}
 
+pub using @sketch {type Growth}
+
 pub using @heap {type HeapKey}
+
+pub using @sketch {type HyperLogLog}
 
 pub using @heap {type IndexHeap}
 
@@ -143,6 +158,10 @@ pub using @map {type SortedMultiMap}
 pub type SortedMultiSet[K] = @map.SortedMultiMap[K, Unit]
 
 pub using @seq {type SparseSet}
+
+pub using @sketch {type TDigest}
+
+pub using @sketch {type ThetaSketch}
 
 pub using @tree {type Treap}
 

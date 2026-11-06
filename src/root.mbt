@@ -48,6 +48,19 @@ pub using @tree {
 }
 
 ///|
+pub using @sketch {
+  type BloomFilter,
+  type BloomOptions,
+  type Growth,
+  type CuckooFilter,
+  type CuckooOptions,
+  type CountMinSketch,
+  type HyperLogLog,
+  type ThetaSketch,
+  type TDigest,
+}
+
+///|
 pub using @map {
   type IndexMap,
   type IndexSet,
