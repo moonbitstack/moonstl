@@ -19,6 +19,18 @@ pub using @seq {
 }
 
 ///|
+pub using @heap {
+  type Order,
+  type HeapKey,
+  type DaryHeap,
+  type IndexHeap,
+  type PairingHeap,
+  type FibonacciHeap,
+  type MinMaxHeap,
+  type RadixHeap,
+}
+
+///|
 pub using @map {
   type IndexMap,
   type IndexSet,

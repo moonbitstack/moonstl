@@ -4,6 +4,7 @@ package "moonbitstack/moonstl"
 import {
   "moonbitstack/moonstl/algo",
   "moonbitstack/moonstl/cache",
+  "moonbitstack/moonstl/heap",
   "moonbitstack/moonstl/map",
   "moonbitstack/moonstl/seq",
   "moonbitstack/moonstl/spec",
@@ -34,11 +35,15 @@ pub using @algo {type CombinationsWithReplacement}
 
 pub using @map {type Counter}
 
+pub using @heap {type DaryHeap}
+
 pub using @map {type DefaultMap}
 
 pub using @seq {type DenseSlotMap}
 
 pub using @cache {type ExpiringCache}
+
+pub using @heap {type FibonacciHeap}
 
 pub using @map {type FlatMap}
 
@@ -52,6 +57,10 @@ pub using @seq {type GapBuffer}
 
 pub using @algo {type GrayCode}
 
+pub using @heap {type HeapKey}
+
+pub using @heap {type IndexHeap}
+
 pub using @map {type IndexMap}
 
 pub using @map {type IndexSet}
@@ -64,13 +73,19 @@ pub using @seq {type LinkedList}
 
 pub using @cache {type LruCache}
 
+pub using @heap {type MinMaxHeap}
+
 pub using @map {type MultiMap}
 
 pub type MultiSet[K] = @map.MultiMap[K, Unit]
 
+pub using @heap {type Order}
+
 pub using @seq {type Overflow}
 
 pub using @map {type Overlap}
+
+pub using @heap {type PairingHeap}
 
 pub using @algo {type Permutations}
 
@@ -79,6 +94,8 @@ pub using @algo {type Position}
 pub using @algo {type Powerset}
 
 pub using @algo {type Product}
+
+pub using @heap {type RadixHeap}
 
 pub using @map {type RadixTree}
 

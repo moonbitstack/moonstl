@@ -1,0 +1,197 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbitstack/moonstl/heap"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "moonbitstack/moonstl/spec",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+#derive(@debug.Debug)
+pub struct DaryHeap[T] {
+  arity : Int32
+  cmp : (T, T) -> Int32
+  items : Array[T]
+}
+pub fn[T] DaryHeap::clear(Self[T]) -> Unit
+pub fn[T] DaryHeap::copy(Self[T]) -> Self[T]
+pub fn[T : Compare] DaryHeap::default() -> Self[T]
+pub fn[T : Eq] DaryHeap::equal(Self[T], Self[T]) -> Bool
+pub fn[T : Compare] DaryHeap::from_array(ArrayView[T], arity? : Int32, order? : Order) -> Self[T] raise @spec.Refused
+pub fn[T] DaryHeap::from_array_by(ArrayView[T], cmp~ : (T, T) -> Int32, arity? : Int32) -> Self[T] raise @spec.Refused
+pub fn[T : Compare] DaryHeap::from_iter(Iter[T], arity? : Int32, order? : Order) -> Self[T] raise @spec.Refused
+pub fn[T] DaryHeap::from_iter_by(Iter[T], cmp~ : (T, T) -> Int32, arity? : Int32) -> Self[T] raise @spec.Refused
+pub fn[T : Hash] DaryHeap::hash(Self[T]) -> Int32
+pub fn[T : Hash] DaryHeap::hash_combine(Self[T], Hasher) -> Unit
+pub fn[T] DaryHeap::into_sorted_array(Self[T]) -> Array[T]
+pub fn[T] DaryHeap::is_empty(Self[T]) -> Bool
+pub fn[T] DaryHeap::iter(Self[T]) -> Iter[T]
+pub fn[T] DaryHeap::length(Self[T]) -> Int32
+pub fn[T : Compare] DaryHeap::new(arity? : Int32, order? : Order) -> Self[T] raise @spec.Refused
+pub fn[T] DaryHeap::new_by(cmp~ : (T, T) -> Int32, arity? : Int32) -> Self[T] raise @spec.Refused
+pub fn[T : Eq] DaryHeap::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Show] DaryHeap::output(Self[T], &Logger) -> Unit
+pub fn[T] DaryHeap::peek(Self[T]) -> T?
+pub fn[T] DaryHeap::pop(Self[T]) -> T?
+pub fn[T] DaryHeap::push(Self[T], T) -> Unit
+pub fn[T] DaryHeap::push_pop(Self[T], T) -> T?
+pub fn[T] DaryHeap::replace(Self[T], T) -> T?
+pub fn[T] DaryHeap::to_array(Self[T]) -> Array[T]
+pub fn[T : @debug.Debug] DaryHeap::to_repr(Self[T]) -> @debug.Repr
+pub fn[T : Show] DaryHeap::to_string(Self[T]) -> String
+pub impl[T : Compare] Default for DaryHeap[T]
+pub impl[T : Eq] Eq for DaryHeap[T]
+pub impl[T : Hash] Hash for DaryHeap[T]
+pub impl[T : Show] Show for DaryHeap[T]
+
+pub struct FibonacciHeap[T] {
+  cmp : (T, T) -> Int32
+  values : Array[T?]
+  parents : Array[Int32]
+  child : Array[Int32]
+  left : Array[Int32]
+  right : Array[Int32]
+  degree : Array[Int32]
+  marked : Array[Bool]
+  generations : Array[UInt32]
+  free : Array[Int32]
+  mut min : Int32
+  mut len : Int32
+}
+pub fn[T] FibonacciHeap::clear(Self[T]) -> Unit
+pub fn[T] FibonacciHeap::contains(Self[T], HeapKey[T]) -> Bool
+pub fn[T] FibonacciHeap::decrease_key(Self[T], HeapKey[T], T) -> Bool
+pub fn[T] FibonacciHeap::get(Self[T], HeapKey[T]) -> T?
+pub fn[T] FibonacciHeap::insert(Self[T], T) -> HeapKey[T]
+pub fn[T] FibonacciHeap::into_sorted_array(Self[T]) -> Array[T]
+pub fn[T] FibonacciHeap::is_empty(Self[T]) -> Bool
+pub fn[T] FibonacciHeap::length(Self[T]) -> Int32
+pub fn[T] FibonacciHeap::merge(Self[T], Self[T]) -> Unit
+pub fn[T : Compare] FibonacciHeap::new(order? : Order) -> Self[T]
+pub fn[T] FibonacciHeap::new_by(cmp~ : (T, T) -> Int32) -> Self[T]
+pub fn[T] FibonacciHeap::peek(Self[T]) -> T?
+pub fn[T] FibonacciHeap::pop(Self[T]) -> T?
+pub fn[T] FibonacciHeap::remove_at(Self[T], HeapKey[T]) -> T?
+pub fn[T] FibonacciHeap::to_array(Self[T]) -> Array[T]
+pub fn[T] FibonacciHeap::update(Self[T], HeapKey[T], T) -> Bool
+
+pub(all) struct HeapKey[T] {
+  index : Int32
+  generation : UInt32
+}
+pub fn[T] HeapKey::equal(Self[T], Self[T]) -> Bool
+pub fn[T] HeapKey::from_json(@json.Json, @json.JsonPath) -> Self[T] raise @json.JsonDecodeError
+pub fn[T] HeapKey::hash(Self[T]) -> Int32
+pub fn[T] HeapKey::hash_combine(Self[T], Hasher) -> Unit
+pub fn[T] HeapKey::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T] HeapKey::output(Self[T], &Logger) -> Unit
+pub fn[T] HeapKey::to_json(Self[T]) -> @json.Json
+pub fn[T] HeapKey::to_string(Self[T]) -> String
+pub impl[T] Eq for HeapKey[T]
+pub impl[T] Hash for HeapKey[T]
+pub impl[T] Show for HeapKey[T]
+pub impl[T] @json.FromJson for HeapKey[T]
+pub impl[T] @json.ToJson for HeapKey[T]
+
+pub struct IndexHeap[T] {
+  cmp : (T, T) -> Int32
+  values : Array[T?]
+  generations : Array[UInt32]
+  positions : Array[Int32]
+  heap : Array[Int32]
+  free : Array[Int32]
+  mut len : Int32
+}
+pub fn[T] IndexHeap::clear(Self[T]) -> Unit
+pub fn[T] IndexHeap::contains(Self[T], HeapKey[T]) -> Bool
+pub fn[T] IndexHeap::copy(Self[T]) -> Self[T]
+pub fn[T] IndexHeap::get(Self[T], HeapKey[T]) -> T?
+pub fn[T] IndexHeap::insert(Self[T], T) -> HeapKey[T]
+pub fn[T] IndexHeap::into_sorted_array(Self[T]) -> Array[T]
+pub fn[T] IndexHeap::is_empty(Self[T]) -> Bool
+pub fn[T] IndexHeap::length(Self[T]) -> Int32
+pub fn[T : Compare] IndexHeap::new(order? : Order) -> Self[T]
+pub fn[T] IndexHeap::new_by(cmp~ : (T, T) -> Int32) -> Self[T]
+pub fn[T] IndexHeap::peek(Self[T]) -> T?
+pub fn[T] IndexHeap::pop(Self[T]) -> T?
+pub fn[T] IndexHeap::remove_at(Self[T], HeapKey[T]) -> T?
+pub fn[T] IndexHeap::to_array(Self[T]) -> Array[T]
+pub fn[T] IndexHeap::update(Self[T], HeapKey[T], T) -> Bool
+
+pub struct MinMaxHeap[T] {
+  cmp : (T, T) -> Int32
+  items : Array[T]
+}
+pub fn[T] MinMaxHeap::clear(Self[T]) -> Unit
+pub fn[T] MinMaxHeap::copy(Self[T]) -> Self[T]
+pub fn[T] MinMaxHeap::is_empty(Self[T]) -> Bool
+pub fn[T] MinMaxHeap::length(Self[T]) -> Int32
+pub fn[T : Compare] MinMaxHeap::new() -> Self[T]
+pub fn[T] MinMaxHeap::new_by(cmp~ : (T, T) -> Int32) -> Self[T]
+pub fn[T] MinMaxHeap::peek_max(Self[T]) -> T?
+pub fn[T] MinMaxHeap::peek_min(Self[T]) -> T?
+pub fn[T] MinMaxHeap::pop_max(Self[T]) -> T?
+pub fn[T] MinMaxHeap::pop_min(Self[T]) -> T?
+pub fn[T] MinMaxHeap::push(Self[T], T) -> Unit
+pub fn[T] MinMaxHeap::to_array(Self[T]) -> Array[T]
+
+#derive(Eq, @debug.Debug)
+pub(all) enum Order {
+  Min
+  Max
+}
+pub fn Order::equal(Self, Self) -> Bool
+pub fn Order::not_equal(Self, Self) -> Bool
+pub fn Order::output(Self, &Logger) -> Unit
+pub fn Order::to_repr(Self) -> @debug.Repr
+pub fn Order::to_string(Self) -> String
+pub impl Show for Order
+
+pub struct PairingHeap[T] {
+  cmp : (T, T) -> Int32
+  values : Array[T?]
+  children : Array[Int32]
+  siblings : Array[Int32]
+  parents : Array[Int32]
+  generations : Array[UInt32]
+  free : Array[Int32]
+  mut root : Int32
+  mut len : Int32
+}
+pub fn[T] PairingHeap::clear(Self[T]) -> Unit
+pub fn[T] PairingHeap::contains(Self[T], HeapKey[T]) -> Bool
+pub fn[T] PairingHeap::get(Self[T], HeapKey[T]) -> T?
+pub fn[T] PairingHeap::insert(Self[T], T) -> HeapKey[T]
+pub fn[T] PairingHeap::into_sorted_array(Self[T]) -> Array[T]
+pub fn[T] PairingHeap::is_empty(Self[T]) -> Bool
+pub fn[T] PairingHeap::length(Self[T]) -> Int32
+pub fn[T] PairingHeap::merge(Self[T], Self[T]) -> Unit
+pub fn[T : Compare] PairingHeap::new(order? : Order) -> Self[T]
+pub fn[T] PairingHeap::new_by(cmp~ : (T, T) -> Int32) -> Self[T]
+pub fn[T] PairingHeap::peek(Self[T]) -> T?
+pub fn[T] PairingHeap::pop(Self[T]) -> T?
+pub fn[T] PairingHeap::remove_at(Self[T], HeapKey[T]) -> T?
+pub fn[T] PairingHeap::to_array(Self[T]) -> Array[T]
+pub fn[T] PairingHeap::update(Self[T], HeapKey[T], T) -> Bool
+
+pub struct RadixHeap[T] {
+  buckets : Array[Array[(UInt64, T)]]
+  mut last : UInt64
+  mut len : Int32
+}
+pub fn[T] RadixHeap::clear(Self[T]) -> Unit
+pub fn[T] RadixHeap::is_empty(Self[T]) -> Bool
+pub fn[T] RadixHeap::length(Self[T]) -> Int32
+pub fn[T] RadixHeap::new() -> Self[T]
+pub fn[T] RadixHeap::peek_key(Self[T]) -> UInt64?
+pub fn[T] RadixHeap::pop_min(Self[T]) -> (UInt64, T)?
+pub fn[T] RadixHeap::push(Self[T], UInt64, T) -> Unit raise @spec.Refused
+
+// Type aliases
+
+// Traits

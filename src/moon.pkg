@@ -9,6 +9,10 @@ import {
 }
 
 import {
+  "moonbitstack/moonstl/heap",
+}
+
+import {
   "moonbitstack/moonstl/map",
 }
 
