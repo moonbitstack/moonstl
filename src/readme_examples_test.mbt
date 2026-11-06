@@ -71,3 +71,48 @@ test "readme: refusal" {
   }
   @test.assert_eq(built, Err(0))
 }
+
+///|
+test "readme: handles" {
+  let slots : @seq.SlotMap[String] = @seq.SlotMap::new()
+  let first = slots.insert("a")
+  let _ = slots.remove(first)
+  let _ = slots.insert("b")
+  @test.assert_eq(slots.get(first), None)
+  @test.assert_eq(slots.length(), 1)
+}
+
+///|
+test "readme: index heap" {
+  let heap : @heap.IndexHeap[Int32] = @heap.IndexHeap::new()
+  let handle = heap.insert(9)
+  let _ = heap.insert(4)
+  let _ = heap.update(handle, 1)
+  @test.assert_eq(heap.pop(), Some(1))
+}
+
+///|
+test "readme: segment tree" {
+  let tree : @tree.SegmentTree[Int32] = @tree.SegmentTree::from_array(
+    [3, 1, 4, 1, 5],
+    op=(a : Int32, b : Int32) => a + b,
+    identity=0,
+  )
+  @test.assert_eq(tree.query(1, 4), 6)
+}
+
+///|
+test "readme: hyperloglog" {
+  let log : @sketch.HyperLogLog[Int32] = @sketch.HyperLogLog::new(precision=12)
+  for i in 0..<1000 {
+    log.add(i)
+  }
+  let estimate = log.estimate()
+  @test.assert_eq(estimate > 900.0 && estimate < 1100.0, true)
+}
+
+///|
+test "readme: suffix automaton" {
+  let automaton : @text.SuffixAutomaton = @text.SuffixAutomaton::new("banana")
+  @test.assert_eq(automaton.count_occurrences("ana"), 2)
+}

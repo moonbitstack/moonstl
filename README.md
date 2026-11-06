@@ -20,8 +20,14 @@ test {
 | Package | Carries |
 |:--|:--|
 | `spec` | `Refused`, the one error type; `hash_seed`, the per-process seed |
+| `seq` | `RingBuffer`, `Slab`, `SlotMap`, `DenseSlotMap`, `SecondaryMap`, `GapBuffer`, `BitVec`, `BitSet`, `SparseSet`, `LinkedList` |
 | `map` | `IndexMap`, `IndexSet`, `MultiMap`, `SortedMultiMap`, `BiMap`, `Counter`, `DefaultMap`, `ChainMap`, `FlatMap`, `FlatSet`, `FlatMultiMap`, `FlatMultiSet`, `RangeMap`, `RangeSet`, `Trie`, `RadixTree` |
+| `heap` | `DaryHeap`, `IndexHeap`, `PairingHeap`, `FibonacciHeap`, `MinMaxHeap`, `RadixHeap` |
+| `tree` | `DisjointSet`, `DisjointSetMap`, `SegmentTree`, `LazySegmentTree`, `Fenwick`, `IntervalTree`, `OrderStatisticTree`, `SkipList`, `Treap`, `ArenaTree` |
 | `cache` | `LruCache`, `LfuCache`, `ArcCache`, `ExpiringCache`, `memoize`, `CacheStats` |
+| `sketch` | `BloomFilter`, `CuckooFilter`, `CountMinSketch`, `HyperLogLog`, `ThetaSketch`, `TDigest` |
+| `text` | `Kmp`, `BoyerMoore`, `AhoCorasick`, `SuffixArray`, `SuffixAutomaton`, `SequenceMatcher`, the diff formats, `Rope` |
+| `phf` | `PhfMap`, `PhfSet`, `PhfOrderedMap`, `PhfOrderedSet`, `PhfBuilder` |
 | `algo` | searching, selection, partitioning, merging and lazy adaptors over `ArrayView` and `Iter`, plus the combinatoric generators |
 
 The module root re-exports the types of these packages, so one import is enough
@@ -108,6 +114,93 @@ test {
   ])
 }
 ```
+
+## Handles, heaps and trees
+
+A `SlotMap` hands out `SlotKey`s that carry the generation of the slot they were
+issued for, so a key to a removed entry reads as absent instead of reaching the
+next occupant; a `Slab` hands out plain indices and makes the opposite trade.
+
+```moonbit
+///|
+test {
+  let slots : @seq.SlotMap[String] = @seq.SlotMap::new()
+  let first = slots.insert("a")
+  let _ = slots.remove(first)
+  let _ = slots.insert("b")
+  @test.assert_eq(slots.get(first), None)
+  @test.assert_eq(slots.length(), 1)
+}
+```
+
+The heaps cover the two shapes an array can take and the two that need nodes: a
+d-ary heap and an index heap where every entry carries a handle, then a pairing
+heap and a Fibonacci heap whose `decrease_key` costs nothing to undo. `MinMaxHeap`
+answers from both ends and `RadixHeap` refuses a key below the last one popped
+rather than reordering.
+
+```moonbit
+///|
+test {
+  let heap : @heap.IndexHeap[Int32] = @heap.IndexHeap::new()
+  let handle = heap.insert(9)
+  let _ = heap.insert(4)
+  let _ = heap.update(handle, 1)
+  @test.assert_eq(heap.pop(), Some(1))
+}
+```
+
+The trees are the range structures an index needs: a segment tree combines an
+associative operation over a range, a lazy one takes a range update, a Fenwick
+tree keeps prefix sums that grow at a point, and an interval tree answers which
+spans cover a point. `OrderStatisticTree` and `SkipList` answer by position as
+well as by key.
+
+```moonbit
+///|
+test {
+  let tree : @tree.SegmentTree[Int32] = @tree.SegmentTree::from_array(
+    [3, 1, 4, 1, 5], op=(a : Int32, b : Int32) => a + b, identity=0,
+  )
+  @test.assert_eq(tree.query(1, 4), 6)
+}
+```
+
+## Sketches, strings and perfect hashes
+
+When an exact answer costs more than it is worth, the sketch package trades
+accuracy for a fixed amount of memory: a Bloom filter with no false negatives, a
+Count-Min that never under-estimates, a HyperLogLog for a distinct count, and a
+t-digest for quantiles. Each round-trips through its own byte format.
+
+```moonbit
+///|
+test {
+  let log : @sketch.HyperLogLog[Int32] = @sketch.HyperLogLog::new(precision=12)
+  for i in 0..<1000 {
+    log.add(i)
+  }
+  let estimate = log.estimate()
+  @test.assert_eq(estimate > 900.0 && estimate < 1100.0, true)
+}
+```
+
+`text` answers the string questions a matcher asks — one pattern, many patterns,
+every occurrence, the longest repeated substring — and `SequenceMatcher` follows
+the algorithm Python's `difflib` uses, so the diffs line up with the ones Python
+prints.
+
+```moonbit
+///|
+test {
+  let automaton : @text.SuffixAutomaton = @text.SuffixAutomaton::new("banana")
+  @test.assert_eq(automaton.count_occurrences("ana"), 2)
+}
+```
+
+A `phf` table hashes its keys once, while it is built, so a lookup is a single
+comparison; the layout is a plain value, which is what lets a generated module
+carry one as a literal.
 
 ## Names, order and failure
 

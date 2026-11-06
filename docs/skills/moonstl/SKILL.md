@@ -84,6 +84,22 @@ have to change in place take an `Array` and say `_in_place`:
 `next_permutation_in_place`. The generators (`Permutations`, `Combinations`,
 `Powerset`, `Product`, `GrayCode`) are structs with `next()` and `iter()`.
 
+## Everything else in one line each
+
+- `seq`: `RingBuffer` (ceiling, overwrite-or-refuse), `SlotMap`/`DenseSlotMap`
+  with generation-checked `SlotKey`s, `Slab` with plain indices, `SecondaryMap`,
+  `GapBuffer`, `BitVec`/`BitSet` with rank and select, `SparseSet`, `LinkedList`
+  with O(1) splice and split.
+- `heap`: `DaryHeap`, `IndexHeap` (handles, `update`/`remove_at`), `PairingHeap`,
+  `FibonacciHeap` (`decrease_key`), `MinMaxHeap`, `RadixHeap` (monotone keys).
+- `tree`: `DisjointSet`, `SegmentTree`, `LazySegmentTree`, `Fenwick`,
+  `IntervalTree`, `OrderStatisticTree`, `SkipList`, `Treap`, `ArenaTree`.
+- `sketch`: `BloomFilter`, `CuckooFilter`, `CountMinSketch`, `HyperLogLog`,
+  `ThetaSketch`, `TDigest`, each with `encode`/`decode`.
+- `text`: `Kmp`, `BoyerMoore`, `AhoCorasick`, `SuffixArray`, `SuffixAutomaton`,
+  `SequenceMatcher` and the diff formats, `Rope`.
+- `phf`: `PhfBuilder` and the four tables whose hash is computed at build time.
+
 ## Rules worth knowing
 
 - Bad input raises `@spec.Refused`: a capacity of zero, a rate outside `(0, 1)`,
