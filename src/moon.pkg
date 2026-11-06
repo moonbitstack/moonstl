@@ -5,6 +5,10 @@ import {
 }
 
 import {
+  "moonbitstack/moonstl/seq",
+}
+
+import {
   "moonbitstack/moonstl/map",
 }
 

@@ -5,6 +5,7 @@ import {
   "moonbitstack/moonstl/algo",
   "moonbitstack/moonstl/cache",
   "moonbitstack/moonstl/map",
+  "moonbitstack/moonstl/seq",
   "moonbitstack/moonstl/spec",
 }
 
@@ -19,6 +20,10 @@ pub using @cache {type ArcCache}
 
 pub using @map {type BiMap}
 
+pub using @seq {type BitSet}
+
+pub using @seq {type BitVec}
+
 pub using @cache {type CacheStats}
 
 pub using @map {type ChainMap}
@@ -31,6 +36,8 @@ pub using @map {type Counter}
 
 pub using @map {type DefaultMap}
 
+pub using @seq {type DenseSlotMap}
+
 pub using @cache {type ExpiringCache}
 
 pub using @map {type FlatMap}
@@ -40,6 +47,8 @@ pub using @map {type FlatMultiMap}
 pub type FlatMultiSet[K] = @map.FlatMultiMap[K, Unit]
 
 pub using @map {type FlatSet}
+
+pub using @seq {type GapBuffer}
 
 pub using @algo {type GrayCode}
 
@@ -51,11 +60,15 @@ pub using @algo {type JoinEntry}
 
 pub using @cache {type LfuCache}
 
+pub using @seq {type LinkedList}
+
 pub using @cache {type LruCache}
 
 pub using @map {type MultiMap}
 
 pub type MultiSet[K] = @map.MultiMap[K, Unit]
+
+pub using @seq {type Overflow}
 
 pub using @map {type Overlap}
 
@@ -75,9 +88,21 @@ pub using @map {type RangeSet}
 
 pub using @spec {type Refused}
 
+pub using @seq {type RingBuffer}
+
+pub using @seq {type SecondaryMap}
+
+pub using @seq {type Slab}
+
+pub using @seq {type SlotKey}
+
+pub using @seq {type SlotMap}
+
 pub using @map {type SortedMultiMap}
 
 pub type SortedMultiSet[K] = @map.SortedMultiMap[K, Unit]
+
+pub using @seq {type SparseSet}
 
 pub using @map {type Trie}
 

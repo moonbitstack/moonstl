@@ -1,0 +1,10 @@
+// Sequence containers over any element type: a ring with a ceiling, two
+// address-by-handle stores, a gap buffer, the bit containers, a sparse set and a
+// doubly linked list.
+import {
+  "moonbitstack/moonstl/spec",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"

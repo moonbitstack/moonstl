@@ -3,6 +3,22 @@
 pub using @spec {type Refused}
 
 ///|
+pub using @seq {
+  type RingBuffer,
+  type Overflow,
+  type Slab,
+  type SlotKey,
+  type SlotMap,
+  type DenseSlotMap,
+  type SecondaryMap,
+  type GapBuffer,
+  type BitVec,
+  type BitSet,
+  type SparseSet,
+  type LinkedList,
+}
+
+///|
 pub using @map {
   type IndexMap,
   type IndexSet,

@@ -1,0 +1,299 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbitstack/moonstl/seq"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "moonbitstack/moonstl/spec",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub struct BitSet {
+  words : Array[UInt64]
+}
+pub fn BitSet::clear(Self) -> Unit
+pub fn BitSet::contains(Self, Int32) -> Bool
+pub fn BitSet::copy(Self) -> Self
+pub fn BitSet::difference(Self, Self) -> Self
+pub fn BitSet::difference_in_place(Self, Self) -> Unit
+pub fn BitSet::equal(Self, Self) -> Bool
+pub fn BitSet::insert(Self, Int32) -> Bool
+pub fn BitSet::intersection(Self, Self) -> Self
+pub fn BitSet::intersection_in_place(Self, Self) -> Unit
+pub fn BitSet::is_disjoint(Self, Self) -> Bool
+pub fn BitSet::is_empty(Self) -> Bool
+pub fn BitSet::is_subset(Self, Self) -> Bool
+pub fn BitSet::is_superset(Self, Self) -> Bool
+pub fn BitSet::iter(Self) -> Iter[Int32]
+pub fn BitSet::length(Self) -> Int32
+pub fn BitSet::new(capacity? : Int32) -> Self
+pub fn BitSet::not_equal(Self, Self) -> Bool
+pub fn BitSet::output(Self, &Logger) -> Unit
+pub fn BitSet::rank(Self, Int32) -> Int32
+pub fn BitSet::remove(Self, Int32) -> Bool
+pub fn BitSet::select(Self, Int32) -> Int32?
+pub fn BitSet::symmetric_difference(Self, Self) -> Self
+pub fn BitSet::to_array(Self) -> Array[Int32]
+pub fn BitSet::to_string(Self) -> String
+pub fn BitSet::union(Self, Self) -> Self
+pub fn BitSet::union_in_place(Self, Self) -> Unit
+pub impl Eq for BitSet
+pub impl Show for BitSet
+
+pub struct BitVec {
+  words : Array[UInt64]
+  mut bits : Int32
+}
+pub fn BitVec::at(Self, Int32) -> Bool
+pub fn BitVec::blocks(Self) -> ArrayView[UInt64]
+pub fn BitVec::clear(Self) -> Unit
+pub fn BitVec::copy(Self) -> Self
+pub fn BitVec::count_ones(Self) -> Int32
+pub fn BitVec::equal(Self, Self) -> Bool
+pub fn BitVec::get(Self, Int32) -> Bool?
+pub fn BitVec::is_empty(Self) -> Bool
+pub fn BitVec::iter(Self) -> Iter[Bool]
+pub fn BitVec::length(Self) -> Int32
+pub fn BitVec::new(capacity? : Int32) -> Self
+pub fn BitVec::not_equal(Self, Self) -> Bool
+pub fn BitVec::output(Self, &Logger) -> Unit
+pub fn BitVec::pop(Self) -> Bool?
+pub fn BitVec::push(Self, Bool) -> Unit
+pub fn BitVec::resize(Self, Int32) -> Unit
+pub fn BitVec::set(Self, Int32, Bool) -> Unit
+pub fn BitVec::to_string(Self) -> String
+pub impl Eq for BitVec
+pub impl Show for BitVec
+
+pub struct DenseSlotMap[T] {
+  values : Array[T?]
+  generations : Array[UInt32]
+  dense : Array[Int32]
+  positions : Array[Int32]
+  free : Array[Int32]
+  mut len : Int32
+}
+pub fn[T] DenseSlotMap::at(Self[T], SlotKey[T]) -> T
+pub fn[T] DenseSlotMap::capacity(Self[T]) -> Int32
+pub fn[T] DenseSlotMap::clear(Self[T]) -> Unit
+pub fn[T] DenseSlotMap::contains(Self[T], SlotKey[T]) -> Bool
+pub fn[T] DenseSlotMap::copy(Self[T]) -> Self[T]
+pub fn[T] DenseSlotMap::get(Self[T], SlotKey[T]) -> T?
+pub fn[T] DenseSlotMap::insert(Self[T], T) -> SlotKey[T]
+pub fn[T] DenseSlotMap::is_empty(Self[T]) -> Bool
+pub fn[T] DenseSlotMap::iter(Self[T]) -> Iter[T]
+pub fn[T] DenseSlotMap::iter2(Self[T]) -> Iter2[SlotKey[T], T]
+pub fn[T] DenseSlotMap::keys(Self[T]) -> Iter[SlotKey[T]]
+pub fn[T] DenseSlotMap::length(Self[T]) -> Int32
+pub fn[T] DenseSlotMap::new(capacity? : Int32) -> Self[T]
+pub fn[T] DenseSlotMap::remove(Self[T], SlotKey[T]) -> T?
+pub fn[T] DenseSlotMap::set(Self[T], SlotKey[T], T) -> Bool
+pub fn[T] DenseSlotMap::to_array(Self[T]) -> Array[T]
+
+pub struct GapBuffer[T] {
+  before : Array[T]
+  after : Array[T]
+}
+pub fn[T] GapBuffer::at(Self[T], Int32) -> T
+pub fn[T] GapBuffer::clear(Self[T]) -> Unit
+pub fn[T] GapBuffer::copy(Self[T]) -> Self[T]
+pub fn[T] GapBuffer::from_array(ArrayView[T], capacity? : Int32) -> Self[T]
+pub fn[T] GapBuffer::get(Self[T], Int32) -> T?
+pub fn[T] GapBuffer::insert(Self[T], Int32, T) -> Unit
+pub fn[T] GapBuffer::is_empty(Self[T]) -> Bool
+pub fn[T] GapBuffer::iter(Self[T]) -> Iter[T]
+pub fn[T] GapBuffer::length(Self[T]) -> Int32
+pub fn[T] GapBuffer::move_gap_to(Self[T], Int32) -> Unit
+pub fn[T] GapBuffer::new(capacity? : Int32) -> Self[T]
+pub fn[T] GapBuffer::remove(Self[T], Int32) -> T?
+pub fn[T] GapBuffer::set(Self[T], Int32, T) -> Bool
+pub fn[T] GapBuffer::to_array(Self[T]) -> Array[T]
+
+pub struct LinkedList[T] {
+  mut head : LinkedListNode[T]?
+  mut tail : LinkedListNode[T]?
+  mut len : Int32
+}
+pub fn[T] LinkedList::append(Self[T], Self[T]) -> Unit
+pub fn[T] LinkedList::back(Self[T]) -> T?
+pub fn[T] LinkedList::clear(Self[T]) -> Unit
+pub fn[T] LinkedList::front(Self[T]) -> T?
+pub fn[T] LinkedList::get(Self[T], Int32) -> T?
+pub fn[T] LinkedList::insert_at(Self[T], Int32, T) -> Unit
+pub fn[T] LinkedList::is_empty(Self[T]) -> Bool
+pub fn[T] LinkedList::iter(Self[T]) -> Iter[T]
+pub fn[T] LinkedList::length(Self[T]) -> Int32
+pub fn[T] LinkedList::new() -> Self[T]
+pub fn[T] LinkedList::pop_back(Self[T]) -> T?
+pub fn[T] LinkedList::pop_front(Self[T]) -> T?
+pub fn[T] LinkedList::push_back(Self[T], T) -> Unit
+pub fn[T] LinkedList::push_front(Self[T], T) -> Unit
+pub fn[T] LinkedList::remove_at(Self[T], Int32) -> T?
+pub fn[T] LinkedList::rev_iter(Self[T]) -> Iter[T]
+pub fn[T] LinkedList::splice(Self[T], Self[T]) -> Unit
+pub fn[T] LinkedList::split_off(Self[T], Int32) -> Self[T]
+pub fn[T] LinkedList::to_array(Self[T]) -> Array[T]
+
+pub struct LinkedListNode[T] {
+  value : T
+  mut prev : LinkedListNode[T]?
+  mut next : LinkedListNode[T]?
+}
+
+#derive(Eq, @debug.Debug)
+pub(all) enum Overflow {
+  Overwrite
+  Refuse
+}
+pub fn Overflow::equal(Self, Self) -> Bool
+pub fn Overflow::not_equal(Self, Self) -> Bool
+pub fn Overflow::output(Self, &Logger) -> Unit
+pub fn Overflow::to_repr(Self) -> @debug.Repr
+pub fn Overflow::to_string(Self) -> String
+pub impl Show for Overflow
+
+pub struct RingBuffer[T] {
+  mut slots : Array[T]
+  mut head : Int32
+  mut len : Int32
+  mut capacity : Int32
+  overflow : Overflow
+}
+pub fn[T] RingBuffer::as_views(Self[T]) -> (ArrayView[T], ArrayView[T])
+pub fn[T] RingBuffer::at(Self[T], Int32) -> T
+pub fn[T] RingBuffer::back(Self[T]) -> T?
+pub fn[T] RingBuffer::capacity(Self[T]) -> Int32
+pub fn[T] RingBuffer::clear(Self[T]) -> Unit
+pub fn[T] RingBuffer::copy(Self[T]) -> Self[T]
+pub fn[T : Eq] RingBuffer::equal(Self[T], Self[T]) -> Bool
+pub fn[T] RingBuffer::from_array(capacity~ : Int32, ArrayView[T], overflow? : Overflow) -> Self[T] raise @spec.Refused
+pub fn[T] RingBuffer::from_iter(capacity~ : Int32, Iter[T], overflow? : Overflow) -> Self[T] raise @spec.Refused
+pub fn[T] RingBuffer::front(Self[T]) -> T?
+pub fn[T] RingBuffer::get(Self[T], Int32) -> T?
+pub fn[T : Hash] RingBuffer::hash(Self[T]) -> Int32
+pub fn[T : Hash] RingBuffer::hash_combine(Self[T], Hasher) -> Unit
+pub fn[T] RingBuffer::is_empty(Self[T]) -> Bool
+pub fn[T] RingBuffer::is_full(Self[T]) -> Bool
+pub fn[T] RingBuffer::iter(Self[T]) -> Iter[T]
+pub fn[T] RingBuffer::length(Self[T]) -> Int32
+pub fn[T] RingBuffer::linearize(Self[T]) -> Unit
+pub fn[T] RingBuffer::new(capacity~ : Int32, overflow? : Overflow) -> Self[T] raise @spec.Refused
+pub fn[T : Eq] RingBuffer::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T : Show] RingBuffer::output(Self[T], &Logger) -> Unit
+pub fn[T] RingBuffer::overflow(Self[T]) -> Overflow
+pub fn[T] RingBuffer::pop_back(Self[T]) -> T?
+pub fn[T] RingBuffer::pop_front(Self[T]) -> T?
+pub fn[T] RingBuffer::push_back(Self[T], T) -> T?
+pub fn[T] RingBuffer::push_front(Self[T], T) -> T?
+pub fn[T] RingBuffer::resize_capacity(Self[T], capacity~ : Int32) -> Unit raise @spec.Refused
+pub fn[T] RingBuffer::rev_iter(Self[T]) -> Iter[T]
+pub fn[T] RingBuffer::set(Self[T], Int32, T) -> Unit
+pub fn[T] RingBuffer::to_array(Self[T]) -> Array[T]
+pub fn[T : @debug.Debug] RingBuffer::to_repr(Self[T]) -> @debug.Repr
+pub fn[T : Show] RingBuffer::to_string(Self[T]) -> String
+pub impl[T : Eq] Eq for RingBuffer[T]
+pub impl[T : Hash] Hash for RingBuffer[T]
+pub impl[T : Show] Show for RingBuffer[T]
+pub impl[T : @debug.Debug] @debug.Debug for RingBuffer[T]
+
+pub struct SecondaryMap[T] {
+  values : Array[T?]
+  mut slots : Int32
+}
+pub fn[T] SecondaryMap::at(Self[T], SlotKey[T]) -> T
+pub fn[T] SecondaryMap::clear(Self[T]) -> Unit
+pub fn[T] SecondaryMap::contains(Self[T], SlotKey[T]) -> Bool
+pub fn[T] SecondaryMap::copy(Self[T]) -> Self[T]
+pub fn[T] SecondaryMap::get(Self[T], SlotKey[T]) -> T?
+pub fn[T] SecondaryMap::is_empty(Self[T]) -> Bool
+pub fn[T] SecondaryMap::iter(Self[T]) -> Iter[T]
+pub fn[T] SecondaryMap::length(Self[T]) -> Int32
+pub fn[T] SecondaryMap::new() -> Self[T]
+pub fn[T] SecondaryMap::remove(Self[T], SlotKey[T]) -> T?
+pub fn[T] SecondaryMap::resize(Self[T], slots~ : Int32) -> Unit raise @spec.Refused
+pub fn[T] SecondaryMap::set(Self[T], SlotKey[T], T) -> Unit raise @spec.Refused
+
+pub struct Slab[T] {
+  values : Array[T?]
+  free : Array[Int32]
+  mut len : Int32
+}
+pub fn[T] Slab::at(Self[T], Int32) -> T
+pub fn[T] Slab::capacity(Self[T]) -> Int32
+pub fn[T] Slab::clear(Self[T]) -> Unit
+pub fn[T] Slab::contains(Self[T], Int32) -> Bool
+pub fn[T] Slab::copy(Self[T]) -> Self[T]
+pub fn[T] Slab::get(Self[T], Int32) -> T?
+pub fn[T] Slab::insert(Self[T], T) -> Int32
+pub fn[T] Slab::is_empty(Self[T]) -> Bool
+pub fn[T] Slab::iter(Self[T]) -> Iter[T]
+pub fn[T] Slab::keys(Self[T]) -> Iter[Int32]
+pub fn[T] Slab::length(Self[T]) -> Int32
+pub fn[T] Slab::new(capacity? : Int32) -> Self[T]
+pub fn[T] Slab::remove(Self[T], Int32) -> T?
+pub fn[T] Slab::set(Self[T], Int32, T) -> Bool
+
+#derive(Eq, Hash, @debug.Debug)
+pub(all) struct SlotKey[T] {
+  index : Int32
+  generation : UInt32
+}
+pub fn[T : Eq] SlotKey::equal(Self[T], Self[T]) -> Bool
+pub fn[T] SlotKey::from_json(@json.Json, @json.JsonPath) -> Self[T] raise @json.JsonDecodeError
+pub fn[T : Hash] SlotKey::hash(Self[T]) -> Int32
+pub fn[T : Hash] SlotKey::hash_combine(Self[T], Hasher) -> Unit
+pub fn[T : Eq] SlotKey::not_equal(Self[T], Self[T]) -> Bool
+pub fn[T] SlotKey::output(Self[T], &Logger) -> Unit
+pub fn[T] SlotKey::to_json(Self[T]) -> @json.Json
+pub fn[T : @debug.Debug] SlotKey::to_repr(Self[T]) -> @debug.Repr
+pub fn[T] SlotKey::to_string(Self[T]) -> String
+pub impl[T] Show for SlotKey[T]
+pub impl[T] @json.FromJson for SlotKey[T]
+pub impl[T] @json.ToJson for SlotKey[T]
+
+pub struct SlotMap[T] {
+  values : Array[T?]
+  generations : Array[UInt32]
+  free : Array[Int32]
+  mut len : Int32
+}
+pub fn[T] SlotMap::at(Self[T], SlotKey[T]) -> T
+pub fn[T] SlotMap::capacity(Self[T]) -> Int32
+pub fn[T] SlotMap::clear(Self[T]) -> Unit
+pub fn[T] SlotMap::contains(Self[T], SlotKey[T]) -> Bool
+pub fn[T] SlotMap::copy(Self[T]) -> Self[T]
+pub fn[T] SlotMap::get(Self[T], SlotKey[T]) -> T?
+pub fn[T] SlotMap::insert(Self[T], T) -> SlotKey[T]
+pub fn[T] SlotMap::is_empty(Self[T]) -> Bool
+pub fn[T] SlotMap::iter(Self[T]) -> Iter[T]
+pub fn[T] SlotMap::iter2(Self[T]) -> Iter2[SlotKey[T], T]
+pub fn[T] SlotMap::keys(Self[T]) -> Iter[SlotKey[T]]
+pub fn[T] SlotMap::length(Self[T]) -> Int32
+pub fn[T] SlotMap::new(capacity? : Int32) -> Self[T]
+pub fn[T] SlotMap::remove(Self[T], SlotKey[T]) -> T?
+pub fn[T] SlotMap::retain(Self[T], (SlotKey[T], T) -> Bool) -> Unit
+pub fn[T] SlotMap::set(Self[T], SlotKey[T], T) -> Bool
+
+pub struct SparseSet[T] {
+  dense : Array[T]
+  positions : Map[T, Int32]
+}
+pub fn[T] SparseSet::clear(Self[T]) -> Unit
+pub fn[T : Hash + Eq] SparseSet::contains(Self[T], T) -> Bool
+pub fn[T] SparseSet::copy(Self[T]) -> Self[T]
+pub fn[T : Hash + Eq] SparseSet::get_index(Self[T], T) -> Int32?
+pub fn[T : Hash + Eq] SparseSet::insert(Self[T], T) -> Bool
+pub fn[T] SparseSet::is_empty(Self[T]) -> Bool
+pub fn[T] SparseSet::iter(Self[T]) -> Iter[T]
+pub fn[T] SparseSet::length(Self[T]) -> Int32
+pub fn[T : Hash + Eq] SparseSet::new(capacity? : Int32) -> Self[T]
+pub fn[T : Hash + Eq] SparseSet::remove(Self[T], T) -> Bool
+pub fn[T] SparseSet::to_array(Self[T]) -> Array[T]
+
+// Type aliases
+
+// Traits
