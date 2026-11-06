@@ -1,0 +1,242 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbitstack/moonstl/algo"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitstack/moonstl/spec",
+}
+
+// Values
+pub fn[T] adjacent_difference(ArrayView[T], op~ : (T, T) -> T) -> Array[T]
+
+pub fn[T : Eq] all_equal(ArrayView[T]) -> Bool
+
+pub fn[T : Hash + Eq] all_unique(ArrayView[T]) -> Bool
+
+pub fn[T] apply_permutation_in_place(Array[T], ArrayView[Int32]) -> Unit
+
+pub fn[T] at_most_one(ArrayView[T], (T) -> Bool) -> Bool
+
+pub fn[T : Compare] bisect_left(ArrayView[T], T) -> Int32
+
+pub fn[T] bisect_left_by(ArrayView[T], T, cmp~ : (T, T) -> Int32) -> Int32
+
+pub fn[T : Compare] bisect_right(ArrayView[T], T) -> Int32
+
+pub fn[T] bisect_right_by(ArrayView[T], T, cmp~ : (T, T) -> Int32) -> Int32
+
+pub fn[T] chunk_by(Iter[T], (T, T) -> Bool) -> Iter[Array[T]]
+
+pub fn[T] chunks(Iter[T], Int32) -> Iter[Array[T]]
+
+pub fn[T : Compare] clamp(T, min~ : T, max~ : T) -> T
+
+pub fn count(Int32) -> Iter[Int32]
+
+pub fn[T] cycle(Iter[T]) -> Iter[T]
+
+pub fn[T : Hash + Eq] duplicates(ArrayView[T]) -> Array[T]
+
+pub fn[T : Compare] equal_range(ArrayView[T], T) -> (Int32, Int32)
+
+pub fn[T] exactly_one(ArrayView[T], (T) -> Bool) -> Bool
+
+pub fn[T : Eq] find_run(ArrayView[T], ArrayView[T]) -> Int32?
+
+pub fn[T] fold_first(Iter[T], (T, T) -> T) -> T?
+
+pub fn[A, B] fold_while(Iter[A], init~ : B, (B, A) -> Result[B, B]) -> B
+
+pub fn[T] gather_in_place(Array[T], mid~ : Int32, (T) -> Bool) -> Int32
+
+pub fn[T, K : Eq] group_by(Iter[T], key~ : (T) -> K) -> Iter[(K, Array[T])]
+
+pub fn[T : Compare] insort_left_in_place(Array[T], T) -> Unit
+
+pub fn[T : Compare] insort_right_in_place(Array[T], T) -> Unit
+
+pub fn[T] interleave(Iter[T], Iter[T]) -> Iter[T]
+
+pub fn[T] interleave_shortest(Iter[T], Iter[T]) -> Iter[T]
+
+pub fn[T : Eq] is_palindrome(ArrayView[T]) -> Bool
+
+pub fn[T] is_partitioned(ArrayView[T], (T) -> Bool) -> Bool
+
+pub fn[T] is_partitioned_until(ArrayView[T], (T) -> Bool) -> Int32?
+
+pub fn[T : Compare] k_largest(Int32, ArrayView[T]) -> Array[T]
+
+pub fn[T : Compare] k_smallest(Int32, ArrayView[T]) -> Array[T]
+
+pub fn[T : Compare] k_way_merge(ArrayView[ArrayView[T]]) -> Array[T]
+
+pub fn[T : Compare] max_set(ArrayView[T]) -> Array[T]
+
+pub fn[T : Compare] merge(ArrayView[T], ArrayView[T]) -> Array[T]
+
+pub fn[T : Compare] merge_in_place(Array[T], Array[T]) -> Unit
+
+pub fn[A, B] merge_join_by(ArrayView[A], ArrayView[B], cmp~ : (A, B) -> Int32) -> Iter[JoinEntry[A, B]]
+
+pub fn[T : Compare] min_max(Iter[T]) -> (T, T)?
+
+pub fn[T : Compare] min_max_element(ArrayView[T]) -> (Int32, Int32)?
+
+pub fn[T : Compare] min_set(ArrayView[T]) -> Array[T]
+
+pub fn[T : Eq] mismatch(ArrayView[T], ArrayView[T]) -> (Int32, Int32)?
+
+pub fn[T : Compare] next_permutation_in_place(Array[T]) -> Bool
+
+pub fn[T : Compare] nth_element_in_place(Array[T], Int32) -> Unit
+
+pub fn[T] pad_using(Iter[T], Int32, (Int32) -> T) -> Iter[T]
+
+pub fn[T : Compare] partial_sort_in_place(Array[T], Int32) -> Unit
+
+pub fn[T] partition_copy(ArrayView[T], (T) -> Bool) -> (Array[T], Array[T])
+
+pub fn[T] partition_in_place(Array[T], (T) -> Bool) -> Int32
+
+pub fn[A, B] partition_pair(ArrayView[A], (A) -> B?) -> (Array[B], Array[A])
+
+pub fn[T] partition_point(ArrayView[T], (T) -> Bool) -> Int32
+
+pub fn[T] peek_nth(Iter[T], Int32) -> Iter[T]
+
+pub fn[T : Compare] position_max(ArrayView[T]) -> Int32?
+
+pub fn[T : Compare] position_min(ArrayView[T]) -> Int32?
+
+pub fn[T : Compare] position_min_max(ArrayView[T]) -> (Int32, Int32)?
+
+pub fn[T] prefix_sum(ArrayView[T], op~ : (T, T) -> T) -> Array[T]
+
+pub fn[T : Compare] prev_permutation_in_place(Array[T]) -> Bool
+
+pub fn[T : Eq] replace_in_place(Array[T], T, T) -> Int32
+
+pub fn[T] rotate(ArrayView[T], mid~ : Int32) -> Array[T]
+
+pub fn[T] rotate_in_place(Array[T], mid~ : Int32) -> Unit
+
+pub fn[A, B] scan(Iter[A], init~ : B, (B, A) -> B) -> Iter[B]
+
+pub fn[T] scan_in_place(Array[T], op~ : (T, T) -> T) -> Unit
+
+pub fn[T] shift_left_in_place(Array[T], n~ : Int32) -> Unit
+
+pub fn[T] shift_right_in_place(Array[T], n~ : Int32) -> Unit
+
+pub fn[T : Compare] sort_subrange_in_place(Array[T], start~ : Int32, end~ : Int32) -> Unit
+
+pub fn[T : Compare] sorted(ArrayView[T]) -> Array[T]
+
+pub fn[T, K : Compare] sorted_by_key(ArrayView[T], key~ : (T) -> K) -> Array[T]
+
+pub fn[T] stable_partition_in_place(Array[T], (T) -> Bool) -> Int32
+
+pub fn[T] take_while_inclusive(Iter[T], (T) -> Bool) -> Iter[T]
+
+pub fn[T] tee(Iter[T]) -> (Iter[T], Iter[T])
+
+pub fn[T] tree_reduce(Iter[T], (T, T) -> T) -> T?
+
+pub fn[T : Hash + Eq] unique(ArrayView[T]) -> Array[T]
+
+pub fn[T] windows_circular(ArrayView[T], Int32) -> Iter[Array[T]]
+
+pub fn[T] with_position(Iter[T]) -> Iter[(Position, T)]
+
+pub fn[A, B] zip_eq(Iter[A], Iter[B]) -> Iter[(A, B)] raise @spec.Refused
+
+pub fn[A, B] zip_longest(Iter[A], Iter[B], fill~ : A, fill_b~ : B) -> Iter[(A, B)]
+
+// Errors
+
+// Types and methods
+pub struct Combinations[T] {
+  pool : Array[T]
+  indices : Array[Int32]
+  mut started : Bool
+  mut done : Bool
+}
+pub fn[T] Combinations::iter(Self[T]) -> Iter[Array[T]]
+pub fn[T] Combinations::new(ArrayView[T], k~ : Int32) -> Self[T]
+pub fn[T] Combinations::next(Self[T]) -> Array[T]?
+
+pub struct CombinationsWithReplacement[T] {
+  pool : Array[T]
+  indices : Array[Int32]
+  mut started : Bool
+  mut done : Bool
+}
+pub fn[T] CombinationsWithReplacement::iter(Self[T]) -> Iter[Array[T]]
+pub fn[T] CombinationsWithReplacement::new(ArrayView[T], k~ : Int32) -> Self[T]
+pub fn[T] CombinationsWithReplacement::next(Self[T]) -> Array[T]?
+
+pub struct GrayCode {
+  bits : Int32
+  mut step : Int32
+  mut done : Bool
+}
+pub fn GrayCode::iter(Self) -> Iter[Array[Bool]]
+pub fn GrayCode::new(Int32) -> Self
+pub fn GrayCode::next(Self) -> Array[Bool]?
+
+#derive(Eq, @debug.Debug)
+pub(all) enum JoinEntry[A, B] {
+  Left(A)
+  Right(B)
+  Both(A, B)
+}
+pub fn[A : Eq, B : Eq] JoinEntry::equal(Self[A, B], Self[A, B]) -> Bool
+pub fn[A : Eq, B : Eq] JoinEntry::not_equal(Self[A, B], Self[A, B]) -> Bool
+pub fn[A : @debug.Debug, B : @debug.Debug] JoinEntry::to_repr(Self[A, B]) -> @debug.Repr
+
+pub struct Permutations[T] {
+  pool : Array[T]
+  indices : Array[Int32]
+  cycles : Array[Int32]
+  size : Int32
+  mut started : Bool
+  mut done : Bool
+}
+pub fn[T] Permutations::iter(Self[T]) -> Iter[Array[T]]
+pub fn[T] Permutations::new(ArrayView[T], length? : Int32) -> Self[T]
+pub fn[T] Permutations::next(Self[T]) -> Array[T]?
+
+#derive(Eq, @debug.Debug)
+pub(all) enum Position {
+  Only
+  First
+  Middle
+  Last
+}
+pub fn Position::equal(Self, Self) -> Bool
+pub fn Position::not_equal(Self, Self) -> Bool
+pub fn Position::to_repr(Self) -> @debug.Repr
+
+pub struct Powerset[T] {
+  mut inner : Combinations[T]
+  pool : Array[T]
+  mut size : Int32
+}
+pub fn[T] Powerset::iter(Self[T]) -> Iter[Array[T]]
+pub fn[T] Powerset::new(ArrayView[T]) -> Self[T]
+pub fn[T] Powerset::next(Self[T]) -> Array[T]?
+
+pub struct Product[T] {
+  pools : Array[Array[T]]
+  digits : Array[Int32]
+  mut started : Bool
+  mut done : Bool
+}
+pub fn[T] Product::iter(Self[T]) -> Iter[Array[T]]
+pub fn[T] Product::new(ArrayView[ArrayView[T]]) -> Self[T]
+pub fn[T] Product::next(Self[T]) -> Array[T]?
+
+// Type aliases
+
+// Traits
