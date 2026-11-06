@@ -1,0 +1,9 @@
+// Perfect hash tables: the hash is computed once, while the table is built, so a
+// lookup is a single comparison.
+import {
+  "moonbitstack/moonstl/spec",
+}
+
+import {
+  "moonbitlang/core/test",
+} for "test"

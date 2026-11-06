@@ -61,6 +61,18 @@ pub using @sketch {
 }
 
 ///|
+pub using @phf {
+  type PhfMap,
+  type PhfSet,
+  type PhfOrderedMap,
+  type PhfOrderedSet,
+  type PhfBuilder,
+  type PhfBuild,
+  type PhfOptions,
+  type PhfLayout,
+}
+
+///|
 pub using @map {
   type IndexMap,
   type IndexSet,

@@ -1,0 +1,138 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonbitstack/moonstl/phf"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitstack/moonstl/spec",
+}
+
+// Values
+pub let phf_options : PhfOptions
+
+// Errors
+
+// Types and methods
+#derive(Eq, @debug.Debug)
+pub(all) enum PhfBuild {
+  Search
+  Quick
+  Minimal
+}
+pub fn PhfBuild::equal(Self, Self) -> Bool
+pub fn PhfBuild::not_equal(Self, Self) -> Bool
+pub fn PhfBuild::output(Self, &Logger) -> Unit
+pub fn PhfBuild::to_repr(Self) -> @debug.Repr
+pub fn PhfBuild::to_string(Self) -> String
+pub impl Show for PhfBuild
+
+pub struct PhfBuilder[K, V] {
+  options : PhfOptions
+  keys : Array[K]
+  values : Array[V]
+  seen : Map[Bytes, Unit]
+}
+pub fn[K : PhfKey, V] PhfBuilder::build(Self[K, V]) -> PhfMap[K, V] raise @spec.Refused
+pub fn[K : PhfKey, V] PhfBuilder::build_ordered(Self[K, V]) -> PhfOrderedMap[K, V] raise @spec.Refused
+pub fn[K : PhfKey, V] PhfBuilder::build_ordered_set(Self[K, V]) -> PhfOrderedSet[K] raise @spec.Refused
+pub fn[K : PhfKey, V] PhfBuilder::build_set(Self[K, V]) -> PhfSet[K] raise @spec.Refused
+pub fn[K : PhfKey + Show, V : Show] PhfBuilder::build_source(Self[K, V], name~ : String) -> String raise @spec.Refused
+pub fn[K : PhfKey, V] PhfBuilder::entry(Self[K, V], K, V) -> Unit raise @spec.Refused
+pub fn[K, V] PhfBuilder::length(Self[K, V]) -> Int32
+pub fn[K, V] PhfBuilder::new(phf_options? : PhfOptions) -> Self[K, V]
+
+pub enum PhfIndex {
+  Direct(FixedArray[Int32])
+  Ranked(PhfRank)
+}
+
+#derive(Eq, @debug.Debug)
+pub(all) struct PhfLayout {
+  build : PhfBuild
+  salt : UInt64
+  buckets : Int32
+  table_len : Int32
+  length : Int32
+  disps : Array[Int32]
+}
+pub fn PhfLayout::equal(Self, Self) -> Bool
+pub fn PhfLayout::not_equal(Self, Self) -> Bool
+pub fn PhfLayout::to_repr(Self) -> @debug.Repr
+
+pub struct PhfMap[K, V] {
+  layout : PhfLayout
+  keys : Array[K]
+  values : Array[V]
+  index : PhfIndex
+}
+pub fn[K : PhfKey + Eq, V] PhfMap::contains(Self[K, V], K) -> Bool
+pub fn[K, V] PhfMap::copy(Self[K, V]) -> Self[K, V]
+pub fn[K : PhfKey, V] PhfMap::from_layout(PhfLayout, Array[(K, V)]) -> Self[K, V] raise @spec.Refused
+pub fn[K : PhfKey + Eq, V] PhfMap::get(Self[K, V], K) -> V?
+pub fn[K, V] PhfMap::get_index(Self[K, V], Int32) -> (K, V)?
+pub fn[K : PhfKey + Eq, V] PhfMap::get_key(Self[K, V], K) -> K?
+pub fn[K : PhfKey + Eq, V] PhfMap::get_key_value(Self[K, V], K) -> (K, V)?
+pub fn[K, V] PhfMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] PhfMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] PhfMap::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] PhfMap::layout(Self[K, V]) -> PhfLayout
+pub fn[K, V] PhfMap::length(Self[K, V]) -> Int32
+pub fn[K, V] PhfMap::values(Self[K, V]) -> Iter[V]
+
+#derive(Eq, @debug.Debug)
+pub(all) struct PhfOptions {
+  build : PhfBuild
+  seed : Int32
+}
+pub fn PhfOptions::equal(Self, Self) -> Bool
+pub fn PhfOptions::not_equal(Self, Self) -> Bool
+pub fn PhfOptions::to_repr(Self) -> @debug.Repr
+
+pub struct PhfOrderedMap[K, V] {
+  map : PhfMap[K, V]
+}
+pub fn[K : PhfKey + Eq, V] PhfOrderedMap::contains(Self[K, V], K) -> Bool
+pub fn[K : PhfKey + Eq, V] PhfOrderedMap::get(Self[K, V], K) -> V?
+pub fn[K, V] PhfOrderedMap::get_index(Self[K, V], Int32) -> (K, V)?
+pub fn[K : PhfKey + Eq, V] PhfOrderedMap::index(Self[K, V], K) -> Int32?
+pub fn[K, V] PhfOrderedMap::is_empty(Self[K, V]) -> Bool
+pub fn[K, V] PhfOrderedMap::iter(Self[K, V]) -> Iter[(K, V)]
+pub fn[K, V] PhfOrderedMap::keys(Self[K, V]) -> Iter[K]
+pub fn[K, V] PhfOrderedMap::length(Self[K, V]) -> Int32
+pub fn[K, V] PhfOrderedMap::values(Self[K, V]) -> Iter[V]
+
+pub struct PhfOrderedSet[K] {
+  map : PhfMap[K, Unit]
+}
+pub fn[K : PhfKey + Eq] PhfOrderedSet::contains(Self[K], K) -> Bool
+pub fn[K] PhfOrderedSet::get_index(Self[K], Int32) -> K?
+pub fn[K : PhfKey + Eq] PhfOrderedSet::index(Self[K], K) -> Int32?
+pub fn[K] PhfOrderedSet::is_empty(Self[K]) -> Bool
+pub fn[K] PhfOrderedSet::iter(Self[K]) -> Iter[K]
+pub fn[K] PhfOrderedSet::length(Self[K]) -> Int32
+
+pub struct PhfRank {
+  words : FixedArray[UInt64]
+  prefixes : FixedArray[Int32]
+  dense : FixedArray[Int32]
+}
+
+pub struct PhfSet[K] {
+  map : PhfMap[K, Unit]
+}
+pub fn[K : PhfKey + Eq] PhfSet::contains(Self[K], K) -> Bool
+pub fn[K] PhfSet::get_index(Self[K], Int32) -> K?
+pub fn[K] PhfSet::is_empty(Self[K]) -> Bool
+pub fn[K] PhfSet::iter(Self[K]) -> Iter[K]
+pub fn[K] PhfSet::length(Self[K]) -> Int32
+
+// Type aliases
+
+// Traits
+pub(open) trait PhfKey {
+  fn to_bytes(Self) -> Bytes
+}
+pub impl PhfKey for Int32
+pub impl PhfKey for Int64
+pub impl PhfKey for UInt64
+pub impl PhfKey for String
+pub impl PhfKey for StringView

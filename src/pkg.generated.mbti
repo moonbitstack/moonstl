@@ -6,6 +6,7 @@ import {
   "moonbitstack/moonstl/cache",
   "moonbitstack/moonstl/heap",
   "moonbitstack/moonstl/map",
+  "moonbitstack/moonstl/phf",
   "moonbitstack/moonstl/seq",
   "moonbitstack/moonstl/sketch",
   "moonbitstack/moonstl/spec",
@@ -120,6 +121,22 @@ pub using @map {type Overlap}
 pub using @heap {type PairingHeap}
 
 pub using @algo {type Permutations}
+
+pub using @phf {type PhfBuild}
+
+pub using @phf {type PhfBuilder}
+
+pub using @phf {type PhfLayout}
+
+pub using @phf {type PhfMap}
+
+pub using @phf {type PhfOptions}
+
+pub using @phf {type PhfOrderedMap}
+
+pub using @phf {type PhfOrderedSet}
+
+pub using @phf {type PhfSet}
 
 pub using @algo {type Position}
 
