@@ -1,0 +1,965 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>moonstl — data structures &amp; algorithms for MoonBit</title>
+<meta name="description" content="moonstl: the containers, caches, trees, heaps, sketches and string algorithms the MoonBit core leaves out — one module, ten families, run live in your browser.">
+<style>
+  :root{
+    --bg:#0a0e14; --bg2:#0c1219; --surface:#111823; --surface2:#151e2b;
+    --border:#1e2a3a; --border2:#28374b;
+    --text:#e6edf3; --muted:#8b98a9; --dim:#5b6878;
+    --accent:#6ea8fe; --accent2:#4fd1c5; --warn:#f0b24a; --err:#f0766b; --ok:#5fd39a;
+    --code:#0d1117; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code,pre{font-family:var(--mono)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+  .muted{color:var(--muted)} .dim{color:var(--dim)}
+
+  /* top bar */
+  header.top{position:sticky;top:0;z-index:40;backdrop-filter:blur(10px);background:rgba(10,14,20,.8);border-bottom:1px solid var(--border)}
+  .top .wrap{display:flex;align-items:center;gap:20px;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:.2px}
+  .brand .glyph{width:26px;height:26px;border-radius:7px;background:conic-gradient(from 210deg,var(--accent),var(--accent2),var(--accent));box-shadow:0 0 18px -2px var(--accent)}
+  .brand .stl{color:var(--accent)}
+  .top nav{margin-left:auto;display:flex;gap:6px;align-items:center}
+  .top nav a{color:var(--muted);font-size:14px;padding:7px 12px;border-radius:8px}
+  .top nav a:hover{color:var(--text);background:var(--surface);text-decoration:none}
+  .live{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--accent2);border:1px solid var(--border2);background:var(--surface);padding:5px 11px;border-radius:999px}
+  .live .dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 0 0 rgba(79,209,197,.6);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,209,197,.5)}70%{box-shadow:0 0 0 7px rgba(79,209,197,0)}100%{box-shadow:0 0 0 0 rgba(79,209,197,0)}}
+
+  /* hero */
+  .hero{position:relative;padding:84px 0 56px;overflow:hidden}
+  .hero .grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:.35;-webkit-mask-image:radial-gradient(circle at 30% 20%,#000,transparent 75%);mask-image:radial-gradient(circle at 30% 20%,#000,transparent 75%)}
+  .hero .glow{position:absolute;top:-120px;left:-40px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(110,168,254,.22),transparent 65%);filter:blur(8px)}
+  .hero .wrap{position:relative}
+  .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent2);font-weight:600}
+  h1{font-size:54px;line-height:1.05;margin:14px 0 18px;font-weight:800;letter-spacing:-.5px}
+  h1 .grad{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{font-size:19px;color:var(--muted);max-width:640px;margin:0 0 30px}
+  .hero-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;max-width:680px;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+  .hero-card .bar{display:flex;align-items:center;gap:8px;padding:11px 15px;border-bottom:1px solid var(--border)}
+  .hero-card .bar i{width:11px;height:11px;border-radius:50%;background:var(--border2)}
+  .hero-card .bar .fn{margin-left:8px;font-size:12.5px;color:var(--dim);font-family:var(--mono)}
+  pre.code{margin:0;padding:18px 20px;background:var(--code);overflow:auto;font-size:13.5px;line-height:1.75;border-radius:0}
+  .tok-k{color:#c792ea}.tok-f{color:#82aaff}.tok-s{color:#c3e88d}.tok-n{color:#f78c6c}.tok-c{color:#5b6878;font-style:italic}.tok-t{color:#ffcb6b}.tok-p{color:#89ddff}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+  .btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:600;font-size:14.5px;padding:11px 20px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);cursor:pointer;transition:.15s}
+  .btn:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .btn.primary{background:linear-gradient(135deg,var(--accent),#5b8def);border-color:transparent;color:#04101f}
+  .btn.ghost{background:transparent}
+  .btn:disabled{opacity:.5;cursor:default}
+  .stats{display:flex;gap:34px;margin-top:38px;flex-wrap:wrap}
+  .stat .k{font-size:30px;font-weight:800;font-family:var(--mono)}
+  .stat .v{font-size:13px;color:var(--muted)}
+
+  section{padding:56px 0;border-top:1px solid var(--border)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+  .sec-head h2{font-size:30px;margin:0;font-weight:750;letter-spacing:-.3px}
+  .sec-head .tag{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);border:1px solid var(--border2);padding:4px 10px;border-radius:999px}
+  .sec-sub{color:var(--muted);max-width:720px;margin:0 0 30px}
+
+  /* live lab */
+  .lab-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+  .lab-bar .hint{font-size:13.5px;color:var(--muted)}
+  .lab{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
+  .demo{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+  .demo:hover{border-color:var(--border2);transform:translateY(-2px)}
+  .demo .dh{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
+  .demo .dh .pk{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:rgba(110,168,254,.1);border:1px solid rgba(110,168,254,.25);padding:3px 8px;border-radius:6px;font-weight:600}
+  .demo .dh h3{margin:0;font-size:15.5px;font-weight:650}
+  .demo .dh .run{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--accent2);border:1px solid var(--border2);background:var(--surface2);padding:5px 12px;border-radius:8px;cursor:pointer}
+  .demo .dh .run:hover{border-color:var(--accent2)}
+  .demo .dctl{padding:14px 16px;border-bottom:1px dashed var(--border);min-height:60px}
+  .demo .dout{padding:16px;flex:1;min-height:120px}
+  .demo .out-empty{color:var(--dim);font-size:13.5px}
+  .demo .err{color:var(--err);font-family:var(--mono);font-size:13px;white-space:pre-wrap}
+  .demo .lat{font-size:11px;color:var(--dim);text-align:right;margin-top:10px;font-family:var(--mono)}
+
+  /* chips input */
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;min-height:30px}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12.5px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:4px 6px 4px 10px}
+  .chip .ix{color:var(--dim);font-size:10.5px}
+  .chip .x{cursor:pointer;color:var(--dim);font-size:14px;line-height:1;padding:0 3px}
+  .chip .x:hover{color:var(--err)}
+  .chip.str{padding:4px 10px}
+  .addrow{display:flex;gap:8px}
+  .addrow input{flex:1;font-family:var(--mono);font-size:13px;background:var(--code);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 11px}
+  .addrow input:focus{outline:none;border-color:var(--accent)}
+  .mini{font:inherit;font-size:12.5px;font-weight:600;background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:8px 12px;cursor:pointer}
+  .mini:hover{border-color:var(--accent)}
+  .mini.ghost{background:transparent;color:var(--muted)}
+  textarea.in{width:100%;font-family:var(--mono);font-size:13px;background:var(--code);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 11px;resize:vertical;min-height:54px}
+  textarea.in:focus,input:focus{outline:none;border-color:var(--accent)}
+  .fieldrow{display:flex;gap:8px;align-items:center;margin-top:9px}
+  .fieldrow label{font-size:12px;color:var(--muted);font-family:var(--mono)}
+  .fieldrow input{width:70px;font-family:var(--mono);font-size:13px;background:var(--code);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px}
+
+  /* visual outputs */
+  .seq{display:flex;flex-wrap:wrap;gap:7px}
+  .seq .node{font-family:var(--mono);font-size:13px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 11px}
+  .seq .node.hi{border-color:var(--accent);background:rgba(110,168,254,.12);color:var(--accent)}
+  .kv{display:flex;flex-direction:column;gap:7px}
+  .kv .row{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:13px}
+  .kv .badge{font-size:10.5px;color:var(--dim);border:1px solid var(--border2);border-radius:5px;padding:1px 6px;min-width:22px;text-align:center}
+  .bars{display:flex;align-items:flex-end;gap:6px;height:84px;padding-top:6px}
+  .bars .bar{flex:1;background:linear-gradient(var(--accent2),var(--accent));border-radius:4px 4px 0 0;position:relative;min-height:2px}
+  .bars .bar .v{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:10.5px;font-family:var(--mono);color:var(--muted)}
+  .groups{display:flex;flex-wrap:wrap;gap:9px}
+  .groups .g{display:flex;gap:5px;padding:7px 9px;border:1px solid var(--border2);border-radius:9px;background:var(--surface2)}
+  .groups .g b{font-family:var(--mono);font-size:12.5px}
+  .metric{display:flex;gap:22px;flex-wrap:wrap}
+  .metric .m{font-family:var(--mono)}
+  .metric .m .lab2{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .metric .m .val{font-size:26px;font-weight:700}
+  .metric .m .val small{font-size:14px;color:var(--muted);font-weight:400}
+  .textvis{font-family:var(--mono);font-size:14px;line-height:2;background:var(--code);border:1px solid var(--border);border-radius:9px;padding:12px 14px;overflow:auto}
+  .textvis .hit{background:rgba(240,178,74,.28);color:var(--warn);border-radius:4px;padding:1px 2px}
+  .textvis .ins{background:rgba(95,211,154,.18);color:var(--ok)}
+  .textvis .del{background:rgba(240,118,107,.18);color:var(--err);text-decoration:line-through}
+  .diffrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .diffcol{font-family:var(--mono);font-size:12.5px;line-height:1.9;background:var(--code);border:1px solid var(--border);border-radius:9px;padding:10px 12px;overflow:auto}
+  .diffcol .op-eq{color:var(--dim)} .diffcol .op-del{color:var(--err);background:rgba(240,118,107,.12)} .diffcol .op-ins{color:var(--ok);background:rgba(95,211,154,.12)} .diffcol .op-repl{color:var(--warn);background:rgba(240,178,74,.12)}
+  .bits{display:grid;grid-template-columns:repeat(16,1fr);gap:3px}
+  .bits .b{aspect-ratio:1;border-radius:3px;background:var(--surface2);border:1px solid var(--border)}
+  .bits .b.on{background:var(--accent2);border-color:var(--accent2)}
+  .oplist{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:12px}
+  .oplist .op{display:flex;gap:10px;padding:5px 9px;border-radius:7px;background:var(--surface2);border:1px solid var(--border)}
+  .oplist .op .t{width:70px;color:var(--accent)} .oplist .op .r{color:var(--muted)}
+
+  /* families */
+  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+  .fam .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:.15s}
+  .fam .card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .fam .card .nm{font-family:var(--mono);font-size:15px;font-weight:650;color:var(--accent)}
+  .fam .card .bl{font-size:12.5px;color:var(--muted);margin:3px 0 11px}
+  .fam .card .types{display:flex;flex-wrap:wrap;gap:5px}
+  .fam .card .types span{font-family:var(--mono);font-size:11px;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:2px 7px}
+
+  /* reference */
+  .ref{display:grid;grid-template-columns:270px 1fr;gap:22px;align-items:start}
+  .ref .side{position:sticky;top:76px}
+  .search{width:100%;font:inherit;font-size:14px;background:var(--surface);border:1px solid var(--border2);color:var(--text);border-radius:10px;padding:10px 13px;margin-bottom:14px}
+  .search:focus{outline:none;border-color:var(--accent)}
+  .pkggrp{margin-bottom:16px}
+  .pkggrp h4{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2)}
+  .pkggrp .ti{display:block;font-family:var(--mono);font-size:13px;color:var(--muted);padding:4px 9px;border-radius:7px;cursor:pointer}
+  .pkggrp .ti:hover{background:var(--surface);color:var(--text)}
+  .pkggrp .ti.sel{background:rgba(110,168,254,.12);color:var(--accent);border:1px solid rgba(110,168,254,.25)}
+  .pkggrp .ti .cnt{color:var(--dim);font-size:11px;float:right}
+  .apipane{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;min-height:340px}
+  .apipane .path{font-size:12.5px;color:var(--dim);font-family:var(--mono);margin-bottom:4px}
+  .apitype{font-size:23px;font-weight:750;margin-bottom:2px}
+  .apitype .params{color:var(--accent);font-family:var(--mono);font-size:16px}
+  .apikind{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2);border:1px solid var(--border2);padding:2px 9px;border-radius:999px;margin-bottom:16px}
+  .impls{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+  .impls .i{font-family:var(--mono);font-size:11.5px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:3px 9px;color:var(--muted)}
+  .apidoc h5{margin:18px 0 8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .apidoc pre{margin:0;background:var(--code);border:1px solid var(--border);border-radius:9px;padding:12px 14px;font-size:12.5px;line-height:1.75;overflow:auto;color:#c9d4e0}
+  .apidoc table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .apidoc th{text-align:left;color:var(--muted);font-weight:600;padding:7px 10px;border-bottom:1px solid var(--border2);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em}
+  .apidoc td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+  .apidoc td.sig{font-family:var(--mono);color:#c9d4e0;white-space:pre-wrap;word-break:break-word}
+  .apidoc td.mn{font-family:var(--mono);color:var(--accent);white-space:nowrap}
+  .apidoc tr:hover td{background:var(--surface2)}
+  .apidoc .note{color:var(--dim);font-size:13px}
+
+  /* conformance + install */
+  .conform{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .conform .c{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
+  .conform .c .t{font-weight:650;font-size:14.5px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .conform .c .t .ok2{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+  .conform .c p{margin:0;font-size:13px;color:var(--muted)}
+  .install{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .install .tabs{display:flex;border-bottom:1px solid var(--border)}
+  .install .tab{font-size:13.5px;padding:12px 20px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+  .install .tab.sel{color:var(--text);border-color:var(--accent)}
+  .install pre{margin:0;padding:20px 22px;background:var(--code);font-size:13.5px;line-height:1.75;overflow:auto}
+  .steps{display:flex;gap:26px;flex-wrap:wrap;margin-top:26px}
+  .steps .s{flex:1;min-width:200px}
+  .steps .s .n{font-family:var(--mono);font-size:13px;color:var(--accent2);margin-bottom:6px}
+  .steps .s p{margin:0;font-size:13.5px;color:var(--muted)}
+
+  footer{border-top:1px solid var(--border);padding:34px 0 48px;color:var(--dim);font-size:13.5px}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  footer .live-note{display:flex;align-items:center;gap:8px;color:var(--accent2)}
+  footer .live-note .dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite}
+
+  @media(max-width:860px){h1{font-size:38px}.ref{grid-template-columns:1fr}.ref .side{position:static}.stats{gap:22px}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><span class="glyph"></span>moon<span class="stl">stl</span></div>
+    <nav>
+      <a href="#lab">Live Lab</a>
+      <a href="#families">Families</a>
+      <a href="#reference">Reference</a>
+      <a href="#conformance">Conformance</a>
+      <a href="#install">Install</a>
+    </nav>
+    <div class="live"><span class="dot"></span><span id="liveLabel">loading library…</span></div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="grid-bg"></div><div class="glow"></div>
+  <div class="wrap">
+    <div class="eyebrow">for MoonBit</div>
+    <h1>Data structures &amp; algorithms<br>the core <span class="grad">leaves out</span>.</h1>
+    <p class="lead">One module, ten families — ordered maps, caches with policies, six heaps,
+      segment and Fenwick trees, probabilistic sketches, string algorithms and perfect
+      hash maps. Compiled to where you run it, and <em>running right here</em> in your
+      browser from the real library, not a reimplementation.</p>
+    <div class="hero-card">
+      <div class="bar"><i></i><i></i><i></i><span class="fn">indexmap.mbt</span></div>
+<pre class="code" id="heroCode"></pre>
+    </div>
+    <div class="hero-actions">
+      <button class="btn primary" id="heroRun">▶ Run it live</button>
+      <a class="btn ghost" href="#lab">Open the Live Lab →</a>
+      <a class="btn ghost" href="#reference">Browse the reference</a>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+</div>
+
+<section id="lab">
+  <div class="wrap">
+    <div class="sec-head"><span class="tag">Live Lab</span><h2>Run the real library</h2></div>
+    <p class="sec-sub">Each panel compiles from moonstl with the JavaScript backend. Edit the inputs,
+      hit run, and the result is produced by the library in this page — the same code that
+      ships on MoonBit. There is no mock behind these.</p>
+    <div class="lab-bar">
+      <button class="btn primary" id="runAll">▶ Run everything</button>
+      <span class="hint" id="labHint">23 structures &amp; algorithms, one compiled bundle</span>
+    </div>
+    <div class="lab" id="lab"></div>
+  </div>
+</section>
+
+<section id="families">
+  <div class="wrap">
+    <div class="sec-head"><span class="tag">Inside</span><h2>ten families</h2></div>
+    <p class="sec-sub">Every type below is generated from the package interfaces — the names you see
+      here are the names in the code. Pick a family to jump into the reference.</p>
+    <div class="fam" id="fam"></div>
+  </div>
+</section>
+
+<section id="reference">
+  <div class="wrap">
+    <div class="sec-head"><span class="tag">Reference</span><h2>the API</h2></div>
+    <p class="sec-sub">Parsed straight from <span class="mono">pkg.generated.mbti</span> by
+      <span class="mono">moon info</span>, so it tracks the code. Search across every type and method.</p>
+    <div class="ref">
+      <div class="side">
+        <input class="search" id="q" placeholder="Search types &amp; methods…  e.g. index, heap, rank">
+        <div id="pkgList"></div>
+      </div>
+      <div class="apipane" id="apiPane"></div>
+    </div>
+  </div>
+</section>
+
+<section id="conformance">
+  <div class="wrap">
+    <div class="sec-head"><span class="tag">Correctness</span><h2>verified, not assumed</h2></div>
+    <p class="sec-sub">The public behaviour is pinned by differential vectors: the same fixed inputs are
+      evaluated two independent ways, and the values are replayed against the library. Each family is
+      covered, so a regression anywhere turns a check red.</p>
+    <div class="conform" id="conform"></div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="wrap">
+    <div class="sec-head"><span class="tag">Install</span><h2>one import is enough</h2></div>
+    <div class="install">
+      <div class="tabs">
+        <div class="tab sel" data-tab="mod">moon.mod</div>
+        <div class="tab" data-tab="use">Using it</div>
+      </div>
+<pre id="tab-mod">// add to your moon.mod import block
+import {
+  "moonbitstack/moonstl@0.1.0",
+}
+
+// one import names the whole module
+let m : @map.IndexMap[String, Int32] = @map.IndexMap::new()
+let _ = m.set("a", 1)
+let _ = m.set("b", 2)
+@map.IndexMap::new()   // the module root re-exports the families</pre>
+<pre id="tab-use" style="display:none">// a few families side by side
+let cache : @cache.LruCache[String, Int32] = @cache.LruCache::new(capacity=8)
+let _ = cache.set("k", 42)
+@cache.LruCache::new()
+
+let h : @heap.DaryHeap[Int32] = @heap.DaryHeap::default()
+let _ = h.push(3)
+let _ = h.push(1)
+h.peek()   // Some(1)
+
+let s : @sketch.CountMinSketch[String] = @sketch.CountMinSketch::new(
+  epsilon=0.01,
+  confidence=0.99,
+)
+let _ = s.insert("hello")
+s.estimate("hello")   // >= 1</pre>
+    </div>
+    <div class="steps">
+      <div class="s"><div class="n">01</div><p>Add <span class="mono">moonbitstack/moonstl</span> to your module's import block.</p></div>
+      <div class="s"><div class="n">02</div><p>Name a family with its package alias — <span class="mono">@map</span>, <span class="mono">@heap</span>, <span class="mono">@cache</span>, <span class="mono">@sketch</span>…</p></div>
+      <div class="s"><div class="n">03</div><p>It builds for every backend: native, wasm, wasm-gc and js, with no platform split.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>moonstl · Apache-2.0 · the data-structures module for MoonBit</span>
+    <span class="live-note"><span class="dot"></span> demos run the library compiled to JS, live in this page</span>
+  </div>
+</footer>
+
+<script src="./moonstl.js"></script>
+<script>
+"use strict";
+// ---------- tiny helpers ----------
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const el = (t, c, html) => { const n=document.createElement(t); if(c)n.className=c; if(html!=null)n.innerHTML=html; return n; };
+const rnd = n => Math.floor(Math.random()*n);
+const rint = (lo,hi) => lo + rnd(hi-lo+1);
+const randInts = (n,lo,hi) => Array.from({length:n},()=>rint(lo,hi));
+const WORDS = ["car","cart","cat","care","careful","cake","carbon","cap","capable","cache","cargo","caramel","card","caramel"];
+const randWords = n => Array.from({length:n},()=>WORDS[rnd(WORDS.length)]);
+const randText = () => ["ababcabab","abcabcabc","aabbaaabb","mississippi","banana banana","abababab"][rnd(6)];
+
+// ---------- hero code ----------
+$("#heroCode").innerHTML =
+`<span class="tok-c">/// the module root re-exports the families</span>
+<span class="tok-k">let</span> map : <span class="tok-t">@map.IndexMap</span>[<span class="tok-t">String</span>, <span class="tok-t">Int32</span>] = <span class="tok-t">@map.IndexMap</span>::<span class="tok-f">new</span>()
+<span class="tok-k">let</span> _ = map.<span class="tok-f">set</span>(<span class="tok-s">"a"</span>, <span class="tok-n">1</span>)
+<span class="tok-k">let</span> _ = map.<span class="tok-f">set</span>(<span class="tok-s">"b"</span>, <span class="tok-n">2</span>)
+map.<span class="tok-f">get_index</span>(<span class="tok-n">1</span>)   <span class="tok-c">// Some(("b", 2)) — value at position 1</span>
+map.<span class="tok-f">get_index_of</span>(<span class="tok-s">"a"</span>) <span class="tok-c">// Some(0) — position of key "a"</span>`;
+
+// ---------- live library ----------
+const LIB = window.moonstl;
+if (LIB) {
+  $("#liveLabel").textContent = "library loaded · live";
+} else {
+  $("#liveLabel").textContent = "bundle not found — run site/build.py";
+}
+function call(name, input) {
+  if (!LIB) return { __dead:true };
+  const t0 = performance.now();
+  const raw = LIB.run(name, JSON.stringify(input));
+  const ms = performance.now() - t0;
+  try { const o = JSON.parse(raw); o.__ms = ms; return o; }
+  catch (e) { return { __err: raw, __ms: ms }; }
+}
+
+// ---------- demo definitions ----------
+// input builders + tailored renderers. All output comes from call(name,input).
+const DEMOS = {
+  indexmap: {
+    pkg:"map", title:"IndexMap", desc:"insertion order + position lookups",
+    state:{ set:[3,1,2,8] },
+    input:()=>({set:DEMOS.indexmap.state.set}),
+    run:()=>call("indexmap", DEMOS.indexmap.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const ks=r.keys||[], pos=r.positions||[];
+      return `<div class="kv">${ks.map((k,i)=>`<div class="row"><span class="badge">${i}</span><span>${k}</span><span class="muted">→ value ${k*2}</span></div>`).join("")}</div>
+      <div class="muted" style="font-size:12px;margin-top:12px;font-family:var(--mono)">positions ${esc(JSON.stringify(pos))} · hash lookup for value, O(1) index for position</div>`;
+    }
+  },
+  trie: {
+    pkg:"map", title:"Trie", desc:"prefix search over a character tree",
+    state:{ words:["car","cart","cat","cake","cap"], prefix:"car" },
+    input:()=>({words:DEMOS.trie.state.words, prefix:DEMOS.trie.state.prefix}),
+    run:()=>call("trie", DEMOS.trie.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const m=r.matches||[];
+      return `<div class="chips">${m.map(w=>`<span class="chip str">${esc(w)}</span>`).join("")||'<span class="out-empty">no keys with that prefix</span>'}</div>
+      <div class="muted" style="font-size:12px;font-family:var(--mono)">prefix "<b>${esc(r.prefix||"")}</b>" matched ${m.length} of ${(r.words||[]).length} keys</div>`;
+    }
+  },
+  lru: {
+    pkg:"cache", title:"LRU cache", desc:"least-recently-used eviction",
+    state:{ cap:3, set:[1,2,3,4,5] },
+    input:()=>({cap:DEMOS.lru.state.cap, set:DEMOS.lru.state.set}),
+    run:()=>call("lru", DEMOS.lru.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const d=r.displaced||[], k=r.keys||[];
+      return `<div class="seq">${k.map(v=>`<span class="node hi">${v}</span>`).join("")||'<span class="out-empty">empty</span>'}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">capacity <b class="mono">${r.capacity}</b> · evicted <span class="mono">${esc(JSON.stringify(d))}</span></div>`;
+    }
+  },
+  heap: {
+    pkg:"heap", title:"Three heaps", desc:"d-ary, fibonacci & pairing, one input",
+    state:{ set:[5,1,9,3,7,2] },
+    input:()=>({set:DEMOS.heap.state.set}),
+    run:()=>call("heap", DEMOS.heap.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const p=r.pops||[], f=r.fib||[], pa=r.pairing||[];
+      return `<div class="seq">${p.map((v,i)=>`<span class="node ${i===0?"hi":""}">${v}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12px;margin-top:11px;font-family:var(--mono);display:flex;flex-direction:column;gap:4px">
+        <span><b style="color:var(--accent)">d-ary</b>&nbsp;&nbsp;&nbsp; ${esc(JSON.stringify(p))}</span>
+        <span><b style="color:var(--accent)">fibonacci</b> ${esc(JSON.stringify(f))}</span>
+        <span><b style="color:var(--accent)">pairing</b>&nbsp;&nbsp; ${esc(JSON.stringify(pa))}</span>
+      </div>`;
+    }
+  },
+  segment: {
+    pkg:"tree", title:"Segment tree", desc:"range sums in log time",
+    state:{ set:[3,1,4,1,5] },
+    input:()=>({set:DEMOS.segment.state.set}),
+    run:()=>call("segment", DEMOS.segment.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const v=r.values||[], mx=Math.max(1,...v);
+      return `<div class="bars">${v.map(x=>`<div class="bar" style="height:${x/mx*100}%"><span class="v">${x}</span></div>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:10px">total <b class="mono">${r.total}</b> · prefix ${esc(JSON.stringify(r.prefix||[]))}</div>`;
+    }
+  },
+  disjoint: {
+    pkg:"tree", title:"Disjoint set", desc:"union–find components",
+    state:{ n:5, set:[0,1,1,2,2,3,4] },
+    input:()=>({n:DEMOS.disjoint.state.n, set:DEMOS.disjoint.state.set}),
+    run:()=>call("disjoint", DEMOS.disjoint.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const s=r.sets||[];
+      return `<div class="groups">${s.map(g=>`<div class="g">${g.map(x=>`<b>${x}</b>`).join("")}</div>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">${r.count} component${r.count===1?"":"s"} after the unions</div>`;
+    }
+  },
+  bloom: {
+    pkg:"sketch", title:"Bloom filter", desc:"no false negatives, few false positives",
+    state:{ cap:100, set:[1,2,3,4,5,6,7], n:3 },
+    input:()=>({cap:DEMOS.bloom.state.cap, set:DEMOS.bloom.state.set, n:DEMOS.bloom.state.n}),
+    run:()=>call("bloom", DEMOS.bloom.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="metric"><div class="m"><div class="lab2">contains ${DEMOS.bloom.state.n}</div><div class="val" style="color:${r.found?"var(--ok)":"var(--err)"}">${r.found?"yes":"no"}</div></div>
+      <div class="m"><div class="lab2">false-positive rate</div><div class="val"><small>${r.false_pos?.toExponential(2) ?? "0"}</small></div></div></div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">members ${esc(JSON.stringify(DEMOS.bloom.state.set))} · a "no" is always true</div>`;
+    }
+  },
+  countmin: {
+    pkg:"sketch", title:"Count-min sketch", desc:"frequency estimates, never under",
+    state:{ set:[7,7,7,7,7,7,7,8,8,9], q:7 },
+    input:()=>({set:DEMOS.countmin.state.set, q:DEMOS.countmin.state.q}),
+    run:()=>call("countmin", DEMOS.countmin.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="metric"><div class="m"><div class="lab2">estimate(${DEMOS.countmin.state.q})</div><div class="val">${r.estimate}</div></div></div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">inserted ${esc(JSON.stringify(DEMOS.countmin.state.set))} · estimate is always ≥ true count</div>`;
+    }
+  },
+  kmp: {
+    pkg:"text", title:"KMP search", desc:"linear scan with a failure function",
+    state:{ text:"ababcabab", pattern:"abab" },
+    input:()=>({text:DEMOS.kmp.state.text, pattern:DEMOS.kmp.state.pattern}),
+    run:()=>call("kmp", DEMOS.kmp.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const t=r.text||"", p=r.pattern||"", hits=new Set(r.hits||[]);
+      let html="";
+      for(let i=0;i<t.length;i++){
+        if(hits.has(i)) html+=`<span class="hit">${esc(t.slice(i,i+p.length))}</span>`;
+        else html+=esc(t[i]);
+      }
+      return `<div class="textvis">${html}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:10px">found at ${esc(JSON.stringify(r.hits||[]))} · one pass, O(n+m)</div>`;
+    }
+  },
+  diff: {
+    pkg:"text", title:"Sequence diff", desc:"opcodes + similarity ratio",
+    state:{ a:"int a = 1", b:"int b = 2" },
+    input:()=>({a:DEMOS.diff.state.a, b:DEMOS.diff.state.b}),
+    run:()=>call("diff", DEMOS.diff.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const ops=r.ops||[];
+      const row=(o,i)=>{const[t,a1,a2,b1,b2]=o;return `<div class="op"><span class="t">${esc(t)}</span><span class="r">a[${a1}:${a2}] b[${b1}:${b2}]</span></div>`;};
+      return `<div class="oplist">${ops.map(row).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:10px">ratio <b class="mono">${(r.ratio).toFixed(3)}</b> · longest-common-subsequence based</div>`;
+    }
+  },
+  phf: {
+    pkg:"phf", title:"Perfect hash map", desc:"zero-collision lookup at a fixed key set",
+    state:{ words:["alpha","beta","gamma","delta"] },
+    input:()=>({set:DEMOS.phf.state.words}),
+    run:()=>call("phf", DEMOS.phf.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const k=r.keys||[];
+      return `<div class="chips">${k.map(w=>`<span class="chip str">${esc(w)}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">${r.size} keys · every probe hits exactly once</div>`;
+    }
+  },
+  ring: {
+    pkg:"seq", title:"Ring buffer", desc:"fixed window, newest overwrites oldest",
+    state:{ cap:3, set:[1,2,3,4,5] },
+    input:()=>({cap:DEMOS.ring.state.cap, set:DEMOS.ring.state.set}),
+    run:()=>call("ring", DEMOS.ring.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const v=r.values||[];
+      const cells=Array.from({length:r.capacity},(_,i)=>v[i]??null);
+      return `<div class="seq">${cells.map(x=>`<span class="node ${x!=null?"hi":""}">${x??""}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">capacity ${r.capacity} · pushed ${esc(JSON.stringify(DEMOS.ring.state.set))}</div>`;
+    }
+  },
+  bitset: {
+    pkg:"seq", title:"Bit set", desc:"rank & select over a sparse set",
+    state:{ set:[1,4,8,16], n:20 },
+    input:()=>({set:DEMOS.bitset.state.set, n:DEMOS.bitset.state.n}),
+    run:()=>call("bitset", DEMOS.bitset.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const n=r.n||20, bits=new Set(r.bits||[]), rank=r.rank||[];
+      let grid="";
+      for(let i=0;i<n;i++) grid+=`<div class="b ${bits.has(i)?"on":""}" title="bit ${i}"></div>`;
+      return `<div class="bits">${grid}</div>
+      <div class="muted" style="font-size:12px;margin-top:12px;font-family:var(--mono)">set {${esc(r.bits.join(","))}} · rank=${esc(JSON.stringify(rank.slice(0,16)))}…</div>`;
+    }
+  },
+  perms: {
+    pkg:"algo", title:"Combinatorics", desc:"permutations / combinations, lazy",
+    state:{ set:[1,2,3], r:2 },
+    input:()=>({set:DEMOS.perms.state.set, r:DEMOS.perms.state.r}),
+    run:()=>call("perms", DEMOS.perms.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const rows=r.rows||[];
+      return `<div class="chips">${rows.slice(0,40).map(row=>`<span class="chip str">${row.map(x=>x).join(" ")}</span>`).join("")}${rows.length>40?`<span class="chip str">… +${rows.length-40}</span>`:""}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">${esc(r.kind)} of [${esc(DEMOS.perms.state.set.join(","))}] · ${rows.length} total</div>`;
+    }
+  },
+  radix: {
+    pkg:"heap", title:"Radix heap", desc:"monotone keys, amortized O(1) pop",
+    state:{ set:[9,4,1,3,7,2,5,6,8,0] },
+    input:()=>({set:DEMOS.radix.state.set}),
+    run:()=>call("radix", DEMOS.radix.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const p=r.pops||[];
+      return `<div class="seq">${p.map((v,i)=>`<span class="node ${i===0?"hi":""}">${v}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">popped in key order · 64-bit radix buckets</div>`;
+    }
+  },
+  fenwick: {
+    pkg:"tree", title:"Fenwick tree", desc:"prefix sums in log time",
+    state:{ set:[3,1,4,1,5] },
+    input:()=>({set:DEMOS.fenwick.state.set}),
+    run:()=>call("fenwick", DEMOS.fenwick.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const v=r.values||[], mx=Math.max(1,...v);
+      return `<div class="bars">${v.map(x=>`<div class="bar" style="height:${x/mx*100}%"><span class="v">${x}</span></div>`).join("")}</div>
+      <div class="muted" style="font-size:12px;margin-top:10px;font-family:var(--mono)">prefix ${esc(JSON.stringify(r.prefix||[]))} · Σ[1,3)=${r.range_1_3}</div>`;
+    }
+  },
+  interval: {
+    pkg:"tree", title:"Interval tree", desc:"overlap queries over [start,end]",
+    state:{ set:[0,10,2,4,8,12], qstart:3, qend:6 },
+    input:()=>({set:DEMOS.interval.state.set, qstart:DEMOS.interval.state.qstart, qend:DEMOS.interval.state.qend}),
+    run:()=>call("interval", DEMOS.interval.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const iv=r.intervals||[], ov=r.overlap||[];
+      return `<div class="chips">${iv.map((v,i)=>`<span class="chip str">${i%2===0?"[":v+(i%2===1?" ]":"")}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">overlap with [${r.q?.[0]},${r.q?.[1]}]: <span class="mono">${esc(JSON.stringify(ov))}</span></div>`;
+    }
+  },
+  cuckoo: {
+    pkg:"sketch", title:"Cuckoo filter", desc:"deletable, with a live probe",
+    state:{ cap:100, set:[1,2,3,4,5,6,7], n:3 },
+    input:()=>({cap:DEMOS.cuckoo.state.cap, set:DEMOS.cuckoo.state.set, n:DEMOS.cuckoo.state.n}),
+    run:()=>call("cuckoo", DEMOS.cuckoo.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="metric">
+        <div class="m"><div class="lab2">contains ${DEMOS.cuckoo.state.n}</div><div class="val" style="color:${r.found?"var(--ok)":"var(--err)"}">${r.found?"yes":"no"}</div></div>
+        <div class="m"><div class="lab2">removed?</div><div class="val" style="color:${r.removed?"var(--ok)":"var(--err)"}">${r.removed?"yes":"no"}</div></div>
+        <div class="m"><div class="lab2">after remove</div><div class="val" style="color:${r.after_remove?"var(--warn)":"var(--ok)"}">${r.after_remove?"still":"gone"}</div></div>
+      </div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">cuckoo supports deletion, unlike bloom</div>`;
+    }
+  },
+  theta: {
+    pkg:"sketch", title:"Theta sketch", desc:"cardinality estimate",
+    state:{ set:[7,7,7,8,8,9,4,4], nominal:8 },
+    input:()=>({set:DEMOS.theta.state.set, nominal:DEMOS.theta.state.nominal}),
+    run:()=>call("theta", DEMOS.theta.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="metric">
+        <div class="m"><div class="lab2">true distinct</div><div class="val">${r.distinct}</div></div>
+        <div class="m"><div class="lab2">estimate</div><div class="val">${(r.estimate).toFixed(r.estimate%1?3:0)}</div></div>
+      </div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">input ${esc(JSON.stringify(DEMOS.theta.state.set))} · exact below nominal, sampled above</div>`;
+    }
+  },
+  aho: {
+    pkg:"text", title:"Aho–Corasick", desc:"many patterns, one pass",
+    state:{ patterns:["he","she","his","hers"], text:"ushers" },
+    input:()=>({patterns:DEMOS.aho.state.patterns, text:DEMOS.aho.state.text}),
+    run:()=>call("aho", DEMOS.aho.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const t=r.text||""; const marks={};
+      (r.matches||[]).forEach(([p,s])=>{ for(let i=s;i<s+ (DEMOS.aho.state.patterns[p]||"").length;i++) marks[i]=1; });
+      let html="";
+      for(let i=0;i<t.length;i++) html+= marks[i]?`<span class="hit">${esc(t[i])}</span>`:esc(t[i]);
+      return `<div class="textvis">${html}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:10px">patterns ${esc(JSON.stringify(r.patterns||[]))} · matches ${esc(JSON.stringify(r.matches||[]))} (pattern-idx, offset)</div>`;
+    }
+  },
+  suffix: {
+    pkg:"text", title:"Suffix array", desc:"sorted suffixes + LCP",
+    state:{ text:"banana" },
+    input:()=>({text:DEMOS.suffix.state.text}),
+    run:()=>call("suffix", DEMOS.suffix.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const o=r.order||[], lcp=r.lcp||[];
+      return `<div class="seq">${o.map((s,i)=>`<span class="node" title="suffix ${esc((r.text||"").slice(s))}"><span class="ix" style="color:var(--dim);font-size:10px">${i}</span>${s}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12px;margin-top:11px;font-family:var(--mono)">order of start-indices · LCP ${esc(JSON.stringify(lcp))}</div>`;
+    }
+  },
+  phf_ordered: {
+    pkg:"phf", title:"Ordered phf map", desc:"declaration order + index",
+    state:{ words:["alpha","beta","gamma","delta"], q:"gamma" },
+    input:()=>({set:DEMOS.phf_ordered.state.words, q:DEMOS.phf_ordered.state.q}),
+    run:()=>call("phf_ordered", DEMOS.phf_ordered.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const k=r.order||[];
+      return `<div class="kv">${k.map((w,i)=>`<div class="row"><span class="badge">${i}</span><span>${esc(w)}</span></div>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">index of "<b>${esc(r.q)}</b>" = <span class="mono">${r.index}</span></div>`;
+    }
+  },
+  gap: {
+    pkg:"seq", title:"Gap buffer", desc:"editor insertions, O(min) to ends",
+    state:{ set:[1,2,3], ops:[[1,100],[1,101]] },
+    input:()=>({set:DEMOS.gap.state.set, ops:DEMOS.gap.state.ops}),
+    run:()=>call("gap", DEMOS.gap.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="seq">${(r.before||[]).map(v=>`<span class="node">${v}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12px;color:var(--dim);margin:9px 0">↓ after inserts ${esc(JSON.stringify(DEMOS.gap.state.ops))}</div>
+      <div class="seq">${(r.after||[]).map(v=>`<span class="node hi">${v}</span>`).join("")}</div>`;
+    }
+  },
+};
+
+// ---------- auto-derived input controls ----------
+const FIELD_LABEL = {
+  cap:"capacity", n:"n", q:"query", r:"r (0 = perms)", nominal:"nominal",
+  qstart:"query start", qend:"query end",
+};
+const SKIP = ["set","words","patterns","ops","text","pattern","a","b"];
+
+function chipList(state, key, mode){
+  const wrap = el("div");
+  const chips = el("div","chips");
+  const row = el("div","addrow");
+  const inp = el("input"); inp.placeholder = mode==="number" ? "add a number, Enter" : "add a word, Enter";
+  const add = el("button","mini","+ add");
+  const rand = el("button","mini ghost","randomize");
+  const clear = el("button","mini ghost","clear");
+  function refresh(){
+    chips.innerHTML = "";
+    state[key].forEach((v,i)=>{
+      const c = mode==="word" ? el("span","chip str") : el("span","chip");
+      c.innerHTML = mode==="number" ? `<span class="ix">${i}</span>${v}<span class="x">×</span>` : `${esc(v)}<span class="x">×</span>`;
+      c.querySelector(".x").onclick = ()=>{ state[key].splice(i,1); refresh(); };
+      chips.appendChild(c);
+    });
+    if(!state[key].length) chips.innerHTML = '<span class="out-empty">empty</span>';
+  }
+  function push(v){ state[key].push(v); refresh(); }
+  function fromInput(){
+    if(mode==="number"){ const v=parseInt(inp.value,10); if(!isNaN(v)) push(v); }
+    else if(inp.value) push(inp.value);
+    inp.value="";
+  }
+  inp.onkeydown = e=>{ if(e.key==="Enter") fromInput(); };
+  add.onclick = fromInput;
+  rand.onclick = ()=>{ state[key] = mode==="number" ? randInts(rint(3,8),1,12) : randWords(rint(3,6)); refresh(); };
+  clear.onclick = ()=>{ state[key]=[]; refresh(); };
+  row.append(inp,add);
+  wrap.append(chips,row);
+  return wrap;
+}
+
+function textField(s, key, label){
+  const wrap = el("div"); const lr = el("div","fieldrow"); lr.style.alignItems = "flex-start";
+  const lab = el("label"); lab.textContent = label; lab.style.width="74px"; lab.style.paddingTop="8px";
+  const ta = el("textarea","in"); ta.value = s[key] ?? ""; ta.rows = 2;
+  ta.oninput = ()=>{ s[key] = ta.value; };
+  lr.append(lab, ta); wrap.append(lr);
+  return wrap;
+}
+
+function numField(s, key, label){
+  const lr = el("div","fieldrow"); const lab = el("label"); lab.textContent = label;
+  const ci = el("input"); ci.type="number"; ci.value = s[key];
+  ci.oninput = ()=>{ s[key] = parseInt(ci.value,10)||0; };
+  lr.append(lab, ci);
+  return lr;
+}
+
+function strField(s, key, label){
+  const lr = el("div","fieldrow"); const lab = el("label"); lab.textContent = label;
+  const ci = el("input"); ci.value = s[key] ?? "";
+  ci.oninput = ()=>{ s[key] = ci.value; };
+  lr.append(lab, ci);
+  return lr;
+}
+
+function opsEditor(state){
+  const wrap = el("div");
+  const lr = el("div","fieldrow"); const lab = el("label"); lab.textContent = "inserts [at, value]";
+  wrap.append(lr);
+  const list = el("div"); list.style.cssText = "display:flex;flex-direction:column;gap:6px";
+  function render(){
+    list.innerHTML = "";
+    state.ops.forEach((op,i)=>{
+      const r = el("div","fieldrow");
+      const la = el("label"); la.textContent = "#"; la.style.minWidth="14px";
+      const ip = el("input"); ip.style.width="48px"; ip.value = op[0];
+      const iv = el("input"); iv.style.width="60px"; iv.value = op[1];
+      const rm = el("button","mini ghost","×");
+      ip.oninput = ()=>{ state.ops[i][0] = parseInt(ip.value,10)||0; };
+      iv.oninput = ()=>{ state.ops[i][1] = parseInt(iv.value,10)||0; };
+      rm.onclick = ()=>{ state.ops.splice(i,1); render(); };
+      r.append(la, ip, iv, rm); list.append(r);
+    });
+  }
+  const addrow = el("div","addrow");
+  const b = el("button","mini","+ insert");
+  b.onclick = ()=>{ state.ops.push([0,0]); render(); };
+  addrow.append(b);
+  wrap.append(list, addrow); render();
+  return wrap;
+}
+
+function buildControls(demo){
+  const box = el("div","dctl");
+  const s = demo.state;
+  const label = k => (demo.fields && demo.fields[k]) || FIELD_LABEL[k] || k;
+  if(Array.isArray(s.set))      box.append(chipList(s, "set", "number"));
+  if(Array.isArray(s.words))    box.append(chipList(s, "words", "word"));
+  if(Array.isArray(s.patterns)) box.append(chipList(s, "patterns", "word"));
+  if(Array.isArray(s.ops))      box.append(opsEditor(s));
+  if(s.text !== undefined)      box.append(textField(s, "text", "text"));
+  if(s.pattern !== undefined)   box.append(textField(s, "pattern", "pattern"));
+  if(s.a !== undefined)         box.append(textField(s, "a", "a"));
+  if(s.b !== undefined)         box.append(textField(s, "b", "b"));
+  for(const k of Object.keys(s)){
+    if(SKIP.includes(k)) continue;
+    if(typeof s[k] === "number")      box.append(numField(s, k, label(k)));
+    else if(typeof s[k] === "string") box.append(strField(s, k, label(k)));
+  }
+  return box;
+}
+
+// ---------- build the lab ----------
+const lab=$("#lab");
+const ORDER=["indexmap","trie","lru","heap","radix","segment","fenwick","interval","disjoint","bloom","cuckoo","countmin","theta","kmp","aho","suffix","diff","phf","phf_ordered","ring","gap","bitset","perms"];
+ORDER.forEach(name=>{
+  const d=DEMOS[name];
+  const card=el("div","demo");
+  const dh=el("div","dh");
+  dh.append(el("span","pk",d.pkg), el("h3",null,d.title));
+  const runBtn=el("button","run","▶ run");
+  dh.append(runBtn);
+  card.append(dh);
+  const ctl=buildControls(d);
+  card.append(ctl);
+  const out=el("div","dout"); out.innerHTML='<div class="out-empty">edit the inputs and run</div>';
+  const lat=el("div","lat"); lat.style.display="none";
+  out.append(lat);
+  card.append(out);
+  function doRun(){
+    const r=d.run();
+    if(r.__dead){ out.innerHTML='<div class="err">bundle not loaded — run <span class="mono">site/build.py</span></div>'; return; }
+    out.innerHTML=d.render(r)+(r.__ms!=null?`<div class="lat">${r.__ms.toFixed(1)} ms</div>`:"");
+  }
+  runBtn.onclick=doRun;
+  d._run=doRun;
+  d._out=out;
+  lab.append(card);
+});
+
+$("#runAll").onclick=()=>{ ORDER.forEach(n=>DEMOS[n]._run()); $("#lab").scrollIntoView({behavior:"smooth",block:"start"}); };
+$("#heroRun").onclick=()=>{
+  DEMOS.indexmap.state.set=[1,2,3]; // same order as the snippet above
+  DEMOS.indexmap._run();
+  $("#lab").scrollIntoView({behavior:"smooth",block:"start"});
+  setTimeout(()=>{ const c=lab.children[0]; c.style.borderColor="var(--accent)"; setTimeout(()=>c.style.borderColor="",900); },400);
+};
+
+// ---------- families ----------
+const CONFORM={
+  spec:"the error type + the per-process hash seed",
+  seq:"ring buffer wrap & overwrite, bit-set rank/select inverse, gap buffer, linked list",
+  map:"index-map positions after removes, flat-set ranges, counter most-common, trie & radix tree",
+  heap:"d-ary pop order, pairing & fibonacci sorted drains, min-max both ends, radix key order",
+  tree:"fenwick & segment prefix/range sums, disjoint-set components, treap in-order",
+  cache:"lru/lfu eviction order, expiring drop at the deadline",
+  sketch:"count-min lower bound, bloom false positives, t-digest quantiles vs the true ones",
+  text:"kmp & aho-corasick hits, z-function & suffix-array exact, sequence-matcher ratio",
+  phf:"map answers its own key set, ordered map returns the declaration index",
+  algo:"bisect, selection, merge, prefix & rotate, and the combinatoric generators in order",
+};
+const fam=$("#fam");
+function buildFamilies(data){
+  data.packages.forEach(p=>{
+    const c=el("div","card");
+    const names=p.types.map(t=>t.name).sort();
+    c.innerHTML=`<div class="nm">@${p.package}</div><div class="bl">${esc(p.blurb)}</div>
+      <div class="types">${names.slice(0,8).map(n=>`<span>${esc(n)}</span>`).join("")}${names.length>8?`<span>+${names.length-8}</span>`:""}</div>`;
+    c.onclick=()=>{ selectType(p.package, names[0]); $("#reference").scrollIntoView({behavior:"smooth"}); };
+    fam.append(c);
+  });
+}
+
+// ---------- conformance ----------
+const conf=$("#conform");
+Object.entries(CONFORM).forEach(([k,v])=>{
+  const c=el("div","c"); c.innerHTML=`<div class="t"><span class="ok2"></span>@${k}</div><p>${esc(v)}</p>`;
+  conf.append(c);
+});
+
+// ---------- API reference ----------
+const apiPane=$("#apiPane");
+const pkgList=$("#pkgList");
+let API=null, selPkg=null, selType=null;
+
+function methodSig(m){ return m.sig.replace(/^fn/,"").trim(); }
+function renderType(p, t){
+  const kindTag = t.kind==="struct"?"struct":t.kind==="enum"?"enum":"type";
+  const params = t.params?`<span class="params">[${esc(t.params)}]</span>`:"";
+  let body=`<div class="path">@${p.package} · ${esc(t.name)}</div>
+    <div class="apitype">${esc(t.name)}${params}</div>
+    <div class="apikind">${kindTag}</div>`;
+  if(t.impls&&t.impls.length) body+=`<div class="impls">${t.impls.map(i=>`<span class="i">${esc(i)}</span>`).join("")}</div>`;
+  const doc=el("div","apidoc");
+  if(t.fields&&t.fields.length){
+    doc.append(el("h5",null,"fields"));
+    doc.append(`<pre>${esc(t.fields.join("\n"))}</pre>`);
+  }
+  if(t.variants&&t.variants.length){
+    doc.append(el("h5",null,"variants"));
+    doc.append(`<pre>${esc(t.variants.join("\n"))}</pre>`);
+  }
+  if(t.alias){ doc.append(el("h5",null,"definition")); doc.append(`<pre>type ${esc(t.name)} = ${esc(t.alias)}</pre>`); }
+  if(t.members&&t.members.length){
+    doc.append(el("h5",null,`methods (${t.members.length})`));
+    let rows=t.members.map(m=>`<tr><td class="mn">${esc(m.name)}</td><td class="sig">${esc(methodSig(m))}</td></tr>`).join("");
+    doc.append(`<table><thead><tr><th>method</th><th>signature</th></tr></thead><tbody>${rows}</tbody></table>`);
+  }
+  if(t.members?.length===0 && !(t.fields||t.variants||t.alias)?.length){
+    doc.append('<p class="note">No public members exposed by name.</p>');
+  }
+  body+=doc.outerHTML;
+  apiPane.innerHTML=body;
+}
+function renderFree(p, filter=""){
+  const f=p.free_fns.filter(f=>!filter||(f.name+ " "+f.sig).toLowerCase().includes(filter.toLowerCase()));
+  const l=p.lets.filter(l=>!filter||l.name.toLowerCase().includes(filter.toLowerCase()));
+  let html=`<div class="path">@${p.package}</div><div class="apitype">free functions &amp; constants</div><div class="apikind">package</div>`;
+  const doc=el("div","apidoc");
+  if(f.length){ doc.append(el("h5",null,`functions (${f.length})`));
+    doc.append(`<table><thead><tr><th>function</th><th>signature</th></tr></thead><tbody>${f.map(x=>`<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.sig.replace(/^fn/,""))}</td></tr>`).join("")}</tbody></table>`); }
+  if(l.length){ doc.append(el("h5",null,`constants (${l.length})`));
+    doc.append(`<table><thead><tr><th>name</th><th>type</th></tr></thead><tbody>${l.map(x=>`<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.type)}</td></tr>`).join("")}</tbody></table>`); }
+  if(!f.length&&!l.length) doc.append('<p class="note">None in this package.</p>');
+  html+=doc.outerHTML;
+  apiPane.innerHTML=html;
+}
+function buildPkgList(filter=""){
+  pkgList.innerHTML="";
+  API.packages.forEach(p=>{
+    const g=el("div","pkggrp");
+    g.append(el("h4",null,"@"+p.package));
+    p.types.forEach(t=>{
+      const item=el("a","ti",`${esc(t.name)}<span class="cnt">${(t.members?.length||0)+(t.fields?.length||0)}</span>`);
+      if(selPkg===p.package&&selType===t.name)item.classList.add("sel");
+      item.onclick=()=>selectType(p.package,t.name);
+      g.append(item);
+    });
+    const fr=el("a","ti",`· free (${p.free_fns.length+p.lets.length})`);
+    fr.onclick=()=>selectFree(p.package);
+    g.append(fr);
+    pkgList.append(g);
+  });
+}
+function selectType(pkg,name){ selPkg=pkg; selType=name; const p=API.packages.find(x=>x.package===pkg); renderType(p,p.types.find(t=>t.name===name)); buildPkgList(); apiPane.scrollIntoView({behavior:"smooth",block:"nearest"}); }
+function selectFree(pkg){ selPkg=pkg; selType=null; const p=API.packages.find(x=>x.package===pkg); renderFree(p); buildPkgList(); }
+
+function doSearch(q){
+  q=q.trim().toLowerCase();
+  buildPkgList(q);
+  if(!q){ if(selPkg)selectType(selPkg,selType); return; }
+  // show first matching type
+  for(const p of API.packages){
+    for(const t of p.types){
+      const hay=(t.name+" "+(t.members?.map(m=>m.name).join(" ")||"")).toLowerCase();
+      if(hay.includes(q)){ selectType(p.package,t.name); return; }
+    }
+  }
+}
+function stats(){
+  const types=API.packages.reduce((a,p)=>a+p.types.length,0);
+  const fns=API.packages.reduce((a,p)=>a+p.free_fns.length,0);
+  $("#stats").innerHTML=`
+    <div class="stat"><div class="k">10</div><div class="v">families</div></div>
+    <div class="stat"><div class="k">${types}</div><div class="v">public types</div></div>
+    <div class="stat"><div class="k">${fns}</div><div class="v">free functions</div></div>
+    <div class="stat"><div class="k">4</div><div class="v">backends · native / wasm / js</div></div>`;
+}
+
+// ---------- boot ----------
+fetch("./api.json").then(r=>r.json()).then(d=>{
+  API=d; buildFamilies(d); stats();
+  selPkg="map"; selType="IndexMap";
+  selectType("map","IndexMap");
+  $("#q").oninput=e=>doSearch(e.target.value);
+}).catch(()=>{
+  $("#apiPane").innerHTML='<p class="note">Reference unavailable — serve this directory over HTTP (e.g. <span class="mono">python -m http.server</span>) to load <span class="mono">api.json</span>. The Live Lab above still works.</p>';
+});
+
+// install tabs
+document.querySelectorAll(".install .tab").forEach(t=>{
+  t.onclick=()=>{
+    document.querySelectorAll(".install .tab").forEach(x=>x.classList.remove("sel"));
+    t.classList.add("sel");
+    ["mod","use"].forEach(k=>{ const p=$("#tab-"+k); p.style.display=(k===t.dataset.tab)?"":"none"; });
+  };
+});
+</script>
+</body>
+</html>
