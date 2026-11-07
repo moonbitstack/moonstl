@@ -3,3 +3,5 @@
 !.moonignore
 _*
 target/
+Cargo.lock
+scripts/vectors/
