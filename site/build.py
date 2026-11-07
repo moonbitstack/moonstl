@@ -32,7 +32,10 @@ def main():
     # 1. API reference straight from the interfaces.
     run([sys.executable, str(ROOT / "scripts" / "gen_api.py")])
 
-    # 2. Compile the bridge (workspace: bridge + moonstl).
+    # 2. Compile the bridge (workspace: bridge + moonstl). `moon update` fetches
+    #    the registry (moonjson, and moonstl's moonseed) so a fresh checkout can
+    #    resolve them before the build.
+    run(["moon", "update"], cwd=BRIDGE)
     run(["moon", "build", "--target", "js", "--release"], cwd=BRIDGE)
 
     # 3. Copy the bundle where the page loads it from.
