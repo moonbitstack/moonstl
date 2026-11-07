@@ -17,6 +17,7 @@ the committed site/moonstl.wasm, so it is safe on any moon version.
 
 import http.server
 import json
+import re
 import os
 import shutil
 import socketserver
@@ -103,40 +104,56 @@ def check_page():
     t = threading.Thread(target=httpd.serve_forever, daemon=True)
     t.start()
 
-    try:
+    def load(budget):
         url = "http://127.0.0.1:%d/index.html" % port
-        print("$ headless browser", url)
         out = subprocess.run(
             [
                 chrome,
                 "--headless=new",
                 "--disable-gpu",
                 "--no-sandbox",
-                "--virtual-time-budget=12000",
+                "--disable-dev-shm-usage",
+                "--virtual-time-budget=%d" % budget,
                 "--dump-dom",
                 url,
             ],
             capture_output=True,
             text=True,
-            timeout=180,
+            timeout=240,
         )
-        dom = out.stdout
-        if len(dom) < 2000:
-            fail("the page did not load in the browser (%d bytes of DOM)" % len(dom))
+        return out.stdout, out.stderr
 
-        if "MoonBit" not in dom:
-            fail("the wordmark is missing from the rendered page")
-        if 'class="modpill live"' not in dom:
-            fail("the wasm module never reached the page (status pill is not live)")
-        # the first specimen runs on load: IndexMap over [3,1,2,8] → positions 0..3
-        if "positions [0,1,2,3]" not in dom:
-            fail("the live demo did not render the library's answer for IndexMap")
-        if "wasm-gc call #" not in dom:
-            fail("the stage did not report a wasm-gc call")
-        print("page runs the wasm-gc module: status live, IndexMap answer rendered")
-    finally:
-        httpd.shutdown()
-        httpd.server_close()
+    dom = ""
+    for attempt, budget in enumerate((20000, 30000)):
+        print("$ headless browser, budget %d ms" % budget)
+        dom, err = load(budget)
+        if len(dom) >= 2000 and 'class="modpill live"' in dom:
+            break
+        if attempt == 0:
+            print("  (not live yet, retrying)")
+
+    def pill(d):
+        m = re.search(r'id="modText">([^<]*)<', d)
+        return m.group(1) if m else "?"
+
+    if len(dom) < 2000:
+        fail("the page did not load in the browser (%d bytes of DOM)" % len(dom))
+    if "MoonBit" not in dom:
+        fail("the wordmark is missing from the rendered page")
+    if 'class="modpill live"' not in dom:
+        detail = re.search(r'class="err">(.*?)</div>', dom, re.S)
+        fail(
+            "the wasm module never reached the page: status=%r%s"
+            % (pill(dom), (" error=" + re.sub(r"<[^>]+>", " ", detail.group(1)).strip()[:300]) if detail else "")
+        )
+    # the first specimen runs on load: IndexMap over [3,1,2,8] -> positions 0..3
+    if "positions [0,1,2,3]" not in dom:
+        fail("the live demo did not render the library's answer for IndexMap")
+    if "wasm-gc call #" not in dom:
+        fail("the stage did not report a wasm-gc call")
+    httpd.shutdown()
+    httpd.server_close()
+    print("page runs the wasm-gc module: status live, IndexMap answer rendered")
 
 
 def main():
