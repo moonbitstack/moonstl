@@ -3,9 +3,10 @@ name: Pages
 # Publish the showcase at https://moonbitstack.github.io/moonstl.
 # The site is rebuilt from source on every push to master, so the live page
 # always reflects the current library: the API reference is regenerated from
-# the package interfaces and the browser bundle is recompiled from site/bridge.
-# The build is gated on site/check.py (reference in sync + bridge compiles +
-# the fresh bundle actually runs) before anything is published.
+# the package interfaces and the WebAssembly module is recompiled from
+# site/bridge with the wasm-gc backend. The build is gated on site/check.py
+# (reference in sync, module compiles and exports run/names, and the page runs
+# it in a headless browser) before anything is published.
 on:
   push:
     branches: [master]
@@ -33,7 +34,7 @@ jobs:
         # build.py runs `moon update` in the bridge workspace first, so a fresh
         # checkout resolves moonjson / moonseed before compiling.
         # regenerates site/api.json from the interfaces, compiles site/bridge to
-        # site/moonstl.js, and copies the bundle next to the page.
+        # site/moonstl.wasm with the wasm-gc backend, and puts it next to the page.
         run: python site/build.py
 
       - name: the site is in sync and runs
@@ -42,7 +43,8 @@ jobs:
       - name: stage the public files
         run: |
           mkdir -p dist
-          cp site/index.html site/moonstl.js site/api.json dist/
+          cp site/index.html site/moonstl.wasm site/api.json dist/
+          touch dist/.nojekyll
           ls -la dist
 
       - name: publish to gh-pages

@@ -1,12 +1,12 @@
 // The page hands us a demo name and a JSON input; we answer with a JSON string.
 // Every answer is produced by moonstl itself, so the page shows the library's
 // real output, not a reimplementation of it.
-
-///|
-extern "js" fn expose(
-  run : (String, String) -> String,
-  names : () -> String,
-) -> Unit = "function(run, names){ globalThis.moonstl = { run: run, names: names }; }"
+//
+// The module is compiled with the wasm-gc backend and `run` / `names` are
+// exported through the link configuration in moon.pkg, so the page calls into
+// the WebAssembly instance directly. Strings cross the boundary as JavaScript
+// strings (`use-js-builtin-string`), which is why `run` takes and returns
+// `String` with no encoding of its own.
 
 // ---- tiny JSON helpers over core's Json (moonjson reads/writes it) ----
 
@@ -44,6 +44,7 @@ fn strs_of(j : @cjson.Json) -> Array[String] {
   }
 }
 
+///|
 fn get_arr(j : @cjson.Json) -> Array[@cjson.Json]? {
   match j {
     @cjson.Json::Array(a) => Some(a)
@@ -51,6 +52,7 @@ fn get_arr(j : @cjson.Json) -> Array[@cjson.Json]? {
   }
 }
 
+///|
 fn elem_of(a : Array[@cjson.Json], i : Int32) -> Int32? {
   if i >= 0 && i < a.length() {
     as_int(a[i])
@@ -181,6 +183,7 @@ fn heap(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+///|
 fn radix(input : String) -> String raise {
   let h : @heap.RadixHeap[Int32] = @heap.RadixHeap::new()
   for v in set_ints(@json.loads(input, @json.strict)) {
@@ -226,7 +229,7 @@ fn fenwick(input : String) -> String raise {
   let vals = set_ints(j)
   let f : @tree.Fenwick[Int32] = @tree.Fenwick::from_array(vals[:])
   let prefix : Array[Int32] = []
-  for i in 0..=vals.length() {
+  for i in 0..<=vals.length() {
     prefix.push(f.prefix_sum(i))
   }
   let out : Map[String, @cjson.Json] = Map([])
@@ -236,6 +239,7 @@ fn fenwick(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+///|
 fn interval(input : String) -> String raise {
   let j = @json.loads(input, @json.strict)
   let pairs = set_ints(j)
@@ -261,11 +265,15 @@ fn interval(input : String) -> String raise {
   }
   let out : Map[String, @cjson.Json] = Map([])
   out["intervals"] = jints(all)
-  out["q"] = @cjson.Json::array([@cjson.Json::number(qstart.to_double()), @cjson.Json::number(qend.to_double())])
+  out["q"] = @cjson.Json::array([
+    @cjson.Json::number(qstart.to_double()),
+    @cjson.Json::number(qend.to_double()),
+  ])
   out["overlap"] = jints(overlaps)
   @json.dumps(@cjson.Json::object(out))
 }
 
+///|
 fn disjoint(input : String) -> String raise {
   let j = @json.loads(input, @json.strict)
   let n = get_int(j, "n")
@@ -320,6 +328,7 @@ fn countmin(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+///|
 fn cuckoo(input : String) -> String raise {
   let j = @json.loads(input, @json.strict)
   let cap = get_int(j, "cap")
@@ -339,6 +348,7 @@ fn cuckoo(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+///|
 fn theta(input : String) -> String raise {
   let j = @json.loads(input, @json.strict)
   let set = set_ints(j)
@@ -356,6 +366,7 @@ fn theta(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+///|
 fn distinct_count(a : Array[Int32]) -> Int32 {
   let mut count = 0
   for i in 0..<a.length() {
@@ -411,6 +422,7 @@ fn diff(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+///|
 fn aho(input : String) -> String raise {
   let j = @json.loads(input, @json.strict)
   let patterns = set_strs(j, key="patterns")
@@ -421,13 +433,20 @@ fn aho(input : String) -> String raise {
   out["patterns"] = jstrs(patterns)
   out["text"] = @cjson.Json::string(text)
   out["matches"] = @cjson.Json::array(
-    ac.search_all(text).to_array().map(ms => {
-      @cjson.Json::array([@cjson.Json::number(ms.0.to_double()), @cjson.Json::number(ms.1.to_double())])
+    ac
+    .search_all(text)
+    .to_array()
+    .map(ms => {
+      @cjson.Json::array([
+        @cjson.Json::number(ms.0.to_double()),
+        @cjson.Json::number(ms.1.to_double()),
+      ])
     }),
   )
   @json.dumps(@cjson.Json::object(out))
 }
 
+///|
 fn suffix(input : String) -> String raise {
   let j = @json.loads(input, @json.strict)
   let text = get_str(j, "text")
@@ -455,6 +474,7 @@ fn phf(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+///|
 fn phf_ordered(input : String) -> String raise {
   let j = @json.loads(input, @json.strict)
   let words = set_strs(j)
@@ -509,6 +529,7 @@ fn bitset(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+///|
 fn gap(input : String) -> String raise {
   let j = @json.loads(input, @json.strict)
   let base = set_ints(j)
@@ -555,7 +576,7 @@ fn perms(input : String) -> String raise {
 // ---- dispatch ----
 
 ///|
-fn run(name : String, input : String) -> String {
+pub fn run(name : String, input : String) -> String {
   try {
     match name {
       "indexmap" => indexmap(input)
@@ -589,7 +610,7 @@ fn run(name : String, input : String) -> String {
 }
 
 ///|
-fn names() -> String {
+pub fn names() -> String {
   @json.dumps(
     @cjson.Json::array([
       "indexmap", "trie", "lru", "heap", "radix", "segment", "fenwick", "interval",
@@ -601,5 +622,5 @@ fn names() -> String {
 
 ///|
 fn main {
-  expose(run, names)
+
 }

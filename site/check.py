@@ -1,33 +1,52 @@
 #!/usr/bin/env python3
-"""CI gate for the showcase site. Proves, without depending on the exact
-moon version that produced the committed bundle:
+"""CI gate for the showcase site. It proves, without depending on the exact
+moon version that produced the committed module:
 
   1. the API reference (site/api.json) is in sync with the package interfaces —
      regenerate it and require no diff;
-  2. the browser bridge compiles to a release JS bundle;
-  3. a freshly built bundle actually runs — load it in Node and call a couple
-     of the demos, asserting the library's real output comes back.
+  2. the bridge compiles to a wasm-gc module and that module exports the two
+     functions the page calls (`run`, `names`);
+  3. the page itself works — serve site/, open it in a headless browser, and
+     require that the module reached the page (the status pill reads "live") and
+     that a demo rendered the library's real answer.
 
 Run with:  python site/check.py
 It builds into the (gitignored) site/bridge/_build directory and never rewrites
-the committed site/moonstl.js, so it is safe on any moon version.
+the committed site/moonstl.wasm, so it is safe on any moon version.
 """
 
+import http.server
 import json
 import os
+import shutil
+import socketserver
 import subprocess
 import sys
-import textwrap
+import threading
 from pathlib import Path
 
 SITE = Path(__file__).resolve().parent
 ROOT = SITE.parent
 BRIDGE = SITE / "bridge"
-BUNDLE = BRIDGE / "_build" / "js" / "release" / "build" / "moonstl-site-bridge" / "main" / "main.js"
+WASM = (
+    BRIDGE / "_build" / "wasm-gc" / "release" / "build" / "moonstl-site-bridge" / "main" / "main.wasm"
+)
+
+CHROME_CANDIDATES = [
+    os.environ.get("CHROME"),
+    "google-chrome",
+    "google-chrome-stable",
+    "chromium",
+    "chromium-browser",
+    r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+    r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+]
 
 
 def sh(cmd, **kw):
-    print("$", " ".join(cmd), flush=True)
+    print("$", " ".join(str(c) for c in cmd), flush=True)
     return subprocess.run(cmd, check=True, **kw)
 
 
@@ -36,47 +55,112 @@ def fail(msg):
     sys.exit(1)
 
 
+def find_chrome():
+    for c in CHROME_CANDIDATES:
+        if not c:
+            continue
+        p = shutil.which(c)
+        if p:
+            return p
+        if Path(c).exists():
+            return c
+    return None
+
+
+def check_exports():
+    """The module must export run/names; read them straight from the binary."""
+    node = shutil.which("node")
+    if not node:
+        print("(node not found — skipping the export check)")
+        return
+    js = (
+        "const fs=require('fs');"
+        "const m=new WebAssembly.Module(fs.readFileSync(process.argv[1]));"
+        "const names=WebAssembly.Module.exports(m).map(e=>e.name);"
+        "process.stdout.write(JSON.stringify(names));"
+    )
+    out = subprocess.run([node, "-e", js, str(WASM)], check=True, capture_output=True, text=True)
+    names = json.loads(out.stdout)
+    for want in ("run", "names", "_start"):
+        if want not in names:
+            fail("wasm module does not export %r (exports: %s)" % (want, ", ".join(names)))
+    print("wasm exports ok:", ", ".join(names))
+
+
+def check_page():
+    """Open the real page in a headless browser and look at what it rendered."""
+    chrome = find_chrome()
+    if not chrome:
+        print("(no chrome/chromium found — skipping the in-browser check)")
+        return
+
+    handler = lambda *a, **kw: http.server.SimpleHTTPRequestHandler(  # noqa: E731
+        *a, directory=str(SITE), **kw
+    )
+    socketserver.TCPServer.allow_reuse_address = True
+    httpd = socketserver.TCPServer(("127.0.0.1", 0), handler)
+    port = httpd.server_address[1]
+    t = threading.Thread(target=httpd.serve_forever, daemon=True)
+    t.start()
+
+    try:
+        url = "http://127.0.0.1:%d/index.html" % port
+        print("$ headless browser", url)
+        out = subprocess.run(
+            [
+                chrome,
+                "--headless=new",
+                "--disable-gpu",
+                "--no-sandbox",
+                "--virtual-time-budget=12000",
+                "--dump-dom",
+                url,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+        dom = out.stdout
+        if len(dom) < 2000:
+            fail("the page did not load in the browser (%d bytes of DOM)" % len(dom))
+
+        if "MoonBit" not in dom:
+            fail("the wordmark is missing from the rendered page")
+        if 'class="modpill live"' not in dom:
+            fail("the wasm module never reached the page (status pill is not live)")
+        # the first specimen runs on load: IndexMap over [3,1,2,8] → positions 0..3
+        if "positions [0,1,2,3]" not in dom:
+            fail("the live demo did not render the library's answer for IndexMap")
+        if "wasm-gc call #" not in dom:
+            fail("the stage did not report a wasm-gc call")
+        print("page runs the wasm-gc module: status live, IndexMap answer rendered")
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
 def main():
     # 1. API reference must match the interfaces.
     sh([sys.executable, str(ROOT / "scripts" / "gen_api.py")])
     diff = subprocess.run(["git", "diff", "--exit-code", "--", "site/api.json"], cwd=ROOT)
     if diff.returncode != 0:
-        fail("site/api.json is out of sync with the package interfaces "
-             "(run scripts/gen_api.py and commit the result)")
+        fail(
+            "site/api.json is out of sync with the package interfaces "
+            "(run scripts/gen_api.py and commit the result)"
+        )
 
-    # 2. Compile the bridge.
-    sh(["moon", "build", "--target", "js", "--release"], cwd=BRIDGE)
-    if not BUNDLE.exists():
-        fail("bridge did not produce a bundle at %s" % BUNDLE)
+    # 2. Compile the bridge to wasm-gc (moon update covers a fresh checkout).
+    sh(["moon", "update"], cwd=BRIDGE)
+    sh(["moon", "build", "--target", "wasm-gc", "--release"], cwd=BRIDGE)
+    if not WASM.exists():
+        fail("bridge did not produce a module at %s" % WASM)
+    print("module: %d KB" % (WASM.stat().st_size // 1024))
+    check_exports()
 
-    # 3. The fresh bundle must run: load it in Node and call a few demos.
-    node = textwrap.dedent(r"""
-      const fs = require('fs'), vm = require('vm');
-      const { TextEncoder, TextDecoder } = require('util');
-      const bundle = fs.readFileSync(process.argv[2], 'utf8');
-      const sandbox = { console, document: undefined, TextEncoder, TextDecoder,
-                        crypto: require('crypto').webcrypto };
-      sandbox.globalThis = sandbox;
-      vm.createContext(sandbox);
-      vm.runInContext(bundle, sandbox);
-      const st = sandbox.moonstl;
-      if (!st || typeof st.run !== 'function') { console.error('bundle did not expose moonstl.run'); process.exit(1); }
-      const idx = JSON.parse(st.run('indexmap', '{"set":[3,1,2,8]}'));
-      if (idx.keys.join(',') !== '3,1,2,8') { console.error('indexmap wrong', idx); process.exit(1); }
-      const heap = JSON.parse(st.run('heap', '{"set":[5,1,9,3,7]}'));
-      if (heap.pops.join(',') !== '1,3,5,7,9') { console.error('heap wrong', heap); process.exit(1); }
-      const seg = JSON.parse(st.run('segment', '{"set":[3,1,4,1,5]}'));
-      if (seg.total !== 14) { console.error('segment wrong', seg); process.exit(1); }
-      console.log('site bundle runs: indexmap / heap / segment verified');
-    """)
-    node_file = BRIDGE / "_smoke_node.js"
-    node_file.write_text(node, encoding="utf-8")
-    try:
-        sh(["node", str(node_file), str(BUNDLE)])
-    finally:
-        node_file.unlink(missing_ok=True)
+    # 3. The page must actually run it.
+    check_page()
 
-    print("site check passed: api.json in sync, bridge compiles, bundle runs")
+    print("site check passed: api.json in sync, wasm-gc module builds and exports run/names, page runs it")
 
 
 if __name__ == "__main__":

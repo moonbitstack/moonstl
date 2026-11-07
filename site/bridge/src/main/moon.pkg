@@ -1,15 +1,24 @@
-// Browser bridge: installs the library on `globalThis` for the showcase page,
-// so the page runs moonstl compiled with the JavaScript backend rather than a
-// reimplementation. Build it with
+// The browser bridge. This package depends on moonstl, compiles to WebAssembly
+// (wasm-gc), and exports two functions to the page:
 //
-//     moon build --target js --release
+//   run(name : String, input : String) -> String   a demo, answered as JSON
+//   names() -> String                              the demo names
 //
-// and the page calls `globalThis.moonstl.run(name, input)` and
-// `globalThis.moonstl.names()`. The input and every answer is a JSON string, so
-// the page needs no knowledge of the MoonBit encodings under the hood.
+// Strings cross the boundary as JavaScript strings through the wasm `js-string`
+// builtins, so the page calls into the instance with ordinary JS strings and
+// needs no knowledge of the MoonBit encodings underneath.
+//
+// Build with:  moon build --target wasm-gc --release
+
 pkgtype(kind: "executable")
 
-supported_targets = "js"
+supported_targets = "all-js+wasm-gc"
+
+options(
+  link: {
+    "wasm-gc": { "exports": [ "run", "names" ], "use-js-builtin-string": true },
+  },
+)
 
 import {
   "moonbitstack/moonstl/map",
