@@ -1,0 +1,26 @@
+// Browser bridge: installs the library on `globalThis` for the showcase page,
+// so the page runs moonstl compiled with the JavaScript backend rather than a
+// reimplementation. Build it with
+//
+//     moon build --target js --release
+//
+// and the page calls `globalThis.moonstl.run(name, input)` and
+// `globalThis.moonstl.names()`. The input and every answer is a JSON string, so
+// the page needs no knowledge of the MoonBit encodings under the hood.
+pkgtype(kind: "executable")
+
+supported_targets = "js"
+
+import {
+  "moonbitstack/moonstl/map",
+  "moonbitstack/moonstl/cache",
+  "moonbitstack/moonstl/heap",
+  "moonbitstack/moonstl/tree",
+  "moonbitstack/moonstl/sketch",
+  "moonbitstack/moonstl/text",
+  "moonbitstack/moonstl/phf",
+  "moonbitstack/moonstl/seq",
+  "moonbitstack/moonstl/algo",
+  "moonbitstack/moonjson" @json,
+  "moonbitlang/core/json" @cjson,
+}

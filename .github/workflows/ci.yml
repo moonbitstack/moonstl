@@ -75,3 +75,8 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           python scripts/check_snippets.py
+
+      - name: the site is in sync and runs
+        if: runner.os == 'Linux'
+        run: |
+          python site/check.py
