@@ -206,8 +206,8 @@ section.band:last-of-type{padding-bottom:20px}
 .stage-hd .btn{margin-left:auto;padding:10px 20px}
 .cx{margin-top:7px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--plat-4)}
 .cx b{color:var(--champagne);font-weight:400;letter-spacing:.16em;text-transform:uppercase;font-size:9px}
-.stage-in{padding:20px 26px;border-bottom:1px solid var(--line-2);background:rgba(0,0,0,.16)}
-.stage-in .cap{margin-bottom:11px;display:block}
+.stage-in{padding:22px 26px 24px;border-bottom:1px solid var(--line-2);background:rgba(0,0,0,.16)}
+.stage-in .cap{margin-bottom:14px;display:block}
 .sheet-wrap{padding:20px 26px 24px;flex:1;display:flex;flex-direction:column;min-height:0}
 .sheet-head{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
 .sheet-head .cap{margin:0;color:var(--plat-5)}
@@ -282,9 +282,11 @@ section.band:last-of-type{padding-bottom:20px}
 .calls pre .c-fn{color:#cfd6d0}
 .calls pre .c-cm{color:var(--plat-6);font-style:italic}
 /* ══════════════════════ controls (on leather) ══════════════════════ */
-.dctl{display:flex;flex-direction:column;gap:11px}
+.dctl{display:flex;flex-direction:column;gap:16px}
+.chiplist{display:flex;flex-direction:column;gap:12px}
 .fieldrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .fieldrow label{font-family:var(--serif);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--plat-5);min-width:74px}
+.fieldrow+.fieldrow{margin-top:2px}
 .fieldrow input,.fieldrow textarea{
   background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--plat-1);
   font-family:var(--mono);font-size:12.5px;padding:6px 9px;outline:none;
@@ -293,13 +295,15 @@ section.band:last-of-type{padding-bottom:20px}
 .fieldrow input[type=number]{width:84px}
 .fieldrow textarea{flex:1;min-width:180px;resize:vertical;line-height:1.55}
 .chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:28px}
-.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-2);background:rgba(233,230,223,.045);padding:3px 8px;font-family:var(--mono);font-size:12px;color:var(--plat-2)}
+.chip{display:inline-flex;align-items:center;gap:8px;height:30px;border:1px solid var(--line-2);background:rgba(233,230,223,.045);padding:0 10px;font-family:var(--mono);font-size:12px;color:var(--plat-2)}
 .chip .ix{color:var(--plat-6);font-size:9.5px}
-.chip .x{color:var(--plat-6);cursor:pointer;font-size:13px;line-height:1}
+.chip .x{color:var(--plat-6);cursor:pointer;font-size:13px;line-height:1;opacity:0;transition:opacity .15s}
+.chip:hover .x{opacity:1}
 .chip .x:hover{color:#d99a8a}
+@media(hover:none){.chip .x{opacity:.55}}
 .chip.str{padding:4px 9px}
 .addrow{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
-.addrow input{flex:1;min-width:120px;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--plat-1);font-family:var(--mono);font-size:12px;padding:6px 9px;outline:none}
+.addrow input{flex:1;min-width:120px;max-width:320px;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--plat-1);font-family:var(--mono);font-size:12px;padding:6px 9px;outline:none}
 .addrow input:focus{border-color:var(--line-3)}
 .mini{background:transparent;border:1px solid var(--line-2);color:var(--plat-4);cursor:pointer;font-family:var(--serif);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;padding:5px 10px;white-space:nowrap}
 .mini:hover{color:var(--champagne);border-color:rgba(201,185,143,.45)}
@@ -346,7 +350,7 @@ section.band:last-of-type{padding-bottom:20px}
 .titem .k{margin-left:auto;font-size:8.5px;color:var(--plat-6);letter-spacing:.1em;text-transform:uppercase}
 .titem:hover{color:var(--plat-0)}
 .titem.on{color:var(--champagne)}
-.apipane{padding:30px 34px 36px;min-height:340px}
+.apipane{padding:30px 34px 36px;min-height:340px;max-height:min(760px,calc(100vh - 140px));overflow:auto}
 .hdr-banner{
   display:inline-block;border:1px solid var(--line-2);padding:5px 12px;margin-bottom:16px;
   font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--plat-4);
@@ -359,14 +363,14 @@ section.band:last-of-type{padding-bottom:20px}
   font-family:var(--mono);font-size:11px;padding:3px 9px;
 }
 .seealso button:hover{color:var(--champagne);border-color:rgba(201,185,143,.45)}
-.path{font-family:var(--serif);font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--plat-5);margin-bottom:10px}
+.path{font-family:var(--serif);font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--plat-4);margin-bottom:10px}
 .awrap{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:16px}
 .apitype{font-family:var(--serif);font-size:34px;line-height:1.1;color:var(--plat-0)}
 .params{font-family:var(--mono);font-size:14px;color:var(--plat-5)}
 .apikind{font-family:var(--serif);font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--champagne);border:1px solid rgba(201,185,143,.4);padding:3px 8px}
 .impls{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 0}
 .impls .i{font-family:var(--mono);font-size:9.5px;color:var(--plat-3);border:1px solid var(--line);padding:2px 7px}
-.apidoc h5{font-family:var(--serif);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--plat-5);margin:26px 0 10px;font-weight:400;display:flex;align-items:center;gap:12px}
+.apidoc h5{font-family:var(--serif);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--plat-4);margin:26px 0 10px;font-weight:400;display:flex;align-items:center;gap:12px}
 .apidoc h5::after{content:"";flex:1;height:1px;background:var(--line)}
 .apidoc pre{margin:0;padding:12px 14px;background:rgba(0,0,0,.34);border:1px solid var(--line);font-size:12px;color:var(--plat-2);overflow:auto;line-height:1.8}
 .apidoc table{width:100%;border-collapse:collapse;font-size:12.5px}
@@ -395,10 +399,10 @@ section.band:last-of-type{padding-bottom:20px}
 /* ══════════════════════ colophon ══════════════════════ */
 footer{padding:0 0 60px;margin-top:60px}
 .colophon{text-align:center;padding:26px 0 0}
-.colophon .l{font-family:var(--serif);font-size:12px;color:var(--plat-5)}
+.colophon .l{font-family:var(--serif);font-size:12.5px;color:var(--plat-4);line-height:1.9}
 .colophon .l a{border-bottom:1px solid var(--line-2)}
 .colophon .l a:hover{color:var(--champagne);border-bottom-color:var(--champagne)}
-.colophon .fine{margin-top:10px;font-family:var(--serif);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--plat-6)}
+.colophon .fine{margin-top:10px;font-family:var(--serif);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--plat-5)}
 /* ══════════════════════ responsive ══════════════════════ */
 @media(max-width:1080px){
   .bench{grid-template-columns:1fr}
@@ -415,6 +419,7 @@ footer{padding:0 0 60px;margin-top:60px}
   .strip-in{height:auto;flex-wrap:wrap;gap:8px;padding:9px 0}
   .strip .edition{display:none}
   .strip-right{margin-left:auto;gap:10px}
+  .dotsep,#modAssay{display:none}
   .masthead{padding:32px 0 18px}
   .wordmark{font-size:clamp(28px,9.4vw,42px);letter-spacing:.1em}
   .masthead nav a{padding:6px 10px;font-size:9.5px;letter-spacing:.16em}
@@ -433,7 +438,7 @@ footer{padding:0 0 60px;margin-top:60px}
   .sheet .stamp{right:16px;bottom:16px}
   .fams{grid-template-columns:1fr 1fr}
   .conf{grid-template-columns:1fr}
-  .apipane{padding:22px 18px 26px}
+  .apipane{padding:22px 18px 26px;max-height:none;overflow:visible}
   .conf-foot div{border-left:0;border-top:1px solid var(--line);width:100%;text-align:center}
   img,pre,table{max-width:100%}
 }
@@ -447,6 +452,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 </style>
 </head>
 <body>
+<noscript>
+  <div style="max-width:1180px;margin:0 auto;padding:14px 32px;border-bottom:1px solid rgba(233,230,223,.26);font-family:Constantia,Georgia,serif;font-size:13px;color:#ded9cd">
+    The Workbench runs the library as WebAssembly, so it needs scripting enabled. The reference, the families and the install notes below do not.
+  </div>
+</noscript>
 
 <!-- running head: wordmark on the left, edition and assay on the right -->
 <div class="strip">
@@ -502,7 +512,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 <section class="hero">
   <div class="wrap">
     <div class="center">
-      <div class="plate-label"><span class="ln l"></span><span class="txt">Plate the First</span><span class="ln"></span></div>
+      <div class="plate-label"><span class="ln l"></span><span class="txt">Plate I &nbsp;·&nbsp; The Argument</span><span class="ln"></span></div>
       <h2>Structures held to<br>a second <em>opinion</em>.</h2>
       <p class="lede">
         Ten families of containers, queues, trees, caches, sketches and text algorithms for MoonBit,
@@ -534,7 +544,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <div class="shead">
       <div class="num">PLATE II</div>
       <h3>The Workbench</h3>
-      <div class="sub"><span id="benchMeta">23 specimens · 9 packages</span> &nbsp;·&nbsp; <span id="modAssay">wasm-gc · —</span></div>
+      <div class="sub"><span id="benchMeta">23 specimens · 9 packages</span><span class="dotsep">&nbsp;·&nbsp;</span><span id="modAssay">wasm-gc · —</span></div>
     </div>
 
     <div class="bench">
@@ -542,7 +552,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
         <div class="head">Index of Specimens</div>
         <div class="idxsearch">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-          <input id="railSearch" type="text" placeholder="search…" autocomplete="off" spellcheck="false">
+          <input id="railSearch" type="search" aria-label="Filter specimens" placeholder="search…" autocomplete="off" spellcheck="false">
         </div>
         <div id="railList"></div>
       </aside>
@@ -659,7 +669,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     <div class="refbar">
       <div class="refsearch">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-        <input id="apiSearch" type="text" placeholder="search types, methods, functions…" autocomplete="off" spellcheck="false">
+        <input id="apiSearch" type="search" aria-label="Search the API reference" placeholder="search types, methods, functions…" autocomplete="off" spellcheck="false">
       </div>
       <div class="pkgchips" id="pkgChips"></div>
     </div>
@@ -717,6 +727,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 
 <footer>
   <div class="wrap">
+    <div class="damask" style="opacity:.5;margin:0 0 18px" aria-hidden="true">
+      <svg viewBox="0 0 1200 26" preserveAspectRatio="none">
+        <g fill="none" stroke="url(#steel)" stroke-width="1.2">
+          <path d="M0 9 C 120 2, 240 16, 360 9 S 600 2, 720 9 S 960 16, 1080 9 S 1200 4, 1200 9"/>
+          <path d="M0 15 C 120 8, 240 22, 360 15 S 600 8, 720 15 S 960 22, 1080 15 S 1200 10, 1200 15" opacity=".7"/>
+          <path d="M0 21 C 120 14, 240 28, 360 21 S 600 14, 720 21 S 960 28, 1080 21 S 1200 16, 1200 21" opacity=".45"/>
+        </g>
+      </svg>
+    </div>
     <div class="rule2"></div>
     <div class="colophon">
       <p class="l">Bound in leather and steel, after the manner of the
@@ -1147,7 +1166,7 @@ const FIELD_LABEL = { cap: "capacity", n: "n", q: "query", r: "r (0 = perms)", n
 const SKIP = ["set", "words", "patterns", "ops", "text", "pattern", "a", "b"];
 
 function chipList(state, key, mode) {
-  const wrap = el("div");
+  const wrap = el("div", "chiplist");
   const chips = el("div", "chips");
   const row = el("div", "addrow");
   const inp = el("input");
