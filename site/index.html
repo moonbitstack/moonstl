@@ -1555,6 +1555,13 @@ function setupInstall() {
 /* ════════════════════════════════════════════════════════════
    boot
    ════════════════════════════════════════════════════════════ */
+const PROBE = /(?:^|[?&])probe=1(?:&|$)/.test(location.search);
+function probe(ok, detail) {
+  if (!PROBE) return;
+  const q = "/__probe?ok=" + (ok ? "1" : "0") + "&detail=" + encodeURIComponent(String(detail).slice(0, 300));
+  fetch(q, { cache: "no-store" }).catch(() => {});
+}
+
 async function boot() {
   setupInstall();
 
@@ -1576,6 +1583,8 @@ async function boot() {
     $("#modAssay").textContent = `wasm-gc · ${(MOD.bytes / 1024).toFixed(0)} KB · loaded in ${MOD.load < 1500 ? Math.round(MOD.load) + " ms" : "—"}`;
     $("#statSpecimens").textContent = String(MOD.demos);
     setupBench();
+    const txt = ($("#canvas").innerText || "").replace(/\s+/g, " ").trim();
+    probe(true, MOD.bytes + " bytes | " + MOD.load.toFixed(0) + " ms | " + txt);
   } catch (e) {
     console.error(e);
     setStatus("err", "wasm-gc · unavailable");
@@ -1583,6 +1592,7 @@ async function boot() {
       serve this directory over HTTP (it fetches moonstl.wasm) — for example
       <span style="color:#c9b98f">python -m http.server</span>.</div>`;
     $("#modAssay").textContent = "wasm-gc · unavailable";
+    probe(false, e.message);
   }
 }
 
