@@ -680,7 +680,8 @@ def gen_sketch(src_root, vec_root):
     d.append(data("sketch_bloom_fp_rate", "Double", fscalar(fp), fp,
                   "The design false-positive rate of the bloom filter."))
     t.append(test("differential: bloom has no false negatives", [
-        "let bloom : @sketch.BloomFilter[String] = @sketch.BloomFilter::new(expected_items=200)",
+        "let bloom : @sketch.BloomFilter[String] = @sketch.BloomFilter::new("
+        "expected_items=200, hash_seed=0)",
         "for i in 0..<200 { let _ = bloom.insert(\"k\" + i.to_string()) }",
         "for i in 0..<200 { @test.assert_eq(bloom.may_contain(\"k\" + i.to_string()), true) }",
         "let mut false_pos = 0",

@@ -94,6 +94,7 @@ test "differential: t-digest quantiles are near the true ones" {
 test "differential: bloom has no false negatives" {
   let bloom : @sketch.BloomFilter[String] = @sketch.BloomFilter::new(
     expected_items=200,
+    hash_seed=0,
   )
   for i in 0..<200 {
     let _ = bloom.insert("k" + i.to_string())
