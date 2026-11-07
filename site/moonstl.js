@@ -34,6 +34,10 @@ function _M0TP312moonbitstack7moonstl3phf11BuildParams(param0, param1, param2, p
   this.load_num = param2;
   this.max_displacement = param3;
 }
+function _M0TP312moonbitstack7moonstl6sketch13CuckooOptions(param0, param1) {
+  this.fingerprint_bits = param0;
+  this.bucket_size = param1;
+}
 function _M0TP312moonbitstack7moonstl6sketch12BloomOptions(param0, param1) {
   this.false_positive_rate = param0;
   this.growth = param1;
@@ -89,11 +93,11 @@ function $makebytes(a, b) {
   }
   return arr;
 }
-function _M0TPB5ArrayGcE(param0, param1) {
+function _M0TPB5ArrayGUiiEE(param0, param1) {
   this.buf = param0;
   this.len = param1;
 }
-function _M0TPB5ArrayGRPC14json4JsonE(param0, param1) {
+function _M0TPB5ArrayGcE(param0, param1) {
   this.buf = param0;
   this.len = param1;
 }
@@ -107,6 +111,14 @@ function _M0TPB8MutLocalGiE(param0) {
 function _M0TPB4IterGRPC14json4JsonE(param0, param1) {
   this.f = param0;
   this.size_hint = param1;
+}
+function _M0TPB4IterGUisEE(param0, param1) {
+  this.f = param0;
+  this.size_hint = param1;
+}
+function _M0TPB5ArrayGRPC16string10StringViewE(param0, param1) {
+  this.buf = param0;
+  this.len = param1;
 }
 function $make_array_len_and_init(a, b) {
   const arr = new Array(a);
@@ -158,6 +170,15 @@ function _M0TPB3MapGcuE(param0, param1, param2, param3, param4, param5, param6) 
   this.head = param5;
   this.tail = param6;
 }
+function _M0TPB3MapGUiiEiE(param0, param1, param2, param3, param4, param5, param6) {
+  this.entries = param0;
+  this.size = param1;
+  this.capacity = param2;
+  this.capacity_mask = param3;
+  this.grow_at = param4;
+  this.head = param5;
+  this.tail = param6;
+}
 function _M0TPB3MapGzuE(param0, param1, param2, param3, param4, param5, param6) {
   this.entries = param0;
   this.size = param1;
@@ -200,6 +221,14 @@ function _M0TPB5EntryGciE(param0, param1, param2, param3, param4, param5) {
   this.value = param5;
 }
 function _M0TPB5EntryGcuE(param0, param1, param2, param3, param4, param5) {
+  this.prev = param0;
+  this.next = param1;
+  this.psl = param2;
+  this.hash = param3;
+  this.key = param4;
+  this.value = param5;
+}
+function _M0TPB5EntryGUiiEiE(param0, param1, param2, param3, param4, param5) {
   this.prev = param0;
   this.next = param1;
   this.psl = param2;
@@ -572,6 +601,10 @@ function _M0DTPC16result6ResultGcRP212moonbitstack8moonjson7RefusedE2Ok(param0) 
   this._0 = param0;
 }
 _M0DTPC16result6ResultGcRP212moonbitstack8moonjson7RefusedE2Ok.prototype.$tag = 1;
+function _M0TPB5ArrayGRPC14json4JsonE(param0, param1) {
+  this.buf = param0;
+  this.len = param1;
+}
 function _M0TPB9ArrayViewGUsRPC14json4JsonEE(param0, param1, param2) {
   this.buf = param0;
   this.start = param1;
@@ -685,10 +718,6 @@ function _M0TP312moonbitstack7moonstl3map8IndexMapGiiE(param0, param1, param2, p
   this.graves = param5;
   this.seed = param6;
 }
-function _M0TPB5ArrayGUiiEE(param0, param1) {
-  this.buf = param0;
-  this.len = param1;
-}
 function _M0DTPC16result6ResultGRP312moonbitstack7moonstl5cache8LruCacheGiiERP312moonbitstack7moonstl4spec7RefusedE3Err(param0) {
   this._0 = param0;
 }
@@ -718,6 +747,64 @@ function _M0TP312moonbitstack7moonstl5cache7LruNodeGiiE(param0, param1, param2, 
   this.value = param1;
   this.prev = param2;
   this.next = param3;
+}
+function _M0TPB5ArrayGRPB5ArrayGUmiEEE(param0, param1) {
+  this.buf = param0;
+  this.len = param1;
+}
+function _M0TPB5ArrayGUmiEE(param0, param1) {
+  this.buf = param0;
+  this.len = param1;
+}
+function _M0TP312moonbitstack7moonstl4heap9RadixHeapGiE(param0, param1, param2) {
+  this.buckets = param0;
+  this.last = param1;
+  this.len = param2;
+}
+function _M0DTPC16result6ResultGuRP312moonbitstack7moonstl4spec7RefusedE3Err(param0) {
+  this._0 = param0;
+}
+_M0DTPC16result6ResultGuRP312moonbitstack7moonstl4spec7RefusedE3Err.prototype.$tag = 0;
+function _M0DTPC16result6ResultGuRP312moonbitstack7moonstl4spec7RefusedE2Ok(param0) {
+  this._0 = param0;
+}
+_M0DTPC16result6ResultGuRP312moonbitstack7moonstl4spec7RefusedE2Ok.prototype.$tag = 1;
+function _M0TP312moonbitstack7moonstl4heap11PairingHeapGiE(param0, param1, param2, param3, param4, param5, param6, param7, param8) {
+  this.cmp = param0;
+  this.values = param1;
+  this.children = param2;
+  this.siblings = param3;
+  this.parents = param4;
+  this.generations = param5;
+  this.free = param6;
+  this.root = param7;
+  this.len = param8;
+}
+function _M0TPB5ArrayGjE(param0, param1) {
+  this.buf = param0;
+  this.len = param1;
+}
+function _M0TP312moonbitstack7moonstl4heap7HeapKeyGiE(param0, param1) {
+  this.index = param0;
+  this.generation = param1;
+}
+function _M0TP312moonbitstack7moonstl4heap13FibonacciHeapGiE(param0, param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11) {
+  this.cmp = param0;
+  this.values = param1;
+  this.parents = param2;
+  this.child = param3;
+  this.left = param4;
+  this.right = param5;
+  this.degree = param6;
+  this.marked = param7;
+  this.generations = param8;
+  this.free = param9;
+  this.min = param10;
+  this.len = param11;
+}
+function _M0TPB5ArrayGbE(param0, param1) {
+  this.buf = param0;
+  this.len = param1;
 }
 function _M0TP312moonbitstack7moonstl4heap8DaryHeapGiE(param0, param1, param2) {
   this.arity = param0;
@@ -786,14 +873,6 @@ function _M0TPB9ArrayViewGUzuEE(param0, param1, param2) {
   this.start = param1;
   this.end = param2;
 }
-function _M0DTPC16result6ResultGuRP312moonbitstack7moonstl4spec7RefusedE3Err(param0) {
-  this._0 = param0;
-}
-_M0DTPC16result6ResultGuRP312moonbitstack7moonstl4spec7RefusedE3Err.prototype.$tag = 0;
-function _M0DTPC16result6ResultGuRP312moonbitstack7moonstl4spec7RefusedE2Ok(param0) {
-  this._0 = param0;
-}
-_M0DTPC16result6ResultGuRP312moonbitstack7moonstl4spec7RefusedE2Ok.prototype.$tag = 1;
 function _M0TP312moonbitstack7moonstl3phf9PhfLayout(param0, param1, param2, param3, param4, param5) {
   this.build = param0;
   this.salt = param1;
@@ -805,6 +884,17 @@ function _M0TP312moonbitstack7moonstl3phf9PhfLayout(param0, param1, param2, para
 function _M0TPB5ArrayGzE(param0, param1) {
   this.buf = param0;
   this.len = param1;
+}
+function _M0DTPC16result6ResultGRP312moonbitstack7moonstl3phf13PhfOrderedMapGsiERP312moonbitstack7moonstl4spec7RefusedE3Err(param0) {
+  this._0 = param0;
+}
+_M0DTPC16result6ResultGRP312moonbitstack7moonstl3phf13PhfOrderedMapGsiERP312moonbitstack7moonstl4spec7RefusedE3Err.prototype.$tag = 0;
+function _M0DTPC16result6ResultGRP312moonbitstack7moonstl3phf13PhfOrderedMapGsiERP312moonbitstack7moonstl4spec7RefusedE2Ok(param0) {
+  this._0 = param0;
+}
+_M0DTPC16result6ResultGRP312moonbitstack7moonstl3phf13PhfOrderedMapGsiERP312moonbitstack7moonstl4spec7RefusedE2Ok.prototype.$tag = 1;
+function _M0TP312moonbitstack7moonstl3phf13PhfOrderedMapGsiE(param0) {
+  this.map = param0;
 }
 function _M0DTPC16result6ResultGRP312moonbitstack7moonstl3seq10RingBufferGiERP312moonbitstack7moonstl4spec7RefusedE3Err(param0) {
   this._0 = param0;
@@ -821,12 +911,47 @@ function _M0TP312moonbitstack7moonstl3seq10RingBufferGiE(param0, param1, param2,
   this.capacity = param3;
   this.overflow = param4;
 }
+function _M0TP312moonbitstack7moonstl3seq9GapBufferGiE(param0, param1) {
+  this.before = param0;
+  this.after = param1;
+}
 function _M0TPB5ArrayGmE(param0, param1) {
   this.buf = param0;
   this.len = param1;
 }
 function _M0TP312moonbitstack7moonstl3seq6BitSet(param0) {
   this.words = param0;
+}
+function _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch11ThetaSketchGiERP312moonbitstack7moonstl4spec7RefusedE3Err(param0) {
+  this._0 = param0;
+}
+_M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch11ThetaSketchGiERP312moonbitstack7moonstl4spec7RefusedE3Err.prototype.$tag = 0;
+function _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch11ThetaSketchGiERP312moonbitstack7moonstl4spec7RefusedE2Ok(param0) {
+  this._0 = param0;
+}
+_M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch11ThetaSketchGiERP312moonbitstack7moonstl4spec7RefusedE2Ok.prototype.$tag = 1;
+function _M0TP312moonbitstack7moonstl6sketch11ThetaSketchGiE(param0, param1, param2, param3) {
+  this.seed = param0;
+  this.nominal = param1;
+  this.hashes = param2;
+  this.theta = param3;
+}
+function _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch12CuckooFilterGiERP312moonbitstack7moonstl4spec7RefusedE3Err(param0) {
+  this._0 = param0;
+}
+_M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch12CuckooFilterGiERP312moonbitstack7moonstl4spec7RefusedE3Err.prototype.$tag = 0;
+function _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch12CuckooFilterGiERP312moonbitstack7moonstl4spec7RefusedE2Ok(param0) {
+  this._0 = param0;
+}
+_M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch12CuckooFilterGiERP312moonbitstack7moonstl4spec7RefusedE2Ok.prototype.$tag = 1;
+function _M0TP312moonbitstack7moonstl6sketch12CuckooFilterGiE(param0, param1, param2, param3, param4, param5, param6) {
+  this.seed = param0;
+  this.slots = param1;
+  this.buckets = param2;
+  this.bucket_size = param3;
+  this.bits = param4;
+  this.mask = param5;
+  this.items = param6;
 }
 function _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch14CountMinSketchGiERP312moonbitstack7moonstl4spec7RefusedE3Err(param0) {
   this._0 = param0;
@@ -874,6 +999,11 @@ function _M0TPB5ArrayGRP312moonbitstack7moonstl6sketch10BloomLayerE(param0, para
 function $f64_convert_i64(a) {
   return Number(BigInt.asIntN(64, a));
 }
+function _M0TP312moonbitstack7moonstl4text11SuffixArray(param0, param1, param2) {
+  this.text_ = param0;
+  this.order = param1;
+  this.ranks = param2;
+}
 function _M0TP312moonbitstack7moonstl4text3Kmp(param0, param1) {
   this.pattern = param0;
   this.fail = param1;
@@ -892,10 +1022,6 @@ function _M0TP312moonbitstack7moonstl4text7KmpScan(param0, param1, param2, param
 function _M0TP312moonbitstack7moonstl4text22SequenceMatcherOptionsGcE(param0, param1) {
   this.autojunk = param0;
   this.junk = param1;
-}
-function _M0TPB5ArrayGbE(param0, param1) {
-  this.buf = param0;
-  this.len = param1;
 }
 function _M0TPB9ArrayViewGUcRPB5ArrayGiEEE(param0, param1, param2) {
   this.buf = param0;
@@ -965,11 +1091,64 @@ function _M0DTP312moonbitstack7moonstl4text6Opcode6Insert(param0, param1, param2
   this._3 = param3;
 }
 _M0DTP312moonbitstack7moonstl4text6Opcode6Insert.prototype.$tag = 3;
+function _M0TP312moonbitstack7moonstl4text11AhoCorasick(param0, param1, param2, param3, param4, param5, param6, param7, param8) {
+  this.lengths = param0;
+  this.next = param1;
+  this.children = param2;
+  this.fail = param3;
+  this.out_head = param4;
+  this.out_tail = param5;
+  this.out_next = param6;
+  this.dict = param7;
+  this.built = param8;
+}
+function _M0TPB9ArrayViewGUUiiEiEE(param0, param1, param2) {
+  this.buf = param0;
+  this.start = param1;
+  this.end = param2;
+}
+function _M0TPB5ArrayGRPB5ArrayGUiiEEE(param0, param1) {
+  this.buf = param0;
+  this.len = param1;
+}
+function _M0TP312moonbitstack7moonstl4text6AcScan(param0, param1, param2, param3, param4, param5, param6) {
+  this.ac = param0;
+  this.text = param1;
+  this.pos = param2;
+  this.state = param3;
+  this.out_node = param4;
+  this.out_last = param5;
+  this.at_root = param6;
+}
 function _M0TP312moonbitstack7moonstl4tree11SegmentTreeGiE(param0, param1, param2, param3) {
   this.op = param0;
   this.identity = param1;
   this.size = param2;
   this.nodes = param3;
+}
+function _M0TP312moonbitstack7moonstl4tree7FenwickGiE(param0, param1, param2) {
+  this.tree = param0;
+  this.values = param1;
+  this.length_ = param2;
+}
+function _M0TP312moonbitstack7moonstl4tree12IntervalTreeGiiE(param0, param1, param2, param3, param4, param5, param6, param7, param8) {
+  this.cmp = param0;
+  this.starts = param1;
+  this.ends = param2;
+  this.values = param3;
+  this.generations = param4;
+  this.free = param5;
+  this.order = param6;
+  this.max_ends = param7;
+  this.len = param8;
+}
+function _M0TP312moonbitstack7moonstl4tree11IntervalKeyGiE(param0, param1) {
+  this.index = param0;
+  this.generation = param1;
+}
+function _M0TPB5ArrayGUiiiEE(param0, param1) {
+  this.buf = param0;
+  this.len = param1;
 }
 function _M0TP312moonbitstack7moonstl4tree11DisjointSet(param0, param1, param2) {
   this.parents = param0;
@@ -1041,15 +1220,15 @@ const _M0FP15Error14_2amethods__33 = { _0: "moonbitstack/moonjson.Refused.Unexpe
 const _M0FP15Error10_2amethods = [_M0FP15Error13_2amethods__0, _M0FP15Error13_2amethods__1, _M0FP15Error13_2amethods__2, _M0FP15Error13_2amethods__3, _M0FP15Error13_2amethods__4, _M0FP15Error13_2amethods__5, _M0FP15Error13_2amethods__6, _M0FP15Error13_2amethods__7, _M0FP15Error13_2amethods__8, _M0FP15Error13_2amethods__9, _M0FP15Error14_2amethods__10, _M0FP15Error14_2amethods__11, _M0FP15Error14_2amethods__12, _M0FP15Error14_2amethods__13, _M0FP15Error14_2amethods__14, _M0FP15Error14_2amethods__15, _M0FP15Error14_2amethods__16, _M0FP15Error14_2amethods__17, _M0FP15Error14_2amethods__18, _M0FP15Error14_2amethods__19, _M0FP15Error14_2amethods__20, _M0FP15Error14_2amethods__21, _M0FP15Error14_2amethods__22, _M0FP15Error14_2amethods__23, _M0FP15Error14_2amethods__24, _M0FP15Error14_2amethods__25, _M0FP15Error14_2amethods__26, _M0FP15Error14_2amethods__27, _M0FP15Error14_2amethods__28, _M0FP15Error14_2amethods__29, _M0FP15Error14_2amethods__30, _M0FP15Error14_2amethods__31, _M0FP15Error14_2amethods__32, _M0FP15Error14_2amethods__33];
 const _M0FPB18double__max__value = $i64_reinterpret_f64(9218868437227405311n);
 const _M0FPB18double__min__value = $i64_reinterpret_f64(18442240474082181119n);
-const _M0MPB4Iter4nextN6constrS661GUcRPB5ArrayGiEEE = 0;
-const _M0MPB4Iter4nextN6constrS662GUcRPB5ArrayGiEEE = 0;
-const _M0MPB4Iter4nextN6constrS693GcE = 0;
-const _M0MPB4Iter4nextN6constrS694GcE = 0;
-const _M0MPB4Iter4nextN6constrS717GiE = 0;
-const _M0MPB4Iter4nextN6constrS718GiE = 0;
-const _M0MPB4Iter3newN6constrS735GUcRPB5ArrayGiEEE = 0;
-const _M0MPB4Iter3newN6constrS759GcE = 0;
-const _M0MPB4Iter3newN6constrS771GiE = 0;
+const _M0MPB4Iter4nextN6constrS816GUcRPB5ArrayGiEEE = 0;
+const _M0MPB4Iter4nextN6constrS817GUcRPB5ArrayGiEEE = 0;
+const _M0MPB4Iter4nextN6constrS864GcE = 0;
+const _M0MPB4Iter4nextN6constrS865GcE = 0;
+const _M0MPB4Iter4nextN6constrS888GiE = 0;
+const _M0MPB4Iter4nextN6constrS889GiE = 0;
+const _M0MPB4Iter3newN6constrS906GUcRPB5ArrayGiEEE = 0;
+const _M0MPB4Iter3newN6constrS936GcE = 0;
+const _M0MPB4Iter3newN6constrS948GiE = 0;
 const _M0FPC16double14not__a__number = $i64_reinterpret_f64(9221120237041090561n);
 const _M0FPC16double8infinity = $i64_reinterpret_f64(9218868437227405312n);
 const _M0FPC16double13neg__infinity = $i64_reinterpret_f64(18442240474082181120n);
@@ -1063,87 +1242,90 @@ const _M0FPC28internal7strconv25max__exponent__fast__path = 22n;
 const _M0FPC28internal7strconv36max__exponent__disguised__fast__path = 37n;
 const _M0FPC28internal7strconv25max__mantissa__fast__path = 9007199254740992n;
 const _M0FPC28internal7strconv6powtab = [1, 3, 6, 9, 13, 16, 19, 23, 26, 29, 33, 36, 39, 43, 46, 49, 53, 56, 59];
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2446 = { _0: 0, _1: "" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2447 = { _0: 1, _1: "5" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2448 = { _0: 1, _1: "25" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2449 = { _0: 1, _1: "125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2450 = { _0: 2, _1: "625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2451 = { _0: 2, _1: "3125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2452 = { _0: 2, _1: "15625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2453 = { _0: 3, _1: "78125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2454 = { _0: 3, _1: "390625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2455 = { _0: 3, _1: "1953125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2456 = { _0: 4, _1: "9765625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2457 = { _0: 4, _1: "48828125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2458 = { _0: 4, _1: "244140625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2459 = { _0: 4, _1: "1220703125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2460 = { _0: 5, _1: "6103515625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2461 = { _0: 5, _1: "30517578125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2462 = { _0: 5, _1: "152587890625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2463 = { _0: 6, _1: "762939453125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2464 = { _0: 6, _1: "3814697265625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2465 = { _0: 6, _1: "19073486328125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2466 = { _0: 7, _1: "95367431640625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2467 = { _0: 7, _1: "476837158203125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2468 = { _0: 7, _1: "2384185791015625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2469 = { _0: 7, _1: "11920928955078125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2470 = { _0: 8, _1: "59604644775390625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2471 = { _0: 8, _1: "298023223876953125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2472 = { _0: 8, _1: "1490116119384765625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2473 = { _0: 9, _1: "7450580596923828125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2474 = { _0: 9, _1: "37252902984619140625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2475 = { _0: 9, _1: "186264514923095703125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2476 = { _0: 10, _1: "931322574615478515625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2477 = { _0: 10, _1: "4656612873077392578125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2478 = { _0: 10, _1: "23283064365386962890625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2479 = { _0: 10, _1: "116415321826934814453125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2480 = { _0: 11, _1: "582076609134674072265625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2481 = { _0: 11, _1: "2910383045673370361328125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2482 = { _0: 11, _1: "14551915228366851806640625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2483 = { _0: 12, _1: "72759576141834259033203125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2484 = { _0: 12, _1: "363797880709171295166015625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2485 = { _0: 12, _1: "1818989403545856475830078125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2486 = { _0: 13, _1: "9094947017729282379150390625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2487 = { _0: 13, _1: "45474735088646411895751953125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2488 = { _0: 13, _1: "227373675443232059478759765625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2489 = { _0: 13, _1: "1136868377216160297393798828125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2490 = { _0: 14, _1: "5684341886080801486968994140625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2491 = { _0: 14, _1: "28421709430404007434844970703125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2492 = { _0: 14, _1: "142108547152020037174224853515625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2493 = { _0: 15, _1: "710542735760100185871124267578125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2494 = { _0: 15, _1: "3552713678800500929355621337890625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2495 = { _0: 15, _1: "17763568394002504646778106689453125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2496 = { _0: 16, _1: "88817841970012523233890533447265625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2497 = { _0: 16, _1: "444089209850062616169452667236328125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2498 = { _0: 16, _1: "2220446049250313080847263336181640625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2499 = { _0: 16, _1: "11102230246251565404236316680908203125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2500 = { _0: 17, _1: "55511151231257827021181583404541015625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2501 = { _0: 17, _1: "277555756156289135105907917022705078125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2502 = { _0: 17, _1: "1387778780781445675529539585113525390625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2503 = { _0: 18, _1: "6938893903907228377647697925567626953125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2504 = { _0: 18, _1: "34694469519536141888238489627838134765625" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2505 = { _0: 18, _1: "173472347597680709441192448139190673828125" };
-const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2506 = { _0: 19, _1: "867361737988403547205962240695953369140625" };
-const _M0FPC28internal7strconv19left__shift__cheats = [_M0FPC28internal7strconv19left__shift__cheatsN5tupleS2446, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2447, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2448, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2449, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2450, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2451, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2452, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2453, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2454, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2455, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2456, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2457, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2458, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2459, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2460, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2461, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2462, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2463, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2464, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2465, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2466, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2467, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2468, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2469, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2470, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2471, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2472, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2473, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2474, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2475, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2476, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2477, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2478, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2479, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2480, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2481, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2482, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2483, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2484, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2485, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2486, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2487, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2488, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2489, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2490, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2491, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2492, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2493, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2494, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2495, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2496, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2497, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2498, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2499, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2500, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2501, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2502, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2503, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2504, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2505, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2506];
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2852 = { _0: 0, _1: "" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2853 = { _0: 1, _1: "5" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2854 = { _0: 1, _1: "25" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2855 = { _0: 1, _1: "125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2856 = { _0: 2, _1: "625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2857 = { _0: 2, _1: "3125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2858 = { _0: 2, _1: "15625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2859 = { _0: 3, _1: "78125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2860 = { _0: 3, _1: "390625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2861 = { _0: 3, _1: "1953125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2862 = { _0: 4, _1: "9765625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2863 = { _0: 4, _1: "48828125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2864 = { _0: 4, _1: "244140625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2865 = { _0: 4, _1: "1220703125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2866 = { _0: 5, _1: "6103515625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2867 = { _0: 5, _1: "30517578125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2868 = { _0: 5, _1: "152587890625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2869 = { _0: 6, _1: "762939453125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2870 = { _0: 6, _1: "3814697265625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2871 = { _0: 6, _1: "19073486328125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2872 = { _0: 7, _1: "95367431640625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2873 = { _0: 7, _1: "476837158203125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2874 = { _0: 7, _1: "2384185791015625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2875 = { _0: 7, _1: "11920928955078125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2876 = { _0: 8, _1: "59604644775390625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2877 = { _0: 8, _1: "298023223876953125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2878 = { _0: 8, _1: "1490116119384765625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2879 = { _0: 9, _1: "7450580596923828125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2880 = { _0: 9, _1: "37252902984619140625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2881 = { _0: 9, _1: "186264514923095703125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2882 = { _0: 10, _1: "931322574615478515625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2883 = { _0: 10, _1: "4656612873077392578125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2884 = { _0: 10, _1: "23283064365386962890625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2885 = { _0: 10, _1: "116415321826934814453125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2886 = { _0: 11, _1: "582076609134674072265625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2887 = { _0: 11, _1: "2910383045673370361328125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2888 = { _0: 11, _1: "14551915228366851806640625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2889 = { _0: 12, _1: "72759576141834259033203125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2890 = { _0: 12, _1: "363797880709171295166015625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2891 = { _0: 12, _1: "1818989403545856475830078125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2892 = { _0: 13, _1: "9094947017729282379150390625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2893 = { _0: 13, _1: "45474735088646411895751953125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2894 = { _0: 13, _1: "227373675443232059478759765625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2895 = { _0: 13, _1: "1136868377216160297393798828125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2896 = { _0: 14, _1: "5684341886080801486968994140625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2897 = { _0: 14, _1: "28421709430404007434844970703125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2898 = { _0: 14, _1: "142108547152020037174224853515625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2899 = { _0: 15, _1: "710542735760100185871124267578125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2900 = { _0: 15, _1: "3552713678800500929355621337890625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2901 = { _0: 15, _1: "17763568394002504646778106689453125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2902 = { _0: 16, _1: "88817841970012523233890533447265625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2903 = { _0: 16, _1: "444089209850062616169452667236328125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2904 = { _0: 16, _1: "2220446049250313080847263336181640625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2905 = { _0: 16, _1: "11102230246251565404236316680908203125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2906 = { _0: 17, _1: "55511151231257827021181583404541015625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2907 = { _0: 17, _1: "277555756156289135105907917022705078125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2908 = { _0: 17, _1: "1387778780781445675529539585113525390625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2909 = { _0: 18, _1: "6938893903907228377647697925567626953125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2910 = { _0: 18, _1: "34694469519536141888238489627838134765625" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2911 = { _0: 18, _1: "173472347597680709441192448139190673828125" };
+const _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2912 = { _0: 19, _1: "867361737988403547205962240695953369140625" };
+const _M0FPC28internal7strconv19left__shift__cheats = [_M0FPC28internal7strconv19left__shift__cheatsN5tupleS2852, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2853, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2854, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2855, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2856, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2857, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2858, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2859, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2860, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2861, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2862, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2863, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2864, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2865, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2866, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2867, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2868, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2869, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2870, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2871, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2872, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2873, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2874, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2875, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2876, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2877, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2878, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2879, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2880, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2881, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2882, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2883, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2884, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2885, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2886, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2887, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2888, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2889, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2890, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2891, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2892, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2893, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2894, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2895, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2896, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2897, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2898, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2899, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2900, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2901, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2902, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2903, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2904, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2905, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2906, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2907, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2908, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2909, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2910, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2911, _M0FPC28internal7strconv19left__shift__cheatsN5tupleS2912];
 const _M0FPC28internal7strconv10int__pow10 = [1n, 10n, 100n, 1000n, 10000n, 100000n, 1000000n, 10000000n, 100000000n, 1000000000n, 10000000000n, 100000000000n, 1000000000000n, 10000000000000n, 100000000000000n, 1000000000000000n];
 const _M0FPC28internal7strconv5table = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1e+012, 1e+013, 1e+014, 1e+015, 1e+016, 1e+017, 1e+018, 1e+019, 1e+020, 1e+021, 1e+022, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-const _M0FPC28internal7strconv12checked__mulN6constrS2672 = 0n;
+const _M0FPC28internal7strconv12checked__mulN6constrS3078 = 0n;
 const _M0FP212moonbitstack8moonjson6strict = new _M0TP212moonbitstack8moonjson6Flavor(false, false, false, false, false, false, false, 500, false, 0);
 const _M0FP312moonbitstack8moonseed6system6source = undefined;
 const _M0FP312moonbitstack7moonstl4spec11seed__state = new _M0TP312moonbitstack7moonstl4spec9SeedState(undefined, false);
 const _M0FP312moonbitstack7moonstl3phf12phf__options = new _M0TP312moonbitstack7moonstl3phf10PhfOptions(0, 0);
-const _M0FP312moonbitstack7moonstl3phf17rank__from__ownerN3bitS3584 = 1n;
-const _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS3653 = new _M0TP312moonbitstack7moonstl3phf11BuildParams(4, 10, 9, 65536);
-const _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS3654 = new _M0TP312moonbitstack7moonstl3phf11BuildParams(4, 2, 1, 8);
-const _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS3655 = new _M0TP312moonbitstack7moonstl3phf11BuildParams(8, 16, 15, 65536);
-const _M0FP312moonbitstack7moonstl3seq9bit__maskN3oneS3810 = 1n;
+const _M0FP312moonbitstack7moonstl3phf17rank__from__ownerN3bitS4275 = 1n;
+const _M0MP312moonbitstack7moonstl3phf7PhfRank6lookupN3bitS4326 = 1n;
+const _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS4369 = new _M0TP312moonbitstack7moonstl3phf11BuildParams(4, 10, 9, 65536);
+const _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS4370 = new _M0TP312moonbitstack7moonstl3phf11BuildParams(4, 2, 1, 8);
+const _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS4371 = new _M0TP312moonbitstack7moonstl3phf11BuildParams(8, 16, 15, 65536);
+const _M0FP312moonbitstack7moonstl3seq9bit__maskN3oneS4571 = 1n;
+const _M0FP312moonbitstack7moonstl6sketch15cuckoo__options = new _M0TP312moonbitstack7moonstl6sketch13CuckooOptions(12, 4);
 const _M0FP312moonbitstack7moonstl6sketch14bloom__options = new _M0TP312moonbitstack7moonstl6sketch12BloomOptions(0.01, 0);
 const _M0FPB4seed = _M0FPB12random__seed();
-const _M0FPC28internal7strconv17parse__scientificN8exp__numS2544 = 0n;
-const _M0FP212moonbitstack8moonjson11hex__escapeN6digitsS2928 = "0123456789abcdef";
-const _M0FPC13env4randN6constrS3126 = $bytes_literal$0;
-const _M0FP312moonbitstack7moonstl4spec10hash__seedN6constrS3149 = 0;
-const _M0FP223moonstl_2dsite_2dbridge4main5bloomN6constrS4442 = 0;
+const _M0FPC28internal7strconv17parse__scientificN8exp__numS2950 = 0n;
+const _M0FP212moonbitstack8moonjson11hex__escapeN6digitsS3334 = "0123456789abcdef";
+const _M0FPC13env4randN6constrS3532 = $bytes_literal$0;
+const _M0FP312moonbitstack7moonstl4spec10hash__seedN6constrS3555 = 0;
+const _M0FP223moonstl_2dsite_2dbridge4main5bloomN6constrS5677 = 0;
+const _M0FP223moonstl_2dsite_2dbridge4main6cuckooN6constrS5703 = 0;
 function _M0MPB6Logger13write__objectGsE(self, obj) {
   _M0IP016_24default__implPB4Show6outputGsE(obj, self);
 }
@@ -1214,6 +1396,48 @@ function _M0MPC15array10FixedArray12unsafe__blitGRPB17UnsafeMaybeUninitGUiiiiEEE
   }
 }
 function _M0MPC15array10FixedArray12unsafe__blitGRPB17UnsafeMaybeUninitGcEE(dst, dst_offset, src, src_offset, len) {
+  if (dst === src && dst_offset < src_offset) {
+    let _tmp = 0;
+    while (true) {
+      const i = _tmp;
+      if (i < len) {
+        const _tmp$2 = dst_offset + i | 0;
+        const _tmp$3 = src_offset + i | 0;
+        if (_tmp$2 >>> 0 < dst.length) {
+          dst[_tmp$2] = _tmp$3 >>> 0 < src.length ? src[_tmp$3] : $oob();
+        } else {
+          $oob();
+        }
+        _tmp = i + 1 | 0;
+        continue;
+      } else {
+        return;
+      }
+    }
+  } else {
+    let _tmp = len - 1 | 0;
+    let _tmp$2 = len > 0;
+    while (true) {
+      const i = _tmp;
+      const _more = _tmp$2;
+      if (_more) {
+        const _tmp$3 = dst_offset + i | 0;
+        const _tmp$4 = src_offset + i | 0;
+        if (_tmp$3 >>> 0 < dst.length) {
+          dst[_tmp$3] = _tmp$4 >>> 0 < src.length ? src[_tmp$4] : $oob();
+        } else {
+          $oob();
+        }
+        _tmp = i - 1 | 0;
+        _tmp$2 = i > 0;
+        continue;
+      } else {
+        return;
+      }
+    }
+  }
+}
+function _M0MPC15array10FixedArray12unsafe__blitGRPB17UnsafeMaybeUninitGjEE(dst, dst_offset, src, src_offset, len) {
   if (dst === src && dst_offset < src_offset) {
     let _tmp = 0;
     while (true) {
@@ -1477,6 +1701,9 @@ function _M0MPB18UninitializedArray12unsafe__blitGOiE(dst, dst_offset, src, src_
 function _M0MPB18UninitializedArray12unsafe__blitGcE(dst, dst_offset, src, src_offset, len) {
   _M0MPC15array10FixedArray12unsafe__blitGRPB17UnsafeMaybeUninitGcEE(dst, dst_offset, src, src_offset, len);
 }
+function _M0MPB18UninitializedArray12unsafe__blitGjE(dst, dst_offset, src, src_offset, len) {
+  _M0MPC15array10FixedArray12unsafe__blitGRPB17UnsafeMaybeUninitGjEE(dst, dst_offset, src, src_offset, len);
+}
 function _M0MPB18UninitializedArray12unsafe__blitGiE(dst, dst_offset, src, src_offset, len) {
   _M0MPC15array10FixedArray12unsafe__blitGRPB17UnsafeMaybeUninitGiEE(dst, dst_offset, src, src_offset, len);
 }
@@ -1504,6 +1731,11 @@ function _M0MPB18UninitializedArray23unsafe__make__and__blitGOiE(src, allocate_l
 function _M0MPB18UninitializedArray23unsafe__make__and__blitGcE(src, allocate_len, src_offset, dst_offset, blit_len) {
   const dst = new Array(allocate_len);
   _M0MPB18UninitializedArray12unsafe__blitGcE(dst, dst_offset, src, src_offset, blit_len);
+  return dst;
+}
+function _M0MPB18UninitializedArray23unsafe__make__and__blitGjE(src, allocate_len, src_offset, dst_offset, blit_len) {
+  const dst = new Array(allocate_len);
+  _M0MPB18UninitializedArray12unsafe__blitGjE(dst, dst_offset, src, src_offset, blit_len);
   return dst;
 }
 function _M0MPB18UninitializedArray23unsafe__make__and__blitGiE(src, allocate_len, src_offset, dst_offset, blit_len) {
@@ -1626,6 +1858,43 @@ function _M0MPB18UninitializedArray23make__and__blit_2einnerGcE(src, allocate_le
   }
   if (_tmp) {
     return _M0MPB18UninitializedArray23unsafe__make__and__blitGcE(src, allocate_len, src_offset, dst_offset, len);
+  } else {
+    const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(89);
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "bounds check failed: allocate_len = ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, allocate_len);
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, ", src_offset = ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, src_offset);
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, ", dst_offset = ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, dst_offset);
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, ", len = ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, len);
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, ", src.length = ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, src.length);
+    return $panic(_string_builder.val);
+  }
+}
+function _M0MPB18UninitializedArray23make__and__blit_2einnerGjE(src, allocate_len, len, src_offset, dst_offset) {
+  let _tmp;
+  if (allocate_len >= 0) {
+    let _tmp$2;
+    if (len >= 0) {
+      let _tmp$3;
+      const _p = src.length;
+      if (src_offset >= 0 && src_offset <= (_p - len | 0)) {
+        _tmp$3 = dst_offset >= 0 && dst_offset <= (allocate_len - len | 0);
+      } else {
+        _tmp$3 = false;
+      }
+      _tmp$2 = _tmp$3;
+    } else {
+      _tmp$2 = false;
+    }
+    _tmp = _tmp$2;
+  } else {
+    _tmp = false;
+  }
+  if (_tmp) {
+    return _M0MPB18UninitializedArray23unsafe__make__and__blitGjE(src, allocate_len, src_offset, dst_offset, len);
   } else {
     const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(89);
     _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "bounds check failed: allocate_len = ");
@@ -1823,6 +2092,9 @@ function _M0MPC16string10StringView21clamped__view_2einner(self, start, end) {
 function _M0MPB6Hasher12combine__int(self, value) {
   _M0MPB6Hasher13combine__uint(self, value);
 }
+function _M0MPB6Hasher7combineGUiiEE(self, value) {
+  _M0IPC15tuple6Tuple2PB4Hash13hash__combineGiiE(value, self);
+}
 function _M0MPB6Hasher7combineGzE(self, value) {
   _M0IPC15bytes5BytesPB4Hash13hash__combine(value, self);
 }
@@ -1831,6 +2103,12 @@ function _M0MPB6Hasher7combineGiE(self, value) {
 }
 function _M0MPB6Hasher7combineGRPC15bytes9BytesViewE(self, value) {
   _M0IPC15bytes9BytesViewPB4Hash13hash__combine(value, self);
+}
+function _M0IPC15tuple6Tuple2PB4Hash13hash__combineGiiE(self, hasher) {
+  const _a = self._0;
+  const _b = self._1;
+  _M0MPB6Hasher7combineGiE(hasher, _a);
+  _M0MPB6Hasher7combineGiE(hasher, _b);
 }
 function _M0IP016_24default__implPB2Eq10not__equalGOsE(x, y) {
   return !_M0IPC16option6OptionPB2Eq5equalGsE(x, y);
@@ -1865,6 +2143,11 @@ function _M0FPB13finalize__acc(acc) {
 }
 function _M0MPB6Hasher8finalize(self) {
   return _M0FPB13finalize__acc(self.acc);
+}
+function _M0IP016_24default__implPB4Hash4hashGUiiEE(self) {
+  const h = _M0MPB6Hasher6Hasher(undefined);
+  _M0MPB6Hasher7combineGUiiEE(h, self);
+  return _M0MPB6Hasher8finalize(h);
 }
 function _M0IP016_24default__implPB4Hash4hashGzE(self) {
   const h = _M0MPB6Hasher6Hasher(undefined);
@@ -1966,13 +2249,13 @@ function _M0MPB4Iter4nextGUcRPB5ArrayGiEEE(self) {
   const result = _func();
   const _bind = self.size_hint;
   if (result === undefined) {
-    self.size_hint = _M0MPB4Iter4nextN6constrS662GUcRPB5ArrayGiEEE;
+    self.size_hint = _M0MPB4Iter4nextN6constrS817GUcRPB5ArrayGiEEE;
   } else {
     if (_bind === undefined) {
     } else {
       const _Some = _bind;
       const _n = _Some;
-      self.size_hint = _n > 0 ? _n - 1 | 0 : _M0MPB4Iter4nextN6constrS661GUcRPB5ArrayGiEEE;
+      self.size_hint = _n > 0 ? _n - 1 | 0 : _M0MPB4Iter4nextN6constrS816GUcRPB5ArrayGiEEE;
     }
   }
   return result;
@@ -1982,13 +2265,13 @@ function _M0MPB4Iter4nextGcE(self) {
   const result = _func();
   const _bind = self.size_hint;
   if (result === -1) {
-    self.size_hint = _M0MPB4Iter4nextN6constrS694GcE;
+    self.size_hint = _M0MPB4Iter4nextN6constrS865GcE;
   } else {
     if (_bind === undefined) {
     } else {
       const _Some = _bind;
       const _n = _Some;
-      self.size_hint = _n > 0 ? _n - 1 | 0 : _M0MPB4Iter4nextN6constrS693GcE;
+      self.size_hint = _n > 0 ? _n - 1 | 0 : _M0MPB4Iter4nextN6constrS864GcE;
     }
   }
   return result;
@@ -1998,13 +2281,13 @@ function _M0MPB4Iter4nextGiE(self) {
   const result = _func();
   const _bind = self.size_hint;
   if (result === undefined) {
-    self.size_hint = _M0MPB4Iter4nextN6constrS718GiE;
+    self.size_hint = _M0MPB4Iter4nextN6constrS889GiE;
   } else {
     if (_bind === undefined) {
     } else {
       const _Some = _bind;
       const _n = _Some;
-      self.size_hint = _n > 0 ? _n - 1 | 0 : _M0MPB4Iter4nextN6constrS717GiE;
+      self.size_hint = _n > 0 ? _n - 1 | 0 : _M0MPB4Iter4nextN6constrS888GiE;
     }
   }
   return result;
@@ -2019,7 +2302,7 @@ function _M0MPB4Iter3newGUcRPB5ArrayGiEEE(f, size_hint) {
   } else {
     const _Some = size_hint;
     const _n = _Some;
-    size_hint$2 = _n > 0 ? _n : _M0MPB4Iter3newN6constrS735GUcRPB5ArrayGiEEE;
+    size_hint$2 = _n > 0 ? _n : _M0MPB4Iter3newN6constrS906GUcRPB5ArrayGiEEE;
   }
   return new _M0TPB4IterGUcRPB5ArrayGiEEE(f, size_hint$2);
 }
@@ -2030,7 +2313,7 @@ function _M0MPB4Iter3newGcE(f, size_hint) {
   } else {
     const _Some = size_hint;
     const _n = _Some;
-    size_hint$2 = _n > 0 ? _n : _M0MPB4Iter3newN6constrS759GcE;
+    size_hint$2 = _n > 0 ? _n : _M0MPB4Iter3newN6constrS936GcE;
   }
   return new _M0TPB4IterGcE(f, size_hint$2);
 }
@@ -2041,7 +2324,7 @@ function _M0MPB4Iter3newGiE(f, size_hint) {
   } else {
     const _Some = size_hint;
     const _n = _Some;
-    size_hint$2 = _n > 0 ? _n : _M0MPB4Iter3newN6constrS771GiE;
+    size_hint$2 = _n > 0 ? _n : _M0MPB4Iter3newN6constrS948GiE;
   }
   return new _M0TPB4IterGiE(f, size_hint$2);
 }
@@ -2142,11 +2425,11 @@ function _M0MPC16string6String29offset__of__nth__char_2einner(self, i, start, en
 function _M0IPB13StringBuilderPB6Logger11write__view(self, str) {
   self.val = `${self.val}${_M0MPC16string10StringView9to__owned(str)}`;
 }
+function _M0MPC15array5Array13Array_2einnerGUiiEE(capacity) {
+  return capacity === 0 ? new _M0TPB5ArrayGUiiEE([], 0) : new _M0TPB5ArrayGUiiEE(new Array(capacity), 0);
+}
 function _M0MPC15array5Array13Array_2einnerGcE(capacity) {
   return capacity === 0 ? new _M0TPB5ArrayGcE([], 0) : new _M0TPB5ArrayGcE(new Array(capacity), 0);
-}
-function _M0MPC15array5Array13Array_2einnerGRPC14json4JsonE(capacity) {
-  return capacity === 0 ? new _M0TPB5ArrayGRPC14json4JsonE([], 0) : new _M0TPB5ArrayGRPC14json4JsonE(new Array(capacity), 0);
 }
 function _M0MPC15array5Array13Array_2einnerGiE(capacity) {
   return capacity === 0 ? new _M0TPB5ArrayGiE([], 0) : new _M0TPB5ArrayGiE(new Array(capacity), 0);
@@ -2180,6 +2463,9 @@ function _M0MPC15array5Array8capacityGOiE(self) {
 function _M0MPC15array5Array8capacityGcE(self) {
   return self.buf.length;
 }
+function _M0MPC15array5Array8capacityGjE(self) {
+  return self.buf.length;
+}
 function _M0MPC15array5Array8capacityGiE(self) {
   return self.buf.length;
 }
@@ -2211,6 +2497,14 @@ function _M0MPC15array5Array14resize__bufferGcE(self, new_capacity) {
   const len = self.len;
   const copy_len = len < new_capacity ? len : new_capacity;
   const new_buf = _M0MPB18UninitializedArray23make__and__blit_2einnerGcE(old_buf, new_capacity, copy_len, 0, 0);
+  self.buf = new_buf;
+}
+function _M0MPC15array5Array14resize__bufferGjE(self, new_capacity) {
+  const old_buf = self.buf;
+  self.buf = [];
+  const len = self.len;
+  const copy_len = len < new_capacity ? len : new_capacity;
+  const new_buf = _M0MPB18UninitializedArray23make__and__blit_2einnerGjE(old_buf, new_capacity, copy_len, 0, 0);
   self.buf = new_buf;
 }
 function _M0MPC15array5Array14resize__bufferGiE(self, new_capacity) {
@@ -2252,6 +2546,11 @@ function _M0MPC15array5Array7reallocGcE(self, required) {
   const new_cap = _M0FPB23array__growth__capacity(old_cap, self.len, required);
   _M0MPC15array5Array14resize__bufferGcE(self, new_cap);
 }
+function _M0MPC15array5Array7reallocGjE(self, required) {
+  const old_cap = _M0MPC15array5Array8capacityGjE(self);
+  const new_cap = _M0FPB23array__growth__capacity(old_cap, self.len, required);
+  _M0MPC15array5Array14resize__bufferGjE(self, new_cap);
+}
 function _M0MPC15array5Array7reallocGiE(self, required) {
   const old_cap = _M0MPC15array5Array8capacityGiE(self);
   const new_cap = _M0FPB23array__growth__capacity(old_cap, self.len, required);
@@ -2286,6 +2585,14 @@ function _M0MPC15array5Array4pushGOiE(self, value) {
 function _M0MPC15array5Array4pushGcE(self, value) {
   if (self.len === self.buf.length) {
     _M0MPC15array5Array7reallocGcE(self, self.len + 1 | 0);
+  }
+  const length = self.len;
+  self.buf[length] = value;
+  self.len = length + 1 | 0;
+}
+function _M0MPC15array5Array4pushGjE(self, value) {
+  if (self.len === self.buf.length) {
+    _M0MPC15array5Array7reallocGjE(self, self.len + 1 | 0);
   }
   const length = self.len;
   self.buf[length] = value;
@@ -2385,6 +2692,29 @@ function _M0MPB4Iter3mapGRPB5ArrayGiERPC14json4JsonE(self, f) {
 function _M0IPC14char4CharPB4Show10to__string(self) {
   return String.fromCodePoint(self);
 }
+function _M0MPB4Iter9to__arrayGUiiEE(self) {
+  const _bind = self.size_hint;
+  let result;
+  if (_bind === undefined) {
+    result = new _M0TPB5ArrayGUiiEE([], 0);
+  } else {
+    const _Some = _bind;
+    const _n = _Some;
+    result = _M0MPC15array5Array13Array_2einnerGUiiEE(_n);
+  }
+  while (true) {
+    const _bind$2 = _M0MPB4Iter4nextGUcRPB5ArrayGiEEE(self);
+    if (_bind$2 === undefined) {
+      break;
+    } else {
+      const _Some = _bind$2;
+      const _x = _Some;
+      _M0MPC15array5Array4pushGRP312moonbitstack7moonstl4text6OpcodeE(result, _x);
+      continue;
+    }
+  }
+  return result;
+}
 function _M0MPB4Iter9to__arrayGcE(self) {
   const _bind = self.size_hint;
   let result;
@@ -2403,29 +2733,6 @@ function _M0MPB4Iter9to__arrayGcE(self) {
       const _Some = _bind$2;
       const _x = _Some;
       _M0MPC15array5Array4pushGcE(result, _x);
-      continue;
-    }
-  }
-  return result;
-}
-function _M0MPB4Iter9to__arrayGRPC14json4JsonE(self) {
-  const _bind = self.size_hint;
-  let result;
-  if (_bind === undefined) {
-    result = new _M0TPB5ArrayGRPC14json4JsonE([], 0);
-  } else {
-    const _Some = _bind;
-    const _n = _Some;
-    result = _M0MPC15array5Array13Array_2einnerGRPC14json4JsonE(_n);
-  }
-  while (true) {
-    const _bind$2 = _M0MPB4Iter4nextGUcRPB5ArrayGiEEE(self);
-    if (_bind$2 === undefined) {
-      break;
-    } else {
-      const _Some = _bind$2;
-      const _x = _Some;
-      _M0MPC15array5Array4pushGRP312moonbitstack7moonstl4text6OpcodeE(result, _x);
       continue;
     }
   }
@@ -2471,6 +2778,24 @@ function _M0MPC16string6String9get__char(self, idx) {
     return -1;
   }
 }
+function _M0IPC16string6StringPB12ToStringView16to__string__view(self) {
+  return new _M0TPC16string10StringView(self, 0, self.length);
+}
+function _M0MPB4Iter5iter2GsE(self) {
+  const i = new _M0TPB8MutLocalGiE(0);
+  return new _M0TPB4IterGUisEE(() => {
+    const _bind = _M0MPB4Iter4nextGUcRPB5ArrayGiEEE(self);
+    if (_bind === undefined) {
+      return undefined;
+    } else {
+      const _Some = _bind;
+      const _elem = _Some;
+      const result = { _0: i.val, _1: _elem };
+      i.val = i.val + 1 | 0;
+      return result;
+    }
+  }, self.size_hint);
+}
 function _M0MPC14byte4Byte10to__uint64(self) {
   const _p = self;
   return BigInt.asUintN(64, BigInt(_p >>> 0));
@@ -2481,8 +2806,8 @@ function _M0IPC13int3IntPB4Show10to__string(self) {
 function _M0IPC16uint646UInt64PB4Show10to__string(self) {
   return _M0MPC16uint646UInt6418to__string_2einner(self, 10);
 }
-function _M0MPC15array5Array20unsafe__make__uninitGRPC14json4JsonE(len) {
-  return new _M0TPB5ArrayGRPC14json4JsonE(new Array(len), len);
+function _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(len) {
+  return new _M0TPB5ArrayGRPC16string10StringViewE(new Array(len), len);
 }
 function _M0MPC15array5Array20unsafe__make__uninitGiE(len) {
   return new _M0TPB5ArrayGiE(new Array(len), len);
@@ -2605,6 +2930,14 @@ function _M0FPB8new__mapGcuE(capacity) {
   const _bind$4 = undefined;
   return new _M0TPB3MapGcuE(_bind$3, 0, capacity$2, _bind, _bind$2, _bind$4, -1);
 }
+function _M0FPB8new__mapGUiiEiE(capacity) {
+  const capacity$2 = _M0MPC13int3Int20next__power__of__two(capacity);
+  const _bind = capacity$2 - 1 | 0;
+  const _bind$2 = _M0FPB21calc__grow__threshold(capacity$2);
+  const _bind$3 = $make_array_len_and_init(capacity$2, undefined);
+  const _bind$4 = undefined;
+  return new _M0TPB3MapGUiiEiE(_bind$3, 0, capacity$2, _bind, _bind$2, _bind$4, -1);
+}
 function _M0FPB8new__mapGzuE(capacity) {
   const capacity$2 = _M0MPC13int3Int20next__power__of__two(capacity);
   const _bind = capacity$2 - 1 | 0;
@@ -2724,6 +3057,26 @@ function _M0MPB3Map20add__entry__to__tailGcuE(self, idx, entry) {
   self.entries[idx] = entry;
   self.size = self.size + 1 | 0;
 }
+function _M0MPB3Map20add__entry__to__tailGUiiEiE(self, idx, entry) {
+  const _bind = self.tail;
+  if (_bind === -1) {
+    self.head = entry;
+  } else {
+    const _tmp = self.entries;
+    const _p = _bind >>> 0 < _tmp.length ? _tmp[_bind] : $oob();
+    let _tmp$2;
+    if (_p === undefined) {
+      _tmp$2 = $panic();
+    } else {
+      const _p$2 = _p;
+      _tmp$2 = _p$2;
+    }
+    _tmp$2.next = entry;
+  }
+  self.tail = idx;
+  self.entries[idx] = entry;
+  self.size = self.size + 1 | 0;
+}
 function _M0MPB3Map20add__entry__to__tailGzuE(self, idx, entry) {
   const _bind = self.tail;
   if (_bind === -1) {
@@ -2789,6 +3142,17 @@ function _M0MPB3Map10set__entryGciE(self, entry, new_idx) {
   self.entries[new_idx] = entry;
 }
 function _M0MPB3Map10set__entryGcuE(self, entry, new_idx) {
+  const _bind = entry.next;
+  if (_bind === undefined) {
+    self.tail = new_idx;
+  } else {
+    const _Some = _bind;
+    const _next = _Some;
+    _next.prev = new_idx;
+  }
+  self.entries[new_idx] = entry;
+}
+function _M0MPB3Map10set__entryGUiiEiE(self, entry, new_idx) {
   const _bind = entry.next;
   if (_bind === undefined) {
     self.tail = new_idx;
@@ -2953,6 +3317,37 @@ function _M0MPB3Map10push__awayGcuE(self, idx, entry) {
       if (psl > _curr_entry.psl) {
         entry$2.psl = psl;
         _M0MPB3Map10set__entryGcuE(self, entry$2, idx$2);
+        _tmp = _curr_entry.psl + 1 | 0;
+        _tmp$2 = idx$2 + 1 & self.capacity_mask;
+        _tmp$3 = _curr_entry;
+        continue;
+      } else {
+        _tmp = psl + 1 | 0;
+        _tmp$2 = idx$2 + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+}
+function _M0MPB3Map10push__awayGUiiEiE(self, idx, entry) {
+  let _tmp = entry.psl + 1 | 0;
+  let _tmp$2 = idx + 1 & self.capacity_mask;
+  let _tmp$3 = entry;
+  while (true) {
+    const psl = _tmp;
+    const idx$2 = _tmp$2;
+    const entry$2 = _tmp$3;
+    const _bind = self.entries[idx$2];
+    if (_bind === undefined) {
+      entry$2.psl = psl;
+      _M0MPB3Map10set__entryGUiiEiE(self, entry$2, idx$2);
+      return;
+    } else {
+      const _Some = _bind;
+      const _curr_entry = _Some;
+      if (psl > _curr_entry.psl) {
+        entry$2.psl = psl;
+        _M0MPB3Map10set__entryGUiiEiE(self, entry$2, idx$2);
         _tmp = _curr_entry.psl + 1 | 0;
         _tmp$2 = idx$2 + 1 & self.capacity_mask;
         _tmp$3 = _curr_entry;
@@ -3146,6 +3541,36 @@ function _M0MPB3Map20rehash__place__entryGcuE(self, outer) {
     }
   }
 }
+function _M0MPB3Map20rehash__place__entryGUiiEiE(self, outer) {
+  const hash = outer.hash;
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const psl = _tmp;
+    const idx = _tmp$2;
+    const _bind = self.entries[idx];
+    if (_bind === undefined) {
+      outer.psl = psl;
+      outer.prev = self.tail;
+      _M0MPB3Map20add__entry__to__tailGUiiEiE(self, idx, outer);
+      return undefined;
+    } else {
+      const _Some = _bind;
+      const _curr = _Some;
+      if (psl > _curr.psl) {
+        _M0MPB3Map10push__awayGUiiEiE(self, idx, _curr);
+        outer.psl = psl;
+        outer.prev = self.tail;
+        _M0MPB3Map20add__entry__to__tailGUiiEiE(self, idx, outer);
+        return undefined;
+      } else {
+        _tmp = psl + 1 | 0;
+        _tmp$2 = idx + 1 & self.capacity_mask;
+        continue;
+      }
+    }
+  }
+}
 function _M0MPB3Map20rehash__place__entryGzuE(self, outer) {
   const hash = outer.hash;
   let _tmp = 0;
@@ -3301,6 +3726,32 @@ function _M0MPB3Map4growGcuE(self) {
       const next_in_chain = _e.next;
       _e.next = undefined;
       _M0MPB3Map20rehash__place__entryGcuE(self, _e);
+      _tmp = next_in_chain;
+      continue;
+    }
+  }
+}
+function _M0MPB3Map4growGUiiEiE(self) {
+  const old_head = self.head;
+  const new_capacity = self.capacity << 1;
+  self.entries = $make_array_len_and_init(new_capacity, undefined);
+  self.capacity = new_capacity;
+  self.capacity_mask = new_capacity - 1 | 0;
+  self.grow_at = _M0FPB21calc__grow__threshold(self.capacity);
+  self.size = 0;
+  self.head = undefined;
+  self.tail = -1;
+  let _tmp = old_head;
+  while (true) {
+    const x = _tmp;
+    if (x === undefined) {
+      return;
+    } else {
+      const _Some = x;
+      const _e = _Some;
+      const next_in_chain = _e.next;
+      _e.next = undefined;
+      _M0MPB3Map20rehash__place__entryGUiiEiE(self, _e);
       _tmp = next_in_chain;
       continue;
     }
@@ -3562,6 +4013,59 @@ function _M0MPB3Map15set__with__hashGcuE(self, key, value, hash) {
     }
   }
 }
+function _M0MPB3Map15set__with__hashGUiiEiE(self, key, value, hash) {
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const psl = _tmp;
+    const idx = _tmp$2;
+    const _bind = self.entries[idx];
+    if (_bind === undefined) {
+      if (self.size >= self.grow_at) {
+        _M0MPB3Map4growGUiiEiE(self);
+        _tmp = 0;
+        _tmp$2 = hash & self.capacity_mask;
+        continue;
+      }
+      const _bind$2 = self.tail;
+      const _bind$3 = undefined;
+      const entry = new _M0TPB5EntryGUiiEiE(_bind$2, _bind$3, psl, hash, key, value);
+      _M0MPB3Map20add__entry__to__tailGUiiEiE(self, idx, entry);
+      return undefined;
+    } else {
+      const _Some = _bind;
+      const _curr_entry = _Some;
+      let _tmp$3;
+      if (_curr_entry.hash === hash) {
+        const _p = _curr_entry.key;
+        _tmp$3 = _p._0 === key._0 && _p._1 === key._1;
+      } else {
+        _tmp$3 = false;
+      }
+      if (_tmp$3) {
+        _curr_entry.value = value;
+        return undefined;
+      }
+      if (psl > _curr_entry.psl) {
+        if (self.size >= self.grow_at) {
+          _M0MPB3Map4growGUiiEiE(self);
+          _tmp = 0;
+          _tmp$2 = hash & self.capacity_mask;
+          continue;
+        }
+        _M0MPB3Map10push__awayGUiiEiE(self, idx, _curr_entry);
+        const _bind$2 = self.tail;
+        const _bind$3 = undefined;
+        const entry = new _M0TPB5EntryGUiiEiE(_bind$2, _bind$3, psl, hash, key, value);
+        _M0MPB3Map20add__entry__to__tailGUiiEiE(self, idx, entry);
+        return undefined;
+      }
+      _tmp = psl + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+}
 function _M0MPB3Map15set__with__hashGzuE(self, key, value, hash) {
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
@@ -3622,6 +4126,9 @@ function _M0MPB3Map3setGciE(self, key, value) {
 }
 function _M0MPB3Map3setGcuE(self, key, value) {
   _M0MPB3Map15set__with__hashGcuE(self, key, value, _M0IPC14char4CharPB4Hash4hash(key));
+}
+function _M0MPB3Map3setGUiiEiE(self, key, value) {
+  _M0MPB3Map15set__with__hashGUiiEiE(self, key, value, _M0IP016_24default__implPB4Hash4hashGUiiEE(key));
 }
 function _M0MPB3Map3setGzuE(self, key, value) {
   _M0MPB3Map15set__with__hashGzuE(self, key, value, _M0IP016_24default__implPB4Hash4hashGzE(key));
@@ -3756,6 +4263,32 @@ function _M0MPB3Map3MapGcuE(arr, capacity) {
   }
   return m;
 }
+function _M0MPB3Map3MapGUiiEiE(arr, capacity) {
+  const length = arr.end - arr.start | 0;
+  let capacity$2;
+  if (capacity === undefined) {
+    capacity$2 = length === 0 ? 8 : _M0FPB21capacity__for__length(length);
+  } else {
+    const _Some = capacity;
+    const _capacity = _Some;
+    capacity$2 = _M0FPB21capacity__for__length(_capacity > length ? _capacity : length);
+  }
+  const m = _M0FPB8new__mapGUiiEiE(capacity$2);
+  const _bind = arr.end - arr.start | 0;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind) {
+      const e = arr.buf[arr.start + _ | 0];
+      _M0MPB3Map3setGUiiEiE(m, e._0, e._1);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return m;
+}
 function _M0MPB3Map3MapGzuE(arr, capacity) {
   const length = arr.end - arr.start | 0;
   let capacity$2;
@@ -3871,6 +4404,38 @@ function _M0MPB3Map3getGciE(self, key) {
       const _Some = _bind;
       const _entry = _Some;
       if (_entry.hash === hash && _entry.key === key) {
+        return _entry.value;
+      }
+      if (i > _entry.psl) {
+        return undefined;
+      }
+      _tmp = i + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+}
+function _M0MPB3Map3getGUiiEiE(self, key) {
+  const hash = _M0IP016_24default__implPB4Hash4hashGUiiEE(key);
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const i = _tmp;
+    const idx = _tmp$2;
+    const _bind = self.entries[idx];
+    if (_bind === undefined) {
+      return undefined;
+    } else {
+      const _Some = _bind;
+      const _entry = _Some;
+      let _tmp$3;
+      if (_entry.hash === hash) {
+        const _p = _entry.key;
+        _tmp$3 = _p._0 === key._0 && _p._1 === key._1;
+      } else {
+        _tmp$3 = false;
+      }
+      if (_tmp$3) {
         return _entry.value;
       }
       if (i > _entry.psl) {
@@ -4129,6 +4694,9 @@ function _M0MPB3Map4keysGcuE(self) {
 function _M0MPB5Iter24nextGsRPC14json4JsonE(self) {
   return _M0MPB4Iter4nextGUcRPB5ArrayGiEEE(self);
 }
+function _M0MPB5Iter24nextGisE(self) {
+  return _M0MPB4Iter4nextGUcRPB5ArrayGiEEE(self);
+}
 function _M0MPB6Hasher8consume1(self, input) {
   const _p = (self.acc >>> 0) + ((Math.imul(input, 374761393) | 0) >>> 0) | 0;
   self.acc = Math.imul(_p << 11 | (_p >>> 21 | 0), -1640531535) | 0;
@@ -4380,7 +4948,7 @@ function _M0FPB23fixed__bubble__sort__byGiE(arr, cmp) {
     }
   }
 }
-function _M0FPB24fixed__choose__pivot__byN7sort__2S1981GUciEE(_env, a, b) {
+function _M0FPB24fixed__choose__pivot__byN7sort__2S2341GUciEE(_env, a, b) {
   const swaps = _env._2;
   const cmp = _env._1;
   const arr = _env._0;
@@ -4392,12 +4960,12 @@ function _M0FPB24fixed__choose__pivot__byN7sort__2S1981GUciEE(_env, a, b) {
     return;
   }
 }
-function _M0FPB24fixed__choose__pivot__byN7sort__3S1982GUciEE(_env, a, b, c) {
-  _M0FPB24fixed__choose__pivot__byN7sort__2S1981GUciEE(_env, a, b);
-  _M0FPB24fixed__choose__pivot__byN7sort__2S1981GUciEE(_env, b, c);
-  _M0FPB24fixed__choose__pivot__byN7sort__2S1981GUciEE(_env, a, b);
+function _M0FPB24fixed__choose__pivot__byN7sort__3S2342GUciEE(_env, a, b, c) {
+  _M0FPB24fixed__choose__pivot__byN7sort__2S2341GUciEE(_env, a, b);
+  _M0FPB24fixed__choose__pivot__byN7sort__2S2341GUciEE(_env, b, c);
+  _M0FPB24fixed__choose__pivot__byN7sort__2S2341GUciEE(_env, a, b);
 }
-function _M0FPB24fixed__choose__pivot__byN7sort__2S2021GiE(_env, a, b) {
+function _M0FPB24fixed__choose__pivot__byN7sort__2S2401GiE(_env, a, b) {
   const swaps = _env._2;
   const cmp = _env._1;
   const arr = _env._0;
@@ -4409,10 +4977,10 @@ function _M0FPB24fixed__choose__pivot__byN7sort__2S2021GiE(_env, a, b) {
     return;
   }
 }
-function _M0FPB24fixed__choose__pivot__byN7sort__3S2022GiE(_env, a, b, c) {
-  _M0FPB24fixed__choose__pivot__byN7sort__2S2021GiE(_env, a, b);
-  _M0FPB24fixed__choose__pivot__byN7sort__2S2021GiE(_env, b, c);
-  _M0FPB24fixed__choose__pivot__byN7sort__2S2021GiE(_env, a, b);
+function _M0FPB24fixed__choose__pivot__byN7sort__3S2402GiE(_env, a, b, c) {
+  _M0FPB24fixed__choose__pivot__byN7sort__2S2401GiE(_env, a, b);
+  _M0FPB24fixed__choose__pivot__byN7sort__2S2401GiE(_env, b, c);
+  _M0FPB24fixed__choose__pivot__byN7sort__2S2401GiE(_env, a, b);
 }
 function _M0FPB24fixed__choose__pivot__byGUciEE(arr, cmp) {
   const len = arr.end - arr.start | 0;
@@ -4423,11 +4991,11 @@ function _M0FPB24fixed__choose__pivot__byGUciEE(arr, cmp) {
     const c = Math.imul(len / 4 | 0, 3) | 0;
     const _env = { _0: arr, _1: cmp, _2: swaps };
     if (len > 50) {
-      _M0FPB24fixed__choose__pivot__byN7sort__3S1982GUciEE(_env, a - 1 | 0, a, a + 1 | 0);
-      _M0FPB24fixed__choose__pivot__byN7sort__3S1982GUciEE(_env, b - 1 | 0, b, b + 1 | 0);
-      _M0FPB24fixed__choose__pivot__byN7sort__3S1982GUciEE(_env, c - 1 | 0, c, c + 1 | 0);
+      _M0FPB24fixed__choose__pivot__byN7sort__3S2342GUciEE(_env, a - 1 | 0, a, a + 1 | 0);
+      _M0FPB24fixed__choose__pivot__byN7sort__3S2342GUciEE(_env, b - 1 | 0, b, b + 1 | 0);
+      _M0FPB24fixed__choose__pivot__byN7sort__3S2342GUciEE(_env, c - 1 | 0, c, c + 1 | 0);
     }
-    _M0FPB24fixed__choose__pivot__byN7sort__3S1982GUciEE(_env, a, b, c);
+    _M0FPB24fixed__choose__pivot__byN7sort__3S2342GUciEE(_env, a, b, c);
   }
   if (swaps.val === 12) {
     _M0MPC15array12MutArrayView14rev__in__placeGUciEE(arr);
@@ -4445,11 +5013,11 @@ function _M0FPB24fixed__choose__pivot__byGiE(arr, cmp) {
     const c = Math.imul(len / 4 | 0, 3) | 0;
     const _env = { _0: arr, _1: cmp, _2: swaps };
     if (len > 50) {
-      _M0FPB24fixed__choose__pivot__byN7sort__3S2022GiE(_env, a - 1 | 0, a, a + 1 | 0);
-      _M0FPB24fixed__choose__pivot__byN7sort__3S2022GiE(_env, b - 1 | 0, b, b + 1 | 0);
-      _M0FPB24fixed__choose__pivot__byN7sort__3S2022GiE(_env, c - 1 | 0, c, c + 1 | 0);
+      _M0FPB24fixed__choose__pivot__byN7sort__3S2402GiE(_env, a - 1 | 0, a, a + 1 | 0);
+      _M0FPB24fixed__choose__pivot__byN7sort__3S2402GiE(_env, b - 1 | 0, b, b + 1 | 0);
+      _M0FPB24fixed__choose__pivot__byN7sort__3S2402GiE(_env, c - 1 | 0, c, c + 1 | 0);
     }
-    _M0FPB24fixed__choose__pivot__byN7sort__3S2022GiE(_env, a, b, c);
+    _M0FPB24fixed__choose__pivot__byN7sort__3S2402GiE(_env, a, b, c);
   }
   if (swaps.val === 12) {
     _M0MPC15array12MutArrayView14rev__in__placeGiE(arr);
@@ -4892,6 +5460,9 @@ function _M0MPC15array5Array8sort__byGiE(self, cmp) {
   const _bind = self.len;
   _M0MPC15array12MutArrayView8sort__byGiE(new _M0TPB12MutArrayViewGiE(self.buf, 0, _bind), cmp);
 }
+function _M0MPC15array5Array12unsafe__blitGiE(dst, dst_offset, src, src_offset, len) {
+  _M0MPC15array10FixedArray12unsafe__blitGRPB17UnsafeMaybeUninitGiEE(dst.buf, dst_offset, src.buf, src_offset, len);
+}
 function _M0MPC15array5Array4makeGiE(len, elem) {
   const arr = _M0MPC15array5Array20unsafe__make__uninitGiE(len);
   let _tmp = 0;
@@ -4908,7 +5479,7 @@ function _M0MPC15array5Array4makeGiE(len, elem) {
   return arr;
 }
 function _M0MPC15array5Array4makeGmE(len, elem) {
-  const arr = _M0MPC15array5Array20unsafe__make__uninitGRPC14json4JsonE(len);
+  const arr = _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(len);
   let _tmp = 0;
   while (true) {
     const i = _tmp;
@@ -4922,13 +5493,19 @@ function _M0MPC15array5Array4makeGmE(len, elem) {
   }
   return arr;
 }
+function _M0MPC15array5Array17reserve__capacityGiE(self, capacity) {
+  if (_M0MPC15array5Array8capacityGiE(self) >= capacity) {
+    return undefined;
+  }
+  _M0MPC15array5Array14resize__bufferGiE(self, capacity);
+}
 function _M0MPC15array5Array17reserve__capacityGmE(self, capacity) {
   if (_M0MPC15array5Array8capacityGRP312moonbitstack7moonstl4text6OpcodeE(self) >= capacity) {
     return undefined;
   }
   _M0MPC15array5Array14resize__bufferGRP312moonbitstack7moonstl4text6OpcodeE(self, capacity);
 }
-function _M0MPC15array5Array3popGUiiEE(self) {
+function _M0MPC15array5Array3popGUmiEE(self) {
   const len = self.len;
   if (len === 0) {
     return undefined;
@@ -4949,6 +5526,55 @@ function _M0MPC15array5Array3popGiE(self) {
     self.len = index;
     return v;
   }
+}
+function _M0MPC15array5Array6insertGiE(self, index, value) {
+  if (index >= 0 && index <= self.len) {
+    if (self.len === self.buf.length) {
+      _M0MPC15array5Array7reallocGiE(self, self.len + 1 | 0);
+    }
+    _M0MPB18UninitializedArray12unsafe__blitGiE(self.buf, index + 1 | 0, self.buf, index, self.len - index | 0);
+    const length = self.len;
+    self.buf[index] = value;
+    self.len = length + 1 | 0;
+    return;
+  } else {
+    const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(60);
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "index out of bounds: the len is from 0 to ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, self.len);
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " but the index is ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, index);
+    $panic(_string_builder.val);
+    return;
+  }
+}
+function _M0MPC15array5Array6insertGmE(self, index, value) {
+  if (index >= 0 && index <= self.len) {
+    if (self.len === self.buf.length) {
+      _M0MPC15array5Array7reallocGRP312moonbitstack7moonstl4text6OpcodeE(self, self.len + 1 | 0);
+    }
+    _M0MPB18UninitializedArray12unsafe__blitGRP312moonbitstack7moonstl4text6OpcodeE(self.buf, index + 1 | 0, self.buf, index, self.len - index | 0);
+    const length = self.len;
+    self.buf[index] = value;
+    self.len = length + 1 | 0;
+    return;
+  } else {
+    const _string_builder = _M0MPB13StringBuilder21StringBuilder_2einner(60);
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, "index out of bounds: the len is from 0 to ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, self.len);
+    _M0IPB13StringBuilderPB6Logger13write__string(_string_builder, " but the index is ");
+    _M0MPB13StringBuilder13write__objectGiE(_string_builder, index);
+    $panic(_string_builder.val);
+    return;
+  }
+}
+function _M0MPC15array5Array4copyGiE(self) {
+  const len = self.len;
+  if (len === 0) {
+    return new _M0TPB5ArrayGiE([], 0);
+  }
+  const arr = _M0MPC15array5Array20unsafe__make__uninitGiE(len);
+  _M0MPC15array5Array12unsafe__blitGiE(arr, 0, self, 0, len);
+  return arr;
 }
 function _M0MPC15array5Array4swapGiE(self, i, j) {
   if (i >= self.len || (j >= self.len || (i < 0 || j < 0))) {
@@ -5084,7 +5710,7 @@ function _M0FPC28internal7strconv17parse__scientific(s) {
     if ((_bind.end - _bind.start | 0) >= 1) {
       const _x = _bind.str.charCodeAt(_bind.start);
       if (_x >= 48 && _x <= 57) {
-        const _bind$2 = _M0EPC16string10StringViewPC28internal7strconv12fold__digitsGlE(s$2, _M0FPC28internal7strconv17parse__scientificN8exp__numS2544, (digit, exp_num) => BigInt.asIntN(64, exp_num) < BigInt.asIntN(64, 65536n) ? BigInt.asUintN(64, BigInt.asUintN(64, 10n * exp_num) + BigInt.asUintN(64, BigInt(digit))) : exp_num);
+        const _bind$2 = _M0EPC16string10StringViewPC28internal7strconv12fold__digitsGlE(s$2, _M0FPC28internal7strconv17parse__scientificN8exp__numS2950, (digit, exp_num) => BigInt.asIntN(64, exp_num) < BigInt.asIntN(64, 65536n) ? BigInt.asUintN(64, BigInt.asUintN(64, 10n * exp_num) + BigInt.asUintN(64, BigInt(digit))) : exp_num);
         const _s = _bind$2._0;
         const _exp_num = _bind$2._1;
         return neg_exp ? { _0: _s, _1: BigInt.asUintN(64, -_exp_num) } : { _0: _s, _1: _exp_num };
@@ -5675,7 +6301,7 @@ function _M0FPC28internal7strconv15parse__inf__nan(rest) {
 }
 function _M0FPC28internal7strconv12checked__mul(a, b) {
   if (BigInt.asUintN(64, a) === BigInt.asUintN(64, 0n) || BigInt.asUintN(64, b) === BigInt.asUintN(64, 0n)) {
-    return _M0FPC28internal7strconv12checked__mulN6constrS2672;
+    return _M0FPC28internal7strconv12checked__mulN6constrS3078;
   }
   if (BigInt.asUintN(64, a) === BigInt.asUintN(64, 1n)) {
     return b;
@@ -6981,7 +7607,7 @@ function _M0FP212moonbitstack8moonjson11hex__escape(c) {
     const _ = _tmp;
     if (_ < _bind) {
       const shift = _bind$2[_];
-      const _p = _M0MPC16string6String9get__char(_M0FP212moonbitstack8moonjson11hex__escapeN6digitsS2928, c >> shift & 15);
+      const _p = _M0MPC16string6String9get__char(_M0FP212moonbitstack8moonjson11hex__escapeN6digitsS3334, c >> shift & 15);
       _M0IPB13StringBuilderPB6Logger11write__char(out, _p === -1 ? $panic() : _p);
       _tmp = _ + 1 | 0;
       continue;
@@ -8155,7 +8781,7 @@ function _M0FPC13env14rand__internal(to_be_filled) {
 function _M0FPC13env4rand(n) {
   if (n <= 0) {
     const probe = $makebytes(1, 0);
-    return _M0FPC13env14rand__internal(probe) ? _M0FPC13env4randN6constrS3126 : undefined;
+    return _M0FPC13env14rand__internal(probe) ? _M0FPC13env4randN6constrS3532 : undefined;
   }
   const buf = $makebytes(n, 0);
   return _M0FPC13env14rand__internal(buf) ? _M0MPC15bytes5Bytes11from__array(new _M0TPB9ArrayViewGyE(buf, 0, buf.length)) : undefined;
@@ -8261,7 +8887,7 @@ function _M0FP312moonbitstack7moonstl4spec10hash__seed() {
       _M0FP312moonbitstack7moonstl4spec11seed__state.random = true;
       return _seed;
     } else {
-      _M0FP312moonbitstack7moonstl4spec11seed__state.value = _M0FP312moonbitstack7moonstl4spec10hash__seedN6constrS3149;
+      _M0FP312moonbitstack7moonstl4spec11seed__state.value = _M0FP312moonbitstack7moonstl4spec10hash__seedN6constrS3555;
       _M0FP312moonbitstack7moonstl4spec11seed__state.random = false;
       return 0;
     }
@@ -8825,7 +9451,7 @@ function _M0MP312moonbitstack7moonstl3map4Trie18keys__with__prefixGiE(self, pref
     const _node = _Some;
     const found = new _M0TPB5ArrayGUsiEE([], 0);
     _M0MP312moonbitstack7moonstl3map4Trie7collectGiE(self, _node, _M0MPC16string10StringView9to__owned(prefix), found);
-    const _p = _M0MPC15array5Array20unsafe__make__uninitGRPC14json4JsonE(found.len);
+    const _p = _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(found.len);
     const _p$2 = found.len;
     const _p$3 = found.buf;
     let _tmp = 0;
@@ -9122,7 +9748,7 @@ function _M0MP312moonbitstack7moonstl3map8IndexMap19swap__remove__indexGiiE(self
     }
     _bind$12.buf[_bind$14] = index;
   }
-  _M0MPC15array5Array3popGUiiEE(self.entries);
+  _M0MPC15array5Array3popGUmiEE(self.entries);
   _M0MPC15array5Array3popGiE(self.hashes);
   _M0MPC15array5Array3popGiE(self.slot_of);
   const _bind$3 = self.slots;
@@ -9331,12 +9957,951 @@ function _M0MP312moonbitstack7moonstl5cache8LruCache4iterGiiE(self) {
 function _M0MP312moonbitstack7moonstl5cache8LruCache4keysGiiE(self) {
   return _M0MPB4Iter3mapGUiiEiE(_M0MP312moonbitstack7moonstl5cache8LruCache4iterGiiE(self), (pair) => pair._0);
 }
+function _M0FP312moonbitstack7moonstl4heap11bit__length(value) {
+  let width = 0;
+  let rest = value;
+  while (true) {
+    if (BigInt.asUintN(64, rest) !== BigInt.asUintN(64, 0n)) {
+      rest = BigInt.asUintN(64, BigInt.asUintN(64, rest) >> BigInt(1 & 63));
+      width = width + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return width;
+}
+function _M0MP312moonbitstack7moonstl4heap9RadixHeap3newGiE() {
+  const buckets = new _M0TPB5ArrayGRPB5ArrayGUmiEEE([], 0);
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < 65) {
+      _M0MPC15array5Array4pushGRP312moonbitstack7moonstl4text6OpcodeE(buckets, new _M0TPB5ArrayGUmiEE([], 0));
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return new _M0TP312moonbitstack7moonstl4heap9RadixHeapGiE(buckets, 0n, 0);
+}
+function _M0MP312moonbitstack7moonstl4heap9RadixHeap10bucket__ofGiE(self, key) {
+  return _M0FP312moonbitstack7moonstl4heap11bit__length(BigInt.asUintN(64, key ^ self.last));
+}
+function _M0MP312moonbitstack7moonstl4heap9RadixHeap4pushGiE(self, key, value) {
+  if (self.len > 0 && BigInt.asUintN(64, key) < BigInt.asUintN(64, self.last)) {
+    return new _M0DTPC16result6ResultGuRP312moonbitstack7moonstl4spec7RefusedE3Err(new _M0DTPC15error5Error53moonbitstack_2fmoonstl_2fspec_2eRefused_2eNonMonotone(key, self.last));
+  }
+  const bucket = _M0MP312moonbitstack7moonstl4heap9RadixHeap10bucket__ofGiE(self, key);
+  const _bind = self.buckets;
+  if (bucket < 0 || bucket >= _bind.len) {
+    $panic();
+  }
+  _M0MPC15array5Array4pushGRP312moonbitstack7moonstl4text6OpcodeE(_bind.buf[bucket], { _0: key, _1: value });
+  self.len = self.len + 1 | 0;
+  return new _M0DTPC16result6ResultGuRP312moonbitstack7moonstl4spec7RefusedE2Ok(undefined);
+}
+function _M0MP312moonbitstack7moonstl4heap9RadixHeap11peek__entryGiE(self) {
+  if (self.len === 0) {
+    return undefined;
+  }
+  let bucket = 0;
+  while (true) {
+    let _tmp;
+    if (bucket < self.buckets.len) {
+      const _bind = self.buckets;
+      const _bind$2 = bucket;
+      if (_bind$2 < 0 || _bind$2 >= _bind.len) {
+        $panic();
+      }
+      _tmp = _bind.buf[_bind$2].len === 0;
+    } else {
+      _tmp = false;
+    }
+    if (_tmp) {
+      bucket = bucket + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  if (bucket >= self.buckets.len) {
+    return undefined;
+  }
+  if (bucket === 0) {
+    const _bind = self.buckets;
+    if (0 >= _bind.len) {
+      $panic();
+    }
+    const _bind$2 = _bind.buf[0];
+    const _bind$3 = self.buckets;
+    if (0 >= _bind$3.len) {
+      $panic();
+    }
+    const _bind$4 = _bind$3.buf[0].len - 1 | 0;
+    if (_bind$4 < 0 || _bind$4 >= _bind$2.len) {
+      $panic();
+    }
+    return _bind$2.buf[_bind$4];
+  }
+  const _bind = self.buckets;
+  const _bind$2 = bucket;
+  if (_bind$2 < 0 || _bind$2 >= _bind.len) {
+    $panic();
+  }
+  const _bind$3 = _bind.buf[_bind$2];
+  if (0 >= _bind$3.len) {
+    $panic();
+  }
+  let smallest = _bind$3.buf[0]._0;
+  const _bind$4 = self.buckets;
+  const _bind$5 = bucket;
+  if (_bind$5 < 0 || _bind$5 >= _bind$4.len) {
+    $panic();
+  }
+  const _bind$6 = _bind$4.buf[_bind$5];
+  const _bind$7 = _bind$6.len;
+  const _bind$8 = _bind$6.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$7) {
+      const entry = _bind$8[_];
+      if (BigInt.asUintN(64, entry._0) < BigInt.asUintN(64, smallest)) {
+        smallest = entry._0;
+      }
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  self.last = smallest;
+  const _bind$9 = self.buckets;
+  const _bind$10 = bucket;
+  if (_bind$10 < 0 || _bind$10 >= _bind$9.len) {
+    $panic();
+  }
+  const moved = _bind$9.buf[_bind$10];
+  const _bind$11 = self.buckets;
+  const _bind$12 = bucket;
+  const _bind$13 = new _M0TPB5ArrayGUmiEE([], 0);
+  if (_bind$12 < 0 || _bind$12 >= _bind$11.len) {
+    $panic();
+  }
+  _bind$11.buf[_bind$12] = _bind$13;
+  const _bind$14 = moved.len;
+  const _bind$15 = moved.buf;
+  let _tmp$2 = 0;
+  while (true) {
+    const _ = _tmp$2;
+    if (_ < _bind$14) {
+      const entry = _bind$15[_];
+      const target = _M0MP312moonbitstack7moonstl4heap9RadixHeap10bucket__ofGiE(self, entry._0);
+      const _bind$16 = self.buckets;
+      if (target < 0 || target >= _bind$16.len) {
+        $panic();
+      }
+      _M0MPC15array5Array4pushGRP312moonbitstack7moonstl4text6OpcodeE(_bind$16.buf[target], entry);
+      _tmp$2 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const _bind$16 = self.buckets;
+  if (0 >= _bind$16.len) {
+    $panic();
+  }
+  const _bind$17 = _bind$16.buf[0];
+  const _bind$18 = self.buckets;
+  if (0 >= _bind$18.len) {
+    $panic();
+  }
+  const _bind$19 = _bind$18.buf[0].len - 1 | 0;
+  if (_bind$19 < 0 || _bind$19 >= _bind$17.len) {
+    $panic();
+  }
+  return _bind$17.buf[_bind$19];
+}
+function _M0MP312moonbitstack7moonstl4heap9RadixHeap8pop__minGiE(self) {
+  const _bind = _M0MP312moonbitstack7moonstl4heap9RadixHeap11peek__entryGiE(self);
+  if (_bind === undefined) {
+    return undefined;
+  } else {
+    const _Some = _bind;
+    const _entry = _Some;
+    const _bind$2 = self.buckets;
+    if (0 >= _bind$2.len) {
+      $panic();
+    }
+    _M0MPC15array5Array3popGUmiEE(_bind$2.buf[0]);
+    self.last = _entry._0;
+    self.len = self.len - 1 | 0;
+    return _entry;
+  }
+}
 function _M0FP312moonbitstack7moonstl4heap17order__comparatorGiE(order) {
   if (order === 0) {
     return (a, b) => $compare_int(a, b);
   } else {
     return (a, b) => $compare_int(b, a);
   }
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap7new__byGiE(cmp) {
+  return new _M0TP312moonbitstack7moonstl4heap11PairingHeapGiE(cmp, new _M0TPB5ArrayGOiE([], 0), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGjE([], 0), new _M0TPB5ArrayGiE([], 0), -1, 0);
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap11new_2einnerGiE(order) {
+  return _M0MP312moonbitstack7moonstl4heap11PairingHeap7new__byGiE(_M0FP312moonbitstack7moonstl4heap17order__comparatorGiE(order));
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap3newGiE(order$46$opt) {
+  let order;
+  if (order$46$opt === undefined) {
+    order = 0;
+  } else {
+    const _Some = order$46$opt;
+    order = _Some;
+  }
+  return _M0MP312moonbitstack7moonstl4heap11PairingHeap11new_2einnerGiE(order);
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap5valueGiE(self, node) {
+  const _bind = self.values;
+  if (node < 0 || node >= _bind.len) {
+    $panic();
+  }
+  const _bind$2 = _bind.buf[node];
+  if (_bind$2 === undefined) {
+    return $panic("moonstl: a pairing heap node that holds nothing");
+  } else {
+    const _Some = _bind$2;
+    return _Some;
+  }
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap5allocGiE(self, value) {
+  const _bind = _M0MPC15array5Array3popGiE(self.free);
+  let node;
+  if (_bind === undefined) {
+    _M0MPC15array5Array4pushGOiE(self.values, value);
+    _M0MPC15array5Array4pushGiE(self.children, -1);
+    _M0MPC15array5Array4pushGiE(self.siblings, -1);
+    _M0MPC15array5Array4pushGiE(self.parents, -1);
+    _M0MPC15array5Array4pushGjE(self.generations, 0);
+    node = self.values.len - 1 | 0;
+  } else {
+    const _Some = _bind;
+    const _node = _Some;
+    const _bind$2 = self.values;
+    const _bind$3 = value;
+    if (_node < 0 || _node >= _bind$2.len) {
+      $panic();
+    }
+    _bind$2.buf[_node] = _bind$3;
+    node = _node;
+  }
+  const _bind$2 = self.children;
+  if (node < 0 || node >= _bind$2.len) {
+    $panic();
+  }
+  _bind$2.buf[node] = -1;
+  const _bind$3 = self.siblings;
+  if (node < 0 || node >= _bind$3.len) {
+    $panic();
+  }
+  _bind$3.buf[node] = -1;
+  const _bind$4 = self.parents;
+  if (node < 0 || node >= _bind$4.len) {
+    $panic();
+  }
+  _bind$4.buf[node] = -1;
+  return node;
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap4meldGiE(self, a, b) {
+  if (a < 0) {
+    return b;
+  }
+  if (b < 0) {
+    return a;
+  }
+  const _func = self.cmp;
+  const take_b = _func(_M0MP312moonbitstack7moonstl4heap11PairingHeap5valueGiE(self, b), _M0MP312moonbitstack7moonstl4heap11PairingHeap5valueGiE(self, a)) < 0;
+  const small = take_b ? b : a;
+  const big = take_b ? a : b;
+  const _bind = self.parents;
+  if (big < 0 || big >= _bind.len) {
+    $panic();
+  }
+  _bind.buf[big] = small;
+  const _bind$2 = self.siblings;
+  if (small < 0 || small >= _bind$2.len) {
+    $panic();
+  }
+  _bind$2.buf[small] = -1;
+  const _bind$3 = self.parents;
+  if (small < 0 || small >= _bind$3.len) {
+    $panic();
+  }
+  _bind$3.buf[small] = -1;
+  const _bind$4 = self.siblings;
+  const _bind$5 = self.children;
+  if (small < 0 || small >= _bind$5.len) {
+    $panic();
+  }
+  const _bind$6 = _bind$5.buf[small];
+  if (big < 0 || big >= _bind$4.len) {
+    $panic();
+  }
+  _bind$4.buf[big] = _bind$6;
+  const _bind$7 = self.children;
+  if (small < 0 || small >= _bind$7.len) {
+    $panic();
+  }
+  _bind$7.buf[small] = big;
+  return small;
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap12merge__pairsGiE(self, first) {
+  const merged = new _M0TPB5ArrayGiE([], 0);
+  let current = first;
+  while (true) {
+    if (current >= 0) {
+      const a = current;
+      const _bind = self.siblings;
+      if (a < 0 || a >= _bind.len) {
+        $panic();
+      }
+      const b = _bind.buf[a];
+      if (b < 0) {
+        const _bind$2 = self.parents;
+        if (a < 0 || a >= _bind$2.len) {
+          $panic();
+        }
+        _bind$2.buf[a] = -1;
+        const _bind$3 = self.siblings;
+        if (a < 0 || a >= _bind$3.len) {
+          $panic();
+        }
+        _bind$3.buf[a] = -1;
+        _M0MPC15array5Array4pushGiE(merged, a);
+        current = -1;
+      } else {
+        const _bind$2 = self.siblings;
+        if (b < 0 || b >= _bind$2.len) {
+          $panic();
+        }
+        const next = _bind$2.buf[b];
+        const _bind$3 = self.parents;
+        if (a < 0 || a >= _bind$3.len) {
+          $panic();
+        }
+        _bind$3.buf[a] = -1;
+        const _bind$4 = self.siblings;
+        if (a < 0 || a >= _bind$4.len) {
+          $panic();
+        }
+        _bind$4.buf[a] = -1;
+        const _bind$5 = self.parents;
+        if (b < 0 || b >= _bind$5.len) {
+          $panic();
+        }
+        _bind$5.buf[b] = -1;
+        const _bind$6 = self.siblings;
+        if (b < 0 || b >= _bind$6.len) {
+          $panic();
+        }
+        _bind$6.buf[b] = -1;
+        _M0MPC15array5Array4pushGiE(merged, _M0MP312moonbitstack7moonstl4heap11PairingHeap4meldGiE(self, a, b));
+        current = next;
+      }
+      continue;
+    } else {
+      break;
+    }
+  }
+  let result = -1;
+  let i = merged.len - 1 | 0;
+  while (true) {
+    if (i >= 0) {
+      const _bind = i;
+      if (_bind < 0 || _bind >= merged.len) {
+        $panic();
+      }
+      result = _M0MP312moonbitstack7moonstl4heap11PairingHeap4meldGiE(self, merged.buf[_bind], result);
+      i = i - 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return result;
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap6insertGiE(self, value) {
+  const node = _M0MP312moonbitstack7moonstl4heap11PairingHeap5allocGiE(self, value);
+  self.root = _M0MP312moonbitstack7moonstl4heap11PairingHeap4meldGiE(self, self.root, node);
+  self.len = self.len + 1 | 0;
+  const _bind = self.generations;
+  if (node < 0 || node >= _bind.len) {
+    $panic();
+  }
+  return new _M0TP312moonbitstack7moonstl4heap7HeapKeyGiE(node, _bind.buf[node]);
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap26release__without__childrenGiE(self, node) {
+  const _bind = self.values;
+  const _bind$2 = undefined;
+  if (node < 0 || node >= _bind.len) {
+    $panic();
+  }
+  _bind.buf[node] = _bind$2;
+  const _bind$3 = self.children;
+  if (node < 0 || node >= _bind$3.len) {
+    $panic();
+  }
+  _bind$3.buf[node] = -1;
+  const _bind$4 = self.siblings;
+  if (node < 0 || node >= _bind$4.len) {
+    $panic();
+  }
+  _bind$4.buf[node] = -1;
+  const _bind$5 = self.parents;
+  if (node < 0 || node >= _bind$5.len) {
+    $panic();
+  }
+  _bind$5.buf[node] = -1;
+  const _bind$6 = self.generations;
+  const _bind$7 = self.generations;
+  if (node < 0 || node >= _bind$7.len) {
+    $panic();
+  }
+  const _bind$8 = (_bind$7.buf[node] >>> 0) + (1 >>> 0) | 0;
+  if (node < 0 || node >= _bind$6.len) {
+    $panic();
+  }
+  _bind$6.buf[node] = _bind$8;
+  _M0MPC15array5Array4pushGiE(self.free, node);
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap3popGiE(self) {
+  if (self.root < 0) {
+    return undefined;
+  }
+  const node = self.root;
+  const _bind = self.values;
+  if (node < 0 || node >= _bind.len) {
+    $panic();
+  }
+  const value = _bind.buf[node];
+  const _bind$2 = self.children;
+  if (node < 0 || node >= _bind$2.len) {
+    $panic();
+  }
+  const children = _bind$2.buf[node];
+  _M0MP312moonbitstack7moonstl4heap11PairingHeap26release__without__childrenGiE(self, node);
+  self.root = _M0MP312moonbitstack7moonstl4heap11PairingHeap12merge__pairsGiE(self, children);
+  self.len = self.len - 1 | 0;
+  return value;
+}
+function _M0MP312moonbitstack7moonstl4heap11PairingHeap19into__sorted__arrayGiE(self) {
+  const out = new _M0TPB5ArrayGiE([], 0);
+  while (true) {
+    if (self.len > 0) {
+      const _bind = _M0MP312moonbitstack7moonstl4heap11PairingHeap3popGiE(self);
+      if (_bind === undefined) {
+        break;
+      } else {
+        const _Some = _bind;
+        const _value = _Some;
+        _M0MPC15array5Array4pushGiE(out, _value);
+      }
+      continue;
+    } else {
+      break;
+    }
+  }
+  return out;
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap7new__byGiE(cmp) {
+  return new _M0TP312moonbitstack7moonstl4heap13FibonacciHeapGiE(cmp, new _M0TPB5ArrayGOiE([], 0), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGbE([], 0), new _M0TPB5ArrayGjE([], 0), new _M0TPB5ArrayGiE([], 0), -1, 0);
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap11new_2einnerGiE(order) {
+  return _M0MP312moonbitstack7moonstl4heap13FibonacciHeap7new__byGiE(_M0FP312moonbitstack7moonstl4heap17order__comparatorGiE(order));
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap3newGiE(order$46$opt) {
+  let order;
+  if (order$46$opt === undefined) {
+    order = 0;
+  } else {
+    const _Some = order$46$opt;
+    order = _Some;
+  }
+  return _M0MP312moonbitstack7moonstl4heap13FibonacciHeap11new_2einnerGiE(order);
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap5valueGiE(self, node) {
+  const _bind = self.values;
+  if (node < 0 || node >= _bind.len) {
+    $panic();
+  }
+  const _bind$2 = _bind.buf[node];
+  if (_bind$2 === undefined) {
+    return $panic("moonstl: a Fibonacci heap node that holds nothing");
+  } else {
+    const _Some = _bind$2;
+    return _Some;
+  }
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap5allocGiE(self, value) {
+  const _bind = _M0MPC15array5Array3popGiE(self.free);
+  let node;
+  if (_bind === undefined) {
+    _M0MPC15array5Array4pushGOiE(self.values, value);
+    _M0MPC15array5Array4pushGiE(self.parents, -1);
+    _M0MPC15array5Array4pushGiE(self.child, -1);
+    _M0MPC15array5Array4pushGiE(self.left, -1);
+    _M0MPC15array5Array4pushGiE(self.right, -1);
+    _M0MPC15array5Array4pushGiE(self.degree, 0);
+    _M0MPC15array5Array4pushGbE(self.marked, false);
+    _M0MPC15array5Array4pushGjE(self.generations, 0);
+    node = self.values.len - 1 | 0;
+  } else {
+    const _Some = _bind;
+    const _node = _Some;
+    const _bind$2 = self.values;
+    const _bind$3 = value;
+    if (_node < 0 || _node >= _bind$2.len) {
+      $panic();
+    }
+    _bind$2.buf[_node] = _bind$3;
+    node = _node;
+  }
+  const _bind$2 = self.parents;
+  if (node < 0 || node >= _bind$2.len) {
+    $panic();
+  }
+  _bind$2.buf[node] = -1;
+  const _bind$3 = self.child;
+  if (node < 0 || node >= _bind$3.len) {
+    $panic();
+  }
+  _bind$3.buf[node] = -1;
+  const _bind$4 = self.left;
+  if (node < 0 || node >= _bind$4.len) {
+    $panic();
+  }
+  _bind$4.buf[node] = node;
+  const _bind$5 = self.right;
+  if (node < 0 || node >= _bind$5.len) {
+    $panic();
+  }
+  _bind$5.buf[node] = node;
+  const _bind$6 = self.degree;
+  if (node < 0 || node >= _bind$6.len) {
+    $panic();
+  }
+  _bind$6.buf[node] = 0;
+  const _bind$7 = self.marked;
+  if (node < 0 || node >= _bind$7.len) {
+    $panic();
+  }
+  _bind$7.buf[node] = false;
+  return node;
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap7releaseGiE(self, node) {
+  const _bind = self.values;
+  const _bind$2 = undefined;
+  if (node < 0 || node >= _bind.len) {
+    $panic();
+  }
+  _bind.buf[node] = _bind$2;
+  const _bind$3 = self.parents;
+  if (node < 0 || node >= _bind$3.len) {
+    $panic();
+  }
+  _bind$3.buf[node] = -1;
+  const _bind$4 = self.child;
+  if (node < 0 || node >= _bind$4.len) {
+    $panic();
+  }
+  _bind$4.buf[node] = -1;
+  const _bind$5 = self.left;
+  if (node < 0 || node >= _bind$5.len) {
+    $panic();
+  }
+  _bind$5.buf[node] = -1;
+  const _bind$6 = self.right;
+  if (node < 0 || node >= _bind$6.len) {
+    $panic();
+  }
+  _bind$6.buf[node] = -1;
+  const _bind$7 = self.degree;
+  if (node < 0 || node >= _bind$7.len) {
+    $panic();
+  }
+  _bind$7.buf[node] = 0;
+  const _bind$8 = self.marked;
+  if (node < 0 || node >= _bind$8.len) {
+    $panic();
+  }
+  _bind$8.buf[node] = false;
+  const _bind$9 = self.generations;
+  const _bind$10 = self.generations;
+  if (node < 0 || node >= _bind$10.len) {
+    $panic();
+  }
+  const _bind$11 = (_bind$10.buf[node] >>> 0) + (1 >>> 0) | 0;
+  if (node < 0 || node >= _bind$9.len) {
+    $panic();
+  }
+  _bind$9.buf[node] = _bind$11;
+  _M0MPC15array5Array4pushGiE(self.free, node);
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap13splice__afterGiE(self, node, anchor) {
+  const _bind = self.right;
+  if (anchor < 0 || anchor >= _bind.len) {
+    $panic();
+  }
+  const next = _bind.buf[anchor];
+  const _bind$2 = self.right;
+  if (node < 0 || node >= _bind$2.len) {
+    $panic();
+  }
+  _bind$2.buf[node] = next;
+  const _bind$3 = self.left;
+  if (node < 0 || node >= _bind$3.len) {
+    $panic();
+  }
+  _bind$3.buf[node] = anchor;
+  const _bind$4 = self.right;
+  if (anchor < 0 || anchor >= _bind$4.len) {
+    $panic();
+  }
+  _bind$4.buf[anchor] = node;
+  const _bind$5 = self.left;
+  if (next < 0 || next >= _bind$5.len) {
+    $panic();
+  }
+  _bind$5.buf[next] = node;
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap6unlinkGiE(self, node) {
+  const _bind = self.left;
+  if (node < 0 || node >= _bind.len) {
+    $panic();
+  }
+  const left = _bind.buf[node];
+  const _bind$2 = self.right;
+  if (node < 0 || node >= _bind$2.len) {
+    $panic();
+  }
+  const right = _bind$2.buf[node];
+  const _bind$3 = self.left;
+  if (right < 0 || right >= _bind$3.len) {
+    $panic();
+  }
+  _bind$3.buf[right] = left;
+  const _bind$4 = self.right;
+  if (left < 0 || left >= _bind$4.len) {
+    $panic();
+  }
+  _bind$4.buf[left] = right;
+  const _bind$5 = self.left;
+  if (node < 0 || node >= _bind$5.len) {
+    $panic();
+  }
+  _bind$5.buf[node] = node;
+  const _bind$6 = self.right;
+  if (node < 0 || node >= _bind$6.len) {
+    $panic();
+  }
+  _bind$6.buf[node] = node;
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap8precedesGiE(self, a, b) {
+  const _func = self.cmp;
+  return _func(_M0MP312moonbitstack7moonstl4heap13FibonacciHeap5valueGiE(self, a), _M0MP312moonbitstack7moonstl4heap13FibonacciHeap5valueGiE(self, b)) < 0;
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap6insertGiE(self, value) {
+  const node = _M0MP312moonbitstack7moonstl4heap13FibonacciHeap5allocGiE(self, value);
+  if (self.min < 0) {
+    self.min = node;
+  } else {
+    _M0MP312moonbitstack7moonstl4heap13FibonacciHeap13splice__afterGiE(self, node, self.min);
+    if (_M0MP312moonbitstack7moonstl4heap13FibonacciHeap8precedesGiE(self, node, self.min)) {
+      self.min = node;
+    }
+  }
+  self.len = self.len + 1 | 0;
+  const _bind = self.generations;
+  if (node < 0 || node >= _bind.len) {
+    $panic();
+  }
+  return new _M0TP312moonbitstack7moonstl4heap7HeapKeyGiE(node, _bind.buf[node]);
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap17promote__childrenGiE(self, node) {
+  const _bind = self.child;
+  if (node < 0 || node >= _bind.len) {
+    $panic();
+  }
+  const first = _bind.buf[node];
+  if (first < 0) {
+    return undefined;
+  }
+  const children = new _M0TPB5ArrayGiE([], 0);
+  let current = first;
+  while (true) {
+    _M0MPC15array5Array4pushGiE(children, current);
+    const _bind$2 = self.right;
+    const _bind$3 = current;
+    if (_bind$3 < 0 || _bind$3 >= _bind$2.len) {
+      $panic();
+    }
+    current = _bind$2.buf[_bind$3];
+    if (current === first) {
+      break;
+    }
+    continue;
+  }
+  const _bind$2 = children.len;
+  const _bind$3 = children.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$2) {
+      const child = _bind$3[_];
+      _M0MP312moonbitstack7moonstl4heap13FibonacciHeap6unlinkGiE(self, child);
+      const _bind$4 = self.parents;
+      if (child < 0 || child >= _bind$4.len) {
+        $panic();
+      }
+      _bind$4.buf[child] = -1;
+      const _bind$5 = self.marked;
+      if (child < 0 || child >= _bind$5.len) {
+        $panic();
+      }
+      _bind$5.buf[child] = false;
+      _M0MP312moonbitstack7moonstl4heap13FibonacciHeap13splice__afterGiE(self, child, self.min);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const _bind$4 = self.child;
+  if (node < 0 || node >= _bind$4.len) {
+    $panic();
+  }
+  _bind$4.buf[node] = -1;
+  const _bind$5 = self.degree;
+  if (node < 0 || node >= _bind$5.len) {
+    $panic();
+  }
+  _bind$5.buf[node] = 0;
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap11consolidateGiE(self) {
+  const roots = new _M0TPB5ArrayGiE([], 0);
+  const start = self.min;
+  let current = start;
+  while (true) {
+    _M0MPC15array5Array4pushGiE(roots, current);
+    const _bind = self.right;
+    const _bind$2 = current;
+    if (_bind$2 < 0 || _bind$2 >= _bind.len) {
+      $panic();
+    }
+    current = _bind.buf[_bind$2];
+    if (current === start) {
+      break;
+    }
+    continue;
+  }
+  const by_degree = new _M0TPB5ArrayGiE([], 0);
+  const _bind = roots.len;
+  const _bind$2 = roots.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind) {
+      const root = _bind$2[_];
+      let carried = root;
+      const _bind$3 = self.degree;
+      const _bind$4 = carried;
+      if (_bind$4 < 0 || _bind$4 >= _bind$3.len) {
+        $panic();
+      }
+      let degree = _bind$3.buf[_bind$4];
+      while (true) {
+        let _tmp$2;
+        if (degree < by_degree.len) {
+          const _bind$5 = degree;
+          if (_bind$5 < 0 || _bind$5 >= by_degree.len) {
+            $panic();
+          }
+          _tmp$2 = by_degree.buf[_bind$5] >= 0;
+        } else {
+          _tmp$2 = false;
+        }
+        if (_tmp$2) {
+          const _bind$5 = degree;
+          if (_bind$5 < 0 || _bind$5 >= by_degree.len) {
+            $panic();
+          }
+          const held = by_degree.buf[_bind$5];
+          const _bind$6 = degree;
+          if (_bind$6 < 0 || _bind$6 >= by_degree.len) {
+            $panic();
+          }
+          by_degree.buf[_bind$6] = -1;
+          const take_carried = _M0MP312moonbitstack7moonstl4heap13FibonacciHeap8precedesGiE(self, carried, held);
+          const small = take_carried ? carried : held;
+          const big = take_carried ? held : carried;
+          _M0MP312moonbitstack7moonstl4heap13FibonacciHeap6unlinkGiE(self, big);
+          const _bind$7 = self.parents;
+          if (big < 0 || big >= _bind$7.len) {
+            $panic();
+          }
+          _bind$7.buf[big] = small;
+          const _bind$8 = self.child;
+          if (small < 0 || small >= _bind$8.len) {
+            $panic();
+          }
+          if (_bind$8.buf[small] < 0) {
+            const _bind$9 = self.child;
+            if (small < 0 || small >= _bind$9.len) {
+              $panic();
+            }
+            _bind$9.buf[small] = big;
+            const _bind$10 = self.left;
+            if (big < 0 || big >= _bind$10.len) {
+              $panic();
+            }
+            _bind$10.buf[big] = big;
+            const _bind$11 = self.right;
+            if (big < 0 || big >= _bind$11.len) {
+              $panic();
+            }
+            _bind$11.buf[big] = big;
+          } else {
+            const _bind$9 = self.child;
+            if (small < 0 || small >= _bind$9.len) {
+              $panic();
+            }
+            _M0MP312moonbitstack7moonstl4heap13FibonacciHeap13splice__afterGiE(self, big, _bind$9.buf[small]);
+          }
+          const _bind$9 = self.degree;
+          const _bind$10 = self.degree;
+          if (small < 0 || small >= _bind$10.len) {
+            $panic();
+          }
+          const _bind$11 = _bind$10.buf[small] + 1 | 0;
+          if (small < 0 || small >= _bind$9.len) {
+            $panic();
+          }
+          _bind$9.buf[small] = _bind$11;
+          const _bind$12 = self.marked;
+          if (big < 0 || big >= _bind$12.len) {
+            $panic();
+          }
+          _bind$12.buf[big] = false;
+          carried = small;
+          const _bind$13 = self.degree;
+          const _bind$14 = carried;
+          if (_bind$14 < 0 || _bind$14 >= _bind$13.len) {
+            $panic();
+          }
+          degree = _bind$13.buf[_bind$14];
+          continue;
+        } else {
+          break;
+        }
+      }
+      while (true) {
+        if (by_degree.len <= degree) {
+          _M0MPC15array5Array4pushGiE(by_degree, -1);
+          continue;
+        } else {
+          break;
+        }
+      }
+      const _bind$5 = degree;
+      const _bind$6 = carried;
+      if (_bind$5 < 0 || _bind$5 >= by_degree.len) {
+        $panic();
+      }
+      by_degree.buf[_bind$5] = _bind$6;
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  let best = -1;
+  const _bind$3 = by_degree.len;
+  const _bind$4 = by_degree.buf;
+  let _tmp$2 = 0;
+  while (true) {
+    const _ = _tmp$2;
+    if (_ < _bind$3) {
+      const candidate = _bind$4[_];
+      if (candidate >= 0) {
+        if (best < 0 || _M0MP312moonbitstack7moonstl4heap13FibonacciHeap8precedesGiE(self, candidate, best)) {
+          best = candidate;
+        }
+      }
+      _tmp$2 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  if (best >= 0) {
+    self.min = best;
+    return;
+  } else {
+    return;
+  }
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap3popGiE(self) {
+  if (self.min < 0) {
+    return undefined;
+  }
+  const node = self.min;
+  const _bind = self.values;
+  if (node < 0 || node >= _bind.len) {
+    $panic();
+  }
+  const value = _bind.buf[node];
+  _M0MP312moonbitstack7moonstl4heap13FibonacciHeap17promote__childrenGiE(self, node);
+  const _bind$2 = self.right;
+  if (node < 0 || node >= _bind$2.len) {
+    $panic();
+  }
+  if (_bind$2.buf[node] === node) {
+    self.min = -1;
+  } else {
+    const _bind$3 = self.right;
+    if (node < 0 || node >= _bind$3.len) {
+      $panic();
+    }
+    self.min = _bind$3.buf[node];
+    _M0MP312moonbitstack7moonstl4heap13FibonacciHeap6unlinkGiE(self, node);
+    _M0MP312moonbitstack7moonstl4heap13FibonacciHeap11consolidateGiE(self);
+  }
+  _M0MP312moonbitstack7moonstl4heap13FibonacciHeap7releaseGiE(self, node);
+  self.len = self.len - 1 | 0;
+  return value;
+}
+function _M0MP312moonbitstack7moonstl4heap13FibonacciHeap19into__sorted__arrayGiE(self) {
+  const out = new _M0TPB5ArrayGiE([], 0);
+  while (true) {
+    if (self.len > 0) {
+      const _bind = _M0MP312moonbitstack7moonstl4heap13FibonacciHeap3popGiE(self);
+      if (_bind === undefined) {
+        break;
+      } else {
+        const _Some = _bind;
+        const _value = _Some;
+        _M0MPC15array5Array4pushGiE(out, _value);
+      }
+      continue;
+    } else {
+      break;
+    }
+  }
+  return out;
 }
 function _M0IP312moonbitstack7moonstl4heap8DaryHeapPB7Default7defaultGiE() {
   return new _M0TP312moonbitstack7moonstl4heap8DaryHeapGiE(4, _M0FP312moonbitstack7moonstl4heap17order__comparatorGiE(0), new _M0TPB5ArrayGiE([], 0));
@@ -9433,6 +10998,23 @@ function _M0MP312moonbitstack7moonstl4heap8DaryHeap3popGiE(self) {
   }
   return value;
 }
+function _M0MP312moonbitstack7moonstl4heap8DaryHeap19into__sorted__arrayGiE(self) {
+  const sorted = new _M0TPB5ArrayGiE([], 0);
+  let next = _M0MP312moonbitstack7moonstl4heap8DaryHeap3popGiE(self);
+  while (true) {
+    const _bind = next;
+    if (_bind === undefined) {
+      break;
+    } else {
+      const _Some = _bind;
+      const _value = _Some;
+      _M0MPC15array5Array4pushGiE(sorted, _value);
+      next = _M0MP312moonbitstack7moonstl4heap8DaryHeap3popGiE(self);
+      continue;
+    }
+  }
+  return sorted;
+}
 function _M0FP312moonbitstack7moonstl3phf9phf__slot(hash, displacement, table_len) {
   const low = BigInt.asUintN(64, hash & 4294967295n);
   const _tmp = BigInt.asUintN(64, BigInt(table_len));
@@ -9459,7 +11041,7 @@ function _M0FP312moonbitstack7moonstl3phf17rank__from__owner(owner, table_len, l
         const _tmp$2 = slot / 64 | 0;
         const _tmp$3 = slot / 64 | 0;
         if (_tmp$2 >>> 0 < words.length) {
-          words[_tmp$2] = BigInt.asUintN(64, (_tmp$3 >>> 0 < words.length ? words[_tmp$3] : $oob()) | BigInt.asUintN(64, _M0FP312moonbitstack7moonstl3phf17rank__from__ownerN3bitS3584 << BigInt(slot % 64 & 63)));
+          words[_tmp$2] = BigInt.asUintN(64, (_tmp$3 >>> 0 < words.length ? words[_tmp$3] : $oob()) | BigInt.asUintN(64, _M0FP312moonbitstack7moonstl3phf17rank__from__ownerN3bitS4275 << BigInt(slot % 64 & 63)));
         } else {
           $oob();
         }
@@ -9610,6 +11192,69 @@ function _M0MP312moonbitstack7moonstl3phf6PhfMap12from__layoutGsiE(layout, entri
   }
   return new _M0DTPC16result6ResultGRP312moonbitstack7moonstl3phf6PhfMapGsiERP312moonbitstack7moonstl4spec7RefusedE2Ok(new _M0TP312moonbitstack7moonstl3phf6PhfMapGsiE(layout, keys, values, index));
 }
+function _M0MP312moonbitstack7moonstl3phf7PhfRank6lookup(self, slot) {
+  const word = slot / 64 | 0;
+  const offset = slot % 64 | 0;
+  const _tmp = self.words;
+  if (BigInt.asUintN(64, BigInt.asUintN(64, BigInt.asUintN(64, BigInt.asUintN(64, word >>> 0 < _tmp.length ? _tmp[word] : $oob()) >> BigInt(offset & 63)) & _M0MP312moonbitstack7moonstl3phf7PhfRank6lookupN3bitS4326)) === BigInt.asUintN(64, _M0MP312moonbitstack7moonstl3phf7PhfRank6lookupN3bitS4326)) {
+    const _tmp$2 = self.words;
+    const lower = $i64_popcnt(BigInt.asUintN(64, (word >>> 0 < _tmp$2.length ? _tmp$2[word] : $oob()) & BigInt.asUintN(64, BigInt.asUintN(64, _M0MP312moonbitstack7moonstl3phf7PhfRank6lookupN3bitS4326 << BigInt(offset & 63)) - _M0MP312moonbitstack7moonstl3phf7PhfRank6lookupN3bitS4326)));
+    const _tmp$3 = self.dense;
+    const _tmp$4 = self.prefixes;
+    const _tmp$5 = (word >>> 0 < _tmp$4.length ? _tmp$4[word] : $oob()) + lower | 0;
+    return _tmp$5 >>> 0 < _tmp$3.length ? _tmp$3[_tmp$5] : $oob();
+  } else {
+    return undefined;
+  }
+}
+function _M0MP312moonbitstack7moonstl3phf8PhfIndex6lookup(self, slot) {
+  if (self.$tag === 0) {
+    const _Direct = self;
+    const _slots = _Direct._0;
+    const index = slot >>> 0 < _slots.length ? _slots[slot] : $oob();
+    return index < 0 ? undefined : index;
+  } else {
+    const _Ranked = self;
+    const _rank = _Ranked._0;
+    return _M0MP312moonbitstack7moonstl3phf7PhfRank6lookup(_rank, slot);
+  }
+}
+function _M0MP312moonbitstack7moonstl3phf6PhfMap10get__entryGsiE(self, key) {
+  const _bind = _M0IPC16string6StringP312moonbitstack7moonstl3phf6PhfKey9to__bytes(key);
+  const hash = _M0FP312moonbitstack7moonstl3phf9phf__hash(new _M0TPC15bytes9BytesView(_bind, 0, _bind.length), self.layout.salt);
+  const _p = self.layout.buckets;
+  const _tmp = BigInt.asUintN(64, BigInt(_p));
+  if (_tmp === 0n) {
+    $panic();
+  }
+  const bucket = Number(BigInt.asIntN(32, BigInt.asUintN(64, BigInt.asUintN(64, BigInt.asUintN(64, BigInt.asUintN(64, hash) >> BigInt(32 & 63))) % BigInt.asUintN(64, _tmp)))) | 0;
+  const slot = _M0FP312moonbitstack7moonstl3phf9slot__for(self.layout, hash, bucket);
+  const _bind$2 = _M0MP312moonbitstack7moonstl3phf8PhfIndex6lookup(self.index, slot);
+  if (_bind$2 === undefined) {
+    return undefined;
+  } else {
+    const _Some = _bind$2;
+    const _at = _Some;
+    const _bind$3 = self.keys;
+    if (_at < 0 || _at >= _bind$3.len) {
+      $panic();
+    }
+    if (_bind$3.buf[_at] === key) {
+      const _bind$4 = self.keys;
+      if (_at < 0 || _at >= _bind$4.len) {
+        $panic();
+      }
+      const _tmp$2 = _bind$4.buf[_at];
+      const _bind$5 = self.values;
+      if (_at < 0 || _at >= _bind$5.len) {
+        $panic();
+      }
+      return { _0: _tmp$2, _1: _bind$5.buf[_at] };
+    } else {
+      return undefined;
+    }
+  }
+}
 function _M0MP312moonbitstack7moonstl3phf6PhfMap4keysGsiE(self) {
   const cursor = new _M0TPB8MutLocalGiE(0);
   return _M0MPB4Iter3newGUcRPB5ArrayGiEEE(() => {
@@ -9655,13 +11300,13 @@ function _M0MP312moonbitstack7moonstl3phf10PhfBuilder5entryGsiE(self, key, value
 function _M0FP312moonbitstack7moonstl3phf13build__params(build) {
   switch (build) {
     case 0: {
-      return _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS3653;
+      return _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS4369;
     }
     case 1: {
-      return _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS3654;
+      return _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS4370;
     }
     default: {
-      return _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS3655;
+      return _M0FP312moonbitstack7moonstl3phf13build__paramsN6recordS4371;
     }
   }
 }
@@ -10042,6 +11687,48 @@ function _M0MP312moonbitstack7moonstl3phf10PhfBuilder5buildGsiE(self) {
   }
   return _M0MP312moonbitstack7moonstl3phf6PhfMap12from__layoutGsiE(layout, entries);
 }
+function _M0MP312moonbitstack7moonstl3phf10PhfBuilder14build__orderedGsiE(self) {
+  const _bind = _M0MP312moonbitstack7moonstl3phf10PhfBuilder5buildGsiE(self);
+  let _tmp;
+  if (_bind.$tag === 1) {
+    const _ok = _bind;
+    _tmp = _ok._0;
+  } else {
+    return _bind;
+  }
+  return new _M0DTPC16result6ResultGRP312moonbitstack7moonstl3phf13PhfOrderedMapGsiERP312moonbitstack7moonstl4spec7RefusedE2Ok(new _M0TP312moonbitstack7moonstl3phf13PhfOrderedMapGsiE(_tmp));
+}
+function _M0MP312moonbitstack7moonstl3phf13PhfOrderedMap5indexGsiE(self, key) {
+  const _bind = _M0MP312moonbitstack7moonstl3phf6PhfMap10get__entryGsiE(self.map, key);
+  if (_bind === undefined) {
+    return undefined;
+  } else {
+    const _Some = _bind;
+    const _entry = _Some;
+    let at = -1;
+    const _it = _M0MPB4Iter5iter2GsE(_M0MP312moonbitstack7moonstl3phf6PhfMap4keysGsiE(self.map));
+    while (true) {
+      const _bind$2 = _M0MPB5Iter24nextGisE(_it);
+      if (_bind$2 === undefined) {
+        break;
+      } else {
+        const _Some$2 = _bind$2;
+        const _x = _Some$2;
+        const _i = _x._0;
+        const _held = _x._1;
+        if (_held === _entry._0) {
+          at = _i;
+          break;
+        }
+        continue;
+      }
+    }
+    return at < 0 ? undefined : at;
+  }
+}
+function _M0MP312moonbitstack7moonstl3phf13PhfOrderedMap4keysGsiE(self) {
+  return _M0MP312moonbitstack7moonstl3phf6PhfMap4keysGsiE(self.map);
+}
 function _M0FP312moonbitstack7moonstl3phf12utf16__bytes(view) {
   const out = $makebytes(Math.imul(view.end - view.start | 0, 2) | 0, 0);
   const _bind = view.end - view.start | 0;
@@ -10202,6 +11889,86 @@ function _M0MP312moonbitstack7moonstl3seq10RingBuffer9to__arrayGiE(self) {
 function _M0FP312moonbitstack7moonstl3seq10words__for(bits) {
   return bits <= 0 ? 0 : bits > 134217663 ? 2147483647 : (bits + 63 | 0) / 64 | 0;
 }
+function _M0MP312moonbitstack7moonstl3seq9GapBuffer11new_2einnerGiE(capacity) {
+  const before = new _M0TPB5ArrayGiE([], 0);
+  if (capacity > 0) {
+    _M0MPC15array5Array17reserve__capacityGiE(before, capacity);
+  }
+  return new _M0TP312moonbitstack7moonstl3seq9GapBufferGiE(before, new _M0TPB5ArrayGiE([], 0));
+}
+function _M0MP312moonbitstack7moonstl3seq9GapBuffer13move__gap__toGiE(self, index) {
+  const target = index < 0 ? 0 : index > (self.before.len + self.after.len | 0) ? self.before.len + self.after.len | 0 : index;
+  while (true) {
+    if (self.before.len > target) {
+      const _bind = _M0MPC15array5Array3popGiE(self.before);
+      if (_bind === undefined) {
+        break;
+      } else {
+        const _Some = _bind;
+        const _value = _Some;
+        _M0MPC15array5Array4pushGiE(self.after, _value);
+      }
+      continue;
+    } else {
+      break;
+    }
+  }
+  while (true) {
+    if (self.before.len < target) {
+      const _bind = _M0MPC15array5Array3popGiE(self.after);
+      if (_bind === undefined) {
+        return;
+      } else {
+        const _Some = _bind;
+        const _value = _Some;
+        _M0MPC15array5Array4pushGiE(self.before, _value);
+      }
+      continue;
+    } else {
+      return;
+    }
+  }
+}
+function _M0MP312moonbitstack7moonstl3seq9GapBuffer6insertGiE(self, index, value) {
+  _M0MP312moonbitstack7moonstl3seq9GapBuffer13move__gap__toGiE(self, index);
+  _M0MPC15array5Array4pushGiE(self.before, value);
+}
+function _M0MP312moonbitstack7moonstl3seq9GapBuffer9to__arrayGiE(self) {
+  const out = new _M0TPB5ArrayGiE([], 0);
+  const _bind = self.before;
+  const _bind$2 = _bind.len;
+  const _bind$3 = _bind.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$2) {
+      const value = _bind$3[_];
+      _M0MPC15array5Array4pushGiE(out, value);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const _bind$4 = self.after.len;
+  let _tmp$2 = 0;
+  while (true) {
+    const i = _tmp$2;
+    if (i < _bind$4) {
+      const _bind$5 = self.after;
+      const _bind$6 = (self.after.len - 1 | 0) - i | 0;
+      if (_bind$6 < 0 || _bind$6 >= _bind$5.len) {
+        $panic();
+      }
+      _M0MPC15array5Array4pushGiE(out, _bind$5.buf[_bind$6]);
+      _tmp$2 = i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return out;
+}
 function _M0FP312moonbitstack7moonstl3seq14popcount__upto(words, limit) {
   let total = 0;
   const stop = limit > words.len ? words.len : limit;
@@ -10246,7 +12013,7 @@ function _M0MP312moonbitstack7moonstl3seq6BitSet6insert(self, index) {
   }
   _M0MP312moonbitstack7moonstl3seq6BitSet4grow(self, index);
   const word = index >> 6;
-  const mask = BigInt.asUintN(64, _M0FP312moonbitstack7moonstl3seq9bit__maskN3oneS3810 << BigInt(index & 63 & 63));
+  const mask = BigInt.asUintN(64, _M0FP312moonbitstack7moonstl3seq9bit__maskN3oneS4571 << BigInt(index & 63 & 63));
   const _bind = self.words;
   if (word < 0 || word >= _bind.len) {
     $panic();
@@ -10274,7 +12041,7 @@ function _M0MP312moonbitstack7moonstl3seq6BitSet4rank(self, index) {
   const word = index >> 6;
   let count = _M0FP312moonbitstack7moonstl3seq14popcount__upto(self.words, word);
   if (word < self.words.len && (index & 63) !== 0) {
-    const mask = BigInt.asUintN(64, BigInt.asUintN(64, _M0FP312moonbitstack7moonstl3seq9bit__maskN3oneS3810 << BigInt(index & 63 & 63)) - 1n);
+    const mask = BigInt.asUintN(64, BigInt.asUintN(64, _M0FP312moonbitstack7moonstl3seq9bit__maskN3oneS4571 << BigInt(index & 63 & 63)) - 1n);
     const _tmp = count;
     const _bind = self.words;
     if (word < 0 || word >= _bind.len) {
@@ -10309,7 +12076,7 @@ function _M0MP312moonbitstack7moonstl3seq6BitSet6select(self, n) {
             }
             const _tmp = _bind$3.buf[_bind$4];
             const _p = bit;
-            if (BigInt.asUintN(64, BigInt.asUintN(64, _tmp & BigInt.asUintN(64, _M0FP312moonbitstack7moonstl3seq9bit__maskN3oneS3810 << BigInt(_p & 63 & 63)))) !== BigInt.asUintN(64, 0n)) {
+            if (BigInt.asUintN(64, BigInt.asUintN(64, _tmp & BigInt.asUintN(64, _M0FP312moonbitstack7moonstl3seq9bit__maskN3oneS4571 << BigInt(_p & 63 & 63)))) !== BigInt.asUintN(64, 0n)) {
               if (remaining === 0) {
                 return (word << 6) + bit | 0;
               }
@@ -10346,7 +12113,7 @@ function _M0MP312moonbitstack7moonstl3seq6BitSet4iter(self) {
             }
             const _tmp = _bind.buf[_bind$2];
             const _p = bit.val;
-            if (BigInt.asUintN(64, BigInt.asUintN(64, _tmp & BigInt.asUintN(64, _M0FP312moonbitstack7moonstl3seq9bit__maskN3oneS3810 << BigInt(_p & 63 & 63)))) !== BigInt.asUintN(64, 0n)) {
+            if (BigInt.asUintN(64, BigInt.asUintN(64, _tmp & BigInt.asUintN(64, _M0FP312moonbitstack7moonstl3seq9bit__maskN3oneS4571 << BigInt(_p & 63 & 63)))) !== BigInt.asUintN(64, 0n)) {
               const index = (word.val << 6) + bit.val | 0;
               bit.val = bit.val + 1 | 0;
               return index;
@@ -10401,6 +12168,34 @@ function _M0FPC14math2ln(_tmp) {
 function _M0FPC14math3exp(_tmp) {
   return Math.exp(_tmp);
 }
+function _M0MP312moonbitstack7moonstl6sketch11ThetaSketch11new_2einnerGiE(nominal_entries, hash_seed) {
+  if (nominal_entries <= 0) {
+    return new _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch11ThetaSketchGiERP312moonbitstack7moonstl4spec7RefusedE3Err(new _M0DTPC15error5Error50moonbitstack_2fmoonstl_2fspec_2eRefused_2eCapacity(nominal_entries));
+  }
+  return new _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch11ThetaSketchGiERP312moonbitstack7moonstl4spec7RefusedE2Ok(new _M0TP312moonbitstack7moonstl6sketch11ThetaSketchGiE(hash_seed, nominal_entries, new _M0TPB5ArrayGmE([], 0), 18446744073709551615n));
+}
+function _M0MP312moonbitstack7moonstl6sketch11ThetaSketch12position__ofGiE(self, hash) {
+  let low = 0;
+  let high = self.hashes.len;
+  while (true) {
+    if (low < high) {
+      const mid = (low + high | 0) / 2 | 0;
+      const _bind = self.hashes;
+      if (mid < 0 || mid >= _bind.len) {
+        $panic();
+      }
+      if (BigInt.asUintN(64, _bind.buf[mid]) < BigInt.asUintN(64, hash)) {
+        low = mid + 1 | 0;
+      } else {
+        high = mid;
+      }
+      continue;
+    } else {
+      break;
+    }
+  }
+  return low;
+}
 function _M0FP312moonbitstack7moonstl6sketch16hash__with__seedGiE(item, seed) {
   const low = _M0MPB6Hasher14Hasher_2einner(seed);
   _M0MPB6Hasher7combineGiE(low, item);
@@ -10411,11 +12206,327 @@ function _M0FP312moonbitstack7moonstl6sketch16hash__with__seedGiE(item, seed) {
   const _p$2 = _M0MPB6Hasher8finalize(high);
   return BigInt.asUintN(64, _tmp | BigInt.asUintN(64, BigInt.asUintN(64, BigInt.asUintN(64, BigInt(_p$2)) & 4294967295n) << BigInt(32 & 63)));
 }
+function _M0MP312moonbitstack7moonstl6sketch11ThetaSketch3addGiE(self, item) {
+  const hash = _M0FP312moonbitstack7moonstl6sketch16hash__with__seedGiE(item, self.seed);
+  if (BigInt.asUintN(64, hash) >= BigInt.asUintN(64, self.theta)) {
+    return undefined;
+  }
+  const at = _M0MP312moonbitstack7moonstl6sketch11ThetaSketch12position__ofGiE(self, hash);
+  let _tmp;
+  if (at < self.hashes.len) {
+    const _bind = self.hashes;
+    if (at < 0 || at >= _bind.len) {
+      $panic();
+    }
+    _tmp = BigInt.asUintN(64, _bind.buf[at]) === BigInt.asUintN(64, hash);
+  } else {
+    _tmp = false;
+  }
+  if (_tmp) {
+    return undefined;
+  }
+  _M0MPC15array5Array6insertGmE(self.hashes, at, hash);
+  while (true) {
+    if (self.hashes.len > self.nominal) {
+      const _p = _M0MPC15array5Array3popGUmiEE(self.hashes);
+      let dropped;
+      if (_p === undefined) {
+        dropped = $panic();
+      } else {
+        const _p$2 = _p;
+        dropped = _p$2;
+      }
+      self.theta = dropped;
+      continue;
+    } else {
+      return;
+    }
+  }
+}
+function _M0MP312moonbitstack7moonstl6sketch11ThetaSketch8estimateGiE(self) {
+  if (self.hashes.len < self.nominal) {
+    return self.hashes.len + 0;
+  } else {
+    const scale = $f64_convert_i64_u(BigInt.asUintN(64, self.theta)) / 1.8446744073709552e+019;
+    return scale <= 0 ? self.hashes.len + 0 : (self.hashes.len + 0) / scale;
+  }
+}
+function _M0MP312moonbitstack7moonstl6sketch12CuckooFilter11new_2einnerGiE(expected_items, cuckoo_options, hash_seed) {
+  if (expected_items <= 0) {
+    return new _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch12CuckooFilterGiERP312moonbitstack7moonstl4spec7RefusedE3Err(new _M0DTPC15error5Error50moonbitstack_2fmoonstl_2fspec_2eRefused_2eCapacity(expected_items));
+  }
+  const bits = cuckoo_options.fingerprint_bits;
+  const bucket_size = cuckoo_options.bucket_size;
+  if (bits < 1 || bits > 30) {
+    return new _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch12CuckooFilterGiERP312moonbitstack7moonstl4spec7RefusedE3Err(new _M0DTPC15error5Error51moonbitstack_2fmoonstl_2fspec_2eRefused_2ePrecision(bits));
+  }
+  if (bucket_size < 1) {
+    return new _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch12CuckooFilterGiERP312moonbitstack7moonstl4spec7RefusedE3Err(new _M0DTPC15error5Error50moonbitstack_2fmoonstl_2fspec_2eRefused_2eCapacity(bucket_size));
+  }
+  const wanted = (Math.imul(expected_items, 4) | 0) / bucket_size | 0;
+  let buckets = 1;
+  while (true) {
+    if (buckets < wanted && buckets < 536870912) {
+      buckets = Math.imul(buckets, 2) | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const slots = new _M0TPB5ArrayGiE([], 0);
+  const _bind = Math.imul(buckets, bucket_size) | 0;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind) {
+      _M0MPC15array5Array4pushGiE(slots, 0);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const mask = BigInt.asUintN(64, BigInt.asUintN(64, 1n << BigInt(bits & 63)) - 1n);
+  return new _M0DTPC16result6ResultGRP312moonbitstack7moonstl6sketch12CuckooFilterGiERP312moonbitstack7moonstl4spec7RefusedE2Ok(new _M0TP312moonbitstack7moonstl6sketch12CuckooFilterGiE(hash_seed, slots, buckets, bucket_size, bits, mask, 0n));
+}
+function _M0MP312moonbitstack7moonstl6sketch12CuckooFilter3newGiE(expected_items, cuckoo_options$46$opt, hash_seed$46$opt) {
+  let cuckoo_options;
+  if (cuckoo_options$46$opt === undefined) {
+    cuckoo_options = _M0FP312moonbitstack7moonstl6sketch15cuckoo__options;
+  } else {
+    const _Some = cuckoo_options$46$opt;
+    cuckoo_options = _Some;
+  }
+  let hash_seed;
+  if (hash_seed$46$opt === undefined) {
+    hash_seed = _M0FP312moonbitstack7moonstl4spec10hash__seed();
+  } else {
+    const _Some = hash_seed$46$opt;
+    hash_seed = _Some;
+  }
+  return _M0MP312moonbitstack7moonstl6sketch12CuckooFilter11new_2einnerGiE(expected_items, cuckoo_options, hash_seed);
+}
+function _M0MP312moonbitstack7moonstl6sketch12CuckooFilter11fingerprintGiE(self, hash) {
+  const value = Number(BigInt.asUintN(32, BigInt.asUintN(64, BigInt.asUintN(64, BigInt.asUintN(64, hash) >> BigInt(32 & 63)) & self.mask))) | 0;
+  return value === 0 ? 1 : value;
+}
 function _M0FP312moonbitstack7moonstl6sketch5mix64(value) {
   let z = BigInt.asUintN(64, value + 11400714819323198485n);
   z = BigInt.asUintN(64, BigInt.asUintN(64, z ^ BigInt.asUintN(64, BigInt.asUintN(64, z) >> BigInt(30 & 63))) * 13787848793156543929n);
   z = BigInt.asUintN(64, BigInt.asUintN(64, z ^ BigInt.asUintN(64, BigInt.asUintN(64, z) >> BigInt(27 & 63))) * 10723151780598845931n);
   return BigInt.asUintN(64, z ^ BigInt.asUintN(64, BigInt.asUintN(64, z) >> BigInt(31 & 63)));
+}
+function _M0MP312moonbitstack7moonstl6sketch12CuckooFilter9alternateGiE(self, index, print) {
+  const mixed = _M0FP312moonbitstack7moonstl6sketch5mix64(BigInt.asUintN(64, BigInt.asUintN(64, BigInt(print)) ^ 11400714819323198485n));
+  const _p = self.buckets;
+  const _tmp = BigInt.asUintN(64, BigInt(_p));
+  if (_tmp === 0n) {
+    $panic();
+  }
+  const offset = Number(BigInt.asUintN(32, BigInt.asUintN(64, BigInt.asUintN(64, mixed) % BigInt.asUintN(64, _tmp)))) | 0;
+  return (index ^ offset) % self.buckets | 0;
+}
+function _M0MP312moonbitstack7moonstl6sketch12CuckooFilter6insertGiE(self, item) {
+  const hash = _M0FP312moonbitstack7moonstl6sketch16hash__with__seedGiE(item, self.seed);
+  const print = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter11fingerprintGiE(self, hash);
+  const _p = self.buckets;
+  const _tmp = BigInt.asUintN(64, BigInt(_p));
+  if (_tmp === 0n) {
+    $panic();
+  }
+  const first = Number(BigInt.asUintN(32, BigInt.asUintN(64, BigInt.asUintN(64, hash) % BigInt.asUintN(64, _tmp)))) | 0;
+  const second = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter9alternateGiE(self, first, print);
+  let _bind_buf = [first, second];
+  let _bind_len = 2;
+  const _bind = _bind_len;
+  const _bind$2 = _bind_buf;
+  let _tmp$2 = 0;
+  while (true) {
+    const _ = _tmp$2;
+    if (_ < _bind) {
+      const index = _bind$2[_];
+      const start = Math.imul(index, self.bucket_size) | 0;
+      const _bind$3 = start + self.bucket_size | 0;
+      let _tmp$3 = start;
+      while (true) {
+        const slot = _tmp$3;
+        if (slot < _bind$3) {
+          const _bind$4 = self.slots;
+          if (slot < 0 || slot >= _bind$4.len) {
+            $panic();
+          }
+          if (_bind$4.buf[slot] === 0) {
+            const _bind$5 = self.slots;
+            if (slot < 0 || slot >= _bind$5.len) {
+              $panic();
+            }
+            _bind$5.buf[slot] = print;
+            self.items = BigInt.asUintN(64, self.items + 1n);
+            return true;
+          }
+          _tmp$3 = slot + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      _tmp$2 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  let index = first;
+  let carried = print;
+  let kicks = 0;
+  while (true) {
+    if (kicks < 500) {
+      const start = Math.imul(index, self.bucket_size) | 0;
+      const slot = start + (kicks % self.bucket_size | 0) | 0;
+      const _bind$3 = self.slots;
+      if (slot < 0 || slot >= _bind$3.len) {
+        $panic();
+      }
+      const evicted = _bind$3.buf[slot];
+      const _bind$4 = self.slots;
+      const _bind$5 = carried;
+      if (slot < 0 || slot >= _bind$4.len) {
+        $panic();
+      }
+      _bind$4.buf[slot] = _bind$5;
+      carried = evicted;
+      index = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter9alternateGiE(self, index, carried);
+      const other = Math.imul(index, self.bucket_size) | 0;
+      const _bind$6 = other + self.bucket_size | 0;
+      let _tmp$3 = other;
+      while (true) {
+        const candidate = _tmp$3;
+        if (candidate < _bind$6) {
+          const _bind$7 = self.slots;
+          if (candidate < 0 || candidate >= _bind$7.len) {
+            $panic();
+          }
+          if (_bind$7.buf[candidate] === 0) {
+            const _bind$8 = self.slots;
+            const _bind$9 = carried;
+            if (candidate < 0 || candidate >= _bind$8.len) {
+              $panic();
+            }
+            _bind$8.buf[candidate] = _bind$9;
+            self.items = BigInt.asUintN(64, self.items + 1n);
+            return true;
+          }
+          _tmp$3 = candidate + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      kicks = kicks + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return false;
+}
+function _M0MP312moonbitstack7moonstl6sketch12CuckooFilter12may__containGiE(self, item) {
+  const hash = _M0FP312moonbitstack7moonstl6sketch16hash__with__seedGiE(item, self.seed);
+  const print = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter11fingerprintGiE(self, hash);
+  const _p = self.buckets;
+  const _tmp = BigInt.asUintN(64, BigInt(_p));
+  if (_tmp === 0n) {
+    $panic();
+  }
+  const first = Number(BigInt.asUintN(32, BigInt.asUintN(64, BigInt.asUintN(64, hash) % BigInt.asUintN(64, _tmp)))) | 0;
+  const second = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter9alternateGiE(self, first, print);
+  let _bind_buf = [first, second];
+  let _bind_len = 2;
+  const _bind = _bind_len;
+  const _bind$2 = _bind_buf;
+  let _tmp$2 = 0;
+  while (true) {
+    const _ = _tmp$2;
+    if (_ < _bind) {
+      const index = _bind$2[_];
+      const start = Math.imul(index, self.bucket_size) | 0;
+      const _bind$3 = start + self.bucket_size | 0;
+      let _tmp$3 = start;
+      while (true) {
+        const slot = _tmp$3;
+        if (slot < _bind$3) {
+          const _bind$4 = self.slots;
+          if (slot < 0 || slot >= _bind$4.len) {
+            $panic();
+          }
+          if (_bind$4.buf[slot] === print) {
+            return true;
+          }
+          _tmp$3 = slot + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      _tmp$2 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return false;
+}
+function _M0MP312moonbitstack7moonstl6sketch12CuckooFilter6removeGiE(self, item) {
+  const hash = _M0FP312moonbitstack7moonstl6sketch16hash__with__seedGiE(item, self.seed);
+  const print = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter11fingerprintGiE(self, hash);
+  const _p = self.buckets;
+  const _tmp = BigInt.asUintN(64, BigInt(_p));
+  if (_tmp === 0n) {
+    $panic();
+  }
+  const first = Number(BigInt.asUintN(32, BigInt.asUintN(64, BigInt.asUintN(64, hash) % BigInt.asUintN(64, _tmp)))) | 0;
+  const second = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter9alternateGiE(self, first, print);
+  let _bind_buf = [first, second];
+  let _bind_len = 2;
+  const _bind = _bind_len;
+  const _bind$2 = _bind_buf;
+  let _tmp$2 = 0;
+  while (true) {
+    const _ = _tmp$2;
+    if (_ < _bind) {
+      const index = _bind$2[_];
+      const start = Math.imul(index, self.bucket_size) | 0;
+      const _bind$3 = start + self.bucket_size | 0;
+      let _tmp$3 = start;
+      while (true) {
+        const slot = _tmp$3;
+        if (slot < _bind$3) {
+          const _bind$4 = self.slots;
+          if (slot < 0 || slot >= _bind$4.len) {
+            $panic();
+          }
+          if (_bind$4.buf[slot] === print) {
+            const _bind$5 = self.slots;
+            if (slot < 0 || slot >= _bind$5.len) {
+              $panic();
+            }
+            _bind$5.buf[slot] = 0;
+            self.items = BigInt.asUintN(64, self.items - 1n);
+            return true;
+          }
+          _tmp$3 = slot + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      _tmp$2 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return false;
 }
 function _M0MP312moonbitstack7moonstl6sketch14CountMinSketch11new_2einnerGiE(epsilon, confidence, hash_seed) {
   if (!(epsilon > 0) || !(epsilon < 1)) {
@@ -10780,6 +12891,280 @@ function _M0MP312moonbitstack7moonstl6sketch11BloomFilter32estimated__false__pos
     }
   }
   return 1 - survives;
+}
+function _M0MP312moonbitstack7moonstl4text11SuffixArray3new(text) {
+  const n = text.end - text.start | 0;
+  const order = new _M0TPB5ArrayGiE([], 0);
+  const ranks = new _M0TPB5ArrayGiE([], 0);
+  let _tmp = 0;
+  while (true) {
+    const i = _tmp;
+    if (i < n) {
+      _M0MPC15array5Array4pushGiE(order, i);
+      _M0MPC15array5Array4pushGiE(ranks, text.str.charCodeAt(text.start + i | 0));
+      _tmp = i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  let step = 1;
+  while (true) {
+    if (step < n) {
+      const key = new _M0TPB5ArrayGUiiEE([], 0);
+      let _tmp$2 = 0;
+      while (true) {
+        const i = _tmp$2;
+        if (i < n) {
+          let second;
+          if ((i + step | 0) < n) {
+            const _bind = i + step | 0;
+            if (_bind < 0 || _bind >= ranks.len) {
+              $panic();
+            }
+            second = ranks.buf[_bind] + 1 | 0;
+          } else {
+            second = 0;
+          }
+          if (i < 0 || i >= ranks.len) {
+            $panic();
+          }
+          _M0MPC15array5Array4pushGRP312moonbitstack7moonstl4text6OpcodeE(key, { _0: ranks.buf[i] + 1 | 0, _1: second });
+          _tmp$2 = i + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      _M0MPC15array5Array8sort__byGiE(order, (a, b) => {
+        if (a < 0 || a >= key.len) {
+          $panic();
+        }
+        const _tmp$3 = key.buf[a]._0;
+        if (b < 0 || b >= key.len) {
+          $panic();
+        }
+        const first = $compare_int(_tmp$3, key.buf[b]._0);
+        if (first !== 0) {
+          return first;
+        } else {
+          if (a < 0 || a >= key.len) {
+            $panic();
+          }
+          const _tmp$4 = key.buf[a]._1;
+          if (b < 0 || b >= key.len) {
+            $panic();
+          }
+          return $compare_int(_tmp$4, key.buf[b]._1);
+        }
+      });
+      const fresh = new _M0TPB5ArrayGiE([], 0);
+      let _tmp$3 = 0;
+      while (true) {
+        const _ = _tmp$3;
+        if (_ < n) {
+          _M0MPC15array5Array4pushGiE(fresh, 0);
+          _tmp$3 = _ + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      let rank = 0;
+      let _tmp$4 = 0;
+      while (true) {
+        const i = _tmp$4;
+        if (i < n) {
+          if (i > 0) {
+            const _bind = i - 1 | 0;
+            if (_bind < 0 || _bind >= order.len) {
+              $panic();
+            }
+            const previous = order.buf[_bind];
+            if (i < 0 || i >= order.len) {
+              $panic();
+            }
+            const current = order.buf[i];
+            let differs;
+            if (previous < 0 || previous >= key.len) {
+              $panic();
+            }
+            const _tmp$5 = key.buf[previous]._0;
+            if (current < 0 || current >= key.len) {
+              $panic();
+            }
+            if (_tmp$5 !== key.buf[current]._0) {
+              differs = true;
+            } else {
+              if (previous < 0 || previous >= key.len) {
+                $panic();
+              }
+              const _tmp$6 = key.buf[previous]._1;
+              if (current < 0 || current >= key.len) {
+                $panic();
+              }
+              differs = _tmp$6 !== key.buf[current]._1;
+            }
+            if (differs) {
+              rank = rank + 1 | 0;
+            }
+          }
+          if (i < 0 || i >= order.len) {
+            $panic();
+          }
+          const _bind = order.buf[i];
+          const _bind$2 = rank;
+          if (_bind < 0 || _bind >= fresh.len) {
+            $panic();
+          }
+          fresh.buf[_bind] = _bind$2;
+          _tmp$4 = i + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      let _tmp$5 = 0;
+      while (true) {
+        const i = _tmp$5;
+        if (i < n) {
+          if (i < 0 || i >= fresh.len) {
+            $panic();
+          }
+          const _bind = fresh.buf[i];
+          if (i < 0 || i >= ranks.len) {
+            $panic();
+          }
+          ranks.buf[i] = _bind;
+          _tmp$5 = i + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      step = Math.imul(step, 2) | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return new _M0TP312moonbitstack7moonstl4text11SuffixArray(_M0MPC16string10StringView9to__owned(text), order, ranks);
+}
+function _M0MP312moonbitstack7moonstl4text11SuffixArray10lcp__array(self) {
+  const n = self.order.len;
+  const lcp = new _M0TPB5ArrayGiE([], 0);
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < n) {
+      _M0MPC15array5Array4pushGiE(lcp, 0);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  if (n === 0) {
+    return lcp;
+  }
+  const position = new _M0TPB5ArrayGiE([], 0);
+  let _tmp$2 = 0;
+  while (true) {
+    const _ = _tmp$2;
+    if (_ < n) {
+      _M0MPC15array5Array4pushGiE(position, 0);
+      _tmp$2 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  let _tmp$3 = 0;
+  while (true) {
+    const i = _tmp$3;
+    if (i < n) {
+      const _bind = self.order;
+      if (i < 0 || i >= _bind.len) {
+        $panic();
+      }
+      const _bind$2 = _bind.buf[i];
+      if (_bind$2 < 0 || _bind$2 >= position.len) {
+        $panic();
+      }
+      position.buf[_bind$2] = i;
+      _tmp$3 = i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  let common = 0;
+  let _tmp$4 = 0;
+  while (true) {
+    const start = _tmp$4;
+    if (start < n) {
+      _L: {
+        if (start < 0 || start >= position.len) {
+          $panic();
+        }
+        const at = position.buf[start];
+        if (at === 0) {
+          common = 0;
+          break _L;
+        }
+        const _bind = self.order;
+        const _bind$2 = at - 1 | 0;
+        if (_bind$2 < 0 || _bind$2 >= _bind.len) {
+          $panic();
+        }
+        const other = _bind.buf[_bind$2];
+        while (true) {
+          let _tmp$5;
+          if ((start + common | 0) < n) {
+            let _tmp$6;
+            if ((other + common | 0) < n) {
+              const _bind$3 = self.text_;
+              const _p = new _M0TPC16string10StringView(_bind$3, 0, _bind$3.length);
+              const _p$2 = start + common | 0;
+              const _tmp$7 = _p.str.charCodeAt(_p.start + _p$2 | 0);
+              const _bind$4 = self.text_;
+              const _p$3 = new _M0TPC16string10StringView(_bind$4, 0, _bind$4.length);
+              const _p$4 = other + common | 0;
+              _tmp$6 = _tmp$7 === _p$3.str.charCodeAt(_p$3.start + _p$4 | 0);
+            } else {
+              _tmp$6 = false;
+            }
+            _tmp$5 = _tmp$6;
+          } else {
+            _tmp$5 = false;
+          }
+          if (_tmp$5) {
+            common = common + 1 | 0;
+            continue;
+          } else {
+            break;
+          }
+        }
+        const _bind$3 = common;
+        if (at < 0 || at >= lcp.len) {
+          $panic();
+        }
+        lcp.buf[at] = _bind$3;
+        if (common > 0) {
+          common = common - 1 | 0;
+        }
+        break _L;
+      }
+      _tmp$4 = start + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return lcp;
+}
+function _M0MP312moonbitstack7moonstl4text11SuffixArray9to__array(self) {
+  return _M0MPC15array5Array4copyGiE(self.order);
 }
 function _M0FP312moonbitstack7moonstl4text12kmp__failure(pattern) {
   const m = pattern.end - pattern.start | 0;
@@ -11266,7 +13651,7 @@ function _M0MP312moonbitstack7moonstl4text15SequenceMatcher21get__matching__bloc
   const queue = new _M0TPB5ArrayGUiiiiEE([{ _0: 0, _1: self.a.len, _2: 0, _3: self.b.len }], 1);
   while (true) {
     if (queue.len > 0) {
-      const _p = _M0MPC15array5Array3popGUiiEE(queue);
+      const _p = _M0MPC15array5Array3popGUmiEE(queue);
       let _bind;
       if (_p === undefined) {
         _bind = $panic();
@@ -11391,6 +13776,362 @@ function _M0MP312moonbitstack7moonstl4text15SequenceMatcher5ratioGcE(self) {
   }
   const total = self.a.len + self.b.len | 0;
   return total === 0 ? 1 : 2 * (matches + 0) / (total + 0);
+}
+function _M0MP312moonbitstack7moonstl4text11AhoCorasick10push__node(self) {
+  _M0MPC15array5Array4pushGRP312moonbitstack7moonstl4text6OpcodeE(self.children, new _M0TPB5ArrayGUiiEE([], 0));
+  _M0MPC15array5Array4pushGiE(self.fail, 0);
+  _M0MPC15array5Array4pushGiE(self.out_head, -1);
+  _M0MPC15array5Array4pushGiE(self.out_tail, -1);
+  _M0MPC15array5Array4pushGiE(self.dict, -1);
+  return self.children.len - 1 | 0;
+}
+function _M0MP312moonbitstack7moonstl4text11AhoCorasick3add(self, pattern) {
+  const index = self.lengths.len;
+  _M0MPC15array5Array4pushGiE(self.lengths, pattern.end - pattern.start | 0);
+  let node = 0;
+  const _bind = pattern.end - pattern.start | 0;
+  let _tmp = 0;
+  while (true) {
+    const i = _tmp;
+    if (i < _bind) {
+      const code = pattern.str.charCodeAt(pattern.start + i | 0);
+      const _bind$2 = _M0MPB3Map3getGUiiEiE(self.next, { _0: node, _1: code });
+      let child;
+      if (_bind$2 === undefined) {
+        const child$2 = _M0MP312moonbitstack7moonstl4text11AhoCorasick10push__node(self);
+        _M0MPB3Map3setGUiiEiE(self.next, { _0: node, _1: code }, child$2);
+        const _bind$3 = self.children;
+        const _bind$4 = node;
+        if (_bind$4 < 0 || _bind$4 >= _bind$3.len) {
+          $panic();
+        }
+        _M0MPC15array5Array4pushGRP312moonbitstack7moonstl4text6OpcodeE(_bind$3.buf[_bind$4], { _0: code, _1: child$2 });
+        child = child$2;
+      } else {
+        const _Some = _bind$2;
+        child = _Some;
+      }
+      node = child;
+      _tmp = i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  _M0MPC15array5Array4pushGiE(self.out_next, -1);
+  const _bind$2 = self.out_head;
+  const _bind$3 = node;
+  if (_bind$3 < 0 || _bind$3 >= _bind$2.len) {
+    $panic();
+  }
+  if (_bind$2.buf[_bind$3] < 0) {
+    const _bind$4 = self.out_head;
+    const _bind$5 = node;
+    if (_bind$5 < 0 || _bind$5 >= _bind$4.len) {
+      $panic();
+    }
+    _bind$4.buf[_bind$5] = index;
+  } else {
+    const _bind$4 = self.out_next;
+    const _bind$5 = self.out_tail;
+    const _bind$6 = node;
+    if (_bind$6 < 0 || _bind$6 >= _bind$5.len) {
+      $panic();
+    }
+    const _bind$7 = _bind$5.buf[_bind$6];
+    if (_bind$7 < 0 || _bind$7 >= _bind$4.len) {
+      $panic();
+    }
+    _bind$4.buf[_bind$7] = index;
+  }
+  const _bind$4 = self.out_tail;
+  const _bind$5 = node;
+  if (_bind$5 < 0 || _bind$5 >= _bind$4.len) {
+    $panic();
+  }
+  _bind$4.buf[_bind$5] = index;
+  self.built = false;
+  return index;
+}
+function _M0MP312moonbitstack7moonstl4text11AhoCorasick5build(self) {
+  const count = self.children.len;
+  let _tmp = 0;
+  while (true) {
+    const node = _tmp;
+    if (node < count) {
+      const _bind = self.fail;
+      if (node < 0 || node >= _bind.len) {
+        $panic();
+      }
+      _bind.buf[node] = 0;
+      const _bind$2 = self.dict;
+      if (node < 0 || node >= _bind$2.len) {
+        $panic();
+      }
+      _bind$2.buf[node] = -1;
+      _tmp = node + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const queue = new _M0TPB5ArrayGiE([], 0);
+  const _bind = self.children;
+  if (0 >= _bind.len) {
+    $panic();
+  }
+  const _bind$2 = _bind.buf[0];
+  const _bind$3 = _bind$2.len;
+  const _bind$4 = _bind$2.buf;
+  let _tmp$2 = 0;
+  while (true) {
+    const _ = _tmp$2;
+    if (_ < _bind$3) {
+      const edge = _bind$4[_];
+      _M0MPC15array5Array4pushGiE(queue, edge._1);
+      _tmp$2 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  let head = 0;
+  while (true) {
+    if (head < queue.len) {
+      const _bind$5 = head;
+      if (_bind$5 < 0 || _bind$5 >= queue.len) {
+        $panic();
+      }
+      const node = queue.buf[_bind$5];
+      head = head + 1 | 0;
+      const _bind$6 = self.children;
+      if (node < 0 || node >= _bind$6.len) {
+        $panic();
+      }
+      const _bind$7 = _bind$6.buf[node];
+      const _bind$8 = _bind$7.len;
+      const _bind$9 = _bind$7.buf;
+      let _tmp$3 = 0;
+      while (true) {
+        const _ = _tmp$3;
+        if (_ < _bind$8) {
+          const edge = _bind$9[_];
+          const code = edge._0;
+          const child = edge._1;
+          const _bind$10 = self.fail;
+          if (node < 0 || node >= _bind$10.len) {
+            $panic();
+          }
+          let parent = _bind$10.buf[node];
+          let target = -1;
+          let searching = true;
+          while (true) {
+            if (searching) {
+              const _bind$11 = _M0MPB3Map3getGUiiEiE(self.next, { _0: parent, _1: code });
+              if (_bind$11 === undefined) {
+                if (parent === 0) {
+                  searching = false;
+                } else {
+                  const _bind$12 = self.fail;
+                  const _bind$13 = parent;
+                  if (_bind$13 < 0 || _bind$13 >= _bind$12.len) {
+                    $panic();
+                  }
+                  parent = _bind$12.buf[_bind$13];
+                }
+              } else {
+                const _Some = _bind$11;
+                const _found = _Some;
+                if (_found !== child) {
+                  target = _found;
+                }
+                searching = false;
+              }
+              continue;
+            } else {
+              break;
+            }
+          }
+          const _bind$11 = self.fail;
+          const _bind$12 = target < 0 ? 0 : target;
+          if (child < 0 || child >= _bind$11.len) {
+            $panic();
+          }
+          _bind$11.buf[child] = _bind$12;
+          const _bind$13 = self.dict;
+          let _bind$14;
+          const _bind$15 = self.out_head;
+          const _bind$16 = self.fail;
+          if (child < 0 || child >= _bind$16.len) {
+            $panic();
+          }
+          const _bind$17 = _bind$16.buf[child];
+          if (_bind$17 < 0 || _bind$17 >= _bind$15.len) {
+            $panic();
+          }
+          if (_bind$15.buf[_bind$17] >= 0) {
+            const _bind$18 = self.fail;
+            if (child < 0 || child >= _bind$18.len) {
+              $panic();
+            }
+            _bind$14 = _bind$18.buf[child];
+          } else {
+            const _bind$18 = self.dict;
+            const _bind$19 = self.fail;
+            if (child < 0 || child >= _bind$19.len) {
+              $panic();
+            }
+            const _bind$20 = _bind$19.buf[child];
+            if (_bind$20 < 0 || _bind$20 >= _bind$18.len) {
+              $panic();
+            }
+            _bind$14 = _bind$18.buf[_bind$20];
+          }
+          if (child < 0 || child >= _bind$13.len) {
+            $panic();
+          }
+          _bind$13.buf[child] = _bind$14;
+          _M0MPC15array5Array4pushGiE(queue, child);
+          _tmp$3 = _ + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      continue;
+    } else {
+      break;
+    }
+  }
+  self.built = true;
+}
+function _M0MP312moonbitstack7moonstl4text11AhoCorasick3new(patterns) {
+  const _tmp = new _M0TPB5ArrayGiE([], 0);
+  const _bind = [];
+  const ac = new _M0TP312moonbitstack7moonstl4text11AhoCorasick(_tmp, _M0MPB3Map3MapGUiiEiE(new _M0TPB9ArrayViewGUUiiEiEE(_bind, 0, 0), undefined), new _M0TPB5ArrayGRPB5ArrayGUiiEEE([new _M0TPB5ArrayGUiiEE([], 0)], 1), new _M0TPB5ArrayGiE([0], 1), new _M0TPB5ArrayGiE([-1], 1), new _M0TPB5ArrayGiE([-1], 1), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGiE([-1], 1), false);
+  const _bind$2 = patterns.len;
+  const _bind$3 = patterns.buf;
+  let _tmp$2 = 0;
+  while (true) {
+    const _ = _tmp$2;
+    if (_ < _bind$2) {
+      const pattern = _bind$3[_];
+      _M0MP312moonbitstack7moonstl4text11AhoCorasick3add(ac, pattern);
+      _tmp$2 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  _M0MP312moonbitstack7moonstl4text11AhoCorasick5build(ac);
+  return ac;
+}
+function _M0MP312moonbitstack7moonstl4text6AcScan11next__match(self) {
+  const _bind = self.text;
+  const n = _bind.end - _bind.start | 0;
+  while (true) {
+    if (self.out_node >= 0) {
+      let pattern;
+      if (self.out_last < 0) {
+        const _bind$2 = self.ac.out_head;
+        const _bind$3 = self.out_node;
+        if (_bind$3 < 0 || _bind$3 >= _bind$2.len) {
+          $panic();
+        }
+        pattern = _bind$2.buf[_bind$3];
+      } else {
+        const _bind$2 = self.ac.out_next;
+        const _bind$3 = self.out_last;
+        if (_bind$3 < 0 || _bind$3 >= _bind$2.len) {
+          $panic();
+        }
+        pattern = _bind$2.buf[_bind$3];
+      }
+      if (pattern >= 0) {
+        self.out_last = pattern;
+        const _tmp = self.pos;
+        const _bind$2 = self.ac.lengths;
+        if (pattern < 0 || pattern >= _bind$2.len) {
+          $panic();
+        }
+        return { _0: pattern, _1: _tmp - _bind$2.buf[pattern] | 0 };
+      }
+      const _bind$2 = self.ac.dict;
+      const _bind$3 = self.out_node;
+      if (_bind$3 < 0 || _bind$3 >= _bind$2.len) {
+        $panic();
+      }
+      self.out_node = _bind$2.buf[_bind$3];
+      self.out_last = -1;
+      continue;
+    }
+    if (!self.at_root) {
+      self.at_root = true;
+      const _bind$2 = self.ac.out_head;
+      if (0 >= _bind$2.len) {
+        $panic();
+      }
+      if (_bind$2.buf[0] >= 0) {
+        self.out_node = 0;
+        continue;
+      }
+    }
+    if (self.pos >= n) {
+      return undefined;
+    }
+    const _p = self.text;
+    const _p$2 = self.pos;
+    const code = _p.str.charCodeAt(_p.start + _p$2 | 0);
+    self.pos = self.pos + 1 | 0;
+    while (true) {
+      const _bind$2 = _M0MPB3Map3getGUiiEiE(self.ac.next, { _0: self.state, _1: code });
+      if (_bind$2 === undefined) {
+        if (self.state === 0) {
+          break;
+        } else {
+          const _bind$3 = self.ac.fail;
+          const _bind$4 = self.state;
+          if (_bind$4 < 0 || _bind$4 >= _bind$3.len) {
+            $panic();
+          }
+          self.state = _bind$3.buf[_bind$4];
+        }
+      } else {
+        const _Some = _bind$2;
+        const _child = _Some;
+        self.state = _child;
+        break;
+      }
+      continue;
+    }
+    self.at_root = false;
+    let _tmp;
+    const _bind$2 = self.ac.out_head;
+    const _bind$3 = self.state;
+    if (_bind$3 < 0 || _bind$3 >= _bind$2.len) {
+      $panic();
+    }
+    if (_bind$2.buf[_bind$3] >= 0) {
+      _tmp = self.state;
+    } else {
+      const _bind$4 = self.ac.dict;
+      const _bind$5 = self.state;
+      if (_bind$5 < 0 || _bind$5 >= _bind$4.len) {
+        $panic();
+      }
+      _tmp = _bind$4.buf[_bind$5];
+    }
+    self.out_node = _tmp;
+    self.out_last = -1;
+    continue;
+  }
+}
+function _M0MP312moonbitstack7moonstl4text11AhoCorasick11search__all(self, text) {
+  if (!self.built) {
+    _M0MP312moonbitstack7moonstl4text11AhoCorasick5build(self);
+  }
+  const scan = new _M0TP312moonbitstack7moonstl4text6AcScan(self, text, 0, 0, -1, -1, false);
+  return _M0MPB4Iter3newGUcRPB5ArrayGiEEE(() => _M0MP312moonbitstack7moonstl4text6AcScan11next__match(scan), undefined);
 }
 function _M0FP312moonbitstack7moonstl4tree13segment__size(n) {
   let size = 1;
@@ -11523,6 +14264,338 @@ function _M0MP312moonbitstack7moonstl4tree11SegmentTree10query__allGiE(self) {
     $panic();
   }
   return _bind.buf[1];
+}
+function _M0MP312moonbitstack7moonstl4tree7Fenwick3newGiE(length) {
+  const size = length < 0 ? 0 : length;
+  const tree = new _M0TPB5ArrayGiE([], 0);
+  const values = new _M0TPB5ArrayGiE([], 0);
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < size) {
+      _M0MPC15array5Array4pushGiE(tree, 0);
+      _M0MPC15array5Array4pushGiE(values, 0);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return new _M0TP312moonbitstack7moonstl4tree7FenwickGiE(tree, values, size);
+}
+function _M0MP312moonbitstack7moonstl4tree7Fenwick3addGiE(self, index, delta) {
+  if (index < 0 || index >= self.length_) {
+    return undefined;
+  }
+  const _bind = self.values;
+  const _bind$2 = self.values;
+  if (index < 0 || index >= _bind$2.len) {
+    $panic();
+  }
+  const _bind$3 = _bind$2.buf[index] + delta | 0;
+  if (index < 0 || index >= _bind.len) {
+    $panic();
+  }
+  _bind.buf[index] = _bind$3;
+  let at = index + 1 | 0;
+  while (true) {
+    if (at <= self.length_) {
+      const _bind$4 = self.tree;
+      const _bind$5 = at - 1 | 0;
+      const _bind$6 = self.tree;
+      const _bind$7 = at - 1 | 0;
+      if (_bind$7 < 0 || _bind$7 >= _bind$6.len) {
+        $panic();
+      }
+      const _bind$8 = _bind$6.buf[_bind$7] + delta | 0;
+      if (_bind$5 < 0 || _bind$5 >= _bind$4.len) {
+        $panic();
+      }
+      _bind$4.buf[_bind$5] = _bind$8;
+      at = at + (at & (-at | 0)) | 0;
+      continue;
+    } else {
+      return;
+    }
+  }
+}
+function _M0MP312moonbitstack7moonstl4tree7Fenwick3getGiE(self, index) {
+  if (index < 0 || index >= self.length_) {
+    return undefined;
+  } else {
+    const _bind = self.values;
+    if (index < 0 || index >= _bind.len) {
+      $panic();
+    }
+    return _bind.buf[index];
+  }
+}
+function _M0MP312moonbitstack7moonstl4tree7Fenwick3setGiE(self, index, value) {
+  const _bind = _M0MP312moonbitstack7moonstl4tree7Fenwick3getGiE(self, index);
+  if (_bind === undefined) {
+    return false;
+  } else {
+    const _Some = _bind;
+    const _old = _Some;
+    _M0MP312moonbitstack7moonstl4tree7Fenwick3addGiE(self, index, value - _old | 0);
+    return true;
+  }
+}
+function _M0MP312moonbitstack7moonstl4tree7Fenwick11from__arrayGiE(values) {
+  const fenwick = _M0MP312moonbitstack7moonstl4tree7Fenwick3newGiE(values.end - values.start | 0);
+  const _bind = values.end - values.start | 0;
+  let _tmp = 0;
+  while (true) {
+    const i = _tmp;
+    if (i < _bind) {
+      if (i < 0 || i >= (values.end - values.start | 0)) {
+        $panic();
+      }
+      _M0MP312moonbitstack7moonstl4tree7Fenwick3setGiE(fenwick, i, values.buf[values.start + i | 0]);
+      _tmp = i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return fenwick;
+}
+function _M0MP312moonbitstack7moonstl4tree7Fenwick11prefix__sumGiE(self, end) {
+  const stop = end > self.length_ ? self.length_ : end < 0 ? 0 : end;
+  let acc = 0;
+  let at = stop;
+  while (true) {
+    if (at > 0) {
+      const _tmp = acc;
+      const _bind = self.tree;
+      const _bind$2 = at - 1 | 0;
+      if (_bind$2 < 0 || _bind$2 >= _bind.len) {
+        $panic();
+      }
+      acc = _tmp + _bind.buf[_bind$2] | 0;
+      at = at - (at & (-at | 0)) | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return acc;
+}
+function _M0MP312moonbitstack7moonstl4tree7Fenwick10range__sumGiE(self, start, end) {
+  return _M0MP312moonbitstack7moonstl4tree7Fenwick11prefix__sumGiE(self, end) - _M0MP312moonbitstack7moonstl4tree7Fenwick11prefix__sumGiE(self, start) | 0;
+}
+function _M0MP312moonbitstack7moonstl4tree12IntervalTree7new__byGiiE(cmp) {
+  return new _M0TP312moonbitstack7moonstl4tree12IntervalTreeGiiE(cmp, new _M0TPB5ArrayGOiE([], 0), new _M0TPB5ArrayGOiE([], 0), new _M0TPB5ArrayGOiE([], 0), new _M0TPB5ArrayGjE([], 0), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGOiE([], 0), 0);
+}
+function _M0MP312moonbitstack7moonstl4tree12IntervalTree3newGiiE() {
+  return _M0MP312moonbitstack7moonstl4tree12IntervalTree7new__byGiiE((a, b) => $compare_int(a, b));
+}
+function _M0MP312moonbitstack7moonstl4tree12IntervalTree9start__atGiiE(self, index) {
+  const _bind = self.starts;
+  if (index < 0 || index >= _bind.len) {
+    $panic();
+  }
+  const _bind$2 = _bind.buf[index];
+  if (_bind$2 === undefined) {
+    return $panic("moonstl: an interval slot that holds nothing");
+  } else {
+    const _Some = _bind$2;
+    return _Some;
+  }
+}
+function _M0MP312moonbitstack7moonstl4tree12IntervalTree7end__atGiiE(self, index) {
+  const _bind = self.ends;
+  if (index < 0 || index >= _bind.len) {
+    $panic();
+  }
+  const _bind$2 = _bind.buf[index];
+  if (_bind$2 === undefined) {
+    return $panic("moonstl: an interval slot that holds nothing");
+  } else {
+    const _Some = _bind$2;
+    return _Some;
+  }
+}
+function _M0MP312moonbitstack7moonstl4tree12IntervalTree12refresh__maxGiiE(self) {
+  const out = new _M0TPB5ArrayGOiE([], 0);
+  let best = undefined;
+  const _bind = self.order;
+  const _bind$2 = _bind.len;
+  const _bind$3 = _bind.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$2) {
+      const slot = _bind$3[_];
+      const end = _M0MP312moonbitstack7moonstl4tree12IntervalTree7end__atGiiE(self, slot);
+      const _bind$4 = best;
+      let _tmp$2;
+      if (_bind$4 === undefined) {
+        _tmp$2 = end;
+      } else {
+        const _Some = _bind$4;
+        const _current = _Some;
+        const _func = self.cmp;
+        if (_func(end, _current) > 0) {
+          _tmp$2 = end;
+        } else {
+          _tmp$2 = _current;
+        }
+      }
+      best = _tmp$2;
+      _M0MPC15array5Array4pushGOiE(out, best);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  self.max_ends = out;
+}
+function _M0MP312moonbitstack7moonstl4tree12IntervalTree12position__ofGiiE(self, start, end) {
+  let low = 0;
+  let high = self.order.len;
+  while (true) {
+    if (low < high) {
+      const mid = (low + high | 0) / 2 | 0;
+      const _bind = self.order;
+      if (mid < 0 || mid >= _bind.len) {
+        $panic();
+      }
+      const slot = _bind.buf[mid];
+      const _func = self.cmp;
+      const by_start = _func(_M0MP312moonbitstack7moonstl4tree12IntervalTree9start__atGiiE(self, slot), start);
+      let order;
+      if (by_start !== 0) {
+        order = by_start;
+      } else {
+        const _func$2 = self.cmp;
+        order = _func$2(_M0MP312moonbitstack7moonstl4tree12IntervalTree7end__atGiiE(self, slot), end);
+      }
+      if (order <= 0) {
+        low = mid + 1 | 0;
+      } else {
+        high = mid;
+      }
+      continue;
+    } else {
+      break;
+    }
+  }
+  return low;
+}
+function _M0MP312moonbitstack7moonstl4tree12IntervalTree6insertGiiE(self, start, end, value) {
+  const _bind = _M0MPC15array5Array3popGiE(self.free);
+  let slot;
+  if (_bind === undefined) {
+    _M0MPC15array5Array4pushGOiE(self.starts, start);
+    _M0MPC15array5Array4pushGOiE(self.ends, end);
+    _M0MPC15array5Array4pushGOiE(self.values, value);
+    _M0MPC15array5Array4pushGjE(self.generations, 0);
+    slot = self.starts.len - 1 | 0;
+  } else {
+    const _Some = _bind;
+    const _slot = _Some;
+    const _bind$2 = self.starts;
+    const _bind$3 = start;
+    if (_slot < 0 || _slot >= _bind$2.len) {
+      $panic();
+    }
+    _bind$2.buf[_slot] = _bind$3;
+    const _bind$4 = self.ends;
+    const _bind$5 = end;
+    if (_slot < 0 || _slot >= _bind$4.len) {
+      $panic();
+    }
+    _bind$4.buf[_slot] = _bind$5;
+    const _bind$6 = self.values;
+    const _bind$7 = value;
+    if (_slot < 0 || _slot >= _bind$6.len) {
+      $panic();
+    }
+    _bind$6.buf[_slot] = _bind$7;
+    slot = _slot;
+  }
+  const at = _M0MP312moonbitstack7moonstl4tree12IntervalTree12position__ofGiiE(self, start, end);
+  _M0MPC15array5Array6insertGiE(self.order, at, slot);
+  _M0MP312moonbitstack7moonstl4tree12IntervalTree12refresh__maxGiiE(self);
+  self.len = self.len + 1 | 0;
+  const _bind$2 = self.generations;
+  if (slot < 0 || slot >= _bind$2.len) {
+    $panic();
+  }
+  return new _M0TP312moonbitstack7moonstl4tree11IntervalKeyGiE(slot, _bind$2.buf[slot]);
+}
+function _M0MP312moonbitstack7moonstl4tree12IntervalTree14query__overlapGiiE(self, start, end) {
+  const found = new _M0TPB5ArrayGUiiiEE([], 0);
+  const _bind = self.order;
+  const _bind$2 = _bind.len;
+  const _bind$3 = _bind.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$2) {
+      const slot = _bind$3[_];
+      const _func = self.cmp;
+      if (_func(_M0MP312moonbitstack7moonstl4tree12IntervalTree9start__atGiiE(self, slot), end) >= 0) {
+        break;
+      }
+      const _func$2 = self.cmp;
+      if (_func$2(_M0MP312moonbitstack7moonstl4tree12IntervalTree7end__atGiiE(self, slot), start) > 0) {
+        const _tmp$2 = _M0MP312moonbitstack7moonstl4tree12IntervalTree9start__atGiiE(self, slot);
+        const _tmp$3 = _M0MP312moonbitstack7moonstl4tree12IntervalTree7end__atGiiE(self, slot);
+        const _bind$4 = self.values;
+        if (slot < 0 || slot >= _bind$4.len) {
+          $panic();
+        }
+        const _p = _bind$4.buf[slot];
+        let _tmp$4;
+        if (_p === undefined) {
+          _tmp$4 = $panic();
+        } else {
+          const _p$2 = _p;
+          _tmp$4 = _p$2;
+        }
+        _M0MPC15array5Array4pushGRP312moonbitstack7moonstl4text6OpcodeE(found, { _0: _tmp$2, _1: _tmp$3, _2: _tmp$4 });
+      }
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return found;
+}
+function _M0MP312moonbitstack7moonstl4tree12IntervalTree4iterGiiE(self) {
+  const cursor = new _M0TPB8MutLocalGiE(0);
+  return _M0MPB4Iter3newGUcRPB5ArrayGiEEE(() => {
+    if (cursor.val >= self.order.len) {
+      return undefined;
+    } else {
+      const _bind = self.order;
+      const _bind$2 = cursor.val;
+      if (_bind$2 < 0 || _bind$2 >= _bind.len) {
+        $panic();
+      }
+      const slot = _bind.buf[_bind$2];
+      cursor.val = cursor.val + 1 | 0;
+      const _tmp = _M0MP312moonbitstack7moonstl4tree12IntervalTree9start__atGiiE(self, slot);
+      const _tmp$2 = _M0MP312moonbitstack7moonstl4tree12IntervalTree7end__atGiiE(self, slot);
+      const _bind$3 = self.values;
+      if (slot < 0 || slot >= _bind$3.len) {
+        $panic();
+      }
+      const _p = _bind$3.buf[slot];
+      let _tmp$3;
+      if (_p === undefined) {
+        _tmp$3 = $panic();
+      } else {
+        const _p$2 = _p;
+        _tmp$3 = _p$2;
+      }
+      return { _0: _tmp, _1: _tmp$2, _2: _tmp$3 };
+    }
+  }, undefined);
 }
 function _M0MP312moonbitstack7moonstl4tree11DisjointSet3new() {
   return new _M0TP312moonbitstack7moonstl4tree11DisjointSet(new _M0TPB5ArrayGiE([], 0), new _M0TPB5ArrayGiE([], 0), 0);
@@ -11737,7 +14810,7 @@ function _M0FP223moonstl_2dsite_2dbridge4main8strs__of(j) {
         break;
       }
     }
-    const _p$5 = _M0MPC15array5Array20unsafe__make__uninitGRPC14json4JsonE(_p$4.len);
+    const _p$5 = _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(_p$4.len);
     const _p$6 = _p$4.len;
     const _p$7 = _p$4.buf;
     let _tmp$2 = 0;
@@ -11756,6 +14829,25 @@ function _M0FP223moonstl_2dsite_2dbridge4main8strs__of(j) {
     return _p$5;
   } else {
     return new _M0TPB5ArrayGsE([], 0);
+  }
+}
+function _M0FP223moonstl_2dsite_2dbridge4main8get__arr(j) {
+  if (j.$tag === 5) {
+    const _Array = j;
+    const _a = _Array._0;
+    return _a;
+  } else {
+    return undefined;
+  }
+}
+function _M0FP223moonstl_2dsite_2dbridge4main8elem__of(a, i) {
+  if (i >= 0 && i < a.len) {
+    if (i < 0 || i >= a.len) {
+      $panic();
+    }
+    return _M0FP223moonstl_2dsite_2dbridge4main7as__int(a.buf[i]);
+  } else {
+    return undefined;
   }
 }
 function _M0FP223moonstl_2dsite_2dbridge4main8get__str(j, key) {
@@ -11792,7 +14884,7 @@ function _M0FP223moonstl_2dsite_2dbridge4main17set__strs_2einner(j, key) {
   return _M0FP223moonstl_2dsite_2dbridge4main8strs__of(_M0FP223moonstl_2dsite_2dbridge4main10get__field(j, key));
 }
 function _M0FP223moonstl_2dsite_2dbridge4main5jints(a) {
-  const _p = _M0MPC15array5Array20unsafe__make__uninitGRPC14json4JsonE(a.len);
+  const _p = _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(a.len);
   const _p$2 = a.len;
   const _p$3 = a.buf;
   let _tmp = 0;
@@ -11814,7 +14906,7 @@ function _M0FP223moonstl_2dsite_2dbridge4main5jints(a) {
   return new _M0DTPC14json4Json5Array(_p$4);
 }
 function _M0FP223moonstl_2dsite_2dbridge4main5jstrs(a) {
-  const _p = _M0MPC15array5Array20unsafe__make__uninitGRPC14json4JsonE(a.len);
+  const _p = _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(a.len);
   const _p$2 = a.len;
   const _p$3 = a.buf;
   let _tmp = 0;
@@ -11910,7 +15002,7 @@ function _M0FP223moonstl_2dsite_2dbridge4main4trie(input) {
   const _bind$5 = [];
   const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$5, 0, 0), undefined);
   const _p = _M0MP312moonbitstack7moonstl3map4Trie9to__arrayGiE(t);
-  const _p$2 = _M0MPC15array5Array20unsafe__make__uninitGRPC14json4JsonE(_p.len);
+  const _p$2 = _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(_p.len);
   const _p$3 = _p.len;
   const _p$4 = _p.buf;
   let _tmp$2 = 0;
@@ -11982,7 +15074,69 @@ function _M0FP223moonstl_2dsite_2dbridge4main3lru(input) {
   return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
 }
 function _M0FP223moonstl_2dsite_2dbridge4main4heap(input) {
+  const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
+  let j;
+  if (_bind.$tag === 1) {
+    const _ok = _bind;
+    j = _ok._0;
+  } else {
+    return _bind;
+  }
+  const vals = _M0FP223moonstl_2dsite_2dbridge4main17set__ints_2einner(j, "set");
   const h = _M0IP312moonbitstack7moonstl4heap8DaryHeapPB7Default7defaultGiE();
+  const _bind$2 = vals.len;
+  const _bind$3 = vals.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$2) {
+      const v = _bind$3[_];
+      _M0MP312moonbitstack7moonstl4heap8DaryHeap4pushGiE(h, v);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const f = _M0MP312moonbitstack7moonstl4heap13FibonacciHeap3newGiE(undefined);
+  const _bind$4 = vals.len;
+  const _bind$5 = vals.buf;
+  let _tmp$2 = 0;
+  while (true) {
+    const _ = _tmp$2;
+    if (_ < _bind$4) {
+      const v = _bind$5[_];
+      _M0MP312moonbitstack7moonstl4heap13FibonacciHeap6insertGiE(f, v);
+      _tmp$2 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const p = _M0MP312moonbitstack7moonstl4heap11PairingHeap3newGiE(undefined);
+  const _bind$6 = vals.len;
+  const _bind$7 = vals.buf;
+  let _tmp$3 = 0;
+  while (true) {
+    const _ = _tmp$3;
+    if (_ < _bind$6) {
+      const v = _bind$7[_];
+      _M0MP312moonbitstack7moonstl4heap11PairingHeap6insertGiE(p, v);
+      _tmp$3 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const _bind$8 = [];
+  const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$8, 0, 0), undefined);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "pops", _M0FP223moonstl_2dsite_2dbridge4main5jints(_M0MP312moonbitstack7moonstl4heap8DaryHeap19into__sorted__arrayGiE(h)));
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "fib", _M0FP223moonstl_2dsite_2dbridge4main5jints(_M0MP312moonbitstack7moonstl4heap13FibonacciHeap19into__sorted__arrayGiE(f)));
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "pairing", _M0FP223moonstl_2dsite_2dbridge4main5jints(_M0MP312moonbitstack7moonstl4heap11PairingHeap19into__sorted__arrayGiE(p)));
+  return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
+}
+function _M0FP223moonstl_2dsite_2dbridge4main5radix(input) {
+  const h = _M0MP312moonbitstack7moonstl4heap9RadixHeap3newGiE();
   const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
   let _tmp;
   if (_bind.$tag === 1) {
@@ -11999,7 +15153,13 @@ function _M0FP223moonstl_2dsite_2dbridge4main4heap(input) {
     const _ = _tmp$2;
     if (_ < _bind$3) {
       const v = _bind$4[_];
-      _M0MP312moonbitstack7moonstl4heap8DaryHeap4pushGiE(h, v);
+      const _bind$5 = _M0MP312moonbitstack7moonstl4heap9RadixHeap4pushGiE(h, BigInt.asUintN(64, BigInt(v)), v);
+      if (_bind$5.$tag === 1) {
+        const _ok = _bind$5;
+        _ok._0;
+      } else {
+        return _bind$5;
+      }
       _tmp$2 = _ + 1 | 0;
       continue;
     } else {
@@ -12007,16 +15167,17 @@ function _M0FP223moonstl_2dsite_2dbridge4main4heap(input) {
     }
   }
   const pops = new _M0TPB5ArrayGiE([], 0);
-  const _bind$5 = h.items.len;
+  const _bind$5 = h.len;
   let _tmp$3 = 0;
   while (true) {
     const _ = _tmp$3;
     if (_ < _bind$5) {
-      const _bind$6 = _M0MP312moonbitstack7moonstl4heap8DaryHeap3popGiE(h);
+      const _bind$6 = _M0MP312moonbitstack7moonstl4heap9RadixHeap8pop__minGiE(h);
       if (_bind$6 === undefined) {
       } else {
         const _Some = _bind$6;
-        const _v = _Some;
+        const _x = _Some;
+        const _v = _x._1;
         _M0MPC15array5Array4pushGiE(pops, _v);
       }
       _tmp$3 = _ + 1 | 0;
@@ -12066,6 +15227,124 @@ function _M0FP223moonstl_2dsite_2dbridge4main7segment(input) {
   _M0MPB3Map3setGsRPC14json4JsonE(out, "prefix", _M0FP223moonstl_2dsite_2dbridge4main5jints(prefix));
   return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
 }
+function _M0FP223moonstl_2dsite_2dbridge4main7fenwick(input) {
+  const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
+  let j;
+  if (_bind.$tag === 1) {
+    const _ok = _bind;
+    j = _ok._0;
+  } else {
+    return _bind;
+  }
+  const vals = _M0FP223moonstl_2dsite_2dbridge4main17set__ints_2einner(j, "set");
+  const f = _M0MP312moonbitstack7moonstl4tree7Fenwick11from__arrayGiE(new _M0TPB9ArrayViewGiE(vals.buf, 0, vals.len));
+  const prefix = new _M0TPB5ArrayGiE([], 0);
+  const _bind$2 = vals.len;
+  let _tmp = 0;
+  let _tmp$2 = 0 <= _bind$2;
+  while (true) {
+    const i = _tmp;
+    const _more = _tmp$2;
+    if (_more) {
+      _M0MPC15array5Array4pushGiE(prefix, _M0MP312moonbitstack7moonstl4tree7Fenwick11prefix__sumGiE(f, i));
+      _tmp = i + 1 | 0;
+      _tmp$2 = i < _bind$2;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const _bind$3 = [];
+  const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$3, 0, 0), undefined);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "values", _M0FP223moonstl_2dsite_2dbridge4main5jints(vals));
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "prefix", _M0FP223moonstl_2dsite_2dbridge4main5jints(prefix));
+  const _p = _M0MP312moonbitstack7moonstl4tree7Fenwick10range__sumGiE(f, 1, 3) + 0;
+  const _p$2 = undefined;
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "range_1_3", new _M0DTPC14json4Json6Number(_p, _p$2));
+  return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
+}
+function _M0FP223moonstl_2dsite_2dbridge4main8interval(input) {
+  const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
+  let j;
+  if (_bind.$tag === 1) {
+    const _ok = _bind;
+    j = _ok._0;
+  } else {
+    return _bind;
+  }
+  const pairs = _M0FP223moonstl_2dsite_2dbridge4main17set__ints_2einner(j, "set");
+  const t = _M0MP312moonbitstack7moonstl4tree12IntervalTree3newGiiE();
+  let count = 0;
+  let i = 0;
+  while (true) {
+    if ((i + 1 | 0) < pairs.len) {
+      const _bind$2 = i;
+      if (_bind$2 < 0 || _bind$2 >= pairs.len) {
+        $panic();
+      }
+      const _tmp = pairs.buf[_bind$2];
+      const _bind$3 = i + 1 | 0;
+      if (_bind$3 < 0 || _bind$3 >= pairs.len) {
+        $panic();
+      }
+      _M0MP312moonbitstack7moonstl4tree12IntervalTree6insertGiiE(t, _tmp, pairs.buf[_bind$3], count);
+      count = count + 1 | 0;
+      i = i + 2 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const qstart = _M0FP223moonstl_2dsite_2dbridge4main8get__int(j, "qstart");
+  const qend = _M0FP223moonstl_2dsite_2dbridge4main8get__int(j, "qend");
+  const overlaps = new _M0TPB5ArrayGiE([], 0);
+  const _bind$2 = _M0MP312moonbitstack7moonstl4tree12IntervalTree14query__overlapGiiE(t, qstart, qend);
+  const _bind$3 = _bind$2.len;
+  const _bind$4 = _bind$2.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$3) {
+      const _foreach_element = _bind$4[_];
+      const _a = _foreach_element._0;
+      const _b = _foreach_element._1;
+      _M0MPC15array5Array4pushGiE(overlaps, _a);
+      _M0MPC15array5Array4pushGiE(overlaps, _b);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const all = new _M0TPB5ArrayGiE([], 0);
+  const _it = _M0MP312moonbitstack7moonstl4tree12IntervalTree4iterGiiE(t);
+  while (true) {
+    const _bind$5 = _M0MPB4Iter4nextGUcRPB5ArrayGiEEE(_it);
+    if (_bind$5 === undefined) {
+      break;
+    } else {
+      const _Some = _bind$5;
+      const _x = _Some;
+      const _a = _x._0;
+      const _b = _x._1;
+      _M0MPC15array5Array4pushGiE(all, _a);
+      _M0MPC15array5Array4pushGiE(all, _b);
+      continue;
+    }
+  }
+  const _bind$5 = [];
+  const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$5, 0, 0), undefined);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "intervals", _M0FP223moonstl_2dsite_2dbridge4main5jints(all));
+  const _p = qstart + 0;
+  const _p$2 = undefined;
+  const _tmp$2 = new _M0DTPC14json4Json6Number(_p, _p$2);
+  const _p$3 = qend + 0;
+  const _p$4 = undefined;
+  const _p$5 = new _M0TPB5ArrayGRPC14json4JsonE([_tmp$2, new _M0DTPC14json4Json6Number(_p$3, _p$4)], 2);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "q", new _M0DTPC14json4Json5Array(_p$5));
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "overlap", _M0FP223moonstl_2dsite_2dbridge4main5jints(overlaps));
+  return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
+}
 function _M0FP223moonstl_2dsite_2dbridge4main8disjoint(input) {
   const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
   let j;
@@ -12113,7 +15392,7 @@ function _M0FP223moonstl_2dsite_2dbridge4main8disjoint(input) {
   const _bind$2 = [];
   const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$2, 0, 0), undefined);
   const _p = _M0MP312moonbitstack7moonstl4tree11DisjointSet8to__sets(d);
-  const _p$2 = _M0MPC15array5Array20unsafe__make__uninitGRPC14json4JsonE(_p.len);
+  const _p$2 = _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(_p.len);
   const _p$3 = _p.len;
   const _p$4 = _p.buf;
   let _tmp$3 = 0;
@@ -12146,7 +15425,7 @@ function _M0FP223moonstl_2dsite_2dbridge4main5bloom(input) {
     return _bind;
   }
   const cap = _M0FP223moonstl_2dsite_2dbridge4main8get__int(j, "cap");
-  const _bind$2 = _M0MP312moonbitstack7moonstl6sketch11BloomFilter3newGiE(cap, undefined, _M0FP223moonstl_2dsite_2dbridge4main5bloomN6constrS4442);
+  const _bind$2 = _M0MP312moonbitstack7moonstl6sketch11BloomFilter3newGiE(cap, undefined, _M0FP223moonstl_2dsite_2dbridge4main5bloomN6constrS5677);
   let b;
   if (_bind$2.$tag === 1) {
     const _ok = _bind$2;
@@ -12219,6 +15498,132 @@ function _M0FP223moonstl_2dsite_2dbridge4main8countmin(input) {
   _M0MPB3Map3setGsRPC14json4JsonE(out, "estimate", new _M0DTPC14json4Json6Number(_p, _p$2));
   return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
 }
+function _M0FP223moonstl_2dsite_2dbridge4main6cuckoo(input) {
+  const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
+  let j;
+  if (_bind.$tag === 1) {
+    const _ok = _bind;
+    j = _ok._0;
+  } else {
+    return _bind;
+  }
+  const cap = _M0FP223moonstl_2dsite_2dbridge4main8get__int(j, "cap");
+  const _bind$2 = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter3newGiE(cap, undefined, _M0FP223moonstl_2dsite_2dbridge4main6cuckooN6constrS5703);
+  let c;
+  if (_bind$2.$tag === 1) {
+    const _ok = _bind$2;
+    c = _ok._0;
+  } else {
+    return _bind$2;
+  }
+  const set = _M0FP223moonstl_2dsite_2dbridge4main17set__ints_2einner(j, "set");
+  const _bind$3 = set.len;
+  const _bind$4 = set.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$3) {
+      const v = _bind$4[_];
+      _M0MP312moonbitstack7moonstl6sketch12CuckooFilter6insertGiE(c, v);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const query = _M0FP223moonstl_2dsite_2dbridge4main8get__int(j, "n");
+  const _bind$5 = [];
+  const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$5, 0, 0), undefined);
+  const _p = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter12may__containGiE(c, query);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "found", _p ? _M0DTPC14json4Json4True__ : _M0DTPC14json4Json5False__);
+  const _p$2 = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter6removeGiE(c, query);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "removed", _p$2 ? _M0DTPC14json4Json4True__ : _M0DTPC14json4Json5False__);
+  const _p$3 = _M0MP312moonbitstack7moonstl6sketch12CuckooFilter12may__containGiE(c, query);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "after_remove", _p$3 ? _M0DTPC14json4Json4True__ : _M0DTPC14json4Json5False__);
+  return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
+}
+function _M0FP223moonstl_2dsite_2dbridge4main15distinct__count(a) {
+  let count = 0;
+  const _bind = a.len;
+  let _tmp = 0;
+  while (true) {
+    const i = _tmp;
+    if (i < _bind) {
+      let first = true;
+      let _tmp$2 = 0;
+      while (true) {
+        const k = _tmp$2;
+        if (k < i) {
+          if (k < 0 || k >= a.len) {
+            $panic();
+          }
+          const _tmp$3 = a.buf[k];
+          if (i < 0 || i >= a.len) {
+            $panic();
+          }
+          if (_tmp$3 === a.buf[i]) {
+            first = false;
+          }
+          _tmp$2 = k + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      if (first) {
+        count = count + 1 | 0;
+      }
+      _tmp = i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return count;
+}
+function _M0FP223moonstl_2dsite_2dbridge4main5theta(input) {
+  const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
+  let j;
+  if (_bind.$tag === 1) {
+    const _ok = _bind;
+    j = _ok._0;
+  } else {
+    return _bind;
+  }
+  const set = _M0FP223moonstl_2dsite_2dbridge4main17set__ints_2einner(j, "set");
+  const nominal = _M0FP223moonstl_2dsite_2dbridge4main8get__int(j, "nominal");
+  const _bind$2 = _M0MP312moonbitstack7moonstl6sketch11ThetaSketch11new_2einnerGiE(nominal > 0 ? nominal : 4096, 0);
+  let t;
+  if (_bind$2.$tag === 1) {
+    const _ok = _bind$2;
+    t = _ok._0;
+  } else {
+    return _bind$2;
+  }
+  const _bind$3 = set.len;
+  const _bind$4 = set.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$3) {
+      const v = _bind$4[_];
+      _M0MP312moonbitstack7moonstl6sketch11ThetaSketch3addGiE(t, v);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const _bind$5 = [];
+  const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$5, 0, 0), undefined);
+  const _p = _M0FP223moonstl_2dsite_2dbridge4main15distinct__count(set) + 0;
+  const _p$2 = undefined;
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "distinct", new _M0DTPC14json4Json6Number(_p, _p$2));
+  const _p$3 = _M0MP312moonbitstack7moonstl6sketch11ThetaSketch8estimateGiE(t);
+  const _p$4 = undefined;
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "estimate", new _M0DTPC14json4Json6Number(_p$3, _p$4));
+  return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
+}
 function _M0FP223moonstl_2dsite_2dbridge4main3kmp(input) {
   const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
   let j;
@@ -12263,7 +15668,7 @@ function _M0FP223moonstl_2dsite_2dbridge4main4diff(input) {
   const _p$3 = _M0MP312moonbitstack7moonstl4text15SequenceMatcher5ratioGcE(m);
   const _p$4 = undefined;
   _M0MPB3Map3setGsRPC14json4JsonE(out, "ratio", new _M0DTPC14json4Json6Number(_p$3, _p$4));
-  const _p$5 = _M0MPC15array5Array20unsafe__make__uninitGRPC14json4JsonE(ops.len);
+  const _p$5 = _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(ops.len);
   const _p$6 = ops.len;
   const _p$7 = ops.buf;
   let _tmp$2 = 0;
@@ -12295,6 +15700,84 @@ function _M0FP223moonstl_2dsite_2dbridge4main4diff(input) {
   }
   const _p$8 = _p$5;
   _M0MPB3Map3setGsRPC14json4JsonE(out, "ops", new _M0DTPC14json4Json5Array(_p$8));
+  return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
+}
+function _M0FP223moonstl_2dsite_2dbridge4main3aho(input) {
+  const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
+  let j;
+  if (_bind.$tag === 1) {
+    const _ok = _bind;
+    j = _ok._0;
+  } else {
+    return _bind;
+  }
+  const patterns = _M0FP223moonstl_2dsite_2dbridge4main17set__strs_2einner(j, "patterns");
+  const text = _M0FP223moonstl_2dsite_2dbridge4main8get__str(j, "text");
+  const _p = _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(patterns.len);
+  const _p$2 = patterns.len;
+  const _p$3 = patterns.buf;
+  let _tmp = 0;
+  while (true) {
+    const _p$4 = _tmp;
+    if (_p$4 < _p$2) {
+      const _p$5 = _p$3[_p$4];
+      const _p$6 = _M0IPC16string6StringPB12ToStringView16to__string__view(_p$5);
+      _p.buf[_p$4] = _p$6;
+      _tmp = _p$4 + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const views = _p;
+  const ac = _M0MP312moonbitstack7moonstl4text11AhoCorasick3new(views);
+  const _bind$2 = [];
+  const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$2, 0, 0), undefined);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "patterns", _M0FP223moonstl_2dsite_2dbridge4main5jstrs(patterns));
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "text", new _M0DTPC14json4Json6String(text));
+  const _p$4 = _M0MPB4Iter9to__arrayGUiiEE(_M0MP312moonbitstack7moonstl4text11AhoCorasick11search__all(ac, new _M0TPC16string10StringView(text, 0, text.length)));
+  const _p$5 = _M0MPC15array5Array20unsafe__make__uninitGRPC16string10StringViewE(_p$4.len);
+  const _p$6 = _p$4.len;
+  const _p$7 = _p$4.buf;
+  let _tmp$2 = 0;
+  while (true) {
+    const _p$8 = _tmp$2;
+    if (_p$8 < _p$6) {
+      const _p$9 = _p$7[_p$8];
+      const _p$10 = _p$9._0 + 0;
+      const _p$11 = undefined;
+      const _tmp$3 = new _M0DTPC14json4Json6Number(_p$10, _p$11);
+      const _p$12 = _p$9._1 + 0;
+      const _p$13 = undefined;
+      const _p$14 = new _M0TPB5ArrayGRPC14json4JsonE([_tmp$3, new _M0DTPC14json4Json6Number(_p$12, _p$13)], 2);
+      const _p$15 = new _M0DTPC14json4Json5Array(_p$14);
+      _p$5.buf[_p$8] = _p$15;
+      _tmp$2 = _p$8 + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const _p$8 = _p$5;
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "matches", new _M0DTPC14json4Json5Array(_p$8));
+  return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
+}
+function _M0FP223moonstl_2dsite_2dbridge4main6suffix(input) {
+  const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
+  let j;
+  if (_bind.$tag === 1) {
+    const _ok = _bind;
+    j = _ok._0;
+  } else {
+    return _bind;
+  }
+  const text = _M0FP223moonstl_2dsite_2dbridge4main8get__str(j, "text");
+  const sa = _M0MP312moonbitstack7moonstl4text11SuffixArray3new(new _M0TPC16string10StringView(text, 0, text.length));
+  const _bind$2 = [];
+  const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$2, 0, 0), undefined);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "text", new _M0DTPC14json4Json6String(text));
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "order", _M0FP223moonstl_2dsite_2dbridge4main5jints(_M0MP312moonbitstack7moonstl4text11SuffixArray9to__array(sa)));
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "lcp", _M0FP223moonstl_2dsite_2dbridge4main5jints(_M0MP312moonbitstack7moonstl4text11SuffixArray10lcp__array(sa)));
   return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
 }
 function _M0FP223moonstl_2dsite_2dbridge4main3phf(input) {
@@ -12341,7 +15824,56 @@ function _M0FP223moonstl_2dsite_2dbridge4main3phf(input) {
   const _p = map.keys.len + 0;
   const _p$2 = undefined;
   _M0MPB3Map3setGsRPC14json4JsonE(out, "size", new _M0DTPC14json4Json6Number(_p, _p$2));
-  _M0MPB3Map3setGsRPC14json4JsonE(out, "keys", _M0FP223moonstl_2dsite_2dbridge4main5jstrs(_M0MPB4Iter9to__arrayGRPC14json4JsonE(_M0MP312moonbitstack7moonstl3phf6PhfMap4keysGsiE(map))));
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "keys", _M0FP223moonstl_2dsite_2dbridge4main5jstrs(_M0MPB4Iter9to__arrayGUiiEE(_M0MP312moonbitstack7moonstl3phf6PhfMap4keysGsiE(map))));
+  return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
+}
+function _M0FP223moonstl_2dsite_2dbridge4main12phf__ordered(input) {
+  const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
+  let j;
+  if (_bind.$tag === 1) {
+    const _ok = _bind;
+    j = _ok._0;
+  } else {
+    return _bind;
+  }
+  const words = _M0FP223moonstl_2dsite_2dbridge4main17set__strs_2einner(j, "set");
+  const builder = _M0MP312moonbitstack7moonstl3phf10PhfBuilder3newGsiE(undefined);
+  const _bind$2 = words.len;
+  const _bind$3 = words.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$2) {
+      const e = _bind$3[_];
+      const _bind$4 = _M0MP312moonbitstack7moonstl3phf10PhfBuilder5entryGsiE(builder, e, e.length);
+      if (_bind$4.$tag === 1) {
+        const _ok = _bind$4;
+        _ok._0;
+      } else {
+        return _bind$4;
+      }
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const _bind$4 = _M0MP312moonbitstack7moonstl3phf10PhfBuilder14build__orderedGsiE(builder);
+  let om;
+  if (_bind$4.$tag === 1) {
+    const _ok = _bind$4;
+    om = _ok._0;
+  } else {
+    return _bind$4;
+  }
+  const q = _M0FP223moonstl_2dsite_2dbridge4main8get__str(j, "q");
+  const _bind$5 = [];
+  const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$5, 0, 0), undefined);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "order", _M0FP223moonstl_2dsite_2dbridge4main5jstrs(_M0MPB4Iter9to__arrayGUiiEE(_M0MP312moonbitstack7moonstl3phf13PhfOrderedMap4keysGsiE(om))));
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "q", new _M0DTPC14json4Json6String(q));
+  const _p = _M0MPC16option6Option10unwrap__orGiE(_M0MP312moonbitstack7moonstl3phf13PhfOrderedMap5indexGsiE(om, q), -1) + 0;
+  const _p$2 = undefined;
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "index", new _M0DTPC14json4Json6Number(_p, _p$2));
   return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
 }
 function _M0FP223moonstl_2dsite_2dbridge4main4ring(input) {
@@ -12432,6 +15964,55 @@ function _M0FP223moonstl_2dsite_2dbridge4main6bitset(input) {
   _M0MPB3Map3setGsRPC14json4JsonE(out, "select0", new _M0DTPC14json4Json6Number(_p, _p$2));
   return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
 }
+function _M0FP223moonstl_2dsite_2dbridge4main3gap(input) {
+  const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
+  let j;
+  if (_bind.$tag === 1) {
+    const _ok = _bind;
+    j = _ok._0;
+  } else {
+    return _bind;
+  }
+  const base = _M0FP223moonstl_2dsite_2dbridge4main17set__ints_2einner(j, "set");
+  const g = _M0MP312moonbitstack7moonstl3seq9GapBuffer11new_2einnerGiE(0);
+  const _bind$2 = base.len;
+  const _bind$3 = base.buf;
+  let _tmp = 0;
+  while (true) {
+    const _ = _tmp;
+    if (_ < _bind$2) {
+      const v = _bind$3[_];
+      _M0MP312moonbitstack7moonstl3seq9GapBuffer6insertGiE(g, g.before.len + g.after.len | 0, v);
+      _tmp = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const ops = _M0MPC16option6Option10unwrap__orGRPC14json4JsonE(_M0FP223moonstl_2dsite_2dbridge4main8get__arr(_M0FP223moonstl_2dsite_2dbridge4main10get__field(j, "ops")), new _M0TPB5ArrayGRPC14json4JsonE([], 0));
+  const _bind$4 = ops.len;
+  const _bind$5 = ops.buf;
+  let _tmp$2 = 0;
+  while (true) {
+    const _ = _tmp$2;
+    if (_ < _bind$4) {
+      const op = _bind$5[_];
+      const oa = _M0MPC16option6Option10unwrap__orGRPC14json4JsonE(_M0FP223moonstl_2dsite_2dbridge4main8get__arr(op), new _M0TPB5ArrayGRPC14json4JsonE([], 0));
+      const pos = _M0MPC16option6Option10unwrap__orGiE(_M0FP223moonstl_2dsite_2dbridge4main8elem__of(oa, 0), 0);
+      const val = _M0MPC16option6Option10unwrap__orGiE(_M0FP223moonstl_2dsite_2dbridge4main8elem__of(oa, 1), 0);
+      _M0MP312moonbitstack7moonstl3seq9GapBuffer6insertGiE(g, pos, val);
+      _tmp$2 = _ + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const _bind$6 = [];
+  const out = _M0MPB3Map3MapGsRPC14json4JsonE(new _M0TPB9ArrayViewGUsRPC14json4JsonEE(_bind$6, 0, 0), undefined);
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "before", _M0FP223moonstl_2dsite_2dbridge4main5jints(base));
+  _M0MPB3Map3setGsRPC14json4JsonE(out, "after", _M0FP223moonstl_2dsite_2dbridge4main5jints(_M0MP312moonbitstack7moonstl3seq9GapBuffer9to__arrayGiE(g)));
+  return new _M0DTPC16result6ResultGsRPC15error5ErrorE2Ok(_M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json6Object(out), 0, false, false));
+}
 function _M0FP223moonstl_2dsite_2dbridge4main5perms(input) {
   const _bind = _M0FP212moonbitstack8moonjson5loads(new _M0TPC16string10StringView(input, 0, input.length), _M0FP212moonbitstack8moonjson6strict);
   let j;
@@ -12451,12 +16032,12 @@ function _M0FP223moonstl_2dsite_2dbridge4main5perms(input) {
     if (r === 0) {
       const p = _M0MP312moonbitstack7moonstl4algo12Permutations3newGiE(new _M0TPB9ArrayViewGiE(pool.buf, 0, pool.len), undefined);
       kind = "permutations";
-      rows = _M0MPB4Iter9to__arrayGRPC14json4JsonE(_M0MPB4Iter3mapGRPB5ArrayGiERPC14json4JsonE(_M0MP312moonbitstack7moonstl4algo12Permutations4iterGiE(p), (row) => _M0FP223moonstl_2dsite_2dbridge4main5jints(row)));
+      rows = _M0MPB4Iter9to__arrayGUiiEE(_M0MPB4Iter3mapGRPB5ArrayGiERPC14json4JsonE(_M0MP312moonbitstack7moonstl4algo12Permutations4iterGiE(p), (row) => _M0FP223moonstl_2dsite_2dbridge4main5jints(row)));
       break _L;
     } else {
       const c = _M0MP312moonbitstack7moonstl4algo12Combinations3newGiE(new _M0TPB9ArrayViewGiE(pool.buf, 0, pool.len), r);
       kind = "combinations";
-      rows = _M0MPB4Iter9to__arrayGRPC14json4JsonE(_M0MPB4Iter3mapGRPB5ArrayGiERPC14json4JsonE(_M0MP312moonbitstack7moonstl4algo12Combinations4iterGiE(c), (row) => _M0FP223moonstl_2dsite_2dbridge4main5jints(row)));
+      rows = _M0MPB4Iter9to__arrayGUiiEE(_M0MPB4Iter3mapGRPB5ArrayGiERPC14json4JsonE(_M0MP312moonbitstack7moonstl4algo12Combinations4iterGiE(c), (row) => _M0FP223moonstl_2dsite_2dbridge4main5jints(row)));
       break _L;
     }
   }
@@ -12512,8 +16093,8 @@ function _M0FP223moonstl_2dsite_2dbridge4main3run(name, input) {
           break _L;
         }
       }
-      case "segment": {
-        const _bind$5 = _M0FP223moonstl_2dsite_2dbridge4main7segment(input);
+      case "radix": {
+        const _bind$5 = _M0FP223moonstl_2dsite_2dbridge4main5radix(input);
         if (_bind$5.$tag === 1) {
           const _ok = _bind$5;
           return _ok._0;
@@ -12523,8 +16104,8 @@ function _M0FP223moonstl_2dsite_2dbridge4main3run(name, input) {
           break _L;
         }
       }
-      case "disjoint": {
-        const _bind$6 = _M0FP223moonstl_2dsite_2dbridge4main8disjoint(input);
+      case "segment": {
+        const _bind$6 = _M0FP223moonstl_2dsite_2dbridge4main7segment(input);
         if (_bind$6.$tag === 1) {
           const _ok = _bind$6;
           return _ok._0;
@@ -12534,8 +16115,8 @@ function _M0FP223moonstl_2dsite_2dbridge4main3run(name, input) {
           break _L;
         }
       }
-      case "bloom": {
-        const _bind$7 = _M0FP223moonstl_2dsite_2dbridge4main5bloom(input);
+      case "fenwick": {
+        const _bind$7 = _M0FP223moonstl_2dsite_2dbridge4main7fenwick(input);
         if (_bind$7.$tag === 1) {
           const _ok = _bind$7;
           return _ok._0;
@@ -12545,8 +16126,8 @@ function _M0FP223moonstl_2dsite_2dbridge4main3run(name, input) {
           break _L;
         }
       }
-      case "countmin": {
-        const _bind$8 = _M0FP223moonstl_2dsite_2dbridge4main8countmin(input);
+      case "interval": {
+        const _bind$8 = _M0FP223moonstl_2dsite_2dbridge4main8interval(input);
         if (_bind$8.$tag === 1) {
           const _ok = _bind$8;
           return _ok._0;
@@ -12556,8 +16137,8 @@ function _M0FP223moonstl_2dsite_2dbridge4main3run(name, input) {
           break _L;
         }
       }
-      case "kmp": {
-        const _bind$9 = _M0FP223moonstl_2dsite_2dbridge4main3kmp(input);
+      case "disjoint": {
+        const _bind$9 = _M0FP223moonstl_2dsite_2dbridge4main8disjoint(input);
         if (_bind$9.$tag === 1) {
           const _ok = _bind$9;
           return _ok._0;
@@ -12567,8 +16148,8 @@ function _M0FP223moonstl_2dsite_2dbridge4main3run(name, input) {
           break _L;
         }
       }
-      case "diff": {
-        const _bind$10 = _M0FP223moonstl_2dsite_2dbridge4main4diff(input);
+      case "bloom": {
+        const _bind$10 = _M0FP223moonstl_2dsite_2dbridge4main5bloom(input);
         if (_bind$10.$tag === 1) {
           const _ok = _bind$10;
           return _ok._0;
@@ -12578,8 +16159,8 @@ function _M0FP223moonstl_2dsite_2dbridge4main3run(name, input) {
           break _L;
         }
       }
-      case "phf": {
-        const _bind$11 = _M0FP223moonstl_2dsite_2dbridge4main3phf(input);
+      case "cuckoo": {
+        const _bind$11 = _M0FP223moonstl_2dsite_2dbridge4main6cuckoo(input);
         if (_bind$11.$tag === 1) {
           const _ok = _bind$11;
           return _ok._0;
@@ -12589,8 +16170,8 @@ function _M0FP223moonstl_2dsite_2dbridge4main3run(name, input) {
           break _L;
         }
       }
-      case "ring": {
-        const _bind$12 = _M0FP223moonstl_2dsite_2dbridge4main4ring(input);
+      case "countmin": {
+        const _bind$12 = _M0FP223moonstl_2dsite_2dbridge4main8countmin(input);
         if (_bind$12.$tag === 1) {
           const _ok = _bind$12;
           return _ok._0;
@@ -12600,8 +16181,8 @@ function _M0FP223moonstl_2dsite_2dbridge4main3run(name, input) {
           break _L;
         }
       }
-      case "bitset": {
-        const _bind$13 = _M0FP223moonstl_2dsite_2dbridge4main6bitset(input);
+      case "theta": {
+        const _bind$13 = _M0FP223moonstl_2dsite_2dbridge4main5theta(input);
         if (_bind$13.$tag === 1) {
           const _ok = _bind$13;
           return _ok._0;
@@ -12611,13 +16192,112 @@ function _M0FP223moonstl_2dsite_2dbridge4main3run(name, input) {
           break _L;
         }
       }
-      case "perms": {
-        const _bind$14 = _M0FP223moonstl_2dsite_2dbridge4main5perms(input);
+      case "kmp": {
+        const _bind$14 = _M0FP223moonstl_2dsite_2dbridge4main3kmp(input);
         if (_bind$14.$tag === 1) {
           const _ok = _bind$14;
           return _ok._0;
         } else {
           const _err = _bind$14;
+          _try_err = _err._0;
+          break _L;
+        }
+      }
+      case "aho": {
+        const _bind$15 = _M0FP223moonstl_2dsite_2dbridge4main3aho(input);
+        if (_bind$15.$tag === 1) {
+          const _ok = _bind$15;
+          return _ok._0;
+        } else {
+          const _err = _bind$15;
+          _try_err = _err._0;
+          break _L;
+        }
+      }
+      case "suffix": {
+        const _bind$16 = _M0FP223moonstl_2dsite_2dbridge4main6suffix(input);
+        if (_bind$16.$tag === 1) {
+          const _ok = _bind$16;
+          return _ok._0;
+        } else {
+          const _err = _bind$16;
+          _try_err = _err._0;
+          break _L;
+        }
+      }
+      case "diff": {
+        const _bind$17 = _M0FP223moonstl_2dsite_2dbridge4main4diff(input);
+        if (_bind$17.$tag === 1) {
+          const _ok = _bind$17;
+          return _ok._0;
+        } else {
+          const _err = _bind$17;
+          _try_err = _err._0;
+          break _L;
+        }
+      }
+      case "phf": {
+        const _bind$18 = _M0FP223moonstl_2dsite_2dbridge4main3phf(input);
+        if (_bind$18.$tag === 1) {
+          const _ok = _bind$18;
+          return _ok._0;
+        } else {
+          const _err = _bind$18;
+          _try_err = _err._0;
+          break _L;
+        }
+      }
+      case "phf_ordered": {
+        const _bind$19 = _M0FP223moonstl_2dsite_2dbridge4main12phf__ordered(input);
+        if (_bind$19.$tag === 1) {
+          const _ok = _bind$19;
+          return _ok._0;
+        } else {
+          const _err = _bind$19;
+          _try_err = _err._0;
+          break _L;
+        }
+      }
+      case "ring": {
+        const _bind$20 = _M0FP223moonstl_2dsite_2dbridge4main4ring(input);
+        if (_bind$20.$tag === 1) {
+          const _ok = _bind$20;
+          return _ok._0;
+        } else {
+          const _err = _bind$20;
+          _try_err = _err._0;
+          break _L;
+        }
+      }
+      case "gap": {
+        const _bind$21 = _M0FP223moonstl_2dsite_2dbridge4main3gap(input);
+        if (_bind$21.$tag === 1) {
+          const _ok = _bind$21;
+          return _ok._0;
+        } else {
+          const _err = _bind$21;
+          _try_err = _err._0;
+          break _L;
+        }
+      }
+      case "bitset": {
+        const _bind$22 = _M0FP223moonstl_2dsite_2dbridge4main6bitset(input);
+        if (_bind$22.$tag === 1) {
+          const _ok = _bind$22;
+          return _ok._0;
+        } else {
+          const _err = _bind$22;
+          _try_err = _err._0;
+          break _L;
+        }
+      }
+      case "perms": {
+        const _bind$23 = _M0FP223moonstl_2dsite_2dbridge4main5perms(input);
+        if (_bind$23.$tag === 1) {
+          const _ok = _bind$23;
+          return _ok._0;
+        } else {
+          const _err = _bind$23;
           _try_err = _err._0;
           break _L;
         }
@@ -12638,27 +16318,45 @@ function _M0FP223moonstl_2dsite_2dbridge4main5names() {
   const _tmp$3 = new _M0DTPC14json4Json6String(_p$3);
   const _p$4 = "heap";
   const _tmp$4 = new _M0DTPC14json4Json6String(_p$4);
-  const _p$5 = "segment";
+  const _p$5 = "radix";
   const _tmp$5 = new _M0DTPC14json4Json6String(_p$5);
-  const _p$6 = "disjoint";
+  const _p$6 = "segment";
   const _tmp$6 = new _M0DTPC14json4Json6String(_p$6);
-  const _p$7 = "bloom";
+  const _p$7 = "fenwick";
   const _tmp$7 = new _M0DTPC14json4Json6String(_p$7);
-  const _p$8 = "countmin";
+  const _p$8 = "interval";
   const _tmp$8 = new _M0DTPC14json4Json6String(_p$8);
-  const _p$9 = "kmp";
+  const _p$9 = "disjoint";
   const _tmp$9 = new _M0DTPC14json4Json6String(_p$9);
-  const _p$10 = "diff";
+  const _p$10 = "bloom";
   const _tmp$10 = new _M0DTPC14json4Json6String(_p$10);
-  const _p$11 = "phf";
+  const _p$11 = "cuckoo";
   const _tmp$11 = new _M0DTPC14json4Json6String(_p$11);
-  const _p$12 = "ring";
+  const _p$12 = "countmin";
   const _tmp$12 = new _M0DTPC14json4Json6String(_p$12);
-  const _p$13 = "bitset";
+  const _p$13 = "theta";
   const _tmp$13 = new _M0DTPC14json4Json6String(_p$13);
-  const _p$14 = "perms";
-  const _p$15 = new _M0TPB5ArrayGRPC14json4JsonE([_tmp, _tmp$2, _tmp$3, _tmp$4, _tmp$5, _tmp$6, _tmp$7, _tmp$8, _tmp$9, _tmp$10, _tmp$11, _tmp$12, _tmp$13, new _M0DTPC14json4Json6String(_p$14)], 14);
-  return _M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json5Array(_p$15), 0, false, false);
+  const _p$14 = "kmp";
+  const _tmp$14 = new _M0DTPC14json4Json6String(_p$14);
+  const _p$15 = "aho";
+  const _tmp$15 = new _M0DTPC14json4Json6String(_p$15);
+  const _p$16 = "suffix";
+  const _tmp$16 = new _M0DTPC14json4Json6String(_p$16);
+  const _p$17 = "diff";
+  const _tmp$17 = new _M0DTPC14json4Json6String(_p$17);
+  const _p$18 = "phf";
+  const _tmp$18 = new _M0DTPC14json4Json6String(_p$18);
+  const _p$19 = "phf_ordered";
+  const _tmp$19 = new _M0DTPC14json4Json6String(_p$19);
+  const _p$20 = "ring";
+  const _tmp$20 = new _M0DTPC14json4Json6String(_p$20);
+  const _p$21 = "gap";
+  const _tmp$21 = new _M0DTPC14json4Json6String(_p$21);
+  const _p$22 = "bitset";
+  const _tmp$22 = new _M0DTPC14json4Json6String(_p$22);
+  const _p$23 = "perms";
+  const _p$24 = new _M0TPB5ArrayGRPC14json4JsonE([_tmp, _tmp$2, _tmp$3, _tmp$4, _tmp$5, _tmp$6, _tmp$7, _tmp$8, _tmp$9, _tmp$10, _tmp$11, _tmp$12, _tmp$13, _tmp$14, _tmp$15, _tmp$16, _tmp$17, _tmp$18, _tmp$19, _tmp$20, _tmp$21, _tmp$22, new _M0DTPC14json4Json6String(_p$23)], 23);
+  return _M0FP212moonbitstack8moonjson13dumps_2einner(new _M0DTPC14json4Json5Array(_p$24), 0, false, false);
 }
 (() => {
   _M0FP223moonstl_2dsite_2dbridge4main6expose(_M0FP223moonstl_2dsite_2dbridge4main3run, _M0FP223moonstl_2dsite_2dbridge4main5names);

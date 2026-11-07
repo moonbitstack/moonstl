@@ -44,6 +44,21 @@ fn strs_of(j : @cjson.Json) -> Array[String] {
   }
 }
 
+fn get_arr(j : @cjson.Json) -> Array[@cjson.Json]? {
+  match j {
+    @cjson.Json::Array(a) => Some(a)
+    _ => None
+  }
+}
+
+fn elem_of(a : Array[@cjson.Json], i : Int32) -> Int32? {
+  if i >= 0 && i < a.length() {
+    as_int(a[i])
+  } else {
+    None
+  }
+}
+
 ///|
 fn get_str(j : @cjson.Json, key : String) -> String {
   match j {
@@ -145,14 +160,36 @@ fn lru(input : String) -> String raise {
 
 ///|
 fn heap(input : String) -> String raise {
+  let j = @json.loads(input, @json.strict)
+  let vals = set_ints(j)
   let h : @heap.DaryHeap[Int32] = @heap.DaryHeap::default()
-  for v in set_ints(@json.loads(input, @json.strict)) {
+  for v in vals {
     h.push(v)
+  }
+  let f : @heap.FibonacciHeap[Int32] = @heap.FibonacciHeap::new()
+  for v in vals {
+    let _ = f.insert(v)
+  }
+  let p : @heap.PairingHeap[Int32] = @heap.PairingHeap::new()
+  for v in vals {
+    let _ = p.insert(v)
+  }
+  let out : Map[String, @cjson.Json] = Map([])
+  out["pops"] = jints(h.into_sorted_array())
+  out["fib"] = jints(f.into_sorted_array())
+  out["pairing"] = jints(p.into_sorted_array())
+  @json.dumps(@cjson.Json::object(out))
+}
+
+fn radix(input : String) -> String raise {
+  let h : @heap.RadixHeap[Int32] = @heap.RadixHeap::new()
+  for v in set_ints(@json.loads(input, @json.strict)) {
+    let _ = h.push(v.to_uint64(), v)
   }
   let pops : Array[Int32] = []
   for _ in 0..<h.length() {
-    match h.pop() {
-      Some(v) => pops.push(v)
+    match h.pop_min() {
+      Some((_, v)) => pops.push(v)
       None => ()
     }
   }
@@ -184,6 +221,51 @@ fn segment(input : String) -> String raise {
 }
 
 ///|
+fn fenwick(input : String) -> String raise {
+  let j = @json.loads(input, @json.strict)
+  let vals = set_ints(j)
+  let f : @tree.Fenwick[Int32] = @tree.Fenwick::from_array(vals[:])
+  let prefix : Array[Int32] = []
+  for i in 0..=vals.length() {
+    prefix.push(f.prefix_sum(i))
+  }
+  let out : Map[String, @cjson.Json] = Map([])
+  out["values"] = jints(vals)
+  out["prefix"] = jints(prefix)
+  out["range_1_3"] = @cjson.Json::number(f.range_sum(1, 3).to_double())
+  @json.dumps(@cjson.Json::object(out))
+}
+
+fn interval(input : String) -> String raise {
+  let j = @json.loads(input, @json.strict)
+  let pairs = set_ints(j)
+  let t : @tree.IntervalTree[Int32, Int32] = @tree.IntervalTree::new()
+  let mut count = 0
+  let mut i = 0
+  while i + 1 < pairs.length() {
+    let _ = t.insert(start=pairs[i], end=pairs[i + 1], count)
+    count = count + 1
+    i = i + 2
+  }
+  let qstart = get_int(j, "qstart")
+  let qend = get_int(j, "qend")
+  let overlaps : Array[Int32] = []
+  for (a, b, _) in t.query_overlap(start=qstart, end=qend) {
+    overlaps.push(a)
+    overlaps.push(b)
+  }
+  let all : Array[Int32] = []
+  for (a, b, _) in t.iter() {
+    all.push(a)
+    all.push(b)
+  }
+  let out : Map[String, @cjson.Json] = Map([])
+  out["intervals"] = jints(all)
+  out["q"] = @cjson.Json::array([@cjson.Json::number(qstart.to_double()), @cjson.Json::number(qend.to_double())])
+  out["overlap"] = jints(overlaps)
+  @json.dumps(@cjson.Json::object(out))
+}
+
 fn disjoint(input : String) -> String raise {
   let j = @json.loads(input, @json.strict)
   let n = get_int(j, "n")
@@ -238,6 +320,58 @@ fn countmin(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+fn cuckoo(input : String) -> String raise {
+  let j = @json.loads(input, @json.strict)
+  let cap = get_int(j, "cap")
+  let c : @sketch.CuckooFilter[Int32] = @sketch.CuckooFilter::new(
+    expected_items=cap,
+    hash_seed=0,
+  )
+  let set = set_ints(j)
+  for v in set {
+    let _ = c.insert(v)
+  }
+  let query = get_int(j, "n")
+  let out : Map[String, @cjson.Json] = Map([])
+  out["found"] = @cjson.Json::boolean(c.may_contain(query))
+  out["removed"] = @cjson.Json::boolean(c.remove(query))
+  out["after_remove"] = @cjson.Json::boolean(c.may_contain(query))
+  @json.dumps(@cjson.Json::object(out))
+}
+
+fn theta(input : String) -> String raise {
+  let j = @json.loads(input, @json.strict)
+  let set = set_ints(j)
+  let nominal = get_int(j, "nominal")
+  let t : @sketch.ThetaSketch[Int32] = @sketch.ThetaSketch::new(
+    nominal_entries=if nominal > 0 { nominal } else { 4096 },
+    hash_seed=0,
+  )
+  for v in set {
+    t.add(v)
+  }
+  let out : Map[String, @cjson.Json] = Map([])
+  out["distinct"] = @cjson.Json::number(distinct_count(set).to_double())
+  out["estimate"] = @cjson.Json::number(t.estimate())
+  @json.dumps(@cjson.Json::object(out))
+}
+
+fn distinct_count(a : Array[Int32]) -> Int32 {
+  let mut count = 0
+  for i in 0..<a.length() {
+    let mut first = true
+    for k in 0..<i {
+      if a[k] == a[i] {
+        first = false
+      }
+    }
+    if first {
+      count = count + 1
+    }
+  }
+  count
+}
+
 // ---- text ----
 
 ///|
@@ -277,6 +411,34 @@ fn diff(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+fn aho(input : String) -> String raise {
+  let j = @json.loads(input, @json.strict)
+  let patterns = set_strs(j, key="patterns")
+  let text = get_str(j, "text")
+  let views : Array[StringView] = patterns.map(s => s.to_string_view())
+  let ac : @text.AhoCorasick = @text.AhoCorasick::new(views)
+  let out : Map[String, @cjson.Json] = Map([])
+  out["patterns"] = jstrs(patterns)
+  out["text"] = @cjson.Json::string(text)
+  out["matches"] = @cjson.Json::array(
+    ac.search_all(text).to_array().map(ms => {
+      @cjson.Json::array([@cjson.Json::number(ms.0.to_double()), @cjson.Json::number(ms.1.to_double())])
+    }),
+  )
+  @json.dumps(@cjson.Json::object(out))
+}
+
+fn suffix(input : String) -> String raise {
+  let j = @json.loads(input, @json.strict)
+  let text = get_str(j, "text")
+  let sa : @text.SuffixArray = @text.SuffixArray::new(text)
+  let out : Map[String, @cjson.Json] = Map([])
+  out["text"] = @cjson.Json::string(text)
+  out["order"] = jints(sa.to_array())
+  out["lcp"] = jints(sa.lcp_array())
+  @json.dumps(@cjson.Json::object(out))
+}
+
 // ---- phf ----
 
 ///|
@@ -290,6 +452,22 @@ fn phf(input : String) -> String raise {
   let out : Map[String, @cjson.Json] = Map([])
   out["size"] = @cjson.Json::number(map.length().to_double())
   out["keys"] = jstrs(map.keys().to_array())
+  @json.dumps(@cjson.Json::object(out))
+}
+
+fn phf_ordered(input : String) -> String raise {
+  let j = @json.loads(input, @json.strict)
+  let words = set_strs(j)
+  let builder : @phf.PhfBuilder[String, Int32] = @phf.PhfBuilder::new()
+  for e in words {
+    let _ = builder.entry(e, e.length())
+  }
+  let om = builder.build_ordered()
+  let q = get_str(j, "q")
+  let out : Map[String, @cjson.Json] = Map([])
+  out["order"] = jstrs(om.keys().to_array())
+  out["q"] = @cjson.Json::string(q)
+  out["index"] = @cjson.Json::number(om.index(q).unwrap_or(-1).to_double())
   @json.dumps(@cjson.Json::object(out))
 }
 
@@ -331,6 +509,26 @@ fn bitset(input : String) -> String raise {
   @json.dumps(@cjson.Json::object(out))
 }
 
+fn gap(input : String) -> String raise {
+  let j = @json.loads(input, @json.strict)
+  let base = set_ints(j)
+  let g : @seq.GapBuffer[Int32] = @seq.GapBuffer::new()
+  for v in base {
+    g.insert(g.length(), v)
+  }
+  let ops = get_arr(get_field(j, "ops")).unwrap_or([])
+  for op in ops {
+    let oa = get_arr(op).unwrap_or([])
+    let pos = elem_of(oa, 0).unwrap_or(0)
+    let val = elem_of(oa, 1).unwrap_or(0)
+    g.insert(pos, val)
+  }
+  let out : Map[String, @cjson.Json] = Map([])
+  out["before"] = jints(base)
+  out["after"] = jints(g.to_array())
+  @json.dumps(@cjson.Json::object(out))
+}
+
 // ---- algo ----
 
 ///|
@@ -364,14 +562,23 @@ fn run(name : String, input : String) -> String {
       "trie" => trie(input)
       "lru" => lru(input)
       "heap" => heap(input)
+      "radix" => radix(input)
       "segment" => segment(input)
+      "fenwick" => fenwick(input)
+      "interval" => interval(input)
       "disjoint" => disjoint(input)
       "bloom" => bloom(input)
+      "cuckoo" => cuckoo(input)
       "countmin" => countmin(input)
+      "theta" => theta(input)
       "kmp" => kmp(input)
+      "aho" => aho(input)
+      "suffix" => suffix(input)
       "diff" => diff(input)
       "phf" => phf(input)
+      "phf_ordered" => phf_ordered(input)
       "ring" => ring(input)
+      "gap" => gap(input)
       "bitset" => bitset(input)
       "perms" => perms(input)
       _ => "{\"error\": \"unknown demo\"}"
@@ -385,8 +592,9 @@ fn run(name : String, input : String) -> String {
 fn names() -> String {
   @json.dumps(
     @cjson.Json::array([
-      "indexmap", "trie", "lru", "heap", "segment", "disjoint", "bloom", "countmin",
-      "kmp", "diff", "phf", "ring", "bitset", "perms",
+      "indexmap", "trie", "lru", "heap", "radix", "segment", "fenwick", "interval",
+      "disjoint", "bloom", "cuckoo", "countmin", "theta", "kmp", "aho", "suffix",
+      "diff", "phf", "phf_ordered", "ring", "gap", "bitset", "perms",
     ]),
   )
 }

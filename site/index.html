@@ -243,7 +243,7 @@
       ships on MoonBit. There is no mock behind these.</p>
     <div class="lab-bar">
       <button class="btn primary" id="runAll">▶ Run everything</button>
-      <span class="hint" id="labHint">14 structures &amp; algorithms, one compiled bundle</span>
+      <span class="hint" id="labHint">23 structures &amp; algorithms, one compiled bundle</span>
     </div>
     <div class="lab" id="lab"></div>
   </div>
@@ -412,15 +412,19 @@ const DEMOS = {
     }
   },
   heap: {
-    pkg:"heap", title:"d-ary heap", desc:"push, then pop in order",
+    pkg:"heap", title:"Three heaps", desc:"d-ary, fibonacci & pairing, one input",
     state:{ set:[5,1,9,3,7,2] },
     input:()=>({set:DEMOS.heap.state.set}),
     run:()=>call("heap", DEMOS.heap.input()),
     render:r=>{
       if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const p=r.pops||[];
+      const p=r.pops||[], f=r.fib||[], pa=r.pairing||[];
       return `<div class="seq">${p.map((v,i)=>`<span class="node ${i===0?"hi":""}">${v}</span>`).join("")}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">4-ary min-heap · ${p.length} pops · log(n) each</div>`;
+      <div class="muted" style="font-size:12px;margin-top:11px;font-family:var(--mono);display:flex;flex-direction:column;gap:4px">
+        <span><b style="color:var(--accent)">d-ary</b>&nbsp;&nbsp;&nbsp; ${esc(JSON.stringify(p))}</span>
+        <span><b style="color:var(--accent)">fibonacci</b> ${esc(JSON.stringify(f))}</span>
+        <span><b style="color:var(--accent)">pairing</b>&nbsp;&nbsp; ${esc(JSON.stringify(pa))}</span>
+      </div>`;
     }
   },
   segment: {
@@ -551,121 +555,248 @@ const DEMOS = {
       <div class="muted" style="font-size:12.5px;margin-top:12px">${esc(r.kind)} of [${esc(DEMOS.perms.state.set.join(","))}] · ${rows.length} total</div>`;
     }
   },
+  radix: {
+    pkg:"heap", title:"Radix heap", desc:"monotone keys, amortized O(1) pop",
+    state:{ set:[9,4,1,3,7,2,5,6,8,0] },
+    input:()=>({set:DEMOS.radix.state.set}),
+    run:()=>call("radix", DEMOS.radix.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const p=r.pops||[];
+      return `<div class="seq">${p.map((v,i)=>`<span class="node ${i===0?"hi":""}">${v}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">popped in key order · 64-bit radix buckets</div>`;
+    }
+  },
+  fenwick: {
+    pkg:"tree", title:"Fenwick tree", desc:"prefix sums in log time",
+    state:{ set:[3,1,4,1,5] },
+    input:()=>({set:DEMOS.fenwick.state.set}),
+    run:()=>call("fenwick", DEMOS.fenwick.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const v=r.values||[], mx=Math.max(1,...v);
+      return `<div class="bars">${v.map(x=>`<div class="bar" style="height:${x/mx*100}%"><span class="v">${x}</span></div>`).join("")}</div>
+      <div class="muted" style="font-size:12px;margin-top:10px;font-family:var(--mono)">prefix ${esc(JSON.stringify(r.prefix||[]))} · Σ[1,3)=${r.range_1_3}</div>`;
+    }
+  },
+  interval: {
+    pkg:"tree", title:"Interval tree", desc:"overlap queries over [start,end]",
+    state:{ set:[0,10,2,4,8,12], qstart:3, qend:6 },
+    input:()=>({set:DEMOS.interval.state.set, qstart:DEMOS.interval.state.qstart, qend:DEMOS.interval.state.qend}),
+    run:()=>call("interval", DEMOS.interval.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const iv=r.intervals||[], ov=r.overlap||[];
+      return `<div class="chips">${iv.map((v,i)=>`<span class="chip str">${i%2===0?"[":v+(i%2===1?" ]":"")}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">overlap with [${r.q?.[0]},${r.q?.[1]}]: <span class="mono">${esc(JSON.stringify(ov))}</span></div>`;
+    }
+  },
+  cuckoo: {
+    pkg:"sketch", title:"Cuckoo filter", desc:"deletable, with a live probe",
+    state:{ cap:100, set:[1,2,3,4,5,6,7], n:3 },
+    input:()=>({cap:DEMOS.cuckoo.state.cap, set:DEMOS.cuckoo.state.set, n:DEMOS.cuckoo.state.n}),
+    run:()=>call("cuckoo", DEMOS.cuckoo.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="metric">
+        <div class="m"><div class="lab2">contains ${DEMOS.cuckoo.state.n}</div><div class="val" style="color:${r.found?"var(--ok)":"var(--err)"}">${r.found?"yes":"no"}</div></div>
+        <div class="m"><div class="lab2">removed?</div><div class="val" style="color:${r.removed?"var(--ok)":"var(--err)"}">${r.removed?"yes":"no"}</div></div>
+        <div class="m"><div class="lab2">after remove</div><div class="val" style="color:${r.after_remove?"var(--warn)":"var(--ok)"}">${r.after_remove?"still":"gone"}</div></div>
+      </div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">cuckoo supports deletion, unlike bloom</div>`;
+    }
+  },
+  theta: {
+    pkg:"sketch", title:"Theta sketch", desc:"cardinality estimate",
+    state:{ set:[7,7,7,8,8,9,4,4], nominal:8 },
+    input:()=>({set:DEMOS.theta.state.set, nominal:DEMOS.theta.state.nominal}),
+    run:()=>call("theta", DEMOS.theta.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="metric">
+        <div class="m"><div class="lab2">true distinct</div><div class="val">${r.distinct}</div></div>
+        <div class="m"><div class="lab2">estimate</div><div class="val">${(r.estimate).toFixed(r.estimate%1?3:0)}</div></div>
+      </div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">input ${esc(JSON.stringify(DEMOS.theta.state.set))} · exact below nominal, sampled above</div>`;
+    }
+  },
+  aho: {
+    pkg:"text", title:"Aho–Corasick", desc:"many patterns, one pass",
+    state:{ patterns:["he","she","his","hers"], text:"ushers" },
+    input:()=>({patterns:DEMOS.aho.state.patterns, text:DEMOS.aho.state.text}),
+    run:()=>call("aho", DEMOS.aho.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const t=r.text||""; const marks={};
+      (r.matches||[]).forEach(([p,s])=>{ for(let i=s;i<s+ (DEMOS.aho.state.patterns[p]||"").length;i++) marks[i]=1; });
+      let html="";
+      for(let i=0;i<t.length;i++) html+= marks[i]?`<span class="hit">${esc(t[i])}</span>`:esc(t[i]);
+      return `<div class="textvis">${html}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:10px">patterns ${esc(JSON.stringify(r.patterns||[]))} · matches ${esc(JSON.stringify(r.matches||[]))} (pattern-idx, offset)</div>`;
+    }
+  },
+  suffix: {
+    pkg:"text", title:"Suffix array", desc:"sorted suffixes + LCP",
+    state:{ text:"banana" },
+    input:()=>({text:DEMOS.suffix.state.text}),
+    run:()=>call("suffix", DEMOS.suffix.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const o=r.order||[], lcp=r.lcp||[];
+      return `<div class="seq">${o.map((s,i)=>`<span class="node" title="suffix ${esc((r.text||"").slice(s))}"><span class="ix" style="color:var(--dim);font-size:10px">${i}</span>${s}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12px;margin-top:11px;font-family:var(--mono)">order of start-indices · LCP ${esc(JSON.stringify(lcp))}</div>`;
+    }
+  },
+  phf_ordered: {
+    pkg:"phf", title:"Ordered phf map", desc:"declaration order + index",
+    state:{ words:["alpha","beta","gamma","delta"], q:"gamma" },
+    input:()=>({set:DEMOS.phf_ordered.state.words, q:DEMOS.phf_ordered.state.q}),
+    run:()=>call("phf_ordered", DEMOS.phf_ordered.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      const k=r.order||[];
+      return `<div class="kv">${k.map((w,i)=>`<div class="row"><span class="badge">${i}</span><span>${esc(w)}</span></div>`).join("")}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">index of "<b>${esc(r.q)}</b>" = <span class="mono">${r.index}</span></div>`;
+    }
+  },
+  gap: {
+    pkg:"seq", title:"Gap buffer", desc:"editor insertions, O(min) to ends",
+    state:{ set:[1,2,3], ops:[[1,100],[1,101]] },
+    input:()=>({set:DEMOS.gap.state.set, ops:DEMOS.gap.state.ops}),
+    run:()=>call("gap", DEMOS.gap.input()),
+    render:r=>{
+      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="seq">${(r.before||[]).map(v=>`<span class="node">${v}</span>`).join("")}</div>
+      <div class="muted" style="font-size:12px;color:var(--dim);margin:9px 0">↓ after inserts ${esc(JSON.stringify(DEMOS.gap.state.ops))}</div>
+      <div class="seq">${(r.after||[]).map(v=>`<span class="node hi">${v}</span>`).join("")}</div>`;
+    }
+  },
 };
 
-// ---------- chip input controls ----------
-function chipsControl(demo, kind){
+// ---------- auto-derived input controls ----------
+const FIELD_LABEL = {
+  cap:"capacity", n:"n", q:"query", r:"r (0 = perms)", nominal:"nominal",
+  qstart:"query start", qend:"query end",
+};
+const SKIP = ["set","words","patterns","ops","text","pattern","a","b"];
+
+function chipList(state, key, mode){
+  const wrap = el("div");
+  const chips = el("div","chips");
+  const row = el("div","addrow");
+  const inp = el("input"); inp.placeholder = mode==="number" ? "add a number, Enter" : "add a word, Enter";
+  const add = el("button","mini","+ add");
+  const rand = el("button","mini ghost","randomize");
+  const clear = el("button","mini ghost","clear");
+  function refresh(){
+    chips.innerHTML = "";
+    state[key].forEach((v,i)=>{
+      const c = mode==="word" ? el("span","chip str") : el("span","chip");
+      c.innerHTML = mode==="number" ? `<span class="ix">${i}</span>${v}<span class="x">×</span>` : `${esc(v)}<span class="x">×</span>`;
+      c.querySelector(".x").onclick = ()=>{ state[key].splice(i,1); refresh(); };
+      chips.appendChild(c);
+    });
+    if(!state[key].length) chips.innerHTML = '<span class="out-empty">empty</span>';
+  }
+  function push(v){ state[key].push(v); refresh(); }
+  function fromInput(){
+    if(mode==="number"){ const v=parseInt(inp.value,10); if(!isNaN(v)) push(v); }
+    else if(inp.value) push(inp.value);
+    inp.value="";
+  }
+  inp.onkeydown = e=>{ if(e.key==="Enter") fromInput(); };
+  add.onclick = fromInput;
+  rand.onclick = ()=>{ state[key] = mode==="number" ? randInts(rint(3,8),1,12) : randWords(rint(3,6)); refresh(); };
+  clear.onclick = ()=>{ state[key]=[]; refresh(); };
+  row.append(inp,add);
+  wrap.append(chips,row);
+  return wrap;
+}
+
+function textField(s, key, label){
+  const wrap = el("div"); const lr = el("div","fieldrow"); lr.style.alignItems = "flex-start";
+  const lab = el("label"); lab.textContent = label; lab.style.width="74px"; lab.style.paddingTop="8px";
+  const ta = el("textarea","in"); ta.value = s[key] ?? ""; ta.rows = 2;
+  ta.oninput = ()=>{ s[key] = ta.value; };
+  lr.append(lab, ta); wrap.append(lr);
+  return wrap;
+}
+
+function numField(s, key, label){
+  const lr = el("div","fieldrow"); const lab = el("label"); lab.textContent = label;
+  const ci = el("input"); ci.type="number"; ci.value = s[key];
+  ci.oninput = ()=>{ s[key] = parseInt(ci.value,10)||0; };
+  lr.append(lab, ci);
+  return lr;
+}
+
+function strField(s, key, label){
+  const lr = el("div","fieldrow"); const lab = el("label"); lab.textContent = label;
+  const ci = el("input"); ci.value = s[key] ?? "";
+  ci.oninput = ()=>{ s[key] = ci.value; };
+  lr.append(lab, ci);
+  return lr;
+}
+
+function opsEditor(state){
+  const wrap = el("div");
+  const lr = el("div","fieldrow"); const lab = el("label"); lab.textContent = "inserts [at, value]";
+  wrap.append(lr);
+  const list = el("div"); list.style.cssText = "display:flex;flex-direction:column;gap:6px";
+  function render(){
+    list.innerHTML = "";
+    state.ops.forEach((op,i)=>{
+      const r = el("div","fieldrow");
+      const la = el("label"); la.textContent = "#"; la.style.minWidth="14px";
+      const ip = el("input"); ip.style.width="48px"; ip.value = op[0];
+      const iv = el("input"); iv.style.width="60px"; iv.value = op[1];
+      const rm = el("button","mini ghost","×");
+      ip.oninput = ()=>{ state.ops[i][0] = parseInt(ip.value,10)||0; };
+      iv.oninput = ()=>{ state.ops[i][1] = parseInt(iv.value,10)||0; };
+      rm.onclick = ()=>{ state.ops.splice(i,1); render(); };
+      r.append(la, ip, iv, rm); list.append(r);
+    });
+  }
+  const addrow = el("div","addrow");
+  const b = el("button","mini","+ insert");
+  b.onclick = ()=>{ state.ops.push([0,0]); render(); };
+  addrow.append(b);
+  wrap.append(list, addrow); render();
+  return wrap;
+}
+
+function buildControls(demo){
   const box = el("div","dctl");
-  if(kind==="nums"){
-    const chips = el("div","chips"); const row = el("div","addrow");
-    const inp = el("input"); inp.placeholder="add a number, Enter";
-    const add = el("button","mini","+ add");
-    const rand = el("button","mini ghost","randomize");
-    const clear = el("button","mini ghost","clear");
-    const capRow = el("div","fieldrow");
-    function refresh(){
-      chips.innerHTML="";
-      demo.state.set.forEach((v,i)=>{
-        const c=el("span","chip"); c.innerHTML=`<span class="ix">${i}</span>${v}<span class="x">×</span>`;
-        c.querySelector(".x").onclick=()=>{demo.state.set.splice(i,1);refresh();};
-        chips.appendChild(c);
-      });
-      if(!demo.state.set.length) chips.innerHTML='<span class="out-empty">empty — add some</span>';
-    }
-    function push(v){ demo.state.set.push(v); refresh(); }
-    inp.onkeydown=e=>{ if(e.key==="Enter"){ const v=parseInt(inp.value,10); if(!isNaN(v))push(v); inp.value=""; } };
-    add.onclick=()=>{ const v=parseInt(inp.value,10); if(!isNaN(v))push(v); inp.value=""; };
-    rand.onclick=()=>{ demo.state.set=randInts(rint(3,8),1,12); refresh(); };
-    clear.onclick=()=>{ demo.state.set=[]; refresh(); };
-    row.append(inp,add);
-    box.append(chips,row);
-    if(demo.state.cap!=null){
-      const lab=el("label"); lab.textContent="capacity";
-      const ci=el("input"); ci.type="number"; ci.value=demo.state.cap;
-      ci.oninput=()=>{ demo.state.cap=parseInt(ci.value,10)||1; };
-      capRow.append(lab,ci); box.append(capRow);
-    }
-    if(demo.state.n!=null){
-      const lr=el("div","fieldrow"); const lab=el("label"); lab.textContent="n (nodes)";
-      const ci=el("input"); ci.type="number"; ci.value=demo.state.n;
-      ci.oninput=()=>{ demo.state.n=parseInt(ci.value,10)||0; };
-      lr.append(lab,ci); box.append(lr);
-    }
-    if(demo.state.q!=null){
-      const lr=el("div","fieldrow"); const lab=el("label"); lab.textContent="query";
-      const ci=el("input"); ci.type="number"; ci.value=demo.state.q;
-      ci.oninput=()=>{ demo.state.q=parseInt(ci.value,10)||0; };
-      lr.append(lab,ci); box.append(lr);
-    }
-    if(demo.state.r!=null){
-      const lr=el("div","fieldrow"); const lab=el("label"); lab.textContent="r (0 = permutations)";
-      const ci=el("input"); ci.type="number"; ci.value=demo.state.r;
-      ci.oninput=()=>{ demo.state.r=parseInt(ci.value,10)||0; };
-      lr.append(lab,ci); box.append(lr);
-    }
-    refresh();
-  } else if(kind==="words"){
-    const chips=el("div","chips"); const row=el("div","addrow");
-    const inp=el("input"); inp.placeholder="add a word, Enter";
-    const add=el("button","mini","+ add"); const rand=el("button","mini ghost","randomize");
-    const clear=el("button","mini ghost","clear");
-    function refresh(){
-      chips.innerHTML="";
-      demo.state.words.forEach((w,i)=>{
-        const c=el("span","chip str"); c.textContent=w;
-        const x=el("span","x","×"); x.onclick=()=>{demo.state.words.splice(i,1);refresh();};
-        c.append(x); chips.appendChild(c);
-      });
-      if(!demo.state.words.length) chips.innerHTML='<span class="out-empty">empty</span>';
-    }
-    inp.onkeydown=e=>{ if(e.key==="Enter"&&inp.value){demo.state.words.push(inp.value);inp.value="";refresh();} };
-    add.onclick=()=>{ if(inp.value){demo.state.words.push(inp.value);inp.value="";refresh();} };
-    rand.onclick=()=>{ demo.state.words=randWords(rint(3,6)); refresh(); };
-    clear.onclick=()=>{ demo.state.words=[]; refresh(); };
-    row.append(inp,add);
-    box.append(chips,row);
-    if(demo.state.prefix!=null){
-      const lr=el("div","fieldrow"); const lab=el("label"); lab.textContent="prefix";
-      const ci=el("input"); ci.style.width="90px"; ci.value=demo.state.prefix;
-      ci.oninput=()=>{ demo.state.prefix=ci.value; };
-      lr.append(lab,ci); box.append(lr);
-    }
-    refresh();
-  } else if(kind==="text"){
-    const ka=demo.labelA||"text", kb=demo.labelB||"pattern";
-    const a=el("div"); const lab1=el("div"); lab1.className="fieldrow";
-    const l1=el("label"); l1.textContent=ka;
-    const ta=el("textarea","in"); ta.value=demo.state[ka]??""; ta.rows=2;
-    lab1.append(l1); a.append(lab1,ta);
-    ta.oninput=()=>{ demo.state[ka]=ta.value; };
-    const b=el("div"); const lab2=el("div"); lab2.className="fieldrow";
-    const l2=el("label"); l2.textContent=kb;
-    const tb=el("textarea","in"); tb.value=demo.state[kb]??""; tb.rows=2;
-    lab2.append(l2); b.append(lab2,tb);
-    tb.oninput=()=>{ demo.state[kb]=tb.value; };
-    box.append(a,b);
+  const s = demo.state;
+  const label = k => (demo.fields && demo.fields[k]) || FIELD_LABEL[k] || k;
+  if(Array.isArray(s.set))      box.append(chipList(s, "set", "number"));
+  if(Array.isArray(s.words))    box.append(chipList(s, "words", "word"));
+  if(Array.isArray(s.patterns)) box.append(chipList(s, "patterns", "word"));
+  if(Array.isArray(s.ops))      box.append(opsEditor(s));
+  if(s.text !== undefined)      box.append(textField(s, "text", "text"));
+  if(s.pattern !== undefined)   box.append(textField(s, "pattern", "pattern"));
+  if(s.a !== undefined)         box.append(textField(s, "a", "a"));
+  if(s.b !== undefined)         box.append(textField(s, "b", "b"));
+  for(const k of Object.keys(s)){
+    if(SKIP.includes(k)) continue;
+    if(typeof s[k] === "number")      box.append(numField(s, k, label(k)));
+    else if(typeof s[k] === "string") box.append(strField(s, k, label(k)));
   }
   return box;
 }
 
 // ---------- build the lab ----------
 const lab=$("#lab");
-const ORDER=["indexmap","trie","lru","heap","segment","disjoint","bloom","countmin","kmp","diff","phf","ring","bitset","perms"];
-const KIND={indexmap:"nums",trie:"words",lru:"nums",heap:"nums",segment:"nums",disjoint:"nums",bloom:"nums",countmin:"nums",kmp:"text",diff:"text",phf:"words",ring:"nums",bitset:"nums",perms:"nums"};
-const DEMO_META={
-  indexmap:{a:null,b:null}, trie:{a:null,b:null}, kmp:{labelA:"text",labelB:"pattern"},
-  diff:{labelA:"a",labelB:"b"},
-};
+const ORDER=["indexmap","trie","lru","heap","radix","segment","fenwick","interval","disjoint","bloom","cuckoo","countmin","theta","kmp","aho","suffix","diff","phf","phf_ordered","ring","gap","bitset","perms"];
 ORDER.forEach(name=>{
   const d=DEMOS[name];
-  Object.assign(d, DEMO_META[name]||{});
   const card=el("div","demo");
   const dh=el("div","dh");
   dh.append(el("span","pk",d.pkg), el("h3",null,d.title));
   const runBtn=el("button","run","▶ run");
   dh.append(runBtn);
   card.append(dh);
-  const ctl=chipsControl(d, KIND[name]);
+  const ctl=buildControls(d);
   card.append(ctl);
   const out=el("div","dout"); out.innerHTML='<div class="out-empty">edit the inputs and run</div>';
   const lat=el("div","lat"); lat.style.display="none";
