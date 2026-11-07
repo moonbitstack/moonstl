@@ -3,993 +3,1558 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>moonstl — data structures &amp; algorithms for MoonBit</title>
-<meta name="description" content="moonstl: the containers, caches, trees, heaps, sketches and string algorithms the MoonBit core leaves out — one module, ten families, run live in your browser.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0b0d'/%3E%3Crect x='7' y='7' width='18' height='18' fill='none' stroke='%23e0a44f' stroke-width='2' transform='rotate(45 16 16)'/%3E%3C/svg%3E">
+<title>MoonBit STL — data structures &amp; algorithms, checked against other implementations</title>
+<meta name="description" content="Ten packages of data structures and algorithms for MoonBit: maps, heaps, trees, caches, sketches, text algorithms, perfect hashing. Every demo on this page runs the library itself, compiled to WebAssembly (wasm-gc).">
 <style>
-  :root{
-    --bg:#0a0e14; --bg2:#0c1219; --surface:#111823; --surface2:#151e2b;
-    --border:#1e2a3a; --border2:#28374b;
-    --text:#e6edf3; --muted:#8b98a9; --dim:#5b6878;
-    --accent:#6ea8fe; --accent2:#4fd1c5; --warn:#f0b24a; --err:#f0766b; --ok:#5fd39a;
-    --code:#0d1117; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
-  }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
-  a{color:var(--accent);text-decoration:none}
-  a:hover{text-decoration:underline}
-  code,pre{font-family:var(--mono)}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
-  img,svg,video,pre,table{max-width:100%}
-  pre{overflow:auto}
-  .mono{font-family:var(--mono)}
-  .muted{color:var(--muted)} .dim{color:var(--dim)}
-
-  /* top bar */
-  header.top{position:sticky;top:0;z-index:40;backdrop-filter:blur(10px);background:rgba(10,14,20,.8);border-bottom:1px solid var(--border)}
-  .top .wrap{display:flex;align-items:center;gap:20px;height:60px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:.2px}
-  .brand .glyph{width:26px;height:26px;border-radius:7px;background:conic-gradient(from 210deg,var(--accent),var(--accent2),var(--accent));box-shadow:0 0 18px -2px var(--accent)}
-  .brand .stl{color:var(--accent)}
-  .top nav{margin-left:auto;display:flex;gap:6px;align-items:center}
-  .top nav a{color:var(--muted);font-size:14px;padding:7px 12px;border-radius:8px}
-  .top nav a:hover{color:var(--text);background:var(--surface);text-decoration:none}
-  .live{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--accent2);border:1px solid var(--border2);background:var(--surface);padding:5px 11px;border-radius:999px}
-  .live .dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);box-shadow:0 0 0 0 rgba(79,209,197,.6);animation:pulse 2s infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,209,197,.5)}70%{box-shadow:0 0 0 7px rgba(79,209,197,0)}100%{box-shadow:0 0 0 0 rgba(79,209,197,0)}}
-
-  /* hero */
-  .hero{position:relative;padding:84px 0 56px;overflow:hidden}
-  .hero .grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:.35;-webkit-mask-image:radial-gradient(circle at 30% 20%,#000,transparent 75%);mask-image:radial-gradient(circle at 30% 20%,#000,transparent 75%)}
-  .hero .glow{position:absolute;top:-120px;left:-40px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(110,168,254,.22),transparent 65%);filter:blur(8px)}
-  .hero .wrap{position:relative}
-  .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent2);font-weight:600}
-  h1{font-size:54px;line-height:1.05;margin:14px 0 18px;font-weight:800;letter-spacing:-.5px}
-  h1 .grad{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .lead{font-size:19px;color:var(--muted);max-width:640px;margin:0 0 30px}
-  .hero-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;max-width:680px;box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
-  .hero-card .bar{display:flex;align-items:center;gap:8px;padding:11px 15px;border-bottom:1px solid var(--border)}
-  .hero-card .bar i{width:11px;height:11px;border-radius:50%;background:var(--border2)}
-  .hero-card .bar .fn{margin-left:8px;font-size:12.5px;color:var(--dim);font-family:var(--mono)}
-  pre.code{margin:0;padding:18px 20px;background:var(--code);overflow:auto;font-size:13.5px;line-height:1.75;border-radius:0}
-  .tok-k{color:#c792ea}.tok-f{color:#82aaff}.tok-s{color:#c3e88d}.tok-n{color:#f78c6c}.tok-c{color:#5b6878;font-style:italic}.tok-t{color:#ffcb6b}.tok-p{color:#89ddff}
-  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
-  .btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:600;font-size:14.5px;padding:11px 20px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);cursor:pointer;transition:.15s}
-  .btn:hover{border-color:var(--accent);transform:translateY(-1px)}
-  .btn.primary{background:linear-gradient(135deg,var(--accent),#5b8def);border-color:transparent;color:#04101f}
-  .btn.ghost{background:transparent}
-  .btn:disabled{opacity:.5;cursor:default}
-  .stats{display:flex;gap:34px;margin-top:38px;flex-wrap:wrap}
-  .stat .k{font-size:30px;font-weight:800;font-family:var(--mono)}
-  .stat .v{font-size:13px;color:var(--muted)}
-
-  section{padding:56px 0;border-top:1px solid var(--border)}
-  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
-  .sec-head h2{font-size:30px;margin:0;font-weight:750;letter-spacing:-.3px}
-  .sec-head .tag{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);border:1px solid var(--border2);padding:4px 10px;border-radius:999px}
-  .sec-sub{color:var(--muted);max-width:720px;margin:0 0 30px}
-
-  /* live lab */
-  .lab-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
-  .lab-bar .hint{font-size:13.5px;color:var(--muted)}
-  .lab{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
-  .demo{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
-  .demo:hover{border-color:var(--border2);transform:translateY(-2px)}
-  .demo .dh{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)}
-  .demo .dh .pk{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);background:rgba(110,168,254,.1);border:1px solid rgba(110,168,254,.25);padding:3px 8px;border-radius:6px;font-weight:600}
-  .demo .dh h3{margin:0;font-size:15.5px;font-weight:650}
-  .demo .dh .run{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--accent2);border:1px solid var(--border2);background:var(--surface2);padding:5px 12px;border-radius:8px;cursor:pointer}
-  .demo .dh .run:hover{border-color:var(--accent2)}
-  .demo .dctl{padding:14px 16px;border-bottom:1px dashed var(--border);min-height:60px}
-  .demo .dout{padding:16px;flex:1;min-height:120px}
-  .demo .out-empty{color:var(--dim);font-size:13.5px}
-  .demo .err{color:var(--err);font-family:var(--mono);font-size:13px;white-space:pre-wrap}
-  .demo .lat{font-size:11px;color:var(--dim);text-align:right;margin-top:10px;font-family:var(--mono)}
-
-  /* chips input */
-  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;min-height:30px}
-  .chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12.5px;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:4px 6px 4px 10px}
-  .chip .ix{color:var(--dim);font-size:10.5px}
-  .chip .x{cursor:pointer;color:var(--dim);font-size:14px;line-height:1;padding:0 3px}
-  .chip .x:hover{color:var(--err)}
-  .chip.str{padding:4px 10px}
-  .chip.hi{border-color:var(--accent);background:rgba(110,168,254,.14);color:var(--accent)}
-  .addrow{display:flex;gap:7px;flex-wrap:wrap}
-  .addrow input{min-width:90px}
-  .addrow input{flex:1;font-family:var(--mono);font-size:13px;background:var(--code);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 11px}
-  .addrow input:focus{outline:none;border-color:var(--accent)}
-  .mini{font:inherit;font-size:12.5px;font-weight:600;background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:8px 12px;cursor:pointer}
-  .mini:hover{border-color:var(--accent)}
-  .mini.ghost{background:transparent;color:var(--muted)}
-  textarea.in{width:100%;font-family:var(--mono);font-size:13px;background:var(--code);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 11px;resize:vertical;min-height:54px}
-  textarea.in:focus,input:focus{outline:none;border-color:var(--accent)}
-  .fieldrow{display:flex;gap:8px;align-items:center;margin-top:9px}
-  .fieldrow label{font-size:12px;color:var(--muted);font-family:var(--mono)}
-  .fieldrow input{width:70px;font-family:var(--mono);font-size:13px;background:var(--code);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 10px}
-
-  /* visual outputs */
-  .seq{display:flex;flex-wrap:wrap;gap:7px}
-  .seq .node{font-family:var(--mono);font-size:13px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:7px 11px}
-  .seq .node.hi{border-color:var(--accent);background:rgba(110,168,254,.12);color:var(--accent)}
-  .kv{display:flex;flex-direction:column;gap:7px}
-  .kv .row{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:13px}
-  .kv .badge{font-size:10.5px;color:var(--dim);border:1px solid var(--border2);border-radius:5px;padding:1px 6px;min-width:22px;text-align:center}
-  .bars{display:flex;align-items:flex-end;gap:6px;height:84px;padding-top:6px}
-  .bars .bar{flex:1;background:linear-gradient(var(--accent2),var(--accent));border-radius:4px 4px 0 0;position:relative;min-height:2px}
-  .bars .bar .v{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:10.5px;font-family:var(--mono);color:var(--muted)}
-  .groups{display:flex;flex-wrap:wrap;gap:9px}
-  .groups .g{display:flex;gap:5px;padding:7px 9px;border:1px solid var(--border2);border-radius:9px;background:var(--surface2)}
-  .groups .g b{font-family:var(--mono);font-size:12.5px}
-  .metric{display:flex;gap:22px;flex-wrap:wrap}
-  .metric .m{font-family:var(--mono)}
-  .metric .m .lab2{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
-  .metric .m .val{font-size:26px;font-weight:700}
-  .metric .m .val small{font-size:14px;color:var(--muted);font-weight:400}
-  .textvis{font-family:var(--mono);font-size:14px;line-height:2;background:var(--code);border:1px solid var(--border);border-radius:9px;padding:12px 14px;overflow:auto}
-  .textvis .hit{background:rgba(240,178,74,.28);color:var(--warn);border-radius:4px;padding:1px 2px}
-  .textvis .ins{background:rgba(95,211,154,.18);color:var(--ok)}
-  .textvis .del{background:rgba(240,118,107,.18);color:var(--err);text-decoration:line-through}
-  .diffrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .diffcol{font-family:var(--mono);font-size:12.5px;line-height:1.9;background:var(--code);border:1px solid var(--border);border-radius:9px;padding:10px 12px;overflow:auto}
-  .diffcol .op-eq{color:var(--dim)} .diffcol .op-del{color:var(--err);background:rgba(240,118,107,.12)} .diffcol .op-ins{color:var(--ok);background:rgba(95,211,154,.12)} .diffcol .op-repl{color:var(--warn);background:rgba(240,178,74,.12)}
-  .bits{display:grid;grid-template-columns:repeat(16,1fr);gap:3px}
-  .bits .b{aspect-ratio:1;border-radius:3px;background:var(--surface2);border:1px solid var(--border)}
-  .bits .b.on{background:var(--accent2);border-color:var(--accent2)}
-  .oplist{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:12px}
-  .oplist .op{display:flex;gap:10px;padding:5px 9px;border-radius:7px;background:var(--surface2);border:1px solid var(--border)}
-  .oplist .op .t{width:70px;color:var(--accent)} .oplist .op .r{color:var(--muted)}
-
-  /* families */
-  .fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
-  .fam .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:.15s}
-  .fam .card:hover{border-color:var(--accent);transform:translateY(-2px)}
-  .fam .card .nm{font-family:var(--mono);font-size:15px;font-weight:650;color:var(--accent)}
-  .fam .card .bl{font-size:12.5px;color:var(--muted);margin:3px 0 11px}
-  .fam .card .types{display:flex;flex-wrap:wrap;gap:5px}
-  .fam .card .types span{font-family:var(--mono);font-size:11px;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:2px 7px}
-
-  /* reference */
-  .ref{display:grid;grid-template-columns:270px 1fr;gap:22px;align-items:start}
-  .ref .side{position:sticky;top:76px;max-height:calc(100vh - 96px);overflow:auto;padding-right:8px;scrollbar-width:thin}
-  .search{width:100%;font:inherit;font-size:14px;background:var(--surface);border:1px solid var(--border2);color:var(--text);border-radius:10px;padding:10px 13px;margin-bottom:14px}
-  .search:focus{outline:none;border-color:var(--accent)}
-  .pkggrp{margin-bottom:16px}
-  .pkggrp h4{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2)}
-  .pkggrp .ti{display:block;font-family:var(--mono);font-size:13px;color:var(--muted);padding:4px 9px;border-radius:7px;cursor:pointer}
-  .pkggrp .ti:hover{background:var(--surface);color:var(--text)}
-  .pkggrp .ti.sel{background:rgba(110,168,254,.12);color:var(--accent);border:1px solid rgba(110,168,254,.25)}
-  .pkggrp .ti .cnt{color:var(--dim);font-size:11px;float:right}
-  .apipane{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;min-height:340px}
-  .apipane .path{font-size:12.5px;color:var(--dim);font-family:var(--mono);margin-bottom:4px}
-  .apitype{font-size:23px;font-weight:750;margin-bottom:2px}
-  .apitype .params{color:var(--accent);font-family:var(--mono);font-size:16px}
-  .apikind{display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2);border:1px solid var(--border2);padding:2px 9px;border-radius:999px;margin-bottom:16px}
-  .impls{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
-  .impls .i{font-family:var(--mono);font-size:11.5px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:3px 9px;color:var(--muted)}
-  .apidoc h5{margin:18px 0 8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .apidoc pre{margin:0;background:var(--code);border:1px solid var(--border);border-radius:9px;padding:12px 14px;font-size:12.5px;line-height:1.75;overflow:auto;color:#c9d4e0}
-  .apidoc table{width:100%;border-collapse:collapse;font-size:12.5px}
-  .apidoc th{text-align:left;color:var(--muted);font-weight:600;padding:7px 10px;border-bottom:1px solid var(--border2);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em}
-  .apidoc td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top}
-  .apidoc td.sig{font-family:var(--mono);color:#c9d4e0;white-space:pre-wrap;word-break:break-word}
-  .apidoc td.mn{font-family:var(--mono);color:var(--accent);white-space:nowrap}
-  .apidoc tr:hover td{background:var(--surface2)}
-  .apidoc .note{color:var(--dim);font-size:13px}
-
-  /* conformance + install */
-  .conform{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-  .conform .c{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
-  .conform .c .t{font-weight:650;font-size:14.5px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
-  .conform .c .t .ok2{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
-  .conform .c p{margin:0;font-size:13px;color:var(--muted)}
-  .install{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-  .install .tabs{display:flex;border-bottom:1px solid var(--border)}
-  .install .tab{font-size:13.5px;padding:12px 20px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
-  .install .tab.sel{color:var(--text);border-color:var(--accent)}
-  .install pre{margin:0;padding:20px 22px;background:var(--code);font-size:13.5px;line-height:1.75;overflow:auto}
-  .steps{display:flex;gap:26px;flex-wrap:wrap;margin-top:26px}
-  .steps .s{flex:1;min-width:200px}
-  .steps .s .n{font-family:var(--mono);font-size:13px;color:var(--accent2);margin-bottom:6px}
-  .steps .s p{margin:0;font-size:13.5px;color:var(--muted)}
-
-  footer{border-top:1px solid var(--border);padding:34px 0 48px;color:var(--dim);font-size:13.5px}
-  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
-  footer .live-note{display:flex;align-items:center;gap:8px;color:var(--accent2)}
-  footer .live-note .dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite}
-
-  @media(max-width:860px){
-    h1{font-size:38px}
-    .lead{font-size:17px}
-    .ref{grid-template-columns:1fr}
-    .ref .side{position:static;max-height:none;overflow:visible;padding-right:0}
-    .stats{gap:22px}
-  }
-  @media(max-width:700px){
-    .wrap{padding:0 16px}
-    .top .wrap{flex-wrap:wrap;height:auto;padding:10px 16px;gap:8px}
-    .top nav{margin-left:0;order:3;width:100%;overflow-x:auto;gap:2px;scrollbar-width:none}
-    .top nav::-webkit-scrollbar{display:none}
-    .top nav a{padding:6px 9px;font-size:13px;white-space:nowrap}
-    .live{order:2}
-    h1{font-size:31px}
-    .lead{font-size:15.5px}
-    section{padding:44px 0}
-    .sec-head{flex-wrap:wrap;gap:8px}
-    .sec-head h2{font-size:24px}
-    .stat .k{font-size:24px}
-    .hero-card{max-width:100%}
-    .lab{grid-template-columns:1fr}
-  }
+/* ---------- tokens ---------- */
+:root{
+  --ink:#0a0b0d; --ink-2:#0d0f12; --panel:#111418; --panel-2:#151a20;
+  --line:rgba(232,226,214,.10); --line-2:rgba(232,226,214,.20);
+  --text:#ece7dd; --muted:#8d877b; --dim:#615d55;
+  --amber:#e0a44f; --amber-2:#f2c987; --amber-soft:rgba(224,164,79,.13);
+  --teal:#6fd3c0; --red:#e0796a;
+  --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,"Songti SC",Georgia,serif;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --max:1240px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#3b3226 transparent}
+body{
+  margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);
+  font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(1100px 620px at 78% -8%,rgba(224,164,79,.10),transparent 62%),
+    radial-gradient(860px 520px at -6% 14%,rgba(111,211,192,.045),transparent 58%),
+    radial-gradient(700px 700px at 50% 120%,rgba(224,164,79,.05),transparent 60%);
+  background-attachment:fixed;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(to right,rgba(232,226,214,.028) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(232,226,214,.028) 1px,transparent 1px);
+  background-size:72px 72px;
+  mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 25%,transparent 78%);
+}
+/* ---------- scrollbars ---------- */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(#3c3529,#2a261e);
+  border:2px solid var(--ink);border-radius:99px;
+}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(#e0a44f,#8a6427)}
+::-webkit-scrollbar-corner{background:var(--ink)}
+.rail::-webkit-scrollbar{width:7px}
+.rail::-webkit-scrollbar-thumb{background:#332e25;border-color:var(--panel)}
+.rail::-webkit-scrollbar-thumb:hover{background:#8a6427}
+/* ---------- type ---------- */
+h1,h2,h3,h4{font-family:var(--serif);font-weight:400;letter-spacing:-.02em;margin:0;line-height:1.08}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+code,kbd,pre{font-family:var(--mono);font-variant-ligatures:none}
+.mono{font-family:var(--mono)}
+.eyebrow,.lbl,.num,.tag{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--dim);
+}
+::selection{background:rgba(224,164,79,.28);color:#fff}
+/* ---------- shell ---------- */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px;position:relative;z-index:1}
+header.top{
+  position:sticky;top:0;z-index:40;backdrop-filter:blur(14px) saturate(1.2);
+  background:rgba(10,11,13,.82);border-bottom:1px solid var(--line);
+}
+.top .wrap{display:flex;align-items:center;gap:26px;height:60px}
+nav.topnav{display:flex;align-items:center;gap:24px;min-width:0}
+nav.topnav a{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);padding:4px 0;position:relative;white-space:nowrap;
+}
+nav.topnav a::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--amber);
+  transform:scaleX(0);transform-origin:left;transition:transform .25s ease;
+}
+nav.topnav a:hover{color:var(--text)}
+nav.topnav a:hover::after{transform:scaleX(1)}
+.modpill{
+  margin-left:auto;display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:5px 11px;white-space:nowrap;
+}
+.modpill .dot{width:6px;height:6px;border-radius:50%;background:var(--dim);box-shadow:0 0 0 3px rgba(255,255,255,.03)}
+.modpill.live{color:var(--teal);border-color:rgba(111,211,192,.34)}
+.modpill.live .dot{background:var(--teal);animation:pulse 2.4s ease-in-out infinite}
+.modpill.err{color:var(--red);border-color:rgba(224,121,106,.4)}
+.modpill.err .dot{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.brand .glyph{
+  width:22px;height:22px;border:1px solid var(--amber);display:grid;place-items:center;
+  color:var(--amber);font-family:var(--mono);font-size:11px;transform:rotate(45deg);
+}
+.brand .glyph span{transform:rotate(-45deg)}
+.brand b{font-family:var(--serif);font-weight:400;font-size:17px;letter-spacing:.01em;white-space:nowrap}
+.brand b em{font-style:normal;color:var(--amber)}
+/* ---------- hero ---------- */
+.hero{padding:86px 0 76px;border-bottom:1px solid var(--line)}
+.hero .wrap{display:grid;grid-template-columns:1.12fr .88fr;gap:70px;align-items:start}
+.hero .kicker{display:flex;align-items:center;gap:12px;margin-bottom:26px}
+.hero .kicker .rule{height:1px;width:44px;background:var(--amber);opacity:.6}
+h1{font-size:clamp(42px,5vw,68px);margin-bottom:24px;letter-spacing:-.028em}
+h1 em{font-style:italic;color:var(--amber)}
+.lede{color:#b8b1a4;font-size:16.5px;max-width:34em;line-height:1.7}
+.lede b{color:var(--text);font-weight:500}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin:34px 0 22px}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line-2);
+  padding:11px 20px;border-radius:2px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text);cursor:pointer;
+  background:transparent;transition:.2s ease;
+}
+.btn:hover{border-color:var(--amber);color:var(--amber-2)}
+.btn.solid{background:var(--amber);border-color:var(--amber);color:#1a1408;font-weight:600}
+.btn.solid:hover{background:var(--amber-2);border-color:var(--amber-2);color:#1a1408}
+.cmd{
+  display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:rgba(255,255,255,.02);
+  padding:10px 14px;border-radius:2px;max-width:400px;
+}
+.cmd code{font-size:12.5px;color:#d8d2c6;overflow:auto;white-space:nowrap}
+.cmd code .c-flag{color:var(--amber)}
+.cmd button{
+  margin-left:auto;background:none;border:0;color:var(--dim);cursor:pointer;font-family:var(--mono);
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 0;
+}
+.cmd button:hover{color:var(--amber)}
+/* plate */
+.plate{
+  border:1px solid var(--line-2);background:linear-gradient(170deg,rgba(255,255,255,.035),rgba(255,255,255,.008) 40%,transparent);
+  padding:20px 22px 18px;position:relative;
+}
+.plate::before,.plate::after{
+  content:"";position:absolute;width:9px;height:9px;border:1px solid var(--amber);opacity:.55;
+}
+.plate::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.plate::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.plate .ph{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px}
+.plate .ph span:last-child{color:var(--dim);font-family:var(--mono);font-size:10px}
+.plate .meta{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin:0 0 16px}
+.plate .meta div{background:var(--ink-2);padding:9px 11px}
+.plate .meta dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 3px}
+.plate .meta dd{margin:0;font-family:var(--mono);font-size:12.5px;color:var(--text)}
+.plate .meta dd.acc{color:var(--amber)}
+.bars{display:flex;align-items:flex-end;gap:6px;height:118px;padding-top:6px}
+.bars .bar{
+  flex:1;background:linear-gradient(180deg,var(--amber),rgba(224,164,79,.18));
+  position:relative;min-height:3px;transform-origin:bottom;animation:grow .7s cubic-bezier(.2,.9,.2,1) both;
+}
+.bars .bar .v{
+  position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:10px;color:var(--amber-2);
+}
+@keyframes grow{from{transform:scaleY(0);opacity:.2}to{transform:scaleY(1);opacity:1}}
+.plate .pf{margin-top:12px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em}
+/* ---------- section head ---------- */
+section.band{padding:78px 0;border-bottom:1px solid var(--line);position:relative}
+.sechead{display:flex;align-items:baseline;gap:18px;margin-bottom:34px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.sechead .num{color:var(--amber);font-size:11px}
+.sechead h2{font-size:clamp(28px,3.1vw,40px)}
+.sechead .rule{display:none}
+.sechead .meta{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase;white-space:nowrap}
+/* ---------- workbench ---------- */
+.bench{display:grid;grid-template-columns:288px 1fr;gap:34px;align-items:start}
+.rail{
+  height:660px;max-height:calc(100vh - 130px);overflow:auto;
+  border-right:1px solid var(--line);padding-right:14px;
+}
+.railsearch{position:relative;margin-bottom:16px}
+.railsearch input{
+  width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--text);
+  font-family:var(--mono);font-size:12px;padding:8px 10px 8px 28px;border-radius:2px;outline:none;
+}
+.railsearch input:focus{border-color:rgba(224,164,79,.5)}
+.railsearch input::placeholder{color:var(--dim)}
+.railsearch svg{position:absolute;left:9px;top:9px;opacity:.45}
+.rgroup{margin-bottom:16px}
+.rgroup h4{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+  margin:0 0 6px;display:flex;justify-content:space-between;
+}
+.ritem{
+  display:flex;align-items:baseline;gap:9px;width:100%;text-align:left;background:none;border:0;
+  border-left:2px solid transparent;padding:6px 8px;cursor:pointer;color:var(--muted);
+  font-family:var(--sans);font-size:13.5px;line-height:1.35;transition:.15s;
+}
+.ritem .n{font-family:var(--mono);font-size:9.5px;color:var(--dim);width:18px;flex-shrink:0}
+.ritem:hover{color:var(--text);background:rgba(255,255,255,.025)}
+.ritem.on{border-left-color:var(--amber);color:var(--text);background:linear-gradient(90deg,var(--amber-soft),transparent)}
+.ritem.on .n{color:var(--amber)}
+.rail .empty{color:var(--dim);font-size:12px;padding:8px}
+/* stage */
+.stage{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.022),transparent 30%);padding:0;display:flex;flex-direction:column;min-height:520px}
+.stage-top{display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--line)}
+.spec-id{font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.1em}
+.spec-id span{color:var(--dim)}
+.stage-top h3{font-size:26px}
+.spec-sub{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em;margin-top:3px}
+.stage-top .btn{margin-left:auto}
+.stage-aside{margin-left:auto;display:flex;align-items:center;gap:10px}
+.stage-in{padding:20px 24px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.16)}
+.stage-in .lbl{margin-bottom:10px;display:block}
+.stage-out{padding:22px 24px 24px;flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column}
+.stage-out .outhead{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.stage-out .lbl{margin:0}
+.outmeta{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em}
+.outmeta b{color:var(--teal);font-weight:400}
+.canvas{flex:1;min-height:132px;display:flex;flex-direction:column;justify-content:center}
+.stage-calls{border-top:1px solid var(--line);padding:0 24px}
+.stage-calls summary{
+  list-style:none;cursor:pointer;padding:12px 0;font-family:var(--mono);font-size:10px;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;gap:8px;
+}
+.stage-calls summary::-webkit-details-marker{display:none}
+.stage-calls summary::before{content:"›";color:var(--amber);transition:transform .2s}
+.stage-calls[open] summary::before{transform:rotate(90deg)}
+.stage-calls pre{margin:0 0 16px;font-size:12px;line-height:1.9;color:#c9c3b6;overflow:auto;white-space:pre}
+.stage-calls pre .c-pkg{color:var(--amber)}
+.stage-calls pre .c-fn{color:var(--teal)}
+.stage-calls pre .c-cm{color:var(--dim);font-style:italic}
+/* controls */
+.dctl{display:flex;flex-direction:column;gap:11px}
+.fieldrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.fieldrow label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);min-width:70px}
+.fieldrow input[type=number],.fieldrow input[type=text],.fieldrow textarea,.fieldrow input:not([type]){
+  background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--text);
+  font-family:var(--mono);font-size:12.5px;padding:7px 9px;border-radius:2px;outline:none;
+}
+.fieldrow input:focus,.fieldrow textarea:focus{border-color:rgba(224,164,79,.5)}
+.fieldrow input[type=number]{width:86px}
+.fieldrow textarea{flex:1;min-width:180px;resize:vertical;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:28px}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-2);
+  background:rgba(255,255,255,.025);padding:3px 8px;border-radius:2px;
+  font-family:var(--mono);font-size:12px;color:#ddd7ca;
+}
+.chip .ix{color:var(--dim);font-size:9.5px}
+.chip .x{color:var(--dim);cursor:pointer;font-size:13px;line-height:1}
+.chip .x:hover{color:var(--red)}
+.chip.hi{border-color:rgba(224,164,79,.55);background:var(--amber-soft);color:var(--amber-2)}
+.chip.str{padding:4px 9px}
+.addrow{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.addrow input{
+  flex:1;min-width:120px;background:rgba(255,255,255,.03);border:1px solid var(--line);
+  color:var(--text);font-family:var(--mono);font-size:12px;padding:6px 9px;border-radius:2px;outline:none;
+}
+.addrow input:focus{border-color:rgba(224,164,79,.5)}
+.mini{
+  background:transparent;border:1px solid var(--line-2);color:var(--muted);cursor:pointer;
+  font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:5px 9px;border-radius:2px;white-space:nowrap;
+}
+.mini:hover{color:var(--amber);border-color:rgba(224,164,79,.5)}
+.mini.ghost{opacity:.75}
+/* output primitives */
+.seq{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.node{
+  min-width:34px;height:34px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--line-2);background:rgba(255,255,255,.02);font-family:var(--mono);font-size:13px;
+  color:#ddd7ca;border-radius:2px;position:relative;
+}
+.node.hi{border-color:rgba(224,164,79,.6);background:var(--amber-soft);color:var(--amber-2)}
+.kv{display:flex;flex-direction:column;gap:5px}
+.kv .row{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:12.5px;color:#ddd7ca}
+.kv .badge{
+  width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--line-2);
+  font-size:10px;color:var(--amber);border-radius:2px;flex-shrink:0;
+}
+.kv .muted{margin-left:auto;color:var(--dim);font-size:11px}
+.metric{display:flex;gap:34px;flex-wrap:wrap}
+.metric .m .lab2{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.metric .m .val{font-family:var(--serif);font-size:38px;line-height:1;color:var(--amber-2)}
+.metric .m .val small{font-size:18px}
+.bars2{display:flex;align-items:flex-end;gap:6px;height:116px}
+.bars2 .bar{
+  flex:1;background:linear-gradient(180deg,rgba(111,211,192,.85),rgba(111,211,192,.12));
+  position:relative;min-height:3px;animation:grow .6s cubic-bezier(.2,.9,.2,1) both;
+}
+.bars2 .bar .v{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;color:var(--teal)}
+.groups{display:flex;flex-wrap:wrap;gap:10px}
+.groups .g{display:flex;gap:4px;border:1px solid var(--line-2);padding:6px;border-radius:2px;background:rgba(255,255,255,.02)}
+.groups .g b{font-family:var(--mono);font-size:12px;font-weight:400;color:#ddd7ca;padding:1px 4px}
+.textvis{
+  font-family:var(--mono);font-size:17px;letter-spacing:.14em;line-height:1.9;word-break:break-all;color:#b8b1a4;
+}
+.textvis .hit{color:#1a1408;background:var(--amber);padding:1px 2px}
+.oplist{display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:12px}
+.oplist .op{display:flex;gap:14px;border-bottom:1px dashed rgba(232,226,214,.07);padding:3px 0}
+.oplist .op .t{color:var(--amber);min-width:74px}
+.oplist .op .r{color:#b8b1a4}
+.bits{display:grid;grid-template-columns:repeat(auto-fill,minmax(18px,1fr));gap:4px;max-width:660px}
+.bits .b{aspect-ratio:1;border:1px solid var(--line);border-radius:1px;background:rgba(255,255,255,.015)}
+.bits .b.on{background:var(--amber);border-color:var(--amber);box-shadow:0 0 10px rgba(224,164,79,.25)}
+.out-empty{color:var(--dim);font-family:var(--mono);font-size:12px}
+.err{border-left:2px solid var(--red);padding:6px 10px;color:var(--red);font-family:var(--mono);font-size:12px;background:rgba(224,121,106,.06)}
+.note{margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.7}
+.note b{color:var(--muted);font-weight:400}
+/* ---------- packages ---------- */
+.pkgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.pkg{background:var(--ink);padding:20px 18px;cursor:pointer;transition:.2s;position:relative}
+.pkg:hover{background:var(--panel)}
+.pkg:hover .pkgname{color:var(--amber)}
+.pkgname{font-family:var(--mono);font-size:13px;letter-spacing:.1em;transition:.2s}
+.pkgname span{color:var(--dim)}
+.pkgrole{margin-top:8px;font-size:12.5px;color:var(--muted);line-height:1.5;min-height:38px}
+.pkgcount{margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+.pkgcount b{color:var(--amber);font-weight:400}
+/* ---------- conformance ---------- */
+.confgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.conf{border-top:1px solid var(--line-2);padding-top:16px}
+.conf .big{font-family:var(--serif);font-size:52px;line-height:1;color:var(--text)}
+.conf .big span{font-size:20px;color:var(--dim);margin-left:4px}
+.conf h4{font-size:16px;margin:10px 0 8px}
+.conf p{font-size:13.5px;color:var(--muted);line-height:1.65}
+.conffoot{
+  margin-top:38px;border:1px solid var(--line);padding:18px 20px;display:flex;gap:28px;
+  flex-wrap:wrap;background:rgba(255,255,255,.015);
+}
+.conffoot div{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.conffoot b{color:var(--amber);font-weight:400}
+/* ---------- reference ---------- */
+.refbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:22px}
+.refsearch{flex:1;min-width:240px;position:relative}
+.refsearch input{
+  width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--text);
+  font-family:var(--mono);font-size:13px;padding:11px 12px 11px 34px;border-radius:2px;outline:none;
+}
+.refsearch input:focus{border-color:rgba(224,164,79,.5)}
+.refsearch svg{position:absolute;left:12px;top:12px;opacity:.45}
+.pkgchips{display:flex;gap:6px;flex-wrap:wrap}
+.pkgchip{
+  background:transparent;border:1px solid var(--line);color:var(--muted);cursor:pointer;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;padding:6px 10px;border-radius:2px;
+}
+.pkgchip:hover{color:var(--text);border-color:var(--line-2)}
+.pkgchip.on{color:#1a1408;background:var(--amber);border-color:var(--amber)}
+.refgrid{display:grid;grid-template-columns:300px 1fr;gap:30px;align-items:start}
+.typelist{
+  position:sticky;top:78px;max-height:min(760px,calc(100vh - 120px));overflow:auto;
+  border-right:1px solid var(--line);padding-right:12px;
+}
+.typelist .pkghead{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);
+  padding:14px 8px 6px;border-bottom:1px solid var(--line);margin-bottom:4px;
+}
+.typelist .pkghead:first-child{padding-top:0}
+.titem{
+  display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;background:none;border:0;
+  border-left:2px solid transparent;padding:5px 8px;cursor:pointer;color:var(--muted);
+  font-family:var(--mono);font-size:12px;
+}
+.titem .k{margin-left:auto;font-size:9px;color:var(--dim);letter-spacing:.08em}
+.titem:hover{color:var(--text);background:rgba(255,255,255,.02)}
+.titem.on{color:var(--amber-2);border-left-color:var(--amber);background:linear-gradient(90deg,var(--amber-soft),transparent)}
+.apipane{min-height:300px}
+.path{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--dim);margin-bottom:8px}
+.apitype{font-family:var(--serif);font-size:34px;line-height:1.1;display:inline}
+.awrap{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.apikind{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);
+  border:1px solid rgba(224,164,79,.4);padding:3px 7px;
+}
+.params{font-family:var(--mono);font-size:15px;color:var(--dim)}
+.impls{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}
+.impls .i{
+  font-family:var(--mono);font-size:10px;color:var(--teal);border:1px solid rgba(111,211,192,.3);
+  padding:2px 7px;border-radius:99px;
+}
+.apidoc h5{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
+  margin:26px 0 10px;font-weight:400;display:flex;align-items:center;gap:10px;
+}
+.apidoc h5::after{content:"";flex:1;height:1px;background:var(--line)}
+.apidoc pre{
+  margin:0;padding:12px 14px;background:#0c0e11;border:1px solid var(--line);
+  font-size:12px;color:#c9c3b6;overflow:auto;line-height:1.75;
+}
+.apidoc table{width:100%;border-collapse:collapse;font-size:12.5px}
+.apidoc th{
+  text-align:left;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);font-weight:400;padding:0 10px 6px 0;border-bottom:1px solid var(--line);
+}
+.apidoc td{padding:6px 10px 6px 0;border-bottom:1px solid rgba(232,226,214,.05);vertical-align:top}
+.apidoc td.mn{font-family:var(--mono);color:var(--amber-2);white-space:nowrap}
+.apidoc td.sig{font-family:var(--mono);font-size:11.5px;color:#b8b1a4;word-break:break-word}
+.apidoc .note{color:var(--muted);font-family:var(--sans);font-size:13px}
+/* ---------- install ---------- */
+.instgrid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+.codecard{border:1px solid var(--line);background:#0c0e11}
+.tabs{display:flex;border-bottom:1px solid var(--line)}
+.tab{
+  background:none;border:0;border-bottom:1px solid transparent;color:var(--dim);cursor:pointer;
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:10px 14px;
+}
+.tab.on{color:var(--amber);border-bottom-color:var(--amber)}
+.codecard pre{margin:0;padding:16px;font-size:12.5px;line-height:1.9;color:#cfc9bd;overflow:auto}
+.codecard pre .c-kw{color:var(--amber)}
+.codecard pre .c-str{color:var(--teal)}
+.codecard pre .c-cm{color:var(--dim)}
+.steps{display:flex;flex-direction:column;gap:18px}
+.step{display:flex;gap:14px}
+.step .sn{
+  font-family:var(--mono);font-size:10px;color:var(--amber);border:1px solid rgba(224,164,79,.4);
+  width:24px;height:24px;display:grid;place-items:center;flex-shrink:0;margin-top:2px;
+}
+.step h4{font-size:15px;margin-bottom:4px}
+.step p{font-size:13.5px;color:var(--muted)}
+.step code{font-size:12px;color:var(--amber-2);background:rgba(224,164,79,.08);padding:1px 5px}
+/* ---------- footer ---------- */
+footer{padding:44px 0 60px}
+footer .wrap{display:flex;gap:24px;align-items:baseline;flex-wrap:wrap}
+footer .fnote{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em}
+footer .flinks{margin-left:auto;display:flex;gap:18px}
+footer .flinks a{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.08em}
+footer .flinks a:hover{color:var(--amber)}
+/* ---------- responsive ---------- */
+@media(max-width:1080px){
+  .hero .wrap{grid-template-columns:1fr;gap:44px}
+  .pkgrid{grid-template-columns:repeat(3,1fr)}
+  .confgrid{grid-template-columns:1fr;gap:22px}
+  .instgrid{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  .bench{grid-template-columns:1fr;gap:22px}
+  .rail{position:static;height:auto;max-height:250px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 10px;overflow:auto}
+  .stage{min-height:0}
+  .stage-out{overflow:visible}
+  .rail .rlist{display:block}
+  .rgroup{min-width:0;margin-bottom:12px}
+  .refgrid{grid-template-columns:1fr}
+  .typelist{position:static;max-height:320px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 12px}
+}
+@media(max-width:760px){
+  .wrap{padding:0 18px}
+  .top .wrap{height:auto;flex-wrap:wrap;gap:10px;padding-top:10px;padding-bottom:10px}
+  nav.topnav{order:2;width:100%;overflow:visible;flex-wrap:wrap;gap:14px;padding-bottom:2px}
+  nav.topnav a{font-size:9.5px;letter-spacing:.1em}
+  .brand{order:1}
+  .modpill{margin-left:auto;order:1}
+  .hero{padding:52px 0 48px}
+  h1{font-size:clamp(34px,9vw,46px)}
+  section.band{padding:52px 0}
+  .sechead{flex-wrap:wrap;gap:10px}
+  .sechead .rule{display:none}
+  .sechead .meta{width:100%}
+  .pkgrid{grid-template-columns:1fr 1fr}
+  .stage-top{flex-wrap:wrap}
+  .stage-top .btn{margin-left:0;width:100%;justify-content:center}
+  .metric{gap:22px}
+  .metric .m .val{font-size:30px}
+  .canvas{min-height:100px}
+  img,pre,table{max-width:100%}
+}
+@media(max-width:460px){
+  .pkgrid{grid-template-columns:1fr}
+  .conf .big{font-size:42px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
-    <div class="brand"><span class="glyph"></span>moon<span class="stl">stl</span></div>
-    <nav>
-      <a href="#lab">Live Lab</a>
-      <a href="#families">Families</a>
-      <a href="#reference">Reference</a>
+    <nav class="topnav">
+      <a href="#workbench">Workbench</a>
+      <a href="#packages">Packages</a>
       <a href="#conformance">Conformance</a>
+      <a href="#reference">Reference</a>
       <a href="#install">Install</a>
     </nav>
-    <div class="live"><span class="dot"></span><span id="liveLabel">loading library…</span></div>
+    <div class="modpill" id="modStatus"><span class="dot"></span><span id="modText">wasm-gc · booting</span></div>
+    <a class="brand" href="#top" aria-label="MoonBit STL">
+      <span class="glyph"><span>M</span></span>
+      <b>MoonBit <em>STL</em></b>
+    </a>
   </div>
 </header>
 
-<div class="hero">
-  <div class="grid-bg"></div><div class="glow"></div>
-  <div class="wrap">
-    <div class="eyebrow">for MoonBit</div>
-    <h1>Data structures &amp; algorithms<br>the core <span class="grad">leaves out</span>.</h1>
-    <p class="lead">One module, ten families — ordered maps, caches with policies, six heaps,
-      segment and Fenwick trees, probabilistic sketches, string algorithms and perfect
-      hash maps. Compiled to where you run it, and <em>running right here</em> in your
-      browser from the real library, not a reimplementation.</p>
-    <div class="hero-card">
-      <div class="bar"><i></i><i></i><i></i><span class="fn">indexmap.mbt</span></div>
-<pre class="code" id="heroCode"></pre>
-    </div>
-    <div class="hero-actions">
-      <button class="btn primary" id="heroRun">▶ Run it live</button>
-      <a class="btn ghost" href="#lab">Open the Live Lab →</a>
-      <a class="btn ghost" href="#reference">Browse the reference</a>
-    </div>
-    <div class="stats" id="stats"></div>
-  </div>
-</div>
+<main id="top">
 
-<section id="lab">
+<!-- ══════════════ hero ══════════════ -->
+<section class="hero">
   <div class="wrap">
-    <div class="sec-head"><span class="tag">Live Lab</span><h2>Run the real library</h2></div>
-    <p class="sec-sub">Each panel compiles from moonstl with the JavaScript backend. Edit the inputs,
-      hit run, and the result is produced by the library in this page — the same code that
-      ships on MoonBit. There is no mock behind these.</p>
-    <div class="lab-bar">
-      <button class="btn primary" id="runAll">▶ Run everything</button>
-      <span class="hint" id="labHint">23 structures &amp; algorithms, one compiled bundle</span>
-    </div>
-    <div class="lab" id="labGrid"></div>
-  </div>
-</section>
-
-<section id="families">
-  <div class="wrap">
-    <div class="sec-head"><span class="tag">Inside</span><h2>ten families</h2></div>
-    <p class="sec-sub">Every type below is generated from the package interfaces — the names you see
-      here are the names in the code. Pick a family to jump into the reference.</p>
-    <div class="fam" id="fam"></div>
-  </div>
-</section>
-
-<section id="reference">
-  <div class="wrap">
-    <div class="sec-head"><span class="tag">Reference</span><h2>the API</h2></div>
-    <p class="sec-sub">Parsed straight from <span class="mono">pkg.generated.mbti</span> by
-      <span class="mono">moon info</span>, so it tracks the code. Search across every type and method.</p>
-    <div class="ref">
-      <div class="side">
-        <input class="search" id="q" placeholder="Search types &amp; methods…  e.g. index, heap, rank">
-        <div id="pkgList"></div>
+    <div>
+      <div class="kicker"><span class="rule"></span><span class="eyebrow">MoonBit standard library extensions · v0.1.0</span></div>
+      <h1>Structures held to<br>a second <em>opinion</em>.</h1>
+      <p class="lede">
+        Ten packages of data structures and algorithms for MoonBit — indexed maps, priority queues,
+        range trees, eviction policies, sketches, string search, perfect hashing.
+        Each one ships with reference vectors computed <b>twice, by two other standard libraries</b>,
+        so the answers are checked against something that is not itself.
+      </p>
+      <p class="lede" style="margin-top:16px">
+        Every panel below runs the real library, compiled to <b>WebAssembly</b> and instantiated in this tab.
+        Nothing here is a re-implementation for the demo.
+      </p>
+      <div class="cta">
+        <a class="btn solid" href="#workbench">Open the workbench <span style="opacity:.6">→</span></a>
+        <a class="btn" href="#reference">API reference</a>
       </div>
+      <div class="cmd">
+        <code><span class="c-flag">moon</span> add moonbitstack/moonstl</code>
+        <button id="copyAdd" type="button">copy</button>
+      </div>
+    </div>
+
+    <aside class="plate">
+      <div class="ph"><span class="lbl">Specimen 00 — the module</span><span id="plateSize">—</span></div>
+      <dl class="meta">
+        <div><dt>backend</dt><dd class="acc">wasm-gc</dd></div>
+        <div><dt>load</dt><dd id="plateLoad">—</dd></div>
+        <div><dt>exports</dt><dd>run · names</dd></div>
+        <div><dt>demos</dt><dd id="plateDemos">—</dd></div>
+      </dl>
+      <div class="bars" id="heroBars"></div>
+      <div class="pf"><span id="plateCall">run("segment", …)</span><span id="plateTotal"></span></div>
+    </aside>
+  </div>
+</section>
+
+<!-- ══════════════ workbench ══════════════ -->
+<section class="band" id="workbench">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="num">01</span><h2>Workbench</h2><span class="rule"></span>
+      <span class="meta" id="benchMeta">23 specimens · 9 packages</span>
+    </div>
+
+    <div class="bench">
+      <aside class="rail">
+        <div class="railsearch">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input id="railSearch" type="text" placeholder="filter specimens…" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="rlist" id="railList"></div>
+      </aside>
+
+      <section class="stage" aria-live="polite">
+        <div class="stage-top">
+          <span class="spec-id" id="specId">01<span>/23</span></span>
+          <div>
+            <h3 id="specTitle">IndexMap</h3>
+            <div class="spec-sub" id="specSub">@map · insertion order + position lookups</div>
+          </div>
+          <div class="stage-aside"><button class="btn solid" id="runBtn" type="button">Run <span style="opacity:.6">⏎</span></button></div>
+        </div>
+
+        <div class="stage-in">
+          <span class="lbl">input</span>
+          <div class="dctl" id="controls"></div>
+        </div>
+
+        <div class="stage-out">
+          <div class="outhead">
+            <span class="lbl">output</span>
+            <span class="outmeta" id="outMeta">—</span>
+          </div>
+          <div class="canvas" id="canvas"><span class="out-empty">loading module…</span></div>
+        </div>
+
+        <details class="stage-calls">
+          <summary>what this calls</summary>
+          <pre id="apiCode"></pre>
+        </details>
+      </section>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ packages ══════════════ -->
+<section class="band" id="packages">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="num">02</span><h2>Ten packages</h2><span class="rule"></span>
+      <span class="meta">one module · ten families</span>
+    </div>
+    <div class="pkgrid" id="pkgCards"></div>
+  </div>
+</section>
+
+<!-- ══════════════ conformance ══════════════ -->
+<section class="band" id="conformance">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="num">03</span><h2>How it is checked</h2><span class="rule"></span>
+      <span class="meta">differential · mutation · replay</span>
+    </div>
+
+    <div class="confgrid">
+      <div class="conf">
+        <div class="big">2<span>refs</span></div>
+        <h4>Answers computed twice</h4>
+        <p>Each package's vectors are produced independently by the Python standard library and by Rust's,
+          then diffed byte for byte. Two mature implementations have to agree before a number is committed.</p>
+      </div>
+      <div class="conf">
+        <div class="big">18<span>breaks</span></div>
+        <h4>Mutation tested</h4>
+        <p>Two key lines per package were broken on purpose — comparisons, bounds, renumbering, expiry
+          boundaries — and every break turned the suite red before it was reverted.</p>
+      </div>
+      <div class="conf">
+        <div class="big">4<span>backends</span></div>
+        <h4>Same tests everywhere</h4>
+        <p>Wasm, wasm-gc, JavaScript and native run the identical suite, so a structure that passes on one
+          target is not allowed to drift on another.</p>
+      </div>
+    </div>
+
+    <div class="conffoot">
+      <div><b>260</b> tests per backend</div>
+      <div><b>9</b> packages replay vectors</div>
+      <div><b>0</b> self-written expectations in the vectors</div>
+      <div><b>108</b> public types documented from the interfaces</div>
+      <div><b>0</b> hand-written signatures in the reference</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ reference ══════════════ -->
+<section class="band" id="reference">
+  <div class="wrap">
+    <div class="sechead">
+      <span class="num">04</span><h2>Reference</h2><span class="rule"></span>
+      <span class="meta" id="refMeta">generated from pkg.generated.mbti</span>
+    </div>
+
+    <div class="refbar">
+      <div class="refsearch">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input id="apiSearch" type="text" placeholder="search types, methods, functions…" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="pkgchips" id="pkgChips"></div>
+    </div>
+
+    <div class="refgrid">
+      <aside class="typelist" id="apiList"></aside>
       <div class="apipane" id="apiPane"></div>
     </div>
   </div>
 </section>
 
-<section id="conformance">
+<!-- ══════════════ install ══════════════ -->
+<section class="band" id="install">
   <div class="wrap">
-    <div class="sec-head"><span class="tag">Correctness</span><h2>verified, not assumed</h2></div>
-    <p class="sec-sub">The public behaviour is pinned by differential vectors: the same fixed inputs are
-      evaluated two independent ways, and the values are replayed against the library. Each family is
-      covered, so a regression anywhere turns a check red.</p>
-    <div class="conform" id="conform"></div>
-  </div>
-</section>
+    <div class="sechead">
+      <span class="num">05</span><h2>Install</h2><span class="rule"></span>
+      <span class="meta">one dependency · no transitive ones</span>
+    </div>
 
-<section id="install">
-  <div class="wrap">
-    <div class="sec-head"><span class="tag">Install</span><h2>one import is enough</h2></div>
-    <div class="install">
-      <div class="tabs">
-        <div class="tab sel" data-tab="mod">moon.mod</div>
-        <div class="tab" data-tab="use">Using it</div>
+    <div class="instgrid">
+      <div class="codecard">
+        <div class="tabs">
+          <button class="tab on" data-tab="mod" type="button">moon.mod</button>
+          <button class="tab" data-tab="src" type="button">use</button>
+        </div>
+        <pre id="installCode"></pre>
       </div>
-<pre id="tab-mod">// add to your moon.mod import block
-import {
-  "moonbitstack/moonstl@0.1.0",
-}
 
-// one import names the whole module
-let m : @map.IndexMap[String, Int32] = @map.IndexMap::new()
-let _ = m.set("a", 1)
-let _ = m.set("b", 2)
-@map.IndexMap::new()   // the module root re-exports the families</pre>
-<pre id="tab-use" style="display:none">// a few families side by side
-let cache : @cache.LruCache[String, Int32] = @cache.LruCache::new(capacity=8)
-let _ = cache.set("k", 42)
-@cache.LruCache::new()
-
-let h : @heap.DaryHeap[Int32] = @heap.DaryHeap::default()
-let _ = h.push(3)
-let _ = h.push(1)
-h.peek()   // Some(1)
-
-let s : @sketch.CountMinSketch[String] = @sketch.CountMinSketch::new(
-  epsilon=0.01,
-  confidence=0.99,
-)
-let _ = s.insert("hello")
-s.estimate("hello")   // >= 1</pre>
-    </div>
-    <div class="steps">
-      <div class="s"><div class="n">01</div><p>Add <span class="mono">moonbitstack/moonstl</span> to your module's import block.</p></div>
-      <div class="s"><div class="n">02</div><p>Name a family with its package alias — <span class="mono">@map</span>, <span class="mono">@heap</span>, <span class="mono">@cache</span>, <span class="mono">@sketch</span>…</p></div>
-      <div class="s"><div class="n">03</div><p>It builds for every backend: native, wasm, wasm-gc and js, with no platform split.</p></div>
+      <div class="steps">
+        <div class="step">
+          <span class="sn">1</span>
+          <div><h4>Add the module</h4>
+            <p><code>moon add moonbitstack/moonstl</code> — the only dependency is MoonBit's own seed package.</p></div>
+        </div>
+        <div class="step">
+          <span class="sn">2</span>
+          <div><h4>Import a family</h4>
+            <p>Packages are separate: bring in <code>map</code>, <code>heap</code>, <code>tree</code>,
+              <code>cache</code>, <code>sketch</code>, <code>seq</code>, <code>text</code>,
+              <code>phf</code>, <code>algo</code> or <code>spec</code>, and nothing else follows.</p></div>
+        </div>
+        <div class="step">
+          <span class="sn">3</span>
+          <div><h4>Run it anywhere</h4>
+            <p>Wasm, wasm-gc, JavaScript and native. Structures that need a capacity or an ordering
+              take it as an explicit argument, and the fallible constructors raise rather than abort.</p></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="wrap">
-    <span>moonstl · Apache-2.0 · the data-structures module for MoonBit</span>
-    <span class="live-note"><span class="dot"></span> demos run the library compiled to JS, live in this page</span>
+    <span class="fnote">MoonBit STL · MIT · built and checked in CI on three systems</span>
+    <div class="flinks">
+      <a href="https://github.com/moonbitstack/moonstl">source</a>
+      <a href="https://mooncakes.io/docs/moonbitstack/moonstl">mooncakes</a>
+      <a href="#top">top ↑</a>
+    </div>
   </div>
 </footer>
 
-<script src="./moonstl.js"></script>
 <script>
-"use strict";
-// ---------- tiny helpers ----------
-const $ = (s, r=document) => r.querySelector(s);
-const esc = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-const el = (t, c, html) => { const n=document.createElement(t); if(c)n.className=c; if(html!=null)n.innerHTML=html; return n; };
-const rnd = n => Math.floor(Math.random()*n);
-const rint = (lo,hi) => lo + rnd(hi-lo+1);
-const randInts = (n,lo,hi) => Array.from({length:n},()=>rint(lo,hi));
-const WORDS = ["car","cart","cat","care","careful","cake","carbon","cap","capable","cache","cargo","caramel","card","caramel"];
-const randWords = n => Array.from({length:n},()=>WORDS[rnd(WORDS.length)]);
-const randText = () => ["ababcabab","abcabcabc","aabbaaabb","mississippi","banana banana","abababab"][rnd(6)];
+/* ════════════════════════════════════════════════════════════
+   helpers
+   ════════════════════════════════════════════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+const el = (t, c, html) => { const n = document.createElement(t); if (c) n.className = c; if (html != null) n.innerHTML = html; return n; };
+const rnd = n => Math.floor(Math.random() * n);
+const rint = (lo, hi) => lo + rnd(hi - lo + 1);
+const randInts = (n, lo, hi) => Array.from({ length: n }, () => rint(lo, hi));
+const WORDS = ["car", "cart", "cat", "care", "careful", "cake", "carbon", "cap", "capable", "cache", "cargo", "card"];
+const randWords = n => Array.from({ length: n }, () => WORDS[rnd(WORDS.length)]);
 
-// ---------- hero code ----------
-$("#heroCode").innerHTML =
-`<span class="tok-c">/// the module root re-exports the families</span>
-<span class="tok-k">let</span> map : <span class="tok-t">@map.IndexMap</span>[<span class="tok-t">String</span>, <span class="tok-t">Int32</span>] = <span class="tok-t">@map.IndexMap</span>::<span class="tok-f">new</span>()
-<span class="tok-k">let</span> _ = map.<span class="tok-f">set</span>(<span class="tok-s">"a"</span>, <span class="tok-n">1</span>)
-<span class="tok-k">let</span> _ = map.<span class="tok-f">set</span>(<span class="tok-s">"b"</span>, <span class="tok-n">2</span>)
-map.<span class="tok-f">get_index</span>(<span class="tok-n">1</span>)   <span class="tok-c">// Some(("b", 2)) — value at position 1</span>
-map.<span class="tok-f">get_index_of</span>(<span class="tok-s">"a"</span>) <span class="tok-c">// Some(0) — position of key "a"</span>`;
+/* ════════════════════════════════════════════════════════════
+   the module: moonstl compiled to wasm-gc
+   ════════════════════════════════════════════════════════════ */
+const MOD = { inst: null, bytes: 0, load: 0, demos: 0, calls: 0 };
 
-// ---------- live library ----------
-const LIB = window.moonstl;
-if (LIB) {
-  $("#liveLabel").textContent = "library loaded · live";
-} else {
-  $("#liveLabel").textContent = "bundle not found — run site/build.py";
+function setStatus(kind, text) {
+  const pill = $("#modStatus");
+  pill.className = "modpill" + (kind === "live" ? " live" : kind === "err" ? " err" : "");
+  $("#modText").textContent = text;
 }
-function call(name, input) {
-  if (!LIB) return { __dead:true };
+
+async function bootWasm() {
   const t0 = performance.now();
-  const raw = LIB.run(name, JSON.stringify(input));
+  const res = await fetch("moonstl.wasm", { cache: "no-cache" });
+  if (!res.ok) throw new Error("moonstl.wasm → HTTP " + res.status);
+  const buf = await res.arrayBuffer();
+  const { instance } = await WebAssembly.instantiate(
+    buf,
+    { console: { log: (...a) => console.log(...a) } },
+    { builtins: ["js-string"], importedStringConstants: "_" }
+  );
+  instance.exports._start();
+  MOD.inst = instance.exports;
+  MOD.bytes = buf.byteLength;
+  MOD.load = performance.now() - t0;
+  MOD.demos = JSON.parse(MOD.inst.names()).length;
+  return MOD;
+}
+
+function call(name, input) {
+  if (!MOD.inst) return { __dead: true };
+  const t0 = performance.now();
+  const raw = MOD.inst.run(name, JSON.stringify(input));
   const ms = performance.now() - t0;
+  MOD.calls++;
   try { const o = JSON.parse(raw); o.__ms = ms; return o; }
   catch (e) { return { __err: raw, __ms: ms }; }
 }
 
-// ---------- demo definitions ----------
-// input builders + tailored renderers. All output comes from call(name,input).
+/* ════════════════════════════════════════════════════════════
+   demo definitions — every renderer consumes the library's answer
+   ════════════════════════════════════════════════════════════ */
 const DEMOS = {
   indexmap: {
-    pkg:"map", title:"IndexMap", desc:"insertion order + position lookups",
-    state:{ set:[3,1,2,8] },
-    input:()=>({set:DEMOS.indexmap.state.set}),
-    run:()=>call("indexmap", DEMOS.indexmap.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const ks=r.keys||[], pos=r.positions||[];
-      return `<div class="kv">${ks.map((k,i)=>`<div class="row"><span class="badge">${i}</span><span>${k}</span><span class="muted">→ value ${k*2}</span></div>`).join("")}</div>
-      <div class="muted" style="font-size:12px;margin-top:12px;font-family:var(--mono)">positions ${esc(JSON.stringify(pos))} · hash lookup for value, O(1) index for position</div>`;
+    pkg: "map", title: "IndexMap", desc: "insertion order + position lookups", family: "map",
+    api: ["let m = @map.IndexMap::new()", "m.set(k, v)            // append or replace, keeping position", "m.keys()  /  m.get_index_of(k)  /  m.get_index(i)"],
+    state: { set: [3, 1, 2, 8] },
+    input: () => ({ set: DEMOS.indexmap.state.set }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const ks = r.keys || [], pos = r.positions || [];
+      return `<div class="kv">${ks.map((k, i) =>
+        `<div class="row"><span class="badge">${i}</span><span>${k}</span><span class="muted">value ${k * 2}</span></div>`).join("")}</div>
+      <div class="note">positions ${esc(JSON.stringify(pos))} · O(1) value lookup, O(1) index → entry</div>`;
     }
   },
   trie: {
-    pkg:"map", title:"Trie", desc:"prefix search over a character tree",
-    state:{ words:["car","cart","cat","cake","cap"], prefix:"car" },
-    input:()=>({words:DEMOS.trie.state.words, prefix:DEMOS.trie.state.prefix}),
-    run:()=>call("trie", DEMOS.trie.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const m=r.matches||[];
-      return `<div class="chips">${m.map(w=>`<span class="chip str">${esc(w)}</span>`).join("")||'<span class="out-empty">no keys with that prefix</span>'}</div>
-      <div class="muted" style="font-size:12px;font-family:var(--mono)">prefix "<b>${esc(r.prefix||"")}</b>" matched ${m.length} of ${(r.words||[]).length} keys</div>`;
+    pkg: "map", title: "Trie", desc: "prefix search over a character tree", family: "map",
+    api: ["let t = @map.Trie::new()", "t.insert(word, value)", "t.keys_with_prefix(prefix)"],
+    state: { words: ["car", "cart", "cat", "cake", "cap"], prefix: "car" },
+    input: () => ({ words: DEMOS.trie.state.words, prefix: DEMOS.trie.state.prefix }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const m = r.matches || [];
+      return `<div class="chips">${m.map(w => `<span class="chip str">${esc(w)}</span>`).join("") || '<span class="out-empty">no keys with that prefix</span>'}</div>
+      <div class="note">prefix "<b>${esc(r.prefix || "")}</b>" matched ${m.length} of ${(r.words || []).length} keys</div>`;
     }
   },
   lru: {
-    pkg:"cache", title:"LRU cache", desc:"least-recently-used eviction",
-    state:{ cap:3, set:[1,2,3,4,5] },
-    input:()=>({cap:DEMOS.lru.state.cap, set:DEMOS.lru.state.set}),
-    run:()=>call("lru", DEMOS.lru.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const d=r.displaced||[], k=r.keys||[];
-      return `<div class="seq">${k.map(v=>`<span class="node hi">${v}</span>`).join("")||'<span class="out-empty">empty</span>'}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">capacity <b class="mono">${r.capacity}</b> · evicted <span class="mono">${esc(JSON.stringify(d))}</span></div>`;
+    pkg: "cache", title: "LRU cache", desc: "least-recently-used eviction", family: "cache",
+    api: ["let c = @cache.LruCache::new(capacity=n)", "c.set(k, v)   // may return the displaced pair", "c.get(k)      // also refreshes recency"],
+    state: { cap: 3, set: [1, 2, 3, 4, 5] },
+    input: () => ({ cap: DEMOS.lru.state.cap, set: DEMOS.lru.state.set }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const d = r.displaced || [], k = r.keys || [];
+      return `<div class="seq">${k.map(v => `<span class="node hi">${v}</span>`).join("") || '<span class="out-empty">empty</span>'}</div>
+      <div class="note">capacity <b>${r.capacity}</b> · evicted in order <b>${esc(JSON.stringify(d))}</b> · recency list, not a clock</div>`;
     }
   },
   heap: {
-    pkg:"heap", title:"Three heaps", desc:"d-ary, fibonacci & pairing, one input",
-    state:{ set:[5,1,9,3,7,2] },
-    input:()=>({set:DEMOS.heap.state.set}),
-    run:()=>call("heap", DEMOS.heap.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const p=r.pops||[], f=r.fib||[], pa=r.pairing||[];
-      return `<div class="seq">${p.map((v,i)=>`<span class="node ${i===0?"hi":""}">${v}</span>`).join("")}</div>
-      <div class="muted" style="font-size:12px;margin-top:11px;font-family:var(--mono);display:flex;flex-direction:column;gap:4px">
-        <span><b style="color:var(--accent)">d-ary</b>&nbsp;&nbsp;&nbsp; ${esc(JSON.stringify(p))}</span>
-        <span><b style="color:var(--accent)">fibonacci</b> ${esc(JSON.stringify(f))}</span>
-        <span><b style="color:var(--accent)">pairing</b>&nbsp;&nbsp; ${esc(JSON.stringify(pa))}</span>
+    pkg: "heap", title: "Three heaps", desc: "d-ary, fibonacci & pairing on one input", family: "heap",
+    api: ["let h = @heap.DaryHeap::default()   // 4-ary min-heap", "let f = @heap.FibonacciHeap::new()", "let p = @heap.PairingHeap::new()", "h.push(v) / f.insert(v) / p.insert(v)   then pop"],
+    state: { set: [5, 1, 9, 3, 7, 2] },
+    input: () => ({ set: DEMOS.heap.state.set }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const p = r.pops || [], f = r.fib || [], pa = r.pairing || [];
+      return `<div class="seq">${p.map((v, i) => `<span class="node ${i === 0 ? "hi" : ""}">${v}</span>`).join("")}</div>
+      <div class="note" style="display:flex;flex-direction:column;gap:3px">
+        <span><b style="color:var(--amber)">d-ary</b>&nbsp;&nbsp;&nbsp;&nbsp; ${esc(JSON.stringify(p))}</span>
+        <span><b style="color:var(--amber)">fibonacci</b> ${esc(JSON.stringify(f))}</span>
+        <span><b style="color:var(--amber)">pairing</b>&nbsp;&nbsp; ${esc(JSON.stringify(pa))}</span>
       </div>`;
     }
   },
-  segment: {
-    pkg:"tree", title:"Segment tree", desc:"range sums in log time",
-    state:{ set:[3,1,4,1,5] },
-    input:()=>({set:DEMOS.segment.state.set}),
-    run:()=>call("segment", DEMOS.segment.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const v=r.values||[], mx=Math.max(1,...v);
-      return `<div class="bars">${v.map(x=>`<div class="bar" style="height:${x/mx*100}%"><span class="v">${x}</span></div>`).join("")}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:10px">total <b class="mono">${r.total}</b> · prefix ${esc(JSON.stringify(r.prefix||[]))}</div>`;
-    }
-  },
-  disjoint: {
-    pkg:"tree", title:"Disjoint set", desc:"union–find components",
-    state:{ n:5, set:[0,1,1,2,2,3,4] },
-    input:()=>({n:DEMOS.disjoint.state.n, set:DEMOS.disjoint.state.set}),
-    run:()=>call("disjoint", DEMOS.disjoint.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const s=r.sets||[];
-      return `<div class="groups">${s.map(g=>`<div class="g">${g.map(x=>`<b>${x}</b>`).join("")}</div>`).join("")}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">${r.count} component${r.count===1?"":"s"} after the unions</div>`;
-    }
-  },
-  bloom: {
-    pkg:"sketch", title:"Bloom filter", desc:"no false negatives, few false positives",
-    state:{ cap:100, set:[1,2,3,4,5,6,7], n:3 },
-    input:()=>({cap:DEMOS.bloom.state.cap, set:DEMOS.bloom.state.set, n:DEMOS.bloom.state.n}),
-    run:()=>call("bloom", DEMOS.bloom.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      return `<div class="metric"><div class="m"><div class="lab2">contains ${DEMOS.bloom.state.n}</div><div class="val" style="color:${r.found?"var(--ok)":"var(--err)"}">${r.found?"yes":"no"}</div></div>
-      <div class="m"><div class="lab2">false-positive rate</div><div class="val"><small>${r.false_pos?.toExponential(2) ?? "0"}</small></div></div></div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">members ${esc(JSON.stringify(DEMOS.bloom.state.set))} · a "no" is always true</div>`;
-    }
-  },
-  countmin: {
-    pkg:"sketch", title:"Count-min sketch", desc:"frequency estimates, never under",
-    state:{ set:[7,7,7,7,7,7,7,8,8,9], q:7 },
-    input:()=>({set:DEMOS.countmin.state.set, q:DEMOS.countmin.state.q}),
-    run:()=>call("countmin", DEMOS.countmin.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      return `<div class="metric"><div class="m"><div class="lab2">estimate(${DEMOS.countmin.state.q})</div><div class="val">${r.estimate}</div></div></div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">inserted ${esc(JSON.stringify(DEMOS.countmin.state.set))} · estimate is always ≥ true count</div>`;
-    }
-  },
-  kmp: {
-    pkg:"text", title:"KMP search", desc:"linear scan with a failure function",
-    state:{ text:"ababcabab", pattern:"abab" },
-    input:()=>({text:DEMOS.kmp.state.text, pattern:DEMOS.kmp.state.pattern}),
-    run:()=>call("kmp", DEMOS.kmp.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const t=r.text||"", p=r.pattern||"", hits=new Set(r.hits||[]);
-      let html="", i=0;
-      while(i<t.length){
-        if(hits.has(i) && p.length>0){
-          html+=`<span class="hit">${esc(t.slice(i,i+p.length))}</span>`;
-          i+=p.length;
-        } else { html+=esc(t[i]); i++; }
-      }
-      return `<div class="textvis">${html}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:10px">found at ${esc(JSON.stringify(r.hits||[]))} · one pass, O(n+m)</div>`;
-    }
-  },
-  diff: {
-    pkg:"text", title:"Sequence diff", desc:"opcodes + similarity ratio",
-    state:{ a:"int a = 1", b:"int b = 2" },
-    input:()=>({a:DEMOS.diff.state.a, b:DEMOS.diff.state.b}),
-    run:()=>call("diff", DEMOS.diff.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const ops=r.ops||[];
-      const row=(o,i)=>{const[t,a1,a2,b1,b2]=o;return `<div class="op"><span class="t">${esc(t)}</span><span class="r">a[${a1}:${a2}] b[${b1}:${b2}]</span></div>`;};
-      return `<div class="oplist">${ops.map(row).join("")}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:10px">ratio <b class="mono">${(r.ratio).toFixed(3)}</b> · longest-common-subsequence based</div>`;
-    }
-  },
-  phf: {
-    pkg:"phf", title:"Perfect hash map", desc:"zero-collision lookup at a fixed key set",
-    state:{ words:["alpha","beta","gamma","delta"] },
-    input:()=>({set:DEMOS.phf.state.words}),
-    run:()=>call("phf", DEMOS.phf.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const k=r.keys||[];
-      return `<div class="chips">${k.map(w=>`<span class="chip str">${esc(w)}</span>`).join("")}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">${r.size} keys · every probe hits exactly once</div>`;
-    }
-  },
-  ring: {
-    pkg:"seq", title:"Ring buffer", desc:"fixed window, newest overwrites oldest",
-    state:{ cap:3, set:[1,2,3,4,5] },
-    input:()=>({cap:DEMOS.ring.state.cap, set:DEMOS.ring.state.set}),
-    run:()=>call("ring", DEMOS.ring.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const v=r.values||[];
-      const cells=Array.from({length:r.capacity},(_,i)=>v[i]??null);
-      return `<div class="seq">${cells.map(x=>`<span class="node ${x!=null?"hi":""}">${x??""}</span>`).join("")}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">capacity ${r.capacity} · pushed ${esc(JSON.stringify(DEMOS.ring.state.set))}</div>`;
-    }
-  },
-  bitset: {
-    pkg:"seq", title:"Bit set", desc:"rank & select over a sparse set",
-    state:{ set:[1,4,8,16], n:20 },
-    input:()=>({set:DEMOS.bitset.state.set, n:DEMOS.bitset.state.n}),
-    run:()=>call("bitset", DEMOS.bitset.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const n=r.n||20, bits=new Set(r.bits||[]), rank=r.rank||[];
-      let grid="";
-      for(let i=0;i<n;i++) grid+=`<div class="b ${bits.has(i)?"on":""}" title="bit ${i}"></div>`;
-      return `<div class="bits">${grid}</div>
-      <div class="muted" style="font-size:12px;margin-top:12px;font-family:var(--mono)">set {${esc(r.bits.join(","))}} · rank=${esc(JSON.stringify(rank.slice(0,16)))}…</div>`;
-    }
-  },
-  perms: {
-    pkg:"algo", title:"Combinatorics", desc:"permutations / combinations, lazy",
-    state:{ set:[1,2,3], r:2 },
-    input:()=>({set:DEMOS.perms.state.set, r:DEMOS.perms.state.r}),
-    run:()=>call("perms", DEMOS.perms.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const rows=r.rows||[];
-      return `<div class="chips">${rows.slice(0,40).map(row=>`<span class="chip str">${row.map(x=>x).join(" ")}</span>`).join("")}${rows.length>40?`<span class="chip str">… +${rows.length-40}</span>`:""}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">${esc(r.kind)} of [${esc(DEMOS.perms.state.set.join(","))}] · ${rows.length} total</div>`;
-    }
-  },
   radix: {
-    pkg:"heap", title:"Radix heap", desc:"monotone keys, amortized O(1) pop",
-    state:{ set:[9,4,1,3,7,2,5,6,8,0] },
-    input:()=>({set:DEMOS.radix.state.set}),
-    run:()=>call("radix", DEMOS.radix.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const p=r.pops||[];
-      return `<div class="seq">${p.map((v,i)=>`<span class="node ${i===0?"hi":""}">${v}</span>`).join("")}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">popped in key order · 64-bit radix buckets</div>`;
+    pkg: "heap", title: "Radix heap", desc: "monotone keys, amortised O(1) pop", family: "heap",
+    api: ["let h : @heap.RadixHeap[Int32] = @heap.RadixHeap::new()", "h.push(key.to_uint64(), value)", "h.pop_min()   // keys must not decrease"],
+    state: { set: [9, 4, 1, 3, 7, 2, 5, 6, 8, 0] },
+    input: () => ({ set: DEMOS.radix.state.set }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const p = r.pops || [];
+      return `<div class="seq">${p.map((v, i) => `<span class="node ${i === 0 ? "hi" : ""}">${v}</span>`).join("")}</div>
+      <div class="note">popped in key order · 64-bit keys, 65 buckets, one bucket re-distributed per pop</div>`;
+    }
+  },
+  segment: {
+    pkg: "tree", title: "Segment tree", desc: "range queries in log time", family: "tree",
+    api: ["let t = @tree.SegmentTree::from_array(a, op=(x, y) => x + y, identity=0)", "t.query(l, r)   // inclusive on both ends"],
+    state: { set: [3, 1, 4, 1, 5] },
+    input: () => ({ set: DEMOS.segment.state.set }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const v = r.values || [], mx = Math.max(1, ...v);
+      return `<div class="bars2">${v.map(x => `<div class="bar" style="height:${Math.max(4, x / mx * 100)}%"><span class="v">${x}</span></div>`).join("")}</div>
+      <div class="note">total <b>${r.total}</b> · prefix sums ${esc(JSON.stringify(r.prefix || []))}</div>`;
     }
   },
   fenwick: {
-    pkg:"tree", title:"Fenwick tree", desc:"prefix sums in log time",
-    state:{ set:[3,1,4,1,5] },
-    input:()=>({set:DEMOS.fenwick.state.set}),
-    run:()=>call("fenwick", DEMOS.fenwick.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const v=r.values||[], mx=Math.max(1,...v);
-      return `<div class="bars">${v.map(x=>`<div class="bar" style="height:${x/mx*100}%"><span class="v">${x}</span></div>`).join("")}</div>
-      <div class="muted" style="font-size:12px;margin-top:10px;font-family:var(--mono)">prefix ${esc(JSON.stringify(r.prefix||[]))} · Σ[1,3)=${r.range_1_3}</div>`;
+    pkg: "tree", title: "Fenwick tree", desc: "prefix sums in log time, tiny footprint", family: "tree",
+    api: ["let f = @tree.Fenwick::from_array(a)", "f.prefix_sum(i)", "f.range_sum(l, r)"],
+    state: { set: [3, 1, 4, 1, 5] },
+    input: () => ({ set: DEMOS.fenwick.state.set }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const v = r.values || [], mx = Math.max(1, ...v);
+      return `<div class="bars2">${v.map(x => `<div class="bar" style="height:${Math.max(4, x / mx * 100)}%"><span class="v">${x}</span></div>`).join("")}</div>
+      <div class="note">prefix ${esc(JSON.stringify(r.prefix || []))} · Σ[1,3) = <b>${r.range_1_3}</b></div>`;
     }
   },
   interval: {
-    pkg:"tree", title:"Interval tree", desc:"overlap queries over [start,end]",
-    state:{ set:[0,10,2,4,8,12], qstart:3, qend:6 },
-    input:()=>({set:DEMOS.interval.state.set, qstart:DEMOS.interval.state.qstart, qend:DEMOS.interval.state.qend}),
-    run:()=>call("interval", DEMOS.interval.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const iv=r.intervals||[], ov=r.overlap||[];
-      const found=new Set();
-      for(let i=0;i+1<ov.length;i+=2) found.add(ov[i]+"|"+ov[i+1]);
-      let chips="";
-      for(let i=0;i+1<iv.length;i+=2){
-        const hit=found.has(iv[i]+"|"+iv[i+1]);
-        chips+=`<span class="chip ${hit?"hi":""}">[${iv[i]}, ${iv[i+1]}]</span>`;
+    pkg: "tree", title: "Interval tree", desc: "overlap queries over [start, end]", family: "tree",
+    api: ["let t = @tree.IntervalTree::new()", "t.insert(start, end, value)", "t.query_overlap(start, end)"],
+    state: { set: [0, 10, 2, 4, 8, 12], qstart: 3, qend: 6 },
+    input: () => ({ set: DEMOS.interval.state.set, qstart: DEMOS.interval.state.qstart, qend: DEMOS.interval.state.qend }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const iv = r.intervals || [], ov = r.overlap || [];
+      const found = new Set();
+      for (let i = 0; i + 1 < ov.length; i += 2) found.add(ov[i] + "|" + ov[i + 1]);
+      let chips = "";
+      for (let i = 0; i + 1 < iv.length; i += 2) {
+        const hit = found.has(iv[i] + "|" + iv[i + 1]);
+        chips += `<span class="chip ${hit ? "hi" : ""}">[${iv[i]}, ${iv[i + 1]}]</span>`;
       }
-      return `<div class="chips">${chips||'<span class="out-empty">no intervals</span>'}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">query [<b>${r.q?.[0]}, ${r.q?.[1]}</b>] · ${ov.length/2} overlapping ${ov.length?"(highlighted)":""}</div>`;
+      return `<div class="chips">${chips || '<span class="out-empty">no intervals</span>'}</div>
+      <div class="note">query [<b>${r.q?.[0]}, ${r.q?.[1]}</b>] · ${ov.length / 2} overlapping${ov.length ? " (highlighted)" : ""}</div>`;
+    }
+  },
+  disjoint: {
+    pkg: "tree", title: "Disjoint set", desc: "union–find components", family: "tree",
+    api: ["let d = @tree.DisjointSet::new()", "d.add()", "d.union(a, b)  /  d.connected(a, b)  /  d.to_sets()"],
+    state: { n: 5, set: [0, 1, 1, 2, 2, 3, 4] },
+    input: () => ({ n: DEMOS.disjoint.state.n, set: DEMOS.disjoint.state.set }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const s = r.sets || [];
+      return `<div class="groups">${s.map(g => `<div class="g">${g.map(x => `<b>${x}</b>`).join("")}</div>`).join("")}</div>
+      <div class="note">${r.count} component${r.count === 1 ? "" : "s"} after the union chain · union by rank with path compression</div>`;
+    }
+  },
+  bloom: {
+    pkg: "sketch", title: "Bloom filter", desc: "no false negatives, few false positives", family: "sketch",
+    api: ["let b = @sketch.BloomFilter::new(expected_items=n, hash_seed=0)", "b.insert(x)  /  b.may_contain(x)", "b.estimated_false_positive_rate()"],
+    state: { cap: 100, set: [1, 2, 3, 4, 5, 6, 7], n: 3 },
+    input: () => ({ cap: DEMOS.bloom.state.cap, set: DEMOS.bloom.state.set, n: DEMOS.bloom.state.n }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="metric">
+        <div class="m"><div class="lab2">contains ${DEMOS.bloom.state.n}</div><div class="val" style="font-size:30px;color:${r.found ? "var(--teal)" : "var(--red)"}">${r.found ? "yes" : "no"}</div></div>
+        <div class="m"><div class="lab2">design false-positive rate</div><div class="val" style="font-size:26px"><small>${r.false_pos != null ? r.false_pos.toExponential(2) : "—"}</small></div></div>
+      </div>
+      <div class="note">members ${esc(JSON.stringify(DEMOS.bloom.state.set))} · a "no" is always true; a "yes" is a probability</div>`;
     }
   },
   cuckoo: {
-    pkg:"sketch", title:"Cuckoo filter", desc:"deletable, with a live probe",
-    state:{ cap:100, set:[1,2,3,4,5,6,7], n:3 },
-    input:()=>({cap:DEMOS.cuckoo.state.cap, set:DEMOS.cuckoo.state.set, n:DEMOS.cuckoo.state.n}),
-    run:()=>call("cuckoo", DEMOS.cuckoo.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+    pkg: "sketch", title: "Cuckoo filter", desc: "deletable, where bloom is not", family: "sketch",
+    api: ["let c = @sketch.CuckooFilter::new(capacity=n)", "c.insert(x)  /  c.may_contain(x)", "c.remove(x)   // deletion is the point"],
+    state: { cap: 100, set: [1, 2, 3, 4, 5, 6, 7], n: 3 },
+    input: () => ({ cap: DEMOS.cuckoo.state.cap, set: DEMOS.cuckoo.state.set, n: DEMOS.cuckoo.state.n }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
       return `<div class="metric">
-        <div class="m"><div class="lab2">contains ${DEMOS.cuckoo.state.n}</div><div class="val" style="color:${r.found?"var(--ok)":"var(--err)"}">${r.found?"yes":"no"}</div></div>
-        <div class="m"><div class="lab2">removed?</div><div class="val" style="color:${r.removed?"var(--ok)":"var(--err)"}">${r.removed?"yes":"no"}</div></div>
-        <div class="m"><div class="lab2">after remove</div><div class="val" style="color:${r.after_remove?"var(--warn)":"var(--ok)"}">${r.after_remove?"still":"gone"}</div></div>
+        <div class="m"><div class="lab2">contains ${DEMOS.cuckoo.state.n}</div><div class="val" style="font-size:30px;color:${r.found ? "var(--teal)" : "var(--red)"}">${r.found ? "yes" : "no"}</div></div>
+        <div class="m"><div class="lab2">remove</div><div class="val" style="font-size:30px;color:${r.removed ? "var(--teal)" : "var(--amber)"}">${r.removed ? "ok" : "no"}</div></div>
+        <div class="m"><div class="lab2">after remove</div><div class="val" style="font-size:30px;color:${r.after_remove ? "var(--amber)" : "var(--teal)"}">${r.after_remove ? "still" : "gone"}</div></div>
       </div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">cuckoo supports deletion, unlike bloom</div>`;
+      <div class="note">two candidate buckets per key, fingerprints evicted along a chain</div>`;
+    }
+  },
+  countmin: {
+    pkg: "sketch", title: "Count-min sketch", desc: "frequency estimates that never undercount", family: "sketch",
+    api: ["let s = @sketch.CountMinSketch::new(depth=…, width=…, hash_seed=0)", "s.insert(x)", "s.estimate(x)   // ≥ true count"],
+    state: { set: [7, 7, 7, 7, 7, 7, 7, 8, 8, 9], q: 7 },
+    input: () => ({ set: DEMOS.countmin.state.set, q: DEMOS.countmin.state.q }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="metric"><div class="m">
+        <div class="lab2">estimate(${DEMOS.countmin.state.q})</div><div class="val">${r.estimate}</div></div>
+        <div class="m"><div class="lab2">true count</div><div class="val" style="font-size:30px;color:var(--muted)">${DEMOS.countmin.state.set.filter(x => x === DEMOS.countmin.state.q).length}</div></div>
+      </div>
+      <div class="note">inserted ${esc(JSON.stringify(DEMOS.countmin.state.set))} · counters only grow, so the estimate is an upper bound</div>`;
     }
   },
   theta: {
-    pkg:"sketch", title:"Theta sketch", desc:"cardinality estimate",
-    state:{ set:[7,7,7,8,8,9,4,4], nominal:8 },
-    input:()=>({set:DEMOS.theta.state.set, nominal:DEMOS.theta.state.nominal}),
-    run:()=>call("theta", DEMOS.theta.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
+    pkg: "sketch", title: "Theta sketch", desc: "cardinality estimate with a bound", family: "sketch",
+    api: ["let t = @sketch.ThetaSketch::new(nominal=n)", "t.add(x)", "t.estimate()"],
+    state: { set: [7, 7, 7, 8, 8, 9, 4, 4], nominal: 8 },
+    input: () => ({ set: DEMOS.theta.state.set, nominal: DEMOS.theta.state.nominal }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
       return `<div class="metric">
         <div class="m"><div class="lab2">true distinct</div><div class="val">${r.distinct}</div></div>
-        <div class="m"><div class="lab2">estimate</div><div class="val">${(r.estimate).toFixed(r.estimate%1?3:0)}</div></div>
+        <div class="m"><div class="lab2">estimate</div><div class="val">${Number(r.estimate).toFixed(Number(r.estimate) % 1 ? 3 : 0)}</div></div>
       </div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">input ${esc(JSON.stringify(DEMOS.theta.state.set))} · exact below nominal, sampled above</div>`;
+      <div class="note">input ${esc(JSON.stringify(DEMOS.theta.state.set))} · exact while the sample fits below the nominal size</div>`;
+    }
+  },
+  kmp: {
+    pkg: "text", title: "KMP search", desc: "linear scan with a failure function", family: "text",
+    api: ["let k = @text.Kmp::new(pattern)", "k.search_all(text)   // every start offset"],
+    state: { text: "ababcabab", pattern: "abab" },
+    input: () => ({ text: DEMOS.kmp.state.text, pattern: DEMOS.kmp.state.pattern }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const t = r.text || "", p = r.pattern || "", hits = new Set(r.hits || []);
+      let html = "", i = 0;
+      while (i < t.length) {
+        if (hits.has(i) && p.length > 0) { html += `<span class="hit">${esc(t.slice(i, i + p.length))}</span>`; i += p.length; }
+        else { html += esc(t[i]); i++; }
+      }
+      return `<div class="textvis">${html}</div>
+      <div class="note">found at ${esc(JSON.stringify(r.hits || []))} · one pass, O(n + m), no backtracking of the text</div>`;
     }
   },
   aho: {
-    pkg:"text", title:"Aho–Corasick", desc:"many patterns, one pass",
-    state:{ patterns:["he","she","his","hers"], text:"ushers" },
-    input:()=>({patterns:DEMOS.aho.state.patterns, text:DEMOS.aho.state.text}),
-    run:()=>call("aho", DEMOS.aho.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const t=r.text||""; const marks={};
-      (r.matches||[]).forEach(([p,s])=>{ for(let i=s;i<s+ (DEMOS.aho.state.patterns[p]||"").length;i++) marks[i]=1; });
-      let html="";
-      for(let i=0;i<t.length;i++) html+= marks[i]?`<span class="hit">${esc(t[i])}</span>`:esc(t[i]);
+    pkg: "text", title: "Aho–Corasick", desc: "many patterns, one pass", family: "text",
+    api: ["let ac = @text.AhoCorasick::new(patterns)", "ac.search_all(text)   // (pattern index, offset) pairs"],
+    state: { patterns: ["he", "she", "his", "hers"], text: "ushers" },
+    input: () => ({ patterns: DEMOS.aho.state.patterns, text: DEMOS.aho.state.text }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const t = r.text || "", marks = {};
+      (r.matches || []).forEach(([p, s]) => {
+        const len = (DEMOS.aho.state.patterns[p] || "").length;
+        for (let i = s; i < s + len; i++) marks[i] = 1;
+      });
+      let html = "";
+      for (let i = 0; i < t.length; i++) html += marks[i] ? `<span class="hit">${esc(t[i])}</span>` : esc(t[i]);
       return `<div class="textvis">${html}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:10px">patterns ${esc(JSON.stringify(r.patterns||[]))} · matches ${esc(JSON.stringify(r.matches||[]))} (pattern-idx, offset)</div>`;
+      <div class="note">patterns ${esc(JSON.stringify(r.patterns || []))} · matches ${esc(JSON.stringify(r.matches || []))} as (pattern, offset)</div>`;
     }
   },
   suffix: {
-    pkg:"text", title:"Suffix array", desc:"sorted suffixes + LCP",
-    state:{ text:"banana" },
-    input:()=>({text:DEMOS.suffix.state.text}),
-    run:()=>call("suffix", DEMOS.suffix.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const o=r.order||[], lcp=r.lcp||[];
-      return `<div class="seq">${o.map((s,i)=>`<span class="node" title="suffix ${esc((r.text||"").slice(s))}"><span class="ix" style="color:var(--dim);font-size:10px">${i}</span>${s}</span>`).join("")}</div>
-      <div class="muted" style="font-size:12px;margin-top:11px;font-family:var(--mono)">order of start-indices · LCP ${esc(JSON.stringify(lcp))}</div>`;
+    pkg: "text", title: "Suffix array", desc: "sorted suffixes, with LCP", family: "text",
+    api: ["let sa = @text.SuffixArray::new(text)", "sa.to_array()      // start index of each suffix, sorted", "sa.lcp_array()"],
+    state: { text: "banana" },
+    input: () => ({ text: DEMOS.suffix.state.text }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const o = r.order || [], lcp = r.lcp || [];
+      return `<div class="seq">${o.map((s, i) =>
+        `<span class="node" title="suffix “${esc((r.text || "").slice(s))}”"><span class="ix" style="color:var(--dim);font-size:9px;margin-right:4px">${i}</span>${s}</span>`).join("")}</div>
+      <div class="note">start indices in sorted order · LCP ${esc(JSON.stringify(lcp))} · doubling construction, O(n log n)</div>`;
+    }
+  },
+  diff: {
+    pkg: "text", title: "Sequence diff", desc: "opcodes + similarity ratio", family: "text",
+    api: ["let m = @text.SequenceMatcher::new(a, b)", "m.get_opcodes()   // equal / replace / delete / insert", "m.ratio()"],
+    state: { a: "int a = 1", b: "int b = 2" },
+    input: () => ({ a: DEMOS.diff.state.a, b: DEMOS.diff.state.b }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const ops = r.ops || [];
+      return `<div class="oplist">${ops.map(o =>
+        `<div class="op"><span class="t">${esc(o[0])}</span><span class="r">a[${o[1]}:${o[2]}] · b[${o[3]}:${o[4]}]</span></div>`).join("")}</div>
+      <div class="note">ratio <b>${Number(r.ratio).toFixed(3)}</b> · longest matching blocks, the same shape as difflib</div>`;
+    }
+  },
+  phf: {
+    pkg: "phf", title: "Perfect hash map", desc: "zero-collision lookup at a fixed key set", family: "phf",
+    api: ["let b = @phf.PhfBuilder::new(phf=@phf.phf_options)", "b.entry(k, v)   …   let m = b.build()", "m.get(k)   // one probe, no chaining"],
+    state: { words: ["alpha", "beta", "gamma", "delta"] },
+    input: () => ({ set: DEMOS.phf.state.words }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const k = r.keys || [];
+      return `<div class="chips">${k.map(w => `<span class="chip str">${esc(w)}</span>`).join("")}</div>
+      <div class="note">${r.size} keys · every probe lands on its own slot — collisions are resolved at build time</div>`;
     }
   },
   phf_ordered: {
-    pkg:"phf", title:"Ordered phf map", desc:"declaration order + index",
-    state:{ words:["alpha","beta","gamma","delta"], q:"gamma" },
-    input:()=>({set:DEMOS.phf_ordered.state.words, q:DEMOS.phf_ordered.state.q}),
-    run:()=>call("phf_ordered", DEMOS.phf_ordered.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      const k=r.order||[];
-      return `<div class="kv">${k.map((w,i)=>`<div class="row"><span class="badge">${i}</span><span>${esc(w)}</span></div>`).join("")}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">index of "<b>${esc(r.q)}</b>" = <span class="mono">${r.index}</span></div>`;
+    pkg: "phf", title: "Ordered phf map", desc: "declaration order plus an index", family: "phf",
+    api: ["let om = b.build_ordered()", "om.index(k)   // Some(declaration position)", "om.keys()"],
+    state: { words: ["alpha", "beta", "gamma", "delta"], q: "gamma" },
+    input: () => ({ set: DEMOS.phf_ordered.state.words, q: DEMOS.phf_ordered.state.q }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const k = r.order || [];
+      return `<div class="kv">${k.map((w, i) =>
+        `<div class="row"><span class="badge">${i}</span><span>${esc(w)}</span>${w === r.q ? `<span class="muted" style="color:var(--amber)">← queried</span>` : ""}</div>`).join("")}</div>
+      <div class="note">index of "<b>${esc(r.q)}</b>" = <b>${r.index}</b></div>`;
+    }
+  },
+  ring: {
+    pkg: "seq", title: "Ring buffer", desc: "fixed window, newest overwrites oldest", family: "seq",
+    api: ["let r = @seq.RingBuffer::new(capacity=n, overflow=@seq.Overflow::Overwrite)", "r.push_back(v)   // returns the dropped value", "r.to_array()"],
+    state: { cap: 3, set: [1, 2, 3, 4, 5] },
+    input: () => ({ cap: DEMOS.ring.state.cap, set: DEMOS.ring.state.set }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const v = r.values || [];
+      const cells = Array.from({ length: r.capacity }, (_, i) => v[i] ?? null);
+      return `<div class="seq">${cells.map(x => `<span class="node ${x != null ? "hi" : ""}">${x ?? ""}</span>`).join("")}</div>
+      <div class="note">capacity ${r.capacity} · pushed ${esc(JSON.stringify(DEMOS.ring.state.set))} · the window keeps the newest</div>`;
     }
   },
   gap: {
-    pkg:"seq", title:"Gap buffer", desc:"editor insertions, O(min) to ends",
-    state:{ set:[1,2,3], ops:[[1,100],[1,101]] },
-    input:()=>({set:DEMOS.gap.state.set, ops:DEMOS.gap.state.ops}),
-    run:()=>call("gap", DEMOS.gap.input()),
-    render:r=>{
-      if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
-      return `<div class="seq">${(r.before||[]).map(v=>`<span class="node">${v}</span>`).join("")}</div>
-      <div class="muted" style="font-size:12px;color:var(--dim);margin:9px 0">↓ after inserts ${esc(JSON.stringify(DEMOS.gap.state.ops))}</div>
-      <div class="seq">${(r.after||[]).map(v=>`<span class="node hi">${v}</span>`).join("")}</div>`;
+    pkg: "seq", title: "Gap buffer", desc: "editor insertions, cheap near the cursor", family: "seq",
+    api: ["let g : @seq.GapBuffer[Int32] = @seq.GapBuffer::new()", "g.insert(at, v)   // moves the gap, then writes", "g.to_array()"],
+    state: { set: [1, 2, 3], ops: [[1, 100], [1, 101]] },
+    input: () => ({ set: DEMOS.gap.state.set, ops: DEMOS.gap.state.ops }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      return `<div class="seq">${(r.before || []).map(v => `<span class="node">${v}</span>`).join("")}</div>
+      <div class="note" style="color:var(--dim)">↓ insert ${esc(JSON.stringify(DEMOS.gap.state.ops))}</div>
+      <div class="seq" style="margin-top:8px">${(r.after || []).map(v => `<span class="node hi">${v}</span>`).join("")}</div>`;
     }
   },
+  bitset: {
+    pkg: "seq", title: "Bit set", desc: "rank & select over a sparse set", family: "seq",
+    api: ["let b = @seq.BitSet::new()", "b.insert(i)   /   b.rank(i)   /   b.select(k)", "b.rank(i) counts the set bits in [0, i)"],
+    state: { set: [1, 4, 8, 16], n: 20 },
+    input: () => ({ set: DEMOS.bitset.state.set, n: DEMOS.bitset.state.n }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const n = r.n || 20, bits = new Set(r.bits || []), rank = r.rank || [];
+      let grid = "";
+      for (let i = 0; i < n; i++) grid += `<div class="b ${bits.has(i) ? "on" : ""}" title="bit ${i}"></div>`;
+      return `<div class="bits">${grid}</div>
+      <div class="note">set {${esc((r.bits || []).join(","))}} · rank ${esc(JSON.stringify(rank.slice(0, 16)))}…</div>`;
+    }
+  },
+  perms: {
+    pkg: "algo", title: "Combinatorics", desc: "permutations / combinations, lazily", family: "algo",
+    api: ["let p = @algo.Permutations::new(pool)", "let c = @algo.Combinations::new(pool, k=r)", "p.iter()   // one row at a time, in lexicographic order"],
+    state: { set: [1, 2, 3], r: 2 },
+    input: () => ({ set: DEMOS.perms.state.set, r: DEMOS.perms.state.r }),
+    render(r) {
+      if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
+      const rows = r.rows || [];
+      return `<div class="chips">${rows.slice(0, 40).map(row => `<span class="chip str">${row.join(" ")}</span>`).join("")}${rows.length > 40 ? `<span class="chip str">… +${rows.length - 40}</span>` : ""}</div>
+      <div class="note">${esc(r.kind)} of [${esc(DEMOS.perms.state.set.join(","))}] · ${rows.length} rows, generated on demand</div>`;
+    }
+  }
 };
 
-// ---------- auto-derived input controls ----------
-const FIELD_LABEL = {
-  cap:"capacity", n:"n", q:"query", r:"r (0 = perms)", nominal:"nominal",
-  qstart:"query start", qend:"query end",
-};
-const SKIP = ["set","words","patterns","ops","text","pattern","a","b"];
+const ORDER = ["indexmap", "trie", "lru", "heap", "radix", "segment", "fenwick", "interval", "disjoint",
+  "bloom", "cuckoo", "countmin", "theta", "kmp", "aho", "suffix", "diff", "phf", "phf_ordered",
+  "ring", "gap", "bitset", "perms"];
 
-function chipList(state, key, mode){
+const FAMILY_LABEL = {
+  map: "map", cache: "cache", heap: "heap", tree: "tree", sketch: "sketch",
+  seq: "seq", text: "text", phf: "phf", algo: "algo"
+};
+
+/* ════════════════════════════════════════════════════════════
+   input controls, derived from each demo's state
+   ════════════════════════════════════════════════════════════ */
+const FIELD_LABEL = { cap: "capacity", n: "n", q: "query", r: "r (0 = perms)", nominal: "nominal", qstart: "query start", qend: "query end" };
+const SKIP = ["set", "words", "patterns", "ops", "text", "pattern", "a", "b"];
+
+function chipList(state, key, mode) {
   const wrap = el("div");
-  const chips = el("div","chips");
-  const row = el("div","addrow");
-  const inp = el("input"); inp.placeholder = mode==="number" ? "add number" : "add word";
-  const add = el("button","mini","+ add");
-  const rand = el("button","mini ghost","rand");
-  const clear = el("button","mini ghost","clear");
-  function refresh(){
+  const chips = el("div", "chips");
+  const row = el("div", "addrow");
+  const inp = el("input");
+  inp.placeholder = mode === "number" ? "add a number ↵" : "add a word ↵";
+  const add = el("button", "mini", "+ add");
+  const rand = el("button", "mini ghost", "randomize");
+  const clear = el("button", "mini ghost", "clear");
+  function refresh() {
     chips.innerHTML = "";
-    state[key].forEach((v,i)=>{
-      const c = mode==="word" ? el("span","chip str") : el("span","chip");
-      c.innerHTML = mode==="number" ? `<span class="ix">${i}</span>${v}<span class="x">×</span>` : `${esc(v)}<span class="x">×</span>`;
-      c.querySelector(".x").onclick = ()=>{ state[key].splice(i,1); refresh(); };
+    state[key].forEach((v, i) => {
+      const c = mode === "word" ? el("span", "chip str") : el("span", "chip");
+      c.innerHTML = mode === "number"
+        ? `<span class="ix">${i}</span>${v}<span class="x">×</span>`
+        : `${esc(v)}<span class="x">×</span>`;
+      c.querySelector(".x").onclick = () => { state[key].splice(i, 1); refresh(); };
       chips.appendChild(c);
     });
-    if(!state[key].length) chips.innerHTML = '<span class="out-empty">empty</span>';
+    if (!state[key].length) chips.innerHTML = '<span class="out-empty">empty</span>';
   }
-  function push(v){ state[key].push(v); refresh(); }
-  function fromInput(){
-    if(mode==="number"){ const v=parseInt(inp.value,10); if(!isNaN(v)) push(v); }
-    else if(inp.value) push(inp.value);
-    inp.value="";
+  function fromInput() {
+    if (mode === "number") { const v = parseInt(inp.value, 10); if (!isNaN(v)) { state[key].push(v); refresh(); } }
+    else if (inp.value) { state[key].push(inp.value); refresh(); }
+    inp.value = "";
   }
-  inp.onkeydown = e=>{ if(e.key==="Enter") fromInput(); };
+  inp.onkeydown = e => { if (e.key === "Enter") fromInput(); };
   add.onclick = fromInput;
-  rand.onclick = ()=>{ state[key] = mode==="number" ? randInts(rint(3,8),1,12) : randWords(rint(3,6)); refresh(); };
-  clear.onclick = ()=>{ state[key]=[]; refresh(); };
+  rand.onclick = () => {
+    state[key] = mode === "number" ? randInts(rint(3, 8), 1, 12) : randWords(rint(3, 6));
+    refresh();
+  };
+  clear.onclick = () => { state[key] = []; refresh(); };
   row.append(inp, add, rand, clear);
   wrap.append(chips, row);
   refresh();
   return wrap;
 }
 
-function textField(s, key, label){
-  const wrap = el("div"); const lr = el("div","fieldrow"); lr.style.alignItems = "flex-start";
-  const lab = el("label"); lab.textContent = label; lab.style.width="74px"; lab.style.paddingTop="8px";
-  const ta = el("textarea","in"); ta.value = s[key] ?? ""; ta.rows = 2;
-  ta.oninput = ()=>{ s[key] = ta.value; };
+function textField(s, key, label) {
+  const wrap = el("div"), lr = el("div", "fieldrow");
+  const lab = el("label"); lab.textContent = label;
+  const ta = el("textarea"); ta.className = "in"; ta.value = s[key] ?? ""; ta.rows = 1;
+  ta.oninput = () => { s[key] = ta.value; };
   lr.append(lab, ta); wrap.append(lr);
   return wrap;
 }
 
-function numField(s, key, label){
-  const lr = el("div","fieldrow"); const lab = el("label"); lab.textContent = label;
-  const ci = el("input"); ci.type="number"; ci.value = s[key];
-  ci.oninput = ()=>{ s[key] = parseInt(ci.value,10)||0; };
+function numField(s, key, label) {
+  const lr = el("div", "fieldrow"), lab = el("label"); lab.textContent = label;
+  const ci = el("input"); ci.type = "number"; ci.value = s[key];
+  ci.oninput = () => { s[key] = parseInt(ci.value, 10) || 0; };
   lr.append(lab, ci);
   return lr;
 }
 
-function strField(s, key, label){
-  const lr = el("div","fieldrow"); const lab = el("label"); lab.textContent = label;
-  const ci = el("input"); ci.value = s[key] ?? "";
-  ci.oninput = ()=>{ s[key] = ci.value; };
+function strField(s, key, label) {
+  const lr = el("div", "fieldrow"), lab = el("label"); lab.textContent = label;
+  const ci = el("input"); ci.type = "text"; ci.value = s[key] ?? "";
+  ci.oninput = () => { s[key] = ci.value; };
   lr.append(lab, ci);
   return lr;
 }
 
-function opsEditor(state){
+function opsEditor(state) {
   const wrap = el("div");
-  const lr = el("div","fieldrow"); const lab = el("label"); lab.textContent = "inserts [at, value]";
-  wrap.append(lr);
   const list = el("div"); list.style.cssText = "display:flex;flex-direction:column;gap:6px";
-  function render(){
+  function render() {
     list.innerHTML = "";
-    state.ops.forEach((op,i)=>{
-      const r = el("div","fieldrow");
-      const la = el("label"); la.textContent = "#"; la.style.minWidth="14px";
-      const ip = el("input"); ip.style.width="48px"; ip.value = op[0];
-      const iv = el("input"); iv.style.width="60px"; iv.value = op[1];
-      const rm = el("button","mini ghost","×");
-      ip.oninput = ()=>{ state.ops[i][0] = parseInt(ip.value,10)||0; };
-      iv.oninput = ()=>{ state.ops[i][1] = parseInt(iv.value,10)||0; };
-      rm.onclick = ()=>{ state.ops.splice(i,1); render(); };
+    state.ops.forEach((op, i) => {
+      const r = el("div", "fieldrow");
+      const la = el("label"); la.textContent = "insert #" + i;
+      const ip = el("input"); ip.type = "number"; ip.style.width = "74px"; ip.value = op[0];
+      const iv = el("input"); iv.type = "number"; iv.style.width = "86px"; iv.value = op[1];
+      const rm = el("button", "mini ghost", "×");
+      ip.oninput = () => { state.ops[i][0] = parseInt(ip.value, 10) || 0; };
+      iv.oninput = () => { state.ops[i][1] = parseInt(iv.value, 10) || 0; };
+      rm.onclick = () => { state.ops.splice(i, 1); render(); };
       r.append(la, ip, iv, rm); list.append(r);
     });
   }
-  const addrow = el("div","addrow");
-  const b = el("button","mini","+ insert");
-  b.onclick = ()=>{ state.ops.push([0,0]); render(); };
+  const addrow = el("div", "addrow");
+  const b = el("button", "mini", "+ insert at, value");
+  b.onclick = () => { state.ops.push([0, 0]); render(); };
   addrow.append(b);
   wrap.append(list, addrow); render();
   return wrap;
 }
 
-function buildControls(demo){
-  const box = el("div","dctl");
-  const s = demo.state;
+function buildControls(demo) {
+  const box = el("div", "dctl"), s = demo.state;
   const label = k => (demo.fields && demo.fields[k]) || FIELD_LABEL[k] || k;
-  if(Array.isArray(s.set))      box.append(chipList(s, "set", "number"));
-  if(Array.isArray(s.words))    box.append(chipList(s, "words", "word"));
-  if(Array.isArray(s.patterns)) box.append(chipList(s, "patterns", "word"));
-  if(Array.isArray(s.ops))      box.append(opsEditor(s));
-  if(s.text !== undefined)      box.append(textField(s, "text", "text"));
-  if(s.pattern !== undefined)   box.append(textField(s, "pattern", "pattern"));
-  if(s.a !== undefined)         box.append(textField(s, "a", "a"));
-  if(s.b !== undefined)         box.append(textField(s, "b", "b"));
-  for(const k of Object.keys(s)){
-    if(SKIP.includes(k)) continue;
-    if(typeof s[k] === "number")      box.append(numField(s, k, label(k)));
-    else if(typeof s[k] === "string") box.append(strField(s, k, label(k)));
+  if (Array.isArray(s.set)) box.append(chipList(s, "set", "number"));
+  if (Array.isArray(s.words)) box.append(chipList(s, "words", "word"));
+  if (Array.isArray(s.patterns)) box.append(chipList(s, "patterns", "word"));
+  if (Array.isArray(s.ops)) box.append(opsEditor(s));
+  if (s.text !== undefined) box.append(textField(s, "text", "text"));
+  if (s.pattern !== undefined) box.append(textField(s, "pattern", "pattern"));
+  if (s.a !== undefined) box.append(textField(s, "a", "a"));
+  if (s.b !== undefined) box.append(textField(s, "b", "b"));
+  for (const k of Object.keys(s)) {
+    if (SKIP.includes(k)) continue;
+    if (typeof s[k] === "number") box.append(numField(s, k, label(k)));
+    else if (typeof s[k] === "string") box.append(strField(s, k, label(k)));
   }
   return box;
 }
 
-// ---------- build the lab ----------
-const lab=$("#labGrid");
-const ORDER=["indexmap","trie","lru","heap","radix","segment","fenwick","interval","disjoint","bloom","cuckoo","countmin","theta","kmp","aho","suffix","diff","phf","phf_ordered","ring","gap","bitset","perms"];
-ORDER.forEach(name=>{
-  const d=DEMOS[name];
-  const card=el("div","demo");
-  const dh=el("div","dh");
-  dh.append(el("span","pk",d.pkg), el("h3",null,d.title));
-  const runBtn=el("button","run","▶ run");
-  dh.append(runBtn);
-  card.append(dh);
-  const ctl=buildControls(d);
-  card.append(ctl);
-  const out=el("div","dout"); out.innerHTML='<div class="out-empty">edit the inputs and run</div>';
-  const lat=el("div","lat"); lat.style.display="none";
-  out.append(lat);
-  card.append(out);
-  function doRun(){
-    const r=d.run();
-    if(r.__dead){ out.innerHTML='<div class="err">bundle not loaded — run <span class="mono">site/build.py</span></div>'; return; }
-    out.innerHTML=d.render(r)+(r.__ms!=null?`<div class="lat">${r.__ms.toFixed(1)} ms</div>`:"");
-  }
-  runBtn.onclick=doRun;
-  d._run=doRun;
-  d._out=out;
-  lab.append(card);
-});
+/* ════════════════════════════════════════════════════════════
+   workbench
+   ════════════════════════════════════════════════════════════ */
+let active = ORDER[0];
 
-$("#runAll").onclick=()=>{ ORDER.forEach(n=>DEMOS[n]._run()); $("#lab").scrollIntoView({behavior:"smooth",block:"start"}); };
-$("#heroRun").onclick=()=>{
-  DEMOS.indexmap.state.set=[1,2,3]; // same order as the snippet above
-  DEMOS.indexmap._run();
-  $("#lab").scrollIntoView({behavior:"smooth",block:"start"});
-  setTimeout(()=>{ const c=lab.children[0]; c.style.borderColor="var(--accent)"; setTimeout(()=>c.style.borderColor="",900); },400);
-};
-
-// ---------- families ----------
-const CONFORM={
-  spec:"the error type + the per-process hash seed",
-  seq:"ring buffer wrap & overwrite, bit-set rank/select inverse, gap buffer, linked list",
-  map:"index-map positions after removes, flat-set ranges, counter most-common, trie & radix tree",
-  heap:"d-ary pop order, pairing & fibonacci sorted drains, min-max both ends, radix key order",
-  tree:"fenwick & segment prefix/range sums, disjoint-set components, treap in-order",
-  cache:"lru/lfu eviction order, expiring drop at the deadline",
-  sketch:"count-min lower bound, bloom false positives, t-digest quantiles vs the true ones",
-  text:"kmp & aho-corasick hits, z-function & suffix-array exact, sequence-matcher ratio",
-  phf:"map answers its own key set, ordered map returns the declaration index",
-  algo:"bisect, selection, merge, prefix & rotate, and the combinatoric generators in order",
-};
-const fam=$("#fam");
-function buildFamilies(data){
-  data.packages.forEach(p=>{
-    const c=el("div","card");
-    const names=p.types.map(t=>t.name).sort();
-    c.innerHTML=`<div class="nm">@${p.package}</div><div class="bl">${esc(p.blurb)}</div>
-      <div class="types">${names.slice(0,8).map(n=>`<span>${esc(n)}</span>`).join("")}${names.length>8?`<span>+${names.length-8}</span>`:""}</div>`;
-    c.onclick=()=>{ selectType(p.package, names[0]); $("#reference").scrollIntoView({behavior:"smooth"}); };
-    fam.append(c);
+function buildRail() {
+  const list = $("#railList");
+  list.innerHTML = "";
+  const groups = {};
+  ORDER.forEach((k, i) => {
+    const f = DEMOS[k].family;
+    (groups[f] = groups[f] || []).push([k, i]);
   });
-}
-
-// ---------- conformance ----------
-const conf=$("#conform");
-Object.entries(CONFORM).forEach(([k,v])=>{
-  const c=el("div","c"); c.innerHTML=`<div class="t"><span class="ok2"></span>@${k}</div><p>${esc(v)}</p>`;
-  conf.append(c);
-});
-
-// ---------- API reference ----------
-const apiPane=$("#apiPane");
-const pkgList=$("#pkgList");
-let API=null, selPkg=null, selType=null;
-
-function methodSig(m){ return m.sig.replace(/^fn/,"").trim(); }
-function renderType(p, t){
-  const kindTag = t.kind==="struct"?"struct":t.kind==="enum"?"enum":"type";
-  const params = t.params?`<span class="params">[${esc(t.params)}]</span>`:"";
-  let body=`<div class="path">@${p.package} · ${esc(t.name)}</div>
-    <div class="apitype">${esc(t.name)}${params}</div>
-    <div class="apikind">${kindTag}</div>`;
-  if(t.impls&&t.impls.length) body+=`<div class="impls">${t.impls.map(i=>`<span class="i">${esc(i)}</span>`).join("")}</div>`;
-  body+='<div class="apidoc">';
-  if(t.fields&&t.fields.length) body+=`<h5>fields</h5><pre>${esc(t.fields.join("\n"))}</pre>`;
-  if(t.variants&&t.variants.length) body+=`<h5>variants</h5><pre>${esc(t.variants.join("\n"))}</pre>`;
-  if(t.alias) body+=`<h5>definition</h5><pre>type ${esc(t.name)} = ${esc(t.alias)}</pre>`;
-  if(t.members&&t.members.length){
-    const rows=t.members.map(m=>`<tr><td class="mn">${esc(m.name)}</td><td class="sig">${esc(methodSig(m))}</td></tr>`).join("");
-    body+=`<h5>methods (${t.members.length})</h5><table><thead><tr><th>method</th><th>signature</th></tr></thead><tbody>${rows}</tbody></table>`;
-  }
-  if(t.members?.length===0 && !(t.fields||t.variants||t.alias)?.length){
-    body+='<p class="note">No public members exposed by name.</p>';
-  }
-  body+='</div>';
-  apiPane.innerHTML=body;
-}
-function renderFree(p, filter=""){
-  const f=p.free_fns.filter(x=>!filter||(x.name+" "+x.sig).toLowerCase().includes(filter.toLowerCase()));
-  const l=p.lets.filter(x=>!filter||x.name.toLowerCase().includes(filter.toLowerCase()));
-  let body=`<div class="path">@${p.package}</div><div class="apitype">free functions &amp; constants</div><div class="apikind">package</div><div class="apidoc">`;
-  if(f.length){
-    body+=`<h5>functions (${f.length})</h5><table><thead><tr><th>function</th><th>signature</th></tr></thead><tbody>${f.map(x=>`<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.sig.replace(/^fn/,""))}</td></tr>`).join("")}</tbody></table>`;
-  }
-  if(l.length){
-    body+=`<h5>constants (${l.length})</h5><table><thead><tr><th>name</th><th>type</th></tr></thead><tbody>${l.map(x=>`<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.type)}</td></tr>`).join("")}</tbody></table>`;
-  }
-  if(!f.length&&!l.length) body+='<p class="note">None in this package.</p>';
-  body+='</div>';
-  apiPane.innerHTML=body;
-}
-function buildPkgList(filter=""){
-  pkgList.innerHTML="";
-  API.packages.forEach(p=>{
-    const g=el("div","pkggrp");
-    g.append(el("h4",null,"@"+p.package));
-    p.types.forEach(t=>{
-      const item=el("a","ti",`${esc(t.name)}<span class="cnt">${(t.members?.length||0)+(t.fields?.length||0)}</span>`);
-      if(selPkg===p.package&&selType===t.name)item.classList.add("sel");
-      item.onclick=()=>selectType(p.package,t.name);
-      g.append(item);
+  Object.keys(groups).forEach(fam => {
+    const g = el("div", "rgroup");
+    g.append(el("h4", null, `<span>${FAMILY_LABEL[fam] || fam}</span><span>${groups[fam].length}</span>`));
+    groups[fam].forEach(([k, i]) => {
+      const b = el("button", "ritem" + (k === active ? " on" : ""));
+      b.dataset.k = k;
+      b.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span><span>${esc(DEMOS[k].title)}</span>`;
+      b.onclick = () => select(k, true);
+      g.append(b);
     });
-    const fr=el("a","ti",`· free (${p.free_fns.length+p.lets.length})`);
-    fr.onclick=()=>selectFree(p.package);
-    g.append(fr);
-    pkgList.append(g);
+    list.append(g);
   });
 }
-function selectType(pkg,name){ selPkg=pkg; selType=name; const p=API.packages.find(x=>x.package===pkg); renderType(p,p.types.find(t=>t.name===name)); buildPkgList(); apiPane.scrollIntoView({behavior:"smooth",block:"nearest"}); }
-function selectFree(pkg){ selPkg=pkg; selType=null; const p=API.packages.find(x=>x.package===pkg); renderFree(p); buildPkgList(); }
 
-function doSearch(q){
-  q=q.trim().toLowerCase();
-  buildPkgList(q);
-  if(!q){ if(selPkg)selectType(selPkg,selType); return; }
-  // show first matching type
-  for(const p of API.packages){
-    for(const t of p.types){
-      const hay=(t.name+" "+(t.members?.map(m=>m.name).join(" ")||"")).toLowerCase();
-      if(hay.includes(q)){ selectType(p.package,t.name); return; }
+function select(key, run) {
+  active = key;
+  const d = DEMOS[key], i = ORDER.indexOf(key);
+  $("#specId").innerHTML = `${String(i + 1).padStart(2, "0")}<span>/${ORDER.length}</span>`;
+  $("#specTitle").textContent = d.title;
+  $("#specSub").textContent = `@${d.pkg} · ${d.desc}`;
+  $("#controls").innerHTML = "";
+  $("#controls").append(buildControls(d));
+  $("#apiCode").innerHTML = d.api.map(line => {
+    if (line.trim().startsWith("//")) return `<span class="c-cm">${esc(line)}</span>`;
+    return esc(line)
+      .replace(/(@[a-z]+)/g, '<span class="c-pkg">$1</span>')
+      .replace(/([A-Za-z_][A-Za-z0-9_]*)\(/g, '<span class="c-fn">$1</span>(');
+  }).join("\n");
+  document.querySelectorAll(".ritem").forEach(b => b.classList.toggle("on", b.dataset.k === key));
+  try { history.replaceState(null, "", "#workbench/" + key); } catch (e) {}
+  if (run) doRun();
+  else { $("#canvas").innerHTML = `<span class="out-empty">press Run</span>`; $("#outMeta").textContent = "—"; }
+}
+
+function doRun() {
+  const d = DEMOS[active];
+  if (!MOD.inst) { $("#canvas").innerHTML = `<div class="err">the wasm module is not loaded</div>`; return; }
+  const r = d.run ? d.run() : call(active, d.input());
+  $("#canvas").innerHTML = d.render(r);
+  const bytes = JSON.stringify(r).length;
+  $("#outMeta").innerHTML = `<b>${(r.__ms ?? 0).toFixed(2)} ms</b> · ${bytes} B answer · wasm-gc call #${MOD.calls}`;
+}
+
+function setupBench() {
+  buildRail();
+  $("#benchMeta").textContent = `${ORDER.length} specimens · ${new Set(ORDER.map(k => DEMOS[k].pkg)).size} packages`;
+  $("#runBtn").onclick = doRun;
+  $("#railSearch").oninput = e => {
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll(".ritem").forEach(b => {
+      const k = b.dataset.k, d = DEMOS[k];
+      const hay = (d.title + " " + d.desc + " " + d.pkg).toLowerCase();
+      b.style.display = !q || hay.includes(q) ? "" : "none";
+    });
+  };
+  document.addEventListener("keydown", e => {
+    const tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea") return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      let i = ORDER.indexOf(active) + (e.key === "ArrowDown" ? 1 : -1);
+      i = (i + ORDER.length) % ORDER.length;
+      select(ORDER[i], true);
+      const b = document.querySelector(`.ritem[data-k="${ORDER[i]}"]`);
+      if (b) b.scrollIntoView({ block: "nearest" });
+    } else if (e.key === "Enter" && !e.metaKey) {
+      if (document.body.contains($("#canvas"))) doRun();
+    }
+  });
+  const deep = (location.hash.match(/^#workbench\/([a-z_]+)$/) || [])[1];
+  select(deep && DEMOS[deep] ? deep : ORDER[0], true);
+}
+
+/* ════════════════════════════════════════════════════════════
+   packages + hero plate
+   ════════════════════════════════════════════════════════════ */
+const PKG_ROLE = {
+  spec: ["the shared vocabulary", "traits, errors and refusals used across the module"],
+  seq: ["linear containers", "ring buffers, gap buffers, bit sets, linked lists"],
+  map: ["maps and sets", "indexed, flat, ordered, trie — plus counters and range sets"],
+  heap: ["priority queues", "d-ary, fibonacci, pairing, min-max and radix heaps"],
+  tree: ["range and union", "segment, Fenwick, interval trees and disjoint sets"],
+  cache: ["eviction policies", "LRU, LFU and time-based caches with statistics"],
+  sketch: ["probabilistic summaries", "bloom, cuckoo, count-min, hyperloglog, t-digest, theta"],
+  text: ["string algorithms", "KMP, Aho–Corasick, suffix arrays, rolling hash, diff"],
+  phf: ["perfect hashing", "tables with no collisions at lookup time"],
+  algo: ["algorithm kernels", "binary search, selection, merge, combinatorics, prefix sums"]
+};
+
+function buildPackages(api) {
+  const box = $("#pkgCards");
+  box.innerHTML = "";
+  api.packages.forEach(p => {
+    const role = PKG_ROLE[p.package] || ["", ""];
+    const card = el("div", "pkg");
+    card.innerHTML = `
+      <div class="pkgname">@${p.package}<span>/</span></div>
+      <div class="pkgrole">${esc(role[0])}<br><span style="color:var(--dim)">${esc(role[1])}</span></div>
+      <div class="pkgcount"><b>${p.types.length}</b> types · <b>${p.free_fns.length}</b> fns</div>`;
+    card.onclick = () => { gotoPackage(p.package); };
+    box.append(card);
+  });
+}
+
+function gotoPackage(pkg) {
+  location.hash = "#reference";
+  filterPkg(pkg);
+}
+
+/* ════════════════════════════════════════════════════════════
+   API reference — rendered straight from site/api.json
+   ════════════════════════════════════════════════════════════ */
+let API = null, apiFilterPkg = "all", apiFilterText = "", apiSel = null;
+
+function methodSig(m) { return m.sig.replace(/^fn/, "").trim(); }
+
+function renderType(p, t) {
+  const kindTag = t.kind === "struct" ? "struct" : t.kind === "enum" ? "enum" : "type";
+  const params = t.params ? `<span class="params">[${esc(t.params)}]</span>` : "";
+  let html = `<div class="path">@${p.package} · ${esc(t.name)}</div>
+    <div class="awrap"><div class="apitype">${esc(t.name)}${params}</div><div class="apikind">${kindTag}</div></div>`;
+  if (t.impls && t.impls.length)
+    html += `<div class="impls">${t.impls.map(i => `<span class="i">${esc(i)}</span>`).join("")}</div>`;
+
+  let doc = "";
+  if (t.fields && t.fields.length) {
+    doc += `<h5>fields</h5><pre>${esc(t.fields.join("\n"))}</pre>`;
+  }
+  if (t.variants && t.variants.length) {
+    doc += `<h5>variants</h5><pre>${esc(t.variants.join("\n"))}</pre>`;
+  }
+  if (t.alias) {
+    doc += `<h5>definition</h5><pre>type ${esc(t.name)} = ${esc(t.alias)}</pre>`;
+  }
+  if (t.members && t.members.length) {
+    const rows = t.members.map(m =>
+      `<tr><td class="mn">${esc(m.name)}</td><td class="sig">${esc(methodSig(m))}</td></tr>`).join("");
+    doc += `<h5>methods · ${t.members.length}</h5>
+      <table><thead><tr><th>method</th><th>signature</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+  if (!doc) doc = `<p class="note" style="margin-top:22px">No public members are exposed by name.</p>`;
+  return html + `<div class="apidoc">${doc}</div>`;
+}
+
+function renderFree(p, filter) {
+  const f = p.free_fns.filter(x => !filter || (x.name + " " + x.sig).toLowerCase().includes(filter));
+  const l = p.lets.filter(x => !filter || x.name.toLowerCase().includes(filter));
+  let html = `<div class="path">@${p.package}</div>
+    <div class="awrap"><div class="apitype">free functions</div><div class="apikind">package</div></div>`;
+  let doc = "";
+  if (f.length) {
+    doc += `<h5>functions · ${f.length}</h5><table><thead><tr><th>function</th><th>signature</th></tr></thead><tbody>` +
+      f.map(x => `<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.sig.replace(/^fn/, ""))}</td></tr>`).join("") +
+      `</tbody></table>`;
+  }
+  if (l.length) {
+    doc += `<h5>constants · ${l.length}</h5><table><thead><tr><th>name</th><th>type</th></tr></thead><tbody>` +
+      l.map(x => `<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.type)}</td></tr>`).join("") +
+      `</tbody></table>`;
+  }
+  if (!doc) doc = `<p class="note" style="margin-top:22px">Nothing in this package matches.</p>`;
+  return html + `<div class="apidoc">${doc}</div>`;
+}
+
+function buildPkgChips() {
+  const box = $("#pkgChips");
+  const pkgs = ["all", ...API.packages.map(p => p.package)];
+  box.innerHTML = "";
+  pkgs.forEach(p => {
+    const b = el("button", "pkgchip" + (p === apiFilterPkg ? " on" : ""), p === "all" ? "all" : "@" + p);
+    b.onclick = () => filterPkg(p);
+    box.append(b);
+  });
+}
+
+function typeMatches(p, t, q) {
+  if (!q) return true;
+  if (t.name.toLowerCase().includes(q)) return true;
+  if ((t.members || []).some(m => m.name.toLowerCase().includes(q))) return true;
+  return false;
+}
+
+function buildTypeList() {
+  const box = $("#apiList");
+  box.innerHTML = "";
+  const q = apiFilterText.toLowerCase();
+  let shown = 0;
+  API.packages.forEach(p => {
+    if (apiFilterPkg !== "all" && p.package !== apiFilterPkg) return;
+    const types = p.types.filter(t => typeMatches(p, t, q));
+    if (!types.length) return;
+    box.append(el("div", "pkghead", `@${p.package} · ${types.length}`));
+    types.forEach(t => {
+      shown++;
+      const b = el("button", "titem" + (apiSel && apiSel.pkg === p.package && apiSel.type === t.name ? " on" : ""));
+      b.innerHTML = `<span>${esc(t.name)}</span><span class="k">${t.kind === "struct" ? "s" : t.kind === "enum" ? "e" : "t"}</span>`;
+      b.onclick = () => showType(p, t, b);
+      box.append(b);
+    });
+    if (apiFilterPkg === "all" && !q) {
+      const b = el("button", "titem" + (apiSel && apiSel.pkg === p.package && apiSel.type === null ? " on" : ""));
+      b.innerHTML = `<span style="color:var(--dim)">free functions</span><span class="k">ƒ</span>`;
+      b.onclick = () => showFree(p, b);
+      box.append(b);
+    }
+  });
+  if (!shown) box.innerHTML = `<div class="empty" style="color:var(--dim);font-family:var(--mono);font-size:12px;padding:10px">no match</div>`;
+  $("#refMeta").textContent = `${shown} types · generated from pkg.generated.mbti`;
+}
+
+function showType(p, t, btn) {
+  apiSel = { pkg: p.package, type: t.name };
+  $("#apiPane").innerHTML = renderType(p, t);
+  document.querySelectorAll(".titem").forEach(b => b.classList.remove("on"));
+  if (btn) btn.classList.add("on");
+}
+
+function showFree(p, btn) {
+  apiSel = { pkg: p.package, type: null };
+  $("#apiPane").innerHTML = renderFree(p);
+  document.querySelectorAll(".titem").forEach(b => b.classList.remove("on"));
+  if (btn) btn.classList.add("on");
+}
+
+function filterPkg(pkg) {
+  apiFilterPkg = pkg;
+  buildPkgChips();
+  buildTypeList();
+  const first = $("#apiList .titem");
+  if (first) {
+    const p = API.packages.find(x => pkg === "all" ? true : x.package === pkg);
+    if (p) {
+      const q = apiFilterText.toLowerCase();
+      const t = p.types.find(t => typeMatches(p, t, q));
+      if (t) $("#apiPane").innerHTML = renderType(p, t);
     }
   }
 }
-function stats(){
-  const types=API.packages.reduce((a,p)=>a+p.types.length,0);
-  const fns=API.packages.reduce((a,p)=>a+p.free_fns.length,0);
-  $("#stats").innerHTML=`
-    <div class="stat"><div class="k">10</div><div class="v">families</div></div>
-    <div class="stat"><div class="k">${types}</div><div class="v">public types</div></div>
-    <div class="stat"><div class="k">${fns}</div><div class="v">free functions</div></div>
-    <div class="stat"><div class="k">4</div><div class="v">backends · native / wasm / js</div></div>`;
+
+function setupReference(api) {
+  API = api;
+  buildPkgChips();
+  buildTypeList();
+  const p0 = api.packages.find(x => x.package === "map") || api.packages[0];
+  if (p0 && p0.types.length) {
+    const t0 = p0.types.find(t => t.name === "IndexMap") || p0.types[0];
+    apiSel = { pkg: p0.package, type: t0.name };
+    $("#apiPane").innerHTML = renderType(p0, t0);
+  }
+  $("#apiSearch").oninput = e => {
+    apiFilterText = e.target.value.trim();
+    buildTypeList();
+    const first = $("#apiList .titem");
+    if (first) first.click();
+  };
 }
 
-// ---------- boot ----------
-fetch("./api.json").then(r=>r.json()).then(d=>{
-  API=d; buildFamilies(d); stats();
-  selPkg="map"; selType="IndexMap";
-  selectType("map","IndexMap");
-  $("#q").oninput=e=>doSearch(e.target.value);
-}).catch(()=>{
-  $("#apiPane").innerHTML='<p class="note">Reference unavailable — serve this directory over HTTP (e.g. <span class="mono">python -m http.server</span>) to load <span class="mono">api.json</span>. The Live Lab above still works.</p>';
-});
+/* ════════════════════════════════════════════════════════════
+   install panel
+   ════════════════════════════════════════════════════════════ */
+const INSTALL = {
+  mod: `<span class="c-cm">// moon.mod</span>
+name = <span class="c-str">"your-app"</span>
+version = <span class="c-str">"0.1.0"</span>
 
-// install tabs
-document.querySelectorAll(".install .tab").forEach(t=>{
-  t.onclick=()=>{
-    document.querySelectorAll(".install .tab").forEach(x=>x.classList.remove("sel"));
-    t.classList.add("sel");
-    ["mod","use"].forEach(k=>{ const p=$("#tab-"+k); p.style.display=(k===t.dataset.tab)?"":"none"; });
+import {
+  <span class="c-str">"moonbitstack/moonstl@0.1.0"</span>,
+}`,
+  src: `<span class="c-cm">// src/main/moon.pkg</span>
+import {
+  <span class="c-str">"moonbitstack/moonstl/map"</span> @map,
+  <span class="c-str">"moonbitstack/moonstl/heap"</span> @heap,
+}
+
+<span class="c-cm">// src/main/main.mbt</span>
+<span class="c-kw">fn</span> main {
+  <span class="c-kw">let</span> q = @heap.DaryHeap::default()
+  q.push(<span class="c-str">3</span>); q.push(<span class="c-str">1</span>); q.push(<span class="c-str">2</span>)
+  println(q.pop())   <span class="c-cm">// Some(1)</span>
+}`
+};
+
+function setupInstall() {
+  $("#installCode").innerHTML = INSTALL.mod;
+  document.querySelectorAll(".tab").forEach(t => {
+    t.onclick = () => {
+      document.querySelectorAll(".tab").forEach(x => x.classList.remove("on"));
+      t.classList.add("on");
+      $("#installCode").innerHTML = INSTALL[t.dataset.tab];
+    };
+  });
+  $("#copyAdd").onclick = async () => {
+    try {
+      await navigator.clipboard.writeText("moon add moonbitstack/moonstl");
+      $("#copyAdd").textContent = "copied";
+      setTimeout(() => ($("#copyAdd").textContent = "copy"), 1600);
+    } catch { $("#copyAdd").textContent = "⌘C"; }
   };
-});
+}
+
+/* ════════════════════════════════════════════════════════════
+   boot
+   ════════════════════════════════════════════════════════════ */
+async function heroPlate() {
+  const bars = $("#heroBars");
+  const r = call("segment", { set: [3, 1, 4, 1, 5] });
+  const vals = (r && r.values) || [3, 1, 4, 1, 5];
+  const mx = Math.max(1, ...vals);
+  bars.innerHTML = vals.map((v, i) =>
+    `<div class="bar" style="height:${Math.max(8, v / mx * 100)}%;animation-delay:${i * 70}ms"><span class="v">${v}</span></div>`).join("");
+  $("#plateTotal").textContent = "total " + (r.total ?? "—");
+}
+
+async function boot() {
+  setupInstall();
+
+  let api = null;
+  try { api = await (await fetch("api.json", { cache: "no-cache" })).json(); }
+  catch (e) { console.error("api.json", e); }
+
+  if (api) {
+    buildPackages(api);
+    setupReference(api);
+  }
+
+  try {
+    await bootWasm();
+    setStatus("live", `wasm-gc · ${(MOD.bytes / 1024).toFixed(0)} KB · live`);
+    $("#plateSize").textContent = `${(MOD.bytes / 1024).toFixed(0)} KB`;
+    $("#plateLoad").textContent = `${MOD.load.toFixed(0)} ms`;
+    $("#plateDemos").textContent = String(MOD.demos);
+    $("#plateCall").textContent = `run("segment", [3,1,4,1,5])`;
+    setupBench();
+    await heroPlate();
+  } catch (e) {
+    console.error(e);
+    setStatus("err", "wasm-gc · unavailable");
+    $("#canvas").innerHTML = `<div class="err">the WebAssembly module did not load: ${esc(e.message)}<br><br>
+      serve this directory over HTTP (it needs to fetch moonstl.wasm) — for example
+      <span style="color:var(--amber)">python -m http.server</span>.</div>`;
+    $("#heroBars").innerHTML = "";
+    $("#plateLoad").textContent = "—";
+  }
+}
+
+boot();
 </script>
 </body>
 </html>
