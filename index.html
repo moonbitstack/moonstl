@@ -3,570 +3,563 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0b0d'/%3E%3Crect x='7' y='7' width='18' height='18' fill='none' stroke='%23e0a44f' stroke-width='2' transform='rotate(45 16 16)'/%3E%3C/svg%3E">
-<title>MoonBit STL — data structures &amp; algorithms, checked against other implementations</title>
-<meta name="description" content="Ten packages of data structures and algorithms for MoonBit: maps, heaps, trees, caches, sketches, text algorithms, perfect hashing. Every demo on this page runs the library itself, compiled to WebAssembly (wasm-gc).">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23151009'/%3E%3Crect x='8' y='8' width='16' height='16' fill='none' stroke='%23e9e6df' stroke-width='1'/%3E%3Cpath d='M16 10l4 6-4 6-4-6z' fill='%23c9b98f'/%3E%3C/svg%3E">
+<title>MoonBit STL — an atlas of data structures and algorithms</title>
+<meta name="description" content="Ten families of data structures and algorithms for MoonBit, bound as one module. Every specimen on this page is the library itself, compiled to WebAssembly and run in the browser.">
 <style>
-/* ---------- tokens ---------- */
+/* ══════════════════════ tokens ══════════════════════ */
 :root{
-  --ink:#0a0b0d; --ink-2:#0d0f12; --panel:#111418; --panel-2:#151a20;
-  --line:rgba(232,226,214,.10); --line-2:rgba(232,226,214,.20);
-  --text:#ece7dd; --muted:#8d877b; --dim:#615d55;
-  --amber:#e0a44f; --amber-2:#f2c987; --amber-soft:rgba(224,164,79,.13);
-  --teal:#6fd3c0; --red:#e0796a;
-  --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,"Songti SC",Georgia,serif;
+  /* leather */
+  --hide:#151009; --hide-2:#1b1410; --hide-3:#221a14; --hide-4:#2b211a;
+  --oxblood:#4a241c; --oxblood-2:#7a3a2c;
+  /* platinum & white gold */
+  --plat-0:#fbfaf5; --plat-1:#efece3; --plat-2:#ded9cd; --plat-3:#c3bcae;
+  --plat-4:#9a9285; --plat-5:#736c60; --plat-6:#4d473e;
+  /* ink on the plate */
+  --ink:#241b14; --ink-2:#4b4034; --ink-3:#7c7060;
+  --champagne:#c9b98f;
+  --line:rgba(233,230,223,.14); --line-2:rgba(233,230,223,.26); --line-3:rgba(233,230,223,.42);
+  --serif:"Constantia","Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,"Songti SC",Georgia,serif;
   --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
   --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,"Liberation Mono",monospace;
-  --max:1240px;
+  --max:1180px;
 }
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#3b3226 transparent}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:#5d5346 #151009}
 body{
-  margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);
-  font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased;
+  margin:0;color:var(--plat-1);font-family:var(--sans);font-size:15px;line-height:1.72;
+  -webkit-font-smoothing:antialiased;
+  background-color:var(--hide);
   background-image:
-    radial-gradient(1100px 620px at 78% -8%,rgba(224,164,79,.10),transparent 62%),
-    radial-gradient(860px 520px at -6% 14%,rgba(111,211,192,.045),transparent 58%),
-    radial-gradient(700px 700px at 50% 120%,rgba(224,164,79,.05),transparent 60%);
+    radial-gradient(1100px 620px at 50% -12%,rgba(233,230,223,.10),transparent 62%),
+    radial-gradient(760px 520px at 100% 4%,rgba(74,36,28,.55),transparent 58%),
+    radial-gradient(700px 700px at 0% 30%,rgba(74,36,28,.28),transparent 62%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
   background-attachment:fixed;
 }
-body::before{
+body::after{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:
-    linear-gradient(to right,rgba(232,226,214,.028) 1px,transparent 1px),
-    linear-gradient(to bottom,rgba(232,226,214,.028) 1px,transparent 1px);
-  background-size:72px 72px;
-  mask-image:radial-gradient(ellipse 90% 60% at 50% 0%,#000 25%,transparent 78%);
+  background:radial-gradient(120% 90% at 50% 45%,transparent 40%,rgba(0,0,0,.5) 100%);
 }
-/* ---------- scrollbars ---------- */
-::-webkit-scrollbar{width:10px;height:10px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{
-  background:linear-gradient(#3c3529,#2a261e);
-  border:2px solid var(--ink);border-radius:99px;
-}
-::-webkit-scrollbar-thumb:hover{background:linear-gradient(#e0a44f,#8a6427)}
-::-webkit-scrollbar-corner{background:var(--ink)}
-.rail::-webkit-scrollbar{width:7px}
-.rail::-webkit-scrollbar-thumb{background:#332e25;border-color:var(--panel)}
-.rail::-webkit-scrollbar-thumb:hover{background:#8a6427}
-/* ---------- type ---------- */
-h1,h2,h3,h4{font-family:var(--serif);font-weight:400;letter-spacing:-.02em;margin:0;line-height:1.08}
+/* ══════════════════════ scrollbars ══════════════════════ */
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:#120d08}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#6c6152,#3b332a);border:2px solid #120d08;border-radius:0}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#d8d2c4,#8c8477)}
+::-webkit-scrollbar-corner{background:#120d08}
+.idx::-webkit-scrollbar,.tlist::-webkit-scrollbar{width:8px}
+.idx::-webkit-scrollbar-thumb,.tlist::-webkit-scrollbar-thumb{background:#4a4136;border-color:var(--hide-2)}
+.idx::-webkit-scrollbar-thumb:hover,.tlist::-webkit-scrollbar-thumb:hover{background:#bdb4a4}
+/* ══════════════════════ type ══════════════════════ */
+h1,h2,h3,h4{font-family:var(--serif);font-weight:400;margin:0;line-height:1.12;letter-spacing:.005em}
 p{margin:0}
 a{color:inherit;text-decoration:none}
-code,kbd,pre{font-family:var(--mono);font-variant-ligatures:none}
-.mono{font-family:var(--mono)}
-.eyebrow,.lbl,.num,.tag{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--dim);
+code,kbd,pre,samp{font-family:var(--mono);font-variant-ligatures:none}
+.cap{font-family:var(--serif);font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--plat-4)}
+.num{font-family:var(--serif);font-size:11px;letter-spacing:.3em;color:var(--champagne)}
+::selection{background:rgba(201,185,143,.32);color:#fff}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 32px;position:relative;z-index:1}
+.rule2{height:5px;border-top:1px solid var(--line-3);border-bottom:1px solid var(--line);position:relative}
+.rule2::before{content:"";position:absolute;left:0;right:0;top:2px;height:1px;background:var(--line)}
+/* ══════════════════════ running head ══════════════════════ */
+.strip{background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.15));border-bottom:1px solid var(--line)}
+.strip-in{display:flex;align-items:center;gap:18px;height:42px}
+.brand{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.brand .mark{
+  width:16px;height:16px;border:1px solid var(--champagne);transform:rotate(45deg);
+  display:grid;place-items:center;flex-shrink:0;
 }
-::selection{background:rgba(224,164,79,.28);color:#fff}
-/* ---------- shell ---------- */
-.wrap{max-width:var(--max);margin:0 auto;padding:0 28px;position:relative;z-index:1}
-header.top{
-  position:sticky;top:0;z-index:40;backdrop-filter:blur(14px) saturate(1.2);
-  background:rgba(10,11,13,.82);border-bottom:1px solid var(--line);
+.brand .mark i{width:5px;height:5px;background:var(--champagne);display:block}
+.brand b{font-family:var(--serif);font-weight:400;font-size:15.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--plat-0)}
+.brand b em{font-style:normal;color:var(--champagne)}
+.strip-right{margin-left:auto;display:flex;align-items:center;gap:16px;min-width:0}
+.strip .edition{
+  font-family:var(--serif);font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--plat-5);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-.top .wrap{display:flex;align-items:center;gap:26px;height:60px}
-nav.topnav{display:flex;align-items:center;gap:24px;min-width:0}
-nav.topnav a{
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--muted);padding:4px 0;position:relative;white-space:nowrap;
-}
-nav.topnav a::after{
-  content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--amber);
-  transform:scaleX(0);transform-origin:left;transition:transform .25s ease;
-}
-nav.topnav a:hover{color:var(--text)}
-nav.topnav a:hover::after{transform:scaleX(1)}
 .modpill{
-  margin-left:auto;display:flex;align-items:center;gap:8px;
-  font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:5px 11px;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:8px;flex-shrink:0;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--plat-4);border:1px solid var(--line);padding:3px 9px;
+  background:linear-gradient(180deg,rgba(233,230,223,.05),transparent);
 }
-.modpill .dot{width:6px;height:6px;border-radius:50%;background:var(--dim);box-shadow:0 0 0 3px rgba(255,255,255,.03)}
-.modpill.live{color:var(--teal);border-color:rgba(111,211,192,.34)}
-.modpill.live .dot{background:var(--teal);animation:pulse 2.4s ease-in-out infinite}
-.modpill.err{color:var(--red);border-color:rgba(224,121,106,.4)}
-.modpill.err .dot{background:var(--red)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.brand{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.brand .glyph{
-  width:22px;height:22px;border:1px solid var(--amber);display:grid;place-items:center;
-  color:var(--amber);font-family:var(--mono);font-size:11px;transform:rotate(45deg);
+.modpill .dot{width:5px;height:5px;border-radius:50%;background:var(--plat-5);box-shadow:0 0 0 2px rgba(233,230,223,.08)}
+.modpill.live{color:var(--champagne);border-color:rgba(201,185,143,.45)}
+.modpill.live .dot{background:var(--champagne);box-shadow:0 0 0 2px rgba(201,185,143,.16)}
+.modpill.err{color:#d99a8a;border-color:rgba(217,154,138,.45)}
+.modpill.err .dot{background:#d99a8a}
+/* ══════════════════════ masthead ══════════════════════ */
+.masthead{text-align:center;padding:52px 0 26px}
+.wordmark{
+  font-size:clamp(38px,5.8vw,68px);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--plat-0);text-shadow:0 1px 0 rgba(0,0,0,.6),0 0 40px rgba(233,230,223,.10);
+  margin:22px 0 10px;
 }
-.brand .glyph span{transform:rotate(-45deg)}
-.brand b{font-family:var(--serif);font-weight:400;font-size:17px;letter-spacing:.01em;white-space:nowrap}
-.brand b em{font-style:normal;color:var(--amber)}
-/* ---------- hero ---------- */
-.hero{padding:86px 0 76px;border-bottom:1px solid var(--line)}
-.hero .wrap{display:grid;grid-template-columns:1.12fr .88fr;gap:70px;align-items:start}
-.hero .kicker{display:flex;align-items:center;gap:12px;margin-bottom:26px}
-.hero .kicker .rule{height:1px;width:44px;background:var(--amber);opacity:.6}
-h1{font-size:clamp(42px,5vw,68px);margin-bottom:24px;letter-spacing:-.028em}
-h1 em{font-style:italic;color:var(--amber)}
-.lede{color:#b8b1a4;font-size:16.5px;max-width:34em;line-height:1.7}
-.lede b{color:var(--text);font-weight:500}
-.cta{display:flex;flex-wrap:wrap;gap:12px;margin:34px 0 22px}
+.wordmark span{color:var(--champagne);letter-spacing:.22em}
+.subtitle{font-family:var(--serif);font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--plat-4)}
+.masthead nav{display:flex;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.masthead nav a{
+  font-family:var(--serif);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--plat-3);
+  padding:8px 20px;position:relative;transition:color .2s;
+}
+.masthead nav a+a::before{content:"·";position:absolute;left:-3px;top:8px;color:var(--plat-6)}
+.masthead nav a:hover{color:var(--champagne)}
+/* damascus band */
+.damask{height:26px;margin:24px 0 0;overflow:hidden;opacity:.85}
+.damask svg{width:100%;height:100%;display:block}
+/* ══════════════════════ plate label ══════════════════════ */
+.plate-label{display:flex;align-items:center;gap:16px;margin-bottom:26px}
+.plate-label .ln{flex:1;height:1px;background:linear-gradient(90deg,var(--line-2),transparent)}
+.plate-label .ln.l{background:linear-gradient(270deg,var(--line-2),transparent)}
+.plate-label .txt{font-family:var(--serif);font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--plat-4);white-space:nowrap}
+/* ══════════════════════ hero ══════════════════════ */
+.hero{padding:44px 0 0}
+.hero .center{max-width:760px;margin:0 auto;text-align:center}
+.hero h2{font-size:clamp(30px,3.9vw,48px);line-height:1.16;color:var(--plat-0);margin-bottom:26px}
+.hero h2 em{font-style:italic;color:var(--champagne)}
+.hero .lede{color:var(--plat-3);font-size:15.5px;line-height:1.85;max-width:60ch;margin:0 auto}
+.hero .lede b{color:var(--plat-1);font-weight:500}
+.hero .cta{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:34px 0 0}
 .btn{
-  display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line-2);
-  padding:11px 20px;border-radius:2px;font-family:var(--mono);font-size:11px;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--text);cursor:pointer;
-  background:transparent;transition:.2s ease;
+  display:inline-flex;align-items:center;gap:10px;cursor:pointer;
+  font-family:var(--serif);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--plat-1);border:1px solid var(--line-3);padding:12px 26px;background:transparent;
+  transition:.2s ease;
 }
-.btn:hover{border-color:var(--amber);color:var(--amber-2)}
-.btn.solid{background:var(--amber);border-color:var(--amber);color:#1a1408;font-weight:600}
-.btn.solid:hover{background:var(--amber-2);border-color:var(--amber-2);color:#1a1408}
-.cmd{
-  display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:rgba(255,255,255,.02);
-  padding:10px 14px;border-radius:2px;max-width:400px;
+.btn:hover{border-color:var(--champagne);color:var(--plat-0);box-shadow:inset 0 0 0 1px rgba(201,185,143,.18)}
+.btn.solid{
+  background:linear-gradient(180deg,#f6f3ea,#cfc9bb);
+  color:#241b14;border-color:#cfc9bb;font-weight:600;
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 6px 18px rgba(0,0,0,.35);
 }
-.cmd code{font-size:12.5px;color:#d8d2c6;overflow:auto;white-space:nowrap}
-.cmd code .c-flag{color:var(--amber)}
-.cmd button{
-  margin-left:auto;background:none;border:0;color:var(--dim);cursor:pointer;font-family:var(--mono);
-  font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:2px 0;
+.btn.solid:hover{background:linear-gradient(180deg,#fffdf6,#ded8c9);color:#1a120c}
+/* stat strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:46px 0 0}
+.stats div{padding:22px 10px;text-align:center;border-left:1px solid var(--line)}
+.stats div:first-child{border-left:0}
+.stats .n{font-family:var(--serif);font-size:34px;line-height:1;color:var(--plat-0)}
+.stats .k{margin-top:9px;font-family:var(--serif);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--plat-4)}
+/* ══════════════════════ sections ══════════════════════ */
+section.band{padding:76px 0 0}
+section.band:last-of-type{padding-bottom:20px}
+.shead{text-align:center;margin-bottom:36px}
+.shead h3{font-size:clamp(24px,2.8vw,34px);color:var(--plat-0);margin:8px 0 10px;letter-spacing:.02em}
+.shead .sub{color:var(--plat-5);font-family:var(--serif);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+/* ══════════════════════ workbench ══════════════════════ */
+.bench{display:grid;grid-template-columns:296px 1fr;border:1px solid var(--line-2);background:linear-gradient(180deg,rgba(233,230,223,.035),rgba(0,0,0,.12))}
+.idx{
+  height:660px;max-height:calc(100vh - 150px);overflow:auto;
+  border-right:1px solid var(--line-2);padding:22px 20px 22px 24px;
+  background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.05));
 }
-.cmd button:hover{color:var(--amber)}
-/* plate */
-.plate{
-  border:1px solid var(--line-2);background:linear-gradient(170deg,rgba(255,255,255,.035),rgba(255,255,255,.008) 40%,transparent);
-  padding:20px 22px 18px;position:relative;
+.idx .head{font-family:var(--serif);font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--plat-5);margin-bottom:14px}
+.idxsearch{position:relative;margin-bottom:16px}
+.idxsearch input{
+  width:100%;background:rgba(0,0,0,.28);border:1px solid var(--line);color:var(--plat-1);
+  font-family:var(--serif);font-size:12px;letter-spacing:.06em;padding:7px 9px 7px 27px;outline:none;
 }
-.plate::before,.plate::after{
-  content:"";position:absolute;width:9px;height:9px;border:1px solid var(--amber);opacity:.55;
+.idxsearch input:focus{border-color:var(--line-3)}
+.idxsearch input::placeholder{color:var(--plat-6)}
+.idxsearch svg{position:absolute;left:8px;top:8px;opacity:.5}
+.grp{margin-bottom:14px}
+.grp .gh{
+  display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:9px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--champagne);margin-bottom:5px;padding-bottom:4px;
+  border-bottom:1px solid rgba(201,185,143,.18);
 }
-.plate::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
-.plate::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
-.plate .ph{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:14px}
-.plate .ph span:last-child{color:var(--dim);font-family:var(--mono);font-size:10px}
-.plate .meta{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);margin:0 0 16px}
-.plate .meta div{background:var(--ink-2);padding:9px 11px}
-.plate .meta dt{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 3px}
-.plate .meta dd{margin:0;font-family:var(--mono);font-size:12.5px;color:var(--text)}
-.plate .meta dd.acc{color:var(--amber)}
-.bars{display:flex;align-items:flex-end;gap:6px;height:118px;padding-top:6px}
-.bars .bar{
-  flex:1;background:linear-gradient(180deg,var(--amber),rgba(224,164,79,.18));
-  position:relative;min-height:3px;transform-origin:bottom;animation:grow .7s cubic-bezier(.2,.9,.2,1) both;
+.grp .gh span:last-child{margin-left:auto;color:var(--plat-6)}
+.it{
+  display:flex;align-items:baseline;gap:7px;width:100%;text-align:left;background:none;border:0;
+  padding:4px 0;cursor:pointer;color:var(--plat-3);font-family:var(--serif);font-size:13px;transition:.15s;
 }
-.bars .bar .v{
-  position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);
-  font-family:var(--mono);font-size:10px;color:var(--amber-2);
+.it .n{font-family:var(--mono);font-size:9px;color:var(--plat-5);width:17px;flex-shrink:0}
+.it .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .lead{flex:1;border-bottom:1px dotted rgba(233,230,223,.22);margin:0 0 4px;min-width:8px}
+.it:hover{color:var(--plat-0)}
+.it.on{color:var(--plat-0)}
+.it.on .n{color:var(--champagne)}
+.it.on .lead{border-bottom-color:rgba(201,185,143,.5)}
+.idx .none{color:var(--plat-6);font-family:var(--serif);font-size:12px;font-style:italic}
+.stage{display:flex;flex-direction:column;min-height:520px;min-width:0}
+.stage-hd{display:flex;align-items:center;gap:16px;padding:20px 26px;border-bottom:1px solid var(--line-2)}
+.cartouche{border:1px solid var(--line-3);padding:5px 10px;text-align:center;min-width:74px;background:linear-gradient(180deg,rgba(233,230,223,.06),transparent)}
+.cartouche .a{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--plat-5);display:block}
+.cartouche .b{font-family:var(--serif);font-size:17px;color:var(--plat-0);line-height:1.1}
+.stage-hd h4{font-size:25px;color:var(--plat-0)}
+.stage-hd .sub{font-family:var(--serif);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--plat-5);margin-top:4px}
+.stage-hd .btn{margin-left:auto;padding:10px 20px}
+.cx{margin-top:7px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--plat-4)}
+.cx b{color:var(--champagne);font-weight:400;letter-spacing:.16em;text-transform:uppercase;font-size:9px}
+.stage-in{padding:20px 26px;border-bottom:1px solid var(--line-2);background:rgba(0,0,0,.16)}
+.stage-in .cap{margin-bottom:11px;display:block}
+.sheet-wrap{padding:20px 26px 24px;flex:1;display:flex;flex-direction:column;min-height:0}
+.sheet-head{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+.sheet-head .cap{margin:0;color:var(--plat-5)}
+.sheet-meta{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--plat-5)}
+.sheet-meta b{color:var(--champagne);font-weight:400}
+/* the engraved platinum plate */
+.sheet{
+  flex:1;min-height:150px;position:relative;overflow:auto;padding:26px 26px 38px;
+  display:flex;flex-direction:column;justify-content:center;
+  background:linear-gradient(160deg,rgba(255,255,255,.92),rgba(238,234,224,.92) 42%,rgba(210,204,192,.95));
+  color:var(--ink);border:1px solid #b9b1a2;
+  box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 0 0 1px rgba(0,0,0,.28),0 16px 34px rgba(0,0,0,.38);
 }
-@keyframes grow{from{transform:scaleY(0);opacity:.2}to{transform:scaleY(1);opacity:1}}
-.plate .pf{margin-top:12px;display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em}
-/* ---------- section head ---------- */
-section.band{padding:78px 0;border-bottom:1px solid var(--line);position:relative}
-.sechead{display:flex;align-items:baseline;gap:18px;margin-bottom:34px;padding-bottom:14px;border-bottom:1px solid var(--line)}
-.sechead .num{color:var(--amber);font-size:11px}
-.sechead h2{font-size:clamp(28px,3.1vw,40px)}
-.sechead .rule{display:none}
-.sechead .meta{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase;white-space:nowrap}
-/* ---------- workbench ---------- */
-.bench{display:grid;grid-template-columns:288px 1fr;gap:34px;align-items:start}
-.rail{
-  height:660px;max-height:calc(100vh - 130px);overflow:auto;
-  border-right:1px solid var(--line);padding-right:14px;
+.sheet::before{content:"";position:absolute;inset:6px;border:1px solid rgba(36,27,20,.16);pointer-events:none}
+.sheet::after{content:"";position:absolute;left:26px;right:26px;bottom:13px;height:1px;background:rgba(36,27,20,.14)}
+.sheet .stamp{position:absolute;right:26px;bottom:18px;font-family:var(--serif);font-size:8.5px;letter-spacing:.28em;text-transform:uppercase;color:rgba(36,27,20,.42)}
+.sheet .sheet-body{position:relative}
+/* ink on platinum */
+.sheet .seq{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sheet .node{
+  min-width:34px;height:34px;padding:0 9px;display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid rgba(36,27,20,.35);background:rgba(255,255,255,.55);
+  font-family:var(--mono);font-size:13px;color:var(--ink);
 }
-.railsearch{position:relative;margin-bottom:16px}
-.railsearch input{
-  width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--text);
-  font-family:var(--mono);font-size:12px;padding:8px 10px 8px 28px;border-radius:2px;outline:none;
+.sheet .node.hi{border-color:#6d2b1f;background:rgba(109,43,31,.10);color:#5f2419}
+.sheet .kv{display:flex;flex-direction:column;gap:4px}
+.sheet .kv .row{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+.sheet .kv .badge{width:22px;height:22px;display:grid;place-items:center;border:1px solid rgba(36,27,20,.35);font-size:10px;color:#5f2419;flex-shrink:0}
+.sheet .kv .muted{margin-left:auto;color:var(--ink-3);font-size:11px}
+.sheet .chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sheet .chip{
+  display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(36,27,20,.32);
+  background:rgba(255,255,255,.5);padding:3px 8px;font-family:var(--mono);font-size:12px;color:var(--ink-2);
 }
-.railsearch input:focus{border-color:rgba(224,164,79,.5)}
-.railsearch input::placeholder{color:var(--dim)}
-.railsearch svg{position:absolute;left:9px;top:9px;opacity:.45}
-.rgroup{margin-bottom:16px}
-.rgroup h4{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
-  margin:0 0 6px;display:flex;justify-content:space-between;
-}
-.ritem{
-  display:flex;align-items:baseline;gap:9px;width:100%;text-align:left;background:none;border:0;
-  border-left:2px solid transparent;padding:6px 8px;cursor:pointer;color:var(--muted);
-  font-family:var(--sans);font-size:13.5px;line-height:1.35;transition:.15s;
-}
-.ritem .n{font-family:var(--mono);font-size:9.5px;color:var(--dim);width:18px;flex-shrink:0}
-.ritem:hover{color:var(--text);background:rgba(255,255,255,.025)}
-.ritem.on{border-left-color:var(--amber);color:var(--text);background:linear-gradient(90deg,var(--amber-soft),transparent)}
-.ritem.on .n{color:var(--amber)}
-.rail .empty{color:var(--dim);font-size:12px;padding:8px}
-/* stage */
-.stage{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.022),transparent 30%);padding:0;display:flex;flex-direction:column;min-height:520px}
-.stage-top{display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1px solid var(--line)}
-.spec-id{font-family:var(--mono);font-size:11px;color:var(--amber);letter-spacing:.1em}
-.spec-id span{color:var(--dim)}
-.stage-top h3{font-size:26px}
-.spec-sub{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em;margin-top:3px}
-.stage-top .btn{margin-left:auto}
-.stage-aside{margin-left:auto;display:flex;align-items:center;gap:10px}
-.stage-in{padding:20px 24px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.16)}
-.stage-in .lbl{margin-bottom:10px;display:block}
-.stage-out{padding:22px 24px 24px;flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column}
-.stage-out .outhead{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
-.stage-out .lbl{margin:0}
-.outmeta{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em}
-.outmeta b{color:var(--teal);font-weight:400}
-.canvas{flex:1;min-height:132px;display:flex;flex-direction:column;justify-content:center}
-.stage-calls{border-top:1px solid var(--line);padding:0 24px}
-.stage-calls summary{
-  list-style:none;cursor:pointer;padding:12px 0;font-family:var(--mono);font-size:10px;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;gap:8px;
-}
-.stage-calls summary::-webkit-details-marker{display:none}
-.stage-calls summary::before{content:"›";color:var(--amber);transition:transform .2s}
-.stage-calls[open] summary::before{transform:rotate(90deg)}
-.stage-calls pre{margin:0 0 16px;font-size:12px;line-height:1.9;color:#c9c3b6;overflow:auto;white-space:pre}
-.stage-calls pre .c-pkg{color:var(--amber)}
-.stage-calls pre .c-fn{color:var(--teal)}
-.stage-calls pre .c-cm{color:var(--dim);font-style:italic}
-/* controls */
+.sheet .chip .ix{color:var(--ink-3);font-size:9.5px}
+.sheet .chip .x{color:var(--ink-3);cursor:pointer;font-size:13px;line-height:1}
+.sheet .chip .x:hover{color:#6d2b1f}
+.sheet .chip.hi{border-color:#6d2b1f;background:rgba(109,43,31,.10);color:#5f2419}
+.sheet .chip.str{padding:4px 9px}
+.sheet .metric{display:flex;gap:44px;flex-wrap:wrap}
+.sheet .metric .lab2{font-family:var(--serif);font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+.sheet .metric .val{font-family:var(--serif);font-size:40px;line-height:1;color:var(--ink)}
+.sheet .metric .val small{font-size:19px}
+.sheet .bars2{display:flex;align-items:flex-end;gap:7px;height:118px}
+.sheet .bars2 .bar{flex:1;min-height:3px;position:relative;background:linear-gradient(180deg,#4a3d31,#a89c8b);animation:grow .6s cubic-bezier(.2,.9,.2,1) both}
+.sheet .bars2 .bar .v{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;color:var(--ink-2)}
+@keyframes grow{from{transform:scaleY(0);opacity:.25}to{transform:scaleY(1);opacity:1}}
+.sheet .groups{display:flex;flex-wrap:wrap;gap:10px}
+.sheet .groups .g{display:flex;gap:4px;border:1px solid rgba(36,27,20,.3);padding:6px;background:rgba(255,255,255,.4)}
+.sheet .groups .g b{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--ink);padding:1px 4px}
+.sheet .textvis{font-family:var(--mono);font-size:18px;letter-spacing:.16em;line-height:2;word-break:break-all;color:var(--ink-2)}
+.sheet .textvis .hit{color:var(--plat-0);background:#4a3d31;padding:2px 3px}
+.sheet .oplist{display:flex;flex-direction:column;gap:3px;font-family:var(--mono);font-size:12px}
+.sheet .oplist .op{display:flex;gap:16px;border-bottom:1px dotted rgba(36,27,20,.2);padding:3px 0}
+.sheet .oplist .op .t{color:#5f2419;min-width:76px;letter-spacing:.1em}
+.sheet .oplist .op .r{color:var(--ink-2)}
+.sheet .bits{display:grid;grid-template-columns:repeat(auto-fill,minmax(18px,1fr));gap:4px;max-width:680px}
+.sheet .bits .b{aspect-ratio:1;border:1px solid rgba(36,27,20,.22);background:rgba(255,255,255,.35)}
+.sheet .bits .b.on{background:#4a3d31;border-color:#4a3d31}
+.sheet .note{margin-top:13px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);line-height:1.8}
+.sheet .note b{color:var(--ink-2);font-weight:400}
+.sheet .err{border-left:2px solid #6d2b1f;padding:6px 10px;color:#5f2419;font-family:var(--mono);font-size:12px;background:rgba(109,43,31,.08)}
+.sheet .out-empty{color:var(--ink-3);font-family:var(--serif);font-size:12px;font-style:italic}
+/* calls */
+.calls{border-top:1px solid var(--line-2);padding:0 26px}
+.calls summary{list-style:none;cursor:pointer;padding:11px 0;font-family:var(--serif);font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--plat-5);display:flex;align-items:center;gap:9px}
+.calls summary::-webkit-details-marker{display:none}
+.calls summary::before{content:"◆";font-size:6px;color:var(--champagne);transition:transform .2s}
+.calls[open] summary::before{transform:rotate(90deg)}
+.calls pre{margin:0 0 16px;font-size:12px;line-height:1.95;color:var(--plat-2);overflow:auto;white-space:pre}
+.calls pre .c-pkg{color:var(--champagne)}
+.calls pre .c-fn{color:#cfd6d0}
+.calls pre .c-cm{color:var(--plat-6);font-style:italic}
+/* ══════════════════════ controls (on leather) ══════════════════════ */
 .dctl{display:flex;flex-direction:column;gap:11px}
 .fieldrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.fieldrow label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);min-width:70px}
-.fieldrow input[type=number],.fieldrow input[type=text],.fieldrow textarea,.fieldrow input:not([type]){
-  background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--text);
-  font-family:var(--mono);font-size:12.5px;padding:7px 9px;border-radius:2px;outline:none;
+.fieldrow label{font-family:var(--serif);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--plat-5);min-width:74px}
+.fieldrow input,.fieldrow textarea{
+  background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--plat-1);
+  font-family:var(--mono);font-size:12.5px;padding:6px 9px;outline:none;
 }
-.fieldrow input:focus,.fieldrow textarea:focus{border-color:rgba(224,164,79,.5)}
-.fieldrow input[type=number]{width:86px}
-.fieldrow textarea{flex:1;min-width:180px;resize:vertical;line-height:1.5}
+.fieldrow input:focus,.fieldrow textarea:focus{border-color:var(--line-3)}
+.fieldrow input[type=number]{width:84px}
+.fieldrow textarea{flex:1;min-width:180px;resize:vertical;line-height:1.55}
 .chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:28px}
-.chip{
-  display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-2);
-  background:rgba(255,255,255,.025);padding:3px 8px;border-radius:2px;
-  font-family:var(--mono);font-size:12px;color:#ddd7ca;
-}
-.chip .ix{color:var(--dim);font-size:9.5px}
-.chip .x{color:var(--dim);cursor:pointer;font-size:13px;line-height:1}
-.chip .x:hover{color:var(--red)}
-.chip.hi{border-color:rgba(224,164,79,.55);background:var(--amber-soft);color:var(--amber-2)}
+.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-2);background:rgba(233,230,223,.045);padding:3px 8px;font-family:var(--mono);font-size:12px;color:var(--plat-2)}
+.chip .ix{color:var(--plat-6);font-size:9.5px}
+.chip .x{color:var(--plat-6);cursor:pointer;font-size:13px;line-height:1}
+.chip .x:hover{color:#d99a8a}
 .chip.str{padding:4px 9px}
 .addrow{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
-.addrow input{
-  flex:1;min-width:120px;background:rgba(255,255,255,.03);border:1px solid var(--line);
-  color:var(--text);font-family:var(--mono);font-size:12px;padding:6px 9px;border-radius:2px;outline:none;
-}
-.addrow input:focus{border-color:rgba(224,164,79,.5)}
-.mini{
-  background:transparent;border:1px solid var(--line-2);color:var(--muted);cursor:pointer;
-  font-family:var(--mono);font-size:10px;letter-spacing:.08em;padding:5px 9px;border-radius:2px;white-space:nowrap;
-}
-.mini:hover{color:var(--amber);border-color:rgba(224,164,79,.5)}
-.mini.ghost{opacity:.75}
-/* output primitives */
-.seq{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.node{
-  min-width:34px;height:34px;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;
-  border:1px solid var(--line-2);background:rgba(255,255,255,.02);font-family:var(--mono);font-size:13px;
-  color:#ddd7ca;border-radius:2px;position:relative;
-}
-.node.hi{border-color:rgba(224,164,79,.6);background:var(--amber-soft);color:var(--amber-2)}
-.kv{display:flex;flex-direction:column;gap:5px}
-.kv .row{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:12.5px;color:#ddd7ca}
-.kv .badge{
-  width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--line-2);
-  font-size:10px;color:var(--amber);border-radius:2px;flex-shrink:0;
-}
-.kv .muted{margin-left:auto;color:var(--dim);font-size:11px}
-.metric{display:flex;gap:34px;flex-wrap:wrap}
-.metric .m .lab2{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
-.metric .m .val{font-family:var(--serif);font-size:38px;line-height:1;color:var(--amber-2)}
-.metric .m .val small{font-size:18px}
-.bars2{display:flex;align-items:flex-end;gap:6px;height:116px}
-.bars2 .bar{
-  flex:1;background:linear-gradient(180deg,rgba(111,211,192,.85),rgba(111,211,192,.12));
-  position:relative;min-height:3px;animation:grow .6s cubic-bezier(.2,.9,.2,1) both;
-}
-.bars2 .bar .v{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;color:var(--teal)}
-.groups{display:flex;flex-wrap:wrap;gap:10px}
-.groups .g{display:flex;gap:4px;border:1px solid var(--line-2);padding:6px;border-radius:2px;background:rgba(255,255,255,.02)}
-.groups .g b{font-family:var(--mono);font-size:12px;font-weight:400;color:#ddd7ca;padding:1px 4px}
-.textvis{
-  font-family:var(--mono);font-size:17px;letter-spacing:.14em;line-height:1.9;word-break:break-all;color:#b8b1a4;
-}
-.textvis .hit{color:#1a1408;background:var(--amber);padding:1px 2px}
-.oplist{display:flex;flex-direction:column;gap:4px;font-family:var(--mono);font-size:12px}
-.oplist .op{display:flex;gap:14px;border-bottom:1px dashed rgba(232,226,214,.07);padding:3px 0}
-.oplist .op .t{color:var(--amber);min-width:74px}
-.oplist .op .r{color:#b8b1a4}
-.bits{display:grid;grid-template-columns:repeat(auto-fill,minmax(18px,1fr));gap:4px;max-width:660px}
-.bits .b{aspect-ratio:1;border:1px solid var(--line);border-radius:1px;background:rgba(255,255,255,.015)}
-.bits .b.on{background:var(--amber);border-color:var(--amber);box-shadow:0 0 10px rgba(224,164,79,.25)}
-.out-empty{color:var(--dim);font-family:var(--mono);font-size:12px}
-.err{border-left:2px solid var(--red);padding:6px 10px;color:var(--red);font-family:var(--mono);font-size:12px;background:rgba(224,121,106,.06)}
-.note{margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.7}
-.note b{color:var(--muted);font-weight:400}
-/* ---------- packages ---------- */
-.pkgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
-.pkg{background:var(--ink);padding:20px 18px;cursor:pointer;transition:.2s;position:relative}
-.pkg:hover{background:var(--panel)}
-.pkg:hover .pkgname{color:var(--amber)}
-.pkgname{font-family:var(--mono);font-size:13px;letter-spacing:.1em;transition:.2s}
-.pkgname span{color:var(--dim)}
-.pkgrole{margin-top:8px;font-size:12.5px;color:var(--muted);line-height:1.5;min-height:38px}
-.pkgcount{margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
-.pkgcount b{color:var(--amber);font-weight:400}
-/* ---------- conformance ---------- */
-.confgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
-.conf{border-top:1px solid var(--line-2);padding-top:16px}
-.conf .big{font-family:var(--serif);font-size:52px;line-height:1;color:var(--text)}
-.conf .big span{font-size:20px;color:var(--dim);margin-left:4px}
-.conf h4{font-size:16px;margin:10px 0 8px}
-.conf p{font-size:13.5px;color:var(--muted);line-height:1.65}
-.conffoot{
-  margin-top:38px;border:1px solid var(--line);padding:18px 20px;display:flex;gap:28px;
-  flex-wrap:wrap;background:rgba(255,255,255,.015);
-}
-.conffoot div{font-family:var(--mono);font-size:11px;color:var(--muted)}
-.conffoot b{color:var(--amber);font-weight:400}
-/* ---------- reference ---------- */
-.refbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:22px}
+.addrow input{flex:1;min-width:120px;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--plat-1);font-family:var(--mono);font-size:12px;padding:6px 9px;outline:none}
+.addrow input:focus{border-color:var(--line-3)}
+.mini{background:transparent;border:1px solid var(--line-2);color:var(--plat-4);cursor:pointer;font-family:var(--serif);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;padding:5px 10px;white-space:nowrap}
+.mini:hover{color:var(--champagne);border-color:rgba(201,185,143,.45)}
+.mini.ghost{opacity:.8}
+.out-empty{color:var(--plat-6);font-family:var(--serif);font-size:12px;font-style:italic}
+.err{border-left:2px solid #d99a8a;padding:6px 10px;color:#e3b3a6;font-family:var(--mono);font-size:12px;background:rgba(217,154,138,.07)}
+/* ══════════════════════ families ══════════════════════ */
+.fams{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line-2);border-left:1px solid var(--line)}
+.fam{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 18px 18px;cursor:pointer;transition:.2s;background:rgba(0,0,0,.06)}
+.fam:hover{background:rgba(233,230,223,.045)}
+.fam .rk{font-family:var(--serif);font-size:9px;letter-spacing:.26em;color:var(--champagne);text-transform:uppercase}
+.fam .nm{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--plat-0);margin:7px 0 6px}
+.fam .nm span{color:var(--plat-6)}
+.fam .ro{font-family:var(--serif);font-size:12.5px;color:var(--plat-4);line-height:1.55;min-height:40px}
+.fam .ct{margin-top:11px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--plat-5)}
+.fam .ct b{color:var(--champagne);font-weight:400}
+/* ══════════════════════ conformance ══════════════════════ */
+.conf{display:grid;grid-template-columns:1fr 1fr 1fr 190px;gap:34px;align-items:start}
+.conf .claim .big{font-family:var(--serif);font-size:54px;line-height:.9;color:var(--plat-0)}
+.conf .claim .big span{font-size:14px;letter-spacing:.2em;color:var(--plat-5);margin-left:6px;text-transform:uppercase}
+.conf .claim h4{font-size:15px;margin:12px 0 7px;color:var(--plat-1)}
+.conf .claim p{font-family:var(--serif);font-size:13.5px;color:var(--plat-4);line-height:1.75}
+.seal{justify-self:center;opacity:.95}
+.conf-foot{margin-top:36px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:center}
+.conf-foot div{padding:14px 22px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--plat-5);border-left:1px solid var(--line);text-transform:uppercase}
+.conf-foot div:first-child{border-left:0}
+.conf-foot b{font-family:var(--serif);font-size:15px;color:var(--champagne);font-weight:400;letter-spacing:.04em;margin-right:6px}
+/* ══════════════════════ reference ══════════════════════ */
+.refbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
 .refsearch{flex:1;min-width:240px;position:relative}
-.refsearch input{
-  width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--text);
-  font-family:var(--mono);font-size:13px;padding:11px 12px 11px 34px;border-radius:2px;outline:none;
-}
-.refsearch input:focus{border-color:rgba(224,164,79,.5)}
-.refsearch svg{position:absolute;left:12px;top:12px;opacity:.45}
+.refsearch input{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--plat-1);font-family:var(--serif);font-size:13px;letter-spacing:.04em;padding:10px 12px 10px 33px;outline:none}
+.refsearch input:focus{border-color:var(--line-3)}
+.refsearch input::placeholder{color:var(--plat-6)}
+.refsearch svg{position:absolute;left:11px;top:12px;opacity:.5}
 .pkgchips{display:flex;gap:6px;flex-wrap:wrap}
-.pkgchip{
-  background:transparent;border:1px solid var(--line);color:var(--muted);cursor:pointer;
-  font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;padding:6px 10px;border-radius:2px;
+.pkgchip{background:transparent;border:1px solid var(--line);color:var(--plat-4);cursor:pointer;font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:6px 10px}
+.pkgchip:hover{color:var(--plat-1);border-color:var(--line-2)}
+.pkgchip.on{color:#241b14;background:linear-gradient(180deg,#f2eee2,#cfc9bb);border-color:#cfc9bb}
+.refgrid{display:grid;grid-template-columns:290px 1fr;border:1px solid var(--line-2)}
+.tlist{max-height:min(760px,calc(100vh - 140px));overflow:auto;border-right:1px solid var(--line-2);padding:18px 16px 18px 20px;background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.05))}
+.tlist .ph{font-family:var(--serif);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--champagne);padding:12px 0 6px;border-bottom:1px solid rgba(201,185,143,.18);margin-bottom:5px}
+.tlist .ph:first-child{padding-top:0}
+.titem{display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;background:none;border:0;padding:4px 0;cursor:pointer;color:var(--plat-3);font-family:var(--mono);font-size:11.5px}
+.titem .k{margin-left:auto;font-size:8.5px;color:var(--plat-6);letter-spacing:.1em;text-transform:uppercase}
+.titem:hover{color:var(--plat-0)}
+.titem.on{color:var(--champagne)}
+.apipane{padding:30px 34px 36px;min-height:340px}
+.hdr-banner{
+  display:inline-block;border:1px solid var(--line-2);padding:5px 12px;margin-bottom:16px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--plat-4);
+  background:linear-gradient(180deg,rgba(233,230,223,.05),transparent);
 }
-.pkgchip:hover{color:var(--text);border-color:var(--line-2)}
-.pkgchip.on{color:#1a1408;background:var(--amber);border-color:var(--amber)}
-.refgrid{display:grid;grid-template-columns:300px 1fr;gap:30px;align-items:start}
-.typelist{
-  position:sticky;top:78px;max-height:min(760px,calc(100vh - 120px));overflow:auto;
-  border-right:1px solid var(--line);padding-right:12px;
+.hdr-banner b{color:var(--champagne);font-weight:400}
+.seealso{display:flex;flex-wrap:wrap;gap:6px}
+.seealso button{
+  background:none;border:1px solid var(--line);color:var(--plat-3);cursor:pointer;
+  font-family:var(--mono);font-size:11px;padding:3px 9px;
 }
-.typelist .pkghead{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);
-  padding:14px 8px 6px;border-bottom:1px solid var(--line);margin-bottom:4px;
-}
-.typelist .pkghead:first-child{padding-top:0}
-.titem{
-  display:flex;align-items:baseline;gap:8px;width:100%;text-align:left;background:none;border:0;
-  border-left:2px solid transparent;padding:5px 8px;cursor:pointer;color:var(--muted);
-  font-family:var(--mono);font-size:12px;
-}
-.titem .k{margin-left:auto;font-size:9px;color:var(--dim);letter-spacing:.08em}
-.titem:hover{color:var(--text);background:rgba(255,255,255,.02)}
-.titem.on{color:var(--amber-2);border-left-color:var(--amber);background:linear-gradient(90deg,var(--amber-soft),transparent)}
-.apipane{min-height:300px}
-.path{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--dim);margin-bottom:8px}
-.apitype{font-family:var(--serif);font-size:34px;line-height:1.1;display:inline}
-.awrap{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
-.apikind{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);
-  border:1px solid rgba(224,164,79,.4);padding:3px 7px;
-}
-.params{font-family:var(--mono);font-size:15px;color:var(--dim)}
-.impls{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}
-.impls .i{
-  font-family:var(--mono);font-size:10px;color:var(--teal);border:1px solid rgba(111,211,192,.3);
-  padding:2px 7px;border-radius:99px;
-}
-.apidoc h5{
-  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);
-  margin:26px 0 10px;font-weight:400;display:flex;align-items:center;gap:10px;
-}
+.seealso button:hover{color:var(--champagne);border-color:rgba(201,185,143,.45)}
+.path{font-family:var(--serif);font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--plat-5);margin-bottom:10px}
+.awrap{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:16px}
+.apitype{font-family:var(--serif);font-size:34px;line-height:1.1;color:var(--plat-0)}
+.params{font-family:var(--mono);font-size:14px;color:var(--plat-5)}
+.apikind{font-family:var(--serif);font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--champagne);border:1px solid rgba(201,185,143,.4);padding:3px 8px}
+.impls{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 0}
+.impls .i{font-family:var(--mono);font-size:9.5px;color:var(--plat-3);border:1px solid var(--line);padding:2px 7px}
+.apidoc h5{font-family:var(--serif);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--plat-5);margin:26px 0 10px;font-weight:400;display:flex;align-items:center;gap:12px}
 .apidoc h5::after{content:"";flex:1;height:1px;background:var(--line)}
-.apidoc pre{
-  margin:0;padding:12px 14px;background:#0c0e11;border:1px solid var(--line);
-  font-size:12px;color:#c9c3b6;overflow:auto;line-height:1.75;
-}
+.apidoc pre{margin:0;padding:12px 14px;background:rgba(0,0,0,.34);border:1px solid var(--line);font-size:12px;color:var(--plat-2);overflow:auto;line-height:1.8}
 .apidoc table{width:100%;border-collapse:collapse;font-size:12.5px}
-.apidoc th{
-  text-align:left;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--dim);font-weight:400;padding:0 10px 6px 0;border-bottom:1px solid var(--line);
-}
-.apidoc td{padding:6px 10px 6px 0;border-bottom:1px solid rgba(232,226,214,.05);vertical-align:top}
-.apidoc td.mn{font-family:var(--mono);color:var(--amber-2);white-space:nowrap}
-.apidoc td.sig{font-family:var(--mono);font-size:11.5px;color:#b8b1a4;word-break:break-word}
-.apidoc .note{color:var(--muted);font-family:var(--sans);font-size:13px}
-/* ---------- install ---------- */
-.instgrid{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
-.codecard{border:1px solid var(--line);background:#0c0e11}
-.tabs{display:flex;border-bottom:1px solid var(--line)}
-.tab{
-  background:none;border:0;border-bottom:1px solid transparent;color:var(--dim);cursor:pointer;
-  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:10px 14px;
-}
-.tab.on{color:var(--amber);border-bottom-color:var(--amber)}
-.codecard pre{margin:0;padding:16px;font-size:12.5px;line-height:1.9;color:#cfc9bd;overflow:auto}
-.codecard pre .c-kw{color:var(--amber)}
-.codecard pre .c-str{color:var(--teal)}
-.codecard pre .c-cm{color:var(--dim)}
-.steps{display:flex;flex-direction:column;gap:18px}
-.step{display:flex;gap:14px}
-.step .sn{
-  font-family:var(--mono);font-size:10px;color:var(--amber);border:1px solid rgba(224,164,79,.4);
-  width:24px;height:24px;display:grid;place-items:center;flex-shrink:0;margin-top:2px;
-}
-.step h4{font-size:15px;margin-bottom:4px}
-.step p{font-size:13.5px;color:var(--muted)}
-.step code{font-size:12px;color:var(--amber-2);background:rgba(224,164,79,.08);padding:1px 5px}
-/* ---------- footer ---------- */
-footer{padding:44px 0 60px}
-footer .wrap{display:flex;gap:24px;align-items:baseline;flex-wrap:wrap}
-footer .fnote{font-family:var(--mono);font-size:10.5px;color:var(--dim);letter-spacing:.06em}
-footer .flinks{margin-left:auto;display:flex;gap:18px}
-footer .flinks a{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.08em}
-footer .flinks a:hover{color:var(--amber)}
-/* ---------- responsive ---------- */
+.apidoc th{text-align:left;font-family:var(--serif);font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:var(--plat-4);font-weight:400;padding:0 10px 7px 0;border-bottom:1px solid var(--line-2)}
+.apidoc td{padding:6px 10px 6px 0;border-bottom:1px solid rgba(233,230,223,.06);vertical-align:top}
+.apidoc td.mn{font-family:var(--mono);color:var(--champagne);white-space:nowrap}
+.apidoc td.sig{font-family:var(--mono);font-size:11.5px;color:var(--plat-3);word-break:break-word}
+.apidoc .note{color:var(--plat-4);font-family:var(--serif);font-size:13px;font-style:italic}
+/* ══════════════════════ install ══════════════════════ */
+.inst{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
+.codecard{border:1px solid var(--line-2);background:rgba(0,0,0,.34)}
+.tabs{display:flex;border-bottom:1px solid var(--line-2)}
+.tab{background:none;border:0;border-bottom:1px solid transparent;color:var(--plat-6);cursor:pointer;font-family:var(--serif);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;padding:10px 16px}
+.tab.on{color:var(--champagne);border-bottom-color:var(--champagne)}
+.codecard pre{margin:0;padding:18px;font-size:12.5px;line-height:2;color:var(--plat-2);overflow:auto}
+.codecard pre .c-kw{color:var(--champagne)}
+.codecard pre .c-str{color:#c9d2c6}
+.codecard pre .c-cm{color:var(--plat-6);font-style:italic}
+.steps{display:flex;flex-direction:column;gap:20px}
+.step{display:flex;gap:15px;border-bottom:1px solid var(--line);padding-bottom:18px}
+.step:last-child{border-bottom:0}
+.step .sn{font-family:var(--serif);font-size:12px;color:var(--champagne);border:1px solid rgba(201,185,143,.4);width:26px;height:26px;display:grid;place-items:center;flex-shrink:0;margin-top:2px}
+.step h4{font-size:15px;color:var(--plat-0);margin-bottom:5px}
+.step p{font-family:var(--serif);font-size:13.5px;color:var(--plat-4);line-height:1.7}
+.step code{font-size:12px;color:var(--champagne);background:rgba(201,185,143,.08);padding:1px 5px}
+/* ══════════════════════ colophon ══════════════════════ */
+footer{padding:0 0 60px;margin-top:60px}
+.colophon{text-align:center;padding:26px 0 0}
+.colophon .l{font-family:var(--serif);font-size:12px;color:var(--plat-5)}
+.colophon .l a{border-bottom:1px solid var(--line-2)}
+.colophon .l a:hover{color:var(--champagne);border-bottom-color:var(--champagne)}
+.colophon .fine{margin-top:10px;font-family:var(--serif);font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--plat-6)}
+/* ══════════════════════ responsive ══════════════════════ */
 @media(max-width:1080px){
-  .hero .wrap{grid-template-columns:1fr;gap:44px}
-  .pkgrid{grid-template-columns:repeat(3,1fr)}
-  .confgrid{grid-template-columns:1fr;gap:22px}
-  .instgrid{grid-template-columns:1fr}
-}
-@media(max-width:900px){
-  .bench{grid-template-columns:1fr;gap:22px}
-  .rail{position:static;height:auto;max-height:250px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 10px;overflow:auto}
-  .stage{min-height:0}
-  .stage-out{overflow:visible}
-  .rail .rlist{display:block}
-  .rgroup{min-width:0;margin-bottom:12px}
+  .bench{grid-template-columns:1fr}
+  .idx{height:auto;max-height:280px;border-right:0;border-bottom:1px solid var(--line-2)}
+  .fams{grid-template-columns:repeat(3,1fr)}
+  .conf{grid-template-columns:1fr 1fr;gap:26px}
+  .seal{grid-column:1/-1;justify-self:center;margin-top:6px}
+  .inst{grid-template-columns:1fr}
   .refgrid{grid-template-columns:1fr}
-  .typelist{position:static;max-height:320px;border-right:0;border-bottom:1px solid var(--line);padding:0 0 12px}
+  .tlist{max-height:320px;border-right:0;border-bottom:1px solid var(--line-2)}
 }
 @media(max-width:760px){
   .wrap{padding:0 18px}
-  .top .wrap{height:auto;flex-wrap:wrap;gap:10px;padding-top:10px;padding-bottom:10px}
-  nav.topnav{order:2;width:100%;overflow:visible;flex-wrap:wrap;gap:14px;padding-bottom:2px}
-  nav.topnav a{font-size:9.5px;letter-spacing:.1em}
-  .brand{order:1}
-  .modpill{margin-left:auto;order:1}
-  .hero{padding:52px 0 48px}
-  h1{font-size:clamp(34px,9vw,46px)}
-  section.band{padding:52px 0}
-  .sechead{flex-wrap:wrap;gap:10px}
-  .sechead .rule{display:none}
-  .sechead .meta{width:100%}
-  .pkgrid{grid-template-columns:1fr 1fr}
-  .stage-top{flex-wrap:wrap}
-  .stage-top .btn{margin-left:0;width:100%;justify-content:center}
-  .metric{gap:22px}
-  .metric .m .val{font-size:30px}
-  .canvas{min-height:100px}
+  .strip-in{height:auto;flex-wrap:wrap;gap:8px;padding:9px 0}
+  .strip .edition{display:none}
+  .strip-right{margin-left:auto;gap:10px}
+  .masthead{padding:32px 0 18px}
+  .wordmark{font-size:clamp(28px,9.4vw,42px);letter-spacing:.1em}
+  .masthead nav a{padding:6px 10px;font-size:9.5px;letter-spacing:.16em}
+  .masthead nav a+a::before{left:-2px}
+  .stats{grid-template-columns:1fr 1fr}
+  .stats div:nth-child(3){border-left:0;border-top:1px solid var(--line)}
+  .stats div:nth-child(4){border-top:1px solid var(--line)}
+  section.band{padding:52px 0 0}
+  .stage-hd{flex-wrap:wrap;gap:12px;padding:16px 18px}
+  .stage-hd .btn{margin-left:0;width:100%;justify-content:center}
+  .stage-in{padding:16px 18px}
+  .sheet-wrap{padding:16px 18px 20px}
+  .sheet{padding:20px 16px 32px}
+  .sheet::before{inset:4px}
+  .sheet::after{left:16px;right:16px}
+  .sheet .stamp{right:16px;bottom:16px}
+  .fams{grid-template-columns:1fr 1fr}
+  .conf{grid-template-columns:1fr}
+  .apipane{padding:22px 18px 26px}
+  .conf-foot div{border-left:0;border-top:1px solid var(--line);width:100%;text-align:center}
   img,pre,table{max-width:100%}
 }
 @media(max-width:460px){
-  .pkgrid{grid-template-columns:1fr}
-  .conf .big{font-size:42px}
+  .fams{grid-template-columns:1fr}
+  .stats .n{font-size:26px}
 }
-@media(prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important}
-  html{scroll-behavior:auto}
-}
+:focus-visible{outline:1px solid var(--champagne);outline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:1px solid var(--champagne);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 
-<header class="top">
+<!-- running head: wordmark on the left, edition and assay on the right -->
+<div class="strip">
+  <div class="wrap strip-in">
+    <a class="brand" href="#top" aria-label="MoonBit STL">
+      <span class="mark"><i></i></span><b>MoonBit <em>STL</em></b>
+    </a>
+    <div class="strip-right">
+      <span class="edition">Vol. I &nbsp;·&nbsp; MMXXVI &nbsp;·&nbsp; The MoonBit Standard Library</span>
+      <span class="modpill" id="modStatus"><span class="dot"></span><span id="modText">wasm-gc · booting</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- title page -->
+<header class="masthead" id="top">
   <div class="wrap">
-    <nav class="topnav">
+    <div class="rule2"></div>
+    <h1 class="wordmark">MoonBit&nbsp;<span>STL</span></h1>
+    <p class="subtitle">An Atlas of Ten Families · Data Structures &amp; Algorithms</p>
+    <nav>
       <a href="#workbench">Workbench</a>
-      <a href="#packages">Packages</a>
-      <a href="#conformance">Conformance</a>
+      <a href="#families">Families</a>
+      <a href="#conformance">Assay</a>
       <a href="#reference">Reference</a>
       <a href="#install">Install</a>
     </nav>
-    <div class="modpill" id="modStatus"><span class="dot"></span><span id="modText">wasm-gc · booting</span></div>
-    <a class="brand" href="#top" aria-label="MoonBit STL">
-      <span class="glyph"><span>M</span></span>
-      <b>MoonBit <em>STL</em></b>
-    </a>
+    <div class="rule2" style="margin-top:22px"></div>
+    <div class="damask" aria-hidden="true">
+      <svg viewBox="0 0 1200 26" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#4d473e"/><stop offset=".22" stop-color="#cfc9bb"/>
+            <stop offset=".34" stop-color="#6d6558"/><stop offset=".5" stop-color="#efece3"/>
+            <stop offset=".62" stop-color="#736c60"/><stop offset=".8" stop-color="#d8d2c4"/>
+            <stop offset="1" stop-color="#4d473e"/>
+          </linearGradient>
+        </defs>
+        <g fill="none" stroke="url(#steel)" stroke-width="1.4">
+          <path d="M0 9 C 120 2, 240 16, 360 9 S 600 2, 720 9 S 960 16, 1080 9 S 1200 4, 1200 9"/>
+          <path d="M0 14 C 120 7, 240 21, 360 14 S 600 7, 720 14 S 960 21, 1080 14 S 1200 9, 1200 14" opacity=".75"/>
+          <path d="M0 19 C 120 12, 240 26, 360 19 S 600 12, 720 19 S 960 26, 1080 19 S 1200 14, 1200 19" opacity=".5"/>
+          <path d="M0 4 C 120 -3, 240 11, 360 4 S 600 -3, 720 4 S 960 11, 1080 4 S 1200 -1, 1200 4" opacity=".45"/>
+        </g>
+      </svg>
+    </div>
   </div>
 </header>
 
-<main id="top">
+<main>
 
-<!-- ══════════════ hero ══════════════ -->
+<!-- ══════════ title & statements ══════════ -->
 <section class="hero">
   <div class="wrap">
-    <div>
-      <div class="kicker"><span class="rule"></span><span class="eyebrow">MoonBit standard library extensions · v0.1.0</span></div>
-      <h1>Structures held to<br>a second <em>opinion</em>.</h1>
+    <div class="center">
+      <div class="plate-label"><span class="ln l"></span><span class="txt">Plate the First</span><span class="ln"></span></div>
+      <h2>Structures held to<br>a second <em>opinion</em>.</h2>
       <p class="lede">
-        Ten packages of data structures and algorithms for MoonBit — indexed maps, priority queues,
-        range trees, eviction policies, sketches, string search, perfect hashing.
-        Each one ships with reference vectors computed <b>twice, by two other standard libraries</b>,
-        so the answers are checked against something that is not itself.
+        Ten families of containers, queues, trees, caches, sketches and text algorithms for MoonBit,
+        bound as one module. Each is accompanied by reference values computed <b>twice, by two other
+        standard libraries</b>, and admitted only when those two agree.
       </p>
       <p class="lede" style="margin-top:16px">
-        Every panel below runs the real library, compiled to <b>WebAssembly</b> and instantiated in this tab.
-        Nothing here is a re-implementation for the demo.
+        Every specimen in the Workbench is the library itself, compiled to <b>WebAssembly</b> and
+        instantiated in this tab — not an illustration of it.
       </p>
       <div class="cta">
-        <a class="btn solid" href="#workbench">Open the workbench <span style="opacity:.6">→</span></a>
-        <a class="btn" href="#reference">API reference</a>
-      </div>
-      <div class="cmd">
-        <code><span class="c-flag">moon</span> add moonbitstack/moonstl</code>
-        <button id="copyAdd" type="button">copy</button>
+        <a class="btn solid" href="#workbench">Open the workbench</a>
+        <a class="btn" href="#reference">The reference</a>
       </div>
     </div>
 
-    <aside class="plate">
-      <div class="ph"><span class="lbl">Specimen 00 — the module</span><span id="plateSize">—</span></div>
-      <dl class="meta">
-        <div><dt>backend</dt><dd class="acc">wasm-gc</dd></div>
-        <div><dt>load</dt><dd id="plateLoad">—</dd></div>
-        <div><dt>exports</dt><dd>run · names</dd></div>
-        <div><dt>demos</dt><dd id="plateDemos">—</dd></div>
-      </dl>
-      <div class="bars" id="heroBars"></div>
-      <div class="pf"><span id="plateCall">run("segment", …)</span><span id="plateTotal"></span></div>
-    </aside>
+    <div class="stats">
+      <div><div class="n" id="statFamilies">10</div><div class="k">Families</div></div>
+      <div><div class="n" id="statSpecimens">23</div><div class="k">Specimens</div></div>
+      <div><div class="n" id="statTypes">—</div><div class="k">Public types</div></div>
+      <div><div class="n">4</div><div class="k">Backends</div></div>
+    </div>
   </div>
 </section>
 
-<!-- ══════════════ workbench ══════════════ -->
+<!-- ══════════ workbench ══════════ -->
 <section class="band" id="workbench">
   <div class="wrap">
-    <div class="sechead">
-      <span class="num">01</span><h2>Workbench</h2><span class="rule"></span>
-      <span class="meta" id="benchMeta">23 specimens · 9 packages</span>
+    <div class="shead">
+      <div class="num">PLATE II</div>
+      <h3>The Workbench</h3>
+      <div class="sub"><span id="benchMeta">23 specimens · 9 packages</span> &nbsp;·&nbsp; <span id="modAssay">wasm-gc · —</span></div>
     </div>
 
     <div class="bench">
-      <aside class="rail">
-        <div class="railsearch">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-          <input id="railSearch" type="text" placeholder="filter specimens…" autocomplete="off" spellcheck="false">
+      <aside class="idx">
+        <div class="head">Index of Specimens</div>
+        <div class="idxsearch">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input id="railSearch" type="text" placeholder="search…" autocomplete="off" spellcheck="false">
         </div>
-        <div class="rlist" id="railList"></div>
+        <div id="railList"></div>
       </aside>
 
-      <section class="stage" aria-live="polite">
-        <div class="stage-top">
-          <span class="spec-id" id="specId">01<span>/23</span></span>
+      <section class="stage">
+        <div class="stage-hd">
+          <div class="cartouche"><span class="a">No.</span><span class="b" id="specNo">I</span></div>
           <div>
-            <h3 id="specTitle">IndexMap</h3>
-            <div class="spec-sub" id="specSub">@map · insertion order + position lookups</div>
+            <h4 id="specTitle">IndexMap</h4>
+            <div class="sub" id="specSub">@map · insertion order + position lookups</div>
+            <div class="cx" id="specCx"></div>
           </div>
-          <div class="stage-aside"><button class="btn solid" id="runBtn" type="button">Run <span style="opacity:.6">⏎</span></button></div>
+          <button class="btn solid" id="runBtn" type="button">Run</button>
         </div>
 
         <div class="stage-in">
-          <span class="lbl">input</span>
+          <span class="cap">Input</span>
           <div class="dctl" id="controls"></div>
         </div>
 
-        <div class="stage-out">
-          <div class="outhead">
-            <span class="lbl">output</span>
-            <span class="outmeta" id="outMeta">—</span>
+        <div class="sheet-wrap">
+          <div class="sheet-head">
+            <span class="cap">Recorded result</span>
+            <span class="sheet-meta" id="outMeta">—</span>
           </div>
-          <div class="canvas" id="canvas"><span class="out-empty">loading module…</span></div>
+          <div class="sheet">
+            <div class="sheet-body" id="canvas"><span class="out-empty">loading the module…</span></div>
+            <span class="stamp">MoonBit STL · wasm-gc</span>
+          </div>
         </div>
 
-        <details class="stage-calls">
-          <summary>what this calls</summary>
+        <details class="calls">
+          <summary>What this calls</summary>
           <pre id="apiCode"></pre>
         </details>
       </section>
@@ -574,88 +567,104 @@ footer .flinks a:hover{color:var(--amber)}
   </div>
 </section>
 
-<!-- ══════════════ packages ══════════════ -->
-<section class="band" id="packages">
+<!-- ══════════ families ══════════ -->
+<section class="band" id="families">
   <div class="wrap">
-    <div class="sechead">
-      <span class="num">02</span><h2>Ten packages</h2><span class="rule"></span>
-      <span class="meta">one module · ten families</span>
+    <div class="shead">
+      <div class="num">PLATE III</div>
+      <h3>The Ten Families</h3>
+      <div class="sub">One module · one package per family</div>
     </div>
-    <div class="pkgrid" id="pkgCards"></div>
+    <div class="fams" id="pkgCards"></div>
   </div>
 </section>
 
-<!-- ══════════════ conformance ══════════════ -->
+<!-- ══════════ conformance ══════════ -->
 <section class="band" id="conformance">
   <div class="wrap">
-    <div class="sechead">
-      <span class="num">03</span><h2>How it is checked</h2><span class="rule"></span>
-      <span class="meta">differential · mutation · replay</span>
+    <div class="shead">
+      <div class="num">PLATE IV</div>
+      <h3>The Assay</h3>
+      <div class="sub">Differential · mutation · replay</div>
     </div>
 
-    <div class="confgrid">
-      <div class="conf">
+    <div class="conf">
+      <div class="claim">
         <div class="big">2<span>refs</span></div>
         <h4>Answers computed twice</h4>
-        <p>Each package's vectors are produced independently by the Python standard library and by Rust's,
-          then diffed byte for byte. Two mature implementations have to agree before a number is committed.</p>
+        <p>Each family's reference values are produced independently by the Python standard library
+          and by Rust's, then compared byte for byte. Nothing is committed until both agree.</p>
       </div>
-      <div class="conf">
+      <div class="claim">
         <div class="big">18<span>breaks</span></div>
         <h4>Mutation tested</h4>
-        <p>Two key lines per package were broken on purpose — comparisons, bounds, renumbering, expiry
-          boundaries — and every break turned the suite red before it was reverted.</p>
+        <p>Two key lines per family were broken deliberately — comparisons, bounds, renumbering,
+          expiry — and each break turned the suite red before it was reverted.</p>
       </div>
-      <div class="conf">
+      <div class="claim">
         <div class="big">4<span>backends</span></div>
-        <h4>Same tests everywhere</h4>
-        <p>Wasm, wasm-gc, JavaScript and native run the identical suite, so a structure that passes on one
-          target is not allowed to drift on another.</p>
+        <h4>The same tests everywhere</h4>
+        <p>Wasm, wasm-gc, JavaScript and native run the identical suite, so no structure is allowed
+          to drift on one target and pass on another.</p>
+      </div>
+      <div class="seal">
+        <svg width="170" height="170" viewBox="0 0 170 170" fill="none" aria-hidden="true">
+          <circle cx="85" cy="85" r="82" stroke="rgba(233,230,223,.28)"/>
+          <circle cx="85" cy="85" r="76" stroke="rgba(233,230,223,.16)"/>
+          <circle cx="85" cy="85" r="56" stroke="rgba(201,185,143,.45)"/>
+          <circle cx="85" cy="85" r="52" stroke="rgba(201,185,143,.22)"/>
+          <path d="M85 57l28 28-28 28-28-28z" stroke="rgba(201,185,143,.6)"/>
+          <path d="M85 66l19 19-19 19-19-19z" stroke="rgba(233,230,223,.35)"/>
+          <text x="85" y="80" text-anchor="middle" font-family="Constantia, Georgia, serif" font-size="13" letter-spacing="3" fill="rgba(233,230,223,.85)">STL</text>
+          <text x="85" y="96" text-anchor="middle" font-family="Constantia, Georgia, serif" font-size="7" letter-spacing="2.6" fill="rgba(201,185,143,.9)">ASSAYED</text>
+          <text x="85" y="150" text-anchor="middle" font-family="Constantia, Georgia, serif" font-size="6.5" letter-spacing="2.4" fill="rgba(233,230,223,.4)">MMXXVI</text>
+        </svg>
       </div>
     </div>
 
-    <div class="conffoot">
+    <div class="conf-foot">
       <div><b>260</b> tests per backend</div>
-      <div><b>9</b> packages replay vectors</div>
-      <div><b>0</b> self-written expectations in the vectors</div>
-      <div><b>108</b> public types documented from the interfaces</div>
-      <div><b>0</b> hand-written signatures in the reference</div>
+      <div><b>9</b> families replay vectors</div>
+      <div><b>0</b> self-written expectations</div>
+      <div><b>108</b> types documented</div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════ reference ══════════════ -->
+<!-- ══════════ reference ══════════ -->
 <section class="band" id="reference">
   <div class="wrap">
-    <div class="sechead">
-      <span class="num">04</span><h2>Reference</h2><span class="rule"></span>
-      <span class="meta" id="refMeta">generated from pkg.generated.mbti</span>
+    <div class="shead">
+      <div class="num">PLATE V</div>
+      <h3>The Reference</h3>
+      <div class="sub"><span id="refMeta">generated from pkg.generated.mbti</span> &nbsp;·&nbsp; after the manner of cppreference</div>
     </div>
 
     <div class="refbar">
       <div class="refsearch">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
         <input id="apiSearch" type="text" placeholder="search types, methods, functions…" autocomplete="off" spellcheck="false">
       </div>
       <div class="pkgchips" id="pkgChips"></div>
     </div>
 
     <div class="refgrid">
-      <aside class="typelist" id="apiList"></aside>
+      <aside class="tlist" id="apiList"></aside>
       <div class="apipane" id="apiPane"></div>
     </div>
   </div>
 </section>
 
-<!-- ══════════════ install ══════════════ -->
+<!-- ══════════ install ══════════ -->
 <section class="band" id="install">
   <div class="wrap">
-    <div class="sechead">
-      <span class="num">05</span><h2>Install</h2><span class="rule"></span>
-      <span class="meta">one dependency · no transitive ones</span>
+    <div class="shead">
+      <div class="num">PLATE VI</div>
+      <h3>Instruction</h3>
+      <div class="sub">One dependency · no transitive ones</div>
     </div>
 
-    <div class="instgrid">
+    <div class="inst">
       <div class="codecard">
         <div class="tabs">
           <button class="tab on" data-tab="mod" type="button">moon.mod</button>
@@ -666,22 +675,22 @@ footer .flinks a:hover{color:var(--amber)}
 
       <div class="steps">
         <div class="step">
-          <span class="sn">1</span>
+          <span class="sn">I</span>
           <div><h4>Add the module</h4>
             <p><code>moon add moonbitstack/moonstl</code> — the only dependency is MoonBit's own seed package.</p></div>
         </div>
         <div class="step">
-          <span class="sn">2</span>
+          <span class="sn">II</span>
           <div><h4>Import a family</h4>
             <p>Packages are separate: bring in <code>map</code>, <code>heap</code>, <code>tree</code>,
               <code>cache</code>, <code>sketch</code>, <code>seq</code>, <code>text</code>,
-              <code>phf</code>, <code>algo</code> or <code>spec</code>, and nothing else follows.</p></div>
+              <code>phf</code>, <code>algo</code> or <code>spec</code> — and nothing else follows.</p></div>
         </div>
         <div class="step">
-          <span class="sn">3</span>
+          <span class="sn">III</span>
           <div><h4>Run it anywhere</h4>
-            <p>Wasm, wasm-gc, JavaScript and native. Structures that need a capacity or an ordering
-              take it as an explicit argument, and the fallible constructors raise rather than abort.</p></div>
+            <p>Wasm, wasm-gc, JavaScript and native. Capacities and orderings are explicit arguments,
+              and fallible constructors raise rather than abort.</p></div>
         </div>
       </div>
     </div>
@@ -692,11 +701,15 @@ footer .flinks a:hover{color:var(--amber)}
 
 <footer>
   <div class="wrap">
-    <span class="fnote">MoonBit STL · MIT · built and checked in CI on three systems</span>
-    <div class="flinks">
-      <a href="https://github.com/moonbitstack/moonstl">source</a>
-      <a href="https://mooncakes.io/docs/moonbitstack/moonstl">mooncakes</a>
-      <a href="#top">top ↑</a>
+    <div class="rule2"></div>
+    <div class="colophon">
+      <p class="l">Bound in leather and steel, after the manner of the
+        <a href="https://www.sgi.com/tech/stl/" rel="noopener">SGI STL reference</a> and
+        <a href="https://en.cppreference.com/" rel="noopener">cppreference</a>.</p>
+      <p class="l" style="margin-top:8px"><a href="https://github.com/moonbitstack/moonstl" rel="noopener">source</a> ·
+        <a href="https://mooncakes.io/docs/moonbitstack/moonstl" rel="noopener">mooncakes</a> ·
+        <a href="#top">return to the title page</a></p>
+      <p class="fine">MoonBit STL · MIT · set in Constantia &amp; Cascadia · checked on three systems</p>
     </div>
   </div>
 </footer>
@@ -754,7 +767,7 @@ function call(name, input) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   demo definitions — every renderer consumes the library's answer
+   specimens
    ════════════════════════════════════════════════════════════ */
 const DEMOS = {
   indexmap: {
@@ -791,7 +804,7 @@ const DEMOS = {
       if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
       const d = r.displaced || [], k = r.keys || [];
       return `<div class="seq">${k.map(v => `<span class="node hi">${v}</span>`).join("") || '<span class="out-empty">empty</span>'}</div>
-      <div class="note">capacity <b>${r.capacity}</b> · evicted in order <b>${esc(JSON.stringify(d))}</b> · recency list, not a clock</div>`;
+      <div class="note">capacity <b>${r.capacity}</b> · evicted in order <b>${esc(JSON.stringify(d))}</b> · a recency list, not a clock</div>`;
     }
   },
   heap: {
@@ -804,9 +817,9 @@ const DEMOS = {
       const p = r.pops || [], f = r.fib || [], pa = r.pairing || [];
       return `<div class="seq">${p.map((v, i) => `<span class="node ${i === 0 ? "hi" : ""}">${v}</span>`).join("")}</div>
       <div class="note" style="display:flex;flex-direction:column;gap:3px">
-        <span><b style="color:var(--amber)">d-ary</b>&nbsp;&nbsp;&nbsp;&nbsp; ${esc(JSON.stringify(p))}</span>
-        <span><b style="color:var(--amber)">fibonacci</b> ${esc(JSON.stringify(f))}</span>
-        <span><b style="color:var(--amber)">pairing</b>&nbsp;&nbsp; ${esc(JSON.stringify(pa))}</span>
+        <span><b>d-ary</b>&nbsp;&nbsp;&nbsp;&nbsp; ${esc(JSON.stringify(p))}</span>
+        <span><b>fibonacci</b> ${esc(JSON.stringify(f))}</span>
+        <span><b>pairing</b>&nbsp;&nbsp; ${esc(JSON.stringify(pa))}</span>
       </div>`;
     }
   },
@@ -862,7 +875,7 @@ const DEMOS = {
         chips += `<span class="chip ${hit ? "hi" : ""}">[${iv[i]}, ${iv[i + 1]}]</span>`;
       }
       return `<div class="chips">${chips || '<span class="out-empty">no intervals</span>'}</div>
-      <div class="note">query [<b>${r.q?.[0]}, ${r.q?.[1]}</b>] · ${ov.length / 2} overlapping${ov.length ? " (highlighted)" : ""}</div>`;
+      <div class="note">query [<b>${r.q?.[0]}, ${r.q?.[1]}</b>] · ${ov.length / 2} overlapping${ov.length ? " (marked)" : ""}</div>`;
     }
   },
   disjoint: {
@@ -885,7 +898,7 @@ const DEMOS = {
     render(r) {
       if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
       return `<div class="metric">
-        <div class="m"><div class="lab2">contains ${DEMOS.bloom.state.n}</div><div class="val" style="font-size:30px;color:${r.found ? "var(--teal)" : "var(--red)"}">${r.found ? "yes" : "no"}</div></div>
+        <div class="m"><div class="lab2">contains ${DEMOS.bloom.state.n}</div><div class="val" style="font-size:30px;color:${r.found ? "#3d5a4a" : "#6d2b1f"}">${r.found ? "yes" : "no"}</div></div>
         <div class="m"><div class="lab2">design false-positive rate</div><div class="val" style="font-size:26px"><small>${r.false_pos != null ? r.false_pos.toExponential(2) : "—"}</small></div></div>
       </div>
       <div class="note">members ${esc(JSON.stringify(DEMOS.bloom.state.set))} · a "no" is always true; a "yes" is a probability</div>`;
@@ -899,9 +912,9 @@ const DEMOS = {
     render(r) {
       if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
       return `<div class="metric">
-        <div class="m"><div class="lab2">contains ${DEMOS.cuckoo.state.n}</div><div class="val" style="font-size:30px;color:${r.found ? "var(--teal)" : "var(--red)"}">${r.found ? "yes" : "no"}</div></div>
-        <div class="m"><div class="lab2">remove</div><div class="val" style="font-size:30px;color:${r.removed ? "var(--teal)" : "var(--amber)"}">${r.removed ? "ok" : "no"}</div></div>
-        <div class="m"><div class="lab2">after remove</div><div class="val" style="font-size:30px;color:${r.after_remove ? "var(--amber)" : "var(--teal)"}">${r.after_remove ? "still" : "gone"}</div></div>
+        <div class="m"><div class="lab2">contains ${DEMOS.cuckoo.state.n}</div><div class="val" style="font-size:30px;color:${r.found ? "#3d5a4a" : "#6d2b1f"}">${r.found ? "yes" : "no"}</div></div>
+        <div class="m"><div class="lab2">remove</div><div class="val" style="font-size:30px">${r.removed ? "ok" : "no"}</div></div>
+        <div class="m"><div class="lab2">after remove</div><div class="val" style="font-size:30px">${r.after_remove ? "still" : "gone"}</div></div>
       </div>
       <div class="note">two candidate buckets per key, fingerprints evicted along a chain</div>`;
     }
@@ -915,7 +928,7 @@ const DEMOS = {
       if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
       return `<div class="metric"><div class="m">
         <div class="lab2">estimate(${DEMOS.countmin.state.q})</div><div class="val">${r.estimate}</div></div>
-        <div class="m"><div class="lab2">true count</div><div class="val" style="font-size:30px;color:var(--muted)">${DEMOS.countmin.state.set.filter(x => x === DEMOS.countmin.state.q).length}</div></div>
+        <div class="m"><div class="lab2">true count</div><div class="val" style="font-size:30px;color:var(--ink-3)">${DEMOS.countmin.state.set.filter(x => x === DEMOS.countmin.state.q).length}</div></div>
       </div>
       <div class="note">inserted ${esc(JSON.stringify(DEMOS.countmin.state.set))} · counters only grow, so the estimate is an upper bound</div>`;
     }
@@ -978,7 +991,7 @@ const DEMOS = {
       if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
       const o = r.order || [], lcp = r.lcp || [];
       return `<div class="seq">${o.map((s, i) =>
-        `<span class="node" title="suffix “${esc((r.text || "").slice(s))}”"><span class="ix" style="color:var(--dim);font-size:9px;margin-right:4px">${i}</span>${s}</span>`).join("")}</div>
+        `<span class="node" title="suffix “${esc((r.text || "").slice(s))}”"><span style="color:var(--ink-3);font-size:9px;margin-right:4px">${i}</span>${s}</span>`).join("")}</div>
       <div class="note">start indices in sorted order · LCP ${esc(JSON.stringify(lcp))} · doubling construction, O(n log n)</div>`;
     }
   },
@@ -1016,7 +1029,7 @@ const DEMOS = {
       if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
       const k = r.order || [];
       return `<div class="kv">${k.map((w, i) =>
-        `<div class="row"><span class="badge">${i}</span><span>${esc(w)}</span>${w === r.q ? `<span class="muted" style="color:var(--amber)">← queried</span>` : ""}</div>`).join("")}</div>
+        `<div class="row"><span class="badge">${i}</span><span>${esc(w)}</span>${w === r.q ? `<span class="muted" style="color:#6d2b1f">◂ queried</span>` : ""}</div>`).join("")}</div>
       <div class="note">index of "<b>${esc(r.q)}</b>" = <b>${r.index}</b></div>`;
     }
   },
@@ -1041,7 +1054,7 @@ const DEMOS = {
     render(r) {
       if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
       return `<div class="seq">${(r.before || []).map(v => `<span class="node">${v}</span>`).join("")}</div>
-      <div class="note" style="color:var(--dim)">↓ insert ${esc(JSON.stringify(DEMOS.gap.state.ops))}</div>
+      <div class="note" style="color:var(--ink-3)">↓ insert ${esc(JSON.stringify(DEMOS.gap.state.ops))}</div>
       <div class="seq" style="margin-top:8px">${(r.after || []).map(v => `<span class="node hi">${v}</span>`).join("")}</div>`;
     }
   },
@@ -1078,12 +1091,41 @@ const ORDER = ["indexmap", "trie", "lru", "heap", "radix", "segment", "fenwick",
   "ring", "gap", "bitset", "perms"];
 
 const FAMILY_LABEL = {
-  map: "map", cache: "cache", heap: "heap", tree: "tree", sketch: "sketch",
-  seq: "seq", text: "text", phf: "phf", algo: "algo"
+  map: "Map", cache: "Cache", heap: "Heap", tree: "Tree", sketch: "Sketch",
+  seq: "Sequence", text: "Text", phf: "Perfect hash", algo: "Algorithm"
 };
 
+const COMPLEXITY = {
+  indexmap: "set O(1) · lookup O(1) · by index O(1)",
+  trie: "insert O(m) · keys with prefix O(m + k)",
+  lru: "get O(1) · set O(1)",
+  heap: "push O(log n) · pop O(log n)",
+  radix: "push O(1) · pop amortised O(1)",
+  segment: "build O(n) · query O(log n)",
+  fenwick: "update O(log n) · prefix sum O(log n)",
+  interval: "insert O(log n) · overlap O(log n + k)",
+  disjoint: "union O(α n) · find O(α n)",
+  bloom: "insert O(k) · may contain O(k)",
+  cuckoo: "insert amortised O(1) · remove O(1)",
+  countmin: "insert O(d) · estimate O(d)",
+  theta: "add O(1) · estimate O(1)",
+  kmp: "search O(n + m)",
+  aho: "build O(Σm) · scan O(n + hits)",
+  suffix: "build O(n log n) · LCP O(n)",
+  diff: "opcodes O(n · d)",
+  phf: "build O(n) · lookup O(1)",
+  phf_ordered: "lookup O(1) · index O(1)",
+  ring: "push O(1) · front O(1) · back O(1)",
+  gap: "insert O(distance to gap)",
+  bitset: "rank O(n / 64) · select O(n / 64)",
+  perms: "next row O(k) · generated on demand"
+};
+
+const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII",
+  "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII"];
+
 /* ════════════════════════════════════════════════════════════
-   input controls, derived from each demo's state
+   input controls
    ════════════════════════════════════════════════════════════ */
 const FIELD_LABEL = { cap: "capacity", n: "n", q: "query", r: "r (0 = perms)", nominal: "nominal", qstart: "query start", qend: "query end" };
 const SKIP = ["set", "words", "patterns", "ops", "text", "pattern", "a", "b"];
@@ -1094,13 +1136,13 @@ function chipList(state, key, mode) {
   const row = el("div", "addrow");
   const inp = el("input");
   inp.placeholder = mode === "number" ? "add a number ↵" : "add a word ↵";
-  const add = el("button", "mini", "+ add");
-  const rand = el("button", "mini ghost", "randomize");
+  const add = el("button", "mini", "add");
+  const rand = el("button", "mini ghost", "random");
   const clear = el("button", "mini ghost", "clear");
   function refresh() {
     chips.innerHTML = "";
     state[key].forEach((v, i) => {
-      const c = mode === "word" ? el("span", "chip str") : el("span", "chip");
+      const c = el("span", "chip");
       c.innerHTML = mode === "number"
         ? `<span class="ix">${i}</span>${v}<span class="x">×</span>`
         : `${esc(v)}<span class="x">×</span>`;
@@ -1130,7 +1172,7 @@ function chipList(state, key, mode) {
 function textField(s, key, label) {
   const wrap = el("div"), lr = el("div", "fieldrow");
   const lab = el("label"); lab.textContent = label;
-  const ta = el("textarea"); ta.className = "in"; ta.value = s[key] ?? ""; ta.rows = 1;
+  const ta = el("textarea"); ta.value = s[key] ?? ""; ta.rows = 1;
   ta.oninput = () => { s[key] = ta.value; };
   lr.append(lab, ta); wrap.append(lr);
   return wrap;
@@ -1159,9 +1201,9 @@ function opsEditor(state) {
     list.innerHTML = "";
     state.ops.forEach((op, i) => {
       const r = el("div", "fieldrow");
-      const la = el("label"); la.textContent = "insert #" + i;
-      const ip = el("input"); ip.type = "number"; ip.style.width = "74px"; ip.value = op[0];
-      const iv = el("input"); iv.type = "number"; iv.style.width = "86px"; iv.value = op[1];
+      const la = el("label"); la.textContent = "insert " + (i + 1);
+      const ip = el("input"); ip.type = "number"; ip.style.width = "72px"; ip.value = op[0];
+      const iv = el("input"); iv.type = "number"; iv.style.width = "84px"; iv.value = op[1];
       const rm = el("button", "mini ghost", "×");
       ip.oninput = () => { state.ops[i][0] = parseInt(ip.value, 10) || 0; };
       iv.oninput = () => { state.ops[i][1] = parseInt(iv.value, 10) || 0; };
@@ -1170,7 +1212,7 @@ function opsEditor(state) {
     });
   }
   const addrow = el("div", "addrow");
-  const b = el("button", "mini", "+ insert at, value");
+  const b = el("button", "mini", "another insertion");
   b.onclick = () => { state.ops.push([0, 0]); render(); };
   addrow.append(b);
   wrap.append(list, addrow); render();
@@ -1210,12 +1252,13 @@ function buildRail() {
     (groups[f] = groups[f] || []).push([k, i]);
   });
   Object.keys(groups).forEach(fam => {
-    const g = el("div", "rgroup");
-    g.append(el("h4", null, `<span>${FAMILY_LABEL[fam] || fam}</span><span>${groups[fam].length}</span>`));
+    const g = el("div", "grp");
+    g.append(el("div", "gh", `<span>${FAMILY_LABEL[fam] || fam}</span><span>${groups[fam].length}</span>`));
     groups[fam].forEach(([k, i]) => {
-      const b = el("button", "ritem" + (k === active ? " on" : ""));
+      const b = el("button", "it" + (k === active ? " on" : ""));
       b.dataset.k = k;
-      b.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span><span>${esc(DEMOS[k].title)}</span>`;
+      b.title = `${DEMOS[k].title} — ${DEMOS[k].desc}`;
+      b.innerHTML = `<span class="n">${String(i + 1).padStart(2, "0")}</span><span class="t">${esc(DEMOS[k].title)}</span><span class="lead"></span>`;
       b.onclick = () => select(k, true);
       g.append(b);
     });
@@ -1226,9 +1269,10 @@ function buildRail() {
 function select(key, run) {
   active = key;
   const d = DEMOS[key], i = ORDER.indexOf(key);
-  $("#specId").innerHTML = `${String(i + 1).padStart(2, "0")}<span>/${ORDER.length}</span>`;
+  $("#specNo").textContent = ROMAN[i] || String(i + 1);
   $("#specTitle").textContent = d.title;
   $("#specSub").textContent = `@${d.pkg} · ${d.desc}`;
+  $("#specCx").innerHTML = COMPLEXITY[key] ? `<b>Complexity</b> &nbsp;${COMPLEXITY[key]}` : "";
   $("#controls").innerHTML = "";
   $("#controls").append(buildControls(d));
   $("#apiCode").innerHTML = d.api.map(line => {
@@ -1237,19 +1281,18 @@ function select(key, run) {
       .replace(/(@[a-z]+)/g, '<span class="c-pkg">$1</span>')
       .replace(/([A-Za-z_][A-Za-z0-9_]*)\(/g, '<span class="c-fn">$1</span>(');
   }).join("\n");
-  document.querySelectorAll(".ritem").forEach(b => b.classList.toggle("on", b.dataset.k === key));
+  document.querySelectorAll(".it").forEach(b => b.classList.toggle("on", b.dataset.k === key));
   try { history.replaceState(null, "", "#workbench/" + key); } catch (e) {}
   if (run) doRun();
-  else { $("#canvas").innerHTML = `<span class="out-empty">press Run</span>`; $("#outMeta").textContent = "—"; }
 }
 
 function doRun() {
   const d = DEMOS[active];
   if (!MOD.inst) { $("#canvas").innerHTML = `<div class="err">the wasm module is not loaded</div>`; return; }
-  const r = d.run ? d.run() : call(active, d.input());
+  const r = call(active, d.input());
   $("#canvas").innerHTML = d.render(r);
   const bytes = JSON.stringify(r).length;
-  $("#outMeta").innerHTML = `<b>${(r.__ms ?? 0).toFixed(2)} ms</b> · ${bytes} B answer · wasm-gc call #${MOD.calls}`;
+  $("#outMeta").innerHTML = `<b>${(r.__ms ?? 0).toFixed(2)} ms</b> &nbsp;·&nbsp; ${bytes} B &nbsp;·&nbsp; wasm-gc call #${MOD.calls}`;
 }
 
 function setupBench() {
@@ -1258,10 +1301,14 @@ function setupBench() {
   $("#runBtn").onclick = doRun;
   $("#railSearch").oninput = e => {
     const q = e.target.value.trim().toLowerCase();
-    document.querySelectorAll(".ritem").forEach(b => {
-      const k = b.dataset.k, d = DEMOS[k];
+    document.querySelectorAll(".it").forEach(b => {
+      const d = DEMOS[b.dataset.k];
       const hay = (d.title + " " + d.desc + " " + d.pkg).toLowerCase();
       b.style.display = !q || hay.includes(q) ? "" : "none";
+    });
+    document.querySelectorAll(".grp").forEach(g => {
+      const any = [...g.querySelectorAll(".it")].some(b => b.style.display !== "none");
+      g.style.display = any ? "" : "none";
     });
   };
   document.addEventListener("keydown", e => {
@@ -1272,10 +1319,10 @@ function setupBench() {
       let i = ORDER.indexOf(active) + (e.key === "ArrowDown" ? 1 : -1);
       i = (i + ORDER.length) % ORDER.length;
       select(ORDER[i], true);
-      const b = document.querySelector(`.ritem[data-k="${ORDER[i]}"]`);
+      const b = document.querySelector(`.it[data-k="${ORDER[i]}"]`);
       if (b) b.scrollIntoView({ block: "nearest" });
-    } else if (e.key === "Enter" && !e.metaKey) {
-      if (document.body.contains($("#canvas"))) doRun();
+    } else if (e.key === "Enter") {
+      doRun();
     }
   });
   const deep = (location.hash.match(/^#workbench\/([a-z_]+)$/) || [])[1];
@@ -1283,43 +1330,39 @@ function setupBench() {
 }
 
 /* ════════════════════════════════════════════════════════════
-   packages + hero plate
+   families
    ════════════════════════════════════════════════════════════ */
 const PKG_ROLE = {
-  spec: ["the shared vocabulary", "traits, errors and refusals used across the module"],
-  seq: ["linear containers", "ring buffers, gap buffers, bit sets, linked lists"],
-  map: ["maps and sets", "indexed, flat, ordered, trie — plus counters and range sets"],
-  heap: ["priority queues", "d-ary, fibonacci, pairing, min-max and radix heaps"],
-  tree: ["range and union", "segment, Fenwick, interval trees and disjoint sets"],
-  cache: ["eviction policies", "LRU, LFU and time-based caches with statistics"],
-  sketch: ["probabilistic summaries", "bloom, cuckoo, count-min, hyperloglog, t-digest, theta"],
-  text: ["string algorithms", "KMP, Aho–Corasick, suffix arrays, rolling hash, diff"],
-  phf: ["perfect hashing", "tables with no collisions at lookup time"],
-  algo: ["algorithm kernels", "binary search, selection, merge, combinatorics, prefix sums"]
+  spec: ["The vocabulary", "traits, errors and refusals shared by the module"],
+  seq: ["Linear containers", "ring and gap buffers, bit sets, slab maps, linked lists"],
+  map: ["Maps & sets", "indexed, flat, ordered, trie — with counters and range sets"],
+  heap: ["Priority queues", "d-ary, fibonacci, pairing, min-max and radix heaps"],
+  tree: ["Range & union", "segment, Fenwick, interval trees and disjoint sets"],
+  cache: ["Eviction", "LRU, LFU, ARC and time-based caches with statistics"],
+  sketch: ["Probabilistic", "bloom, cuckoo, count-min, hyperloglog, t-digest, theta"],
+  text: ["Strings", "KMP, Boyer–Moore, Aho–Corasick, suffix arrays, hashing, diff"],
+  phf: ["Perfect hashing", "tables with no collisions at lookup time"],
+  algo: ["Algorithm kernels", "search, selection, merge, prefix sums, combinatorics"]
 };
 
 function buildPackages(api) {
   const box = $("#pkgCards");
   box.innerHTML = "";
-  api.packages.forEach(p => {
+  api.packages.forEach((p, i) => {
     const role = PKG_ROLE[p.package] || ["", ""];
-    const card = el("div", "pkg");
+    const card = el("div", "fam");
     card.innerHTML = `
-      <div class="pkgname">@${p.package}<span>/</span></div>
-      <div class="pkgrole">${esc(role[0])}<br><span style="color:var(--dim)">${esc(role[1])}</span></div>
-      <div class="pkgcount"><b>${p.types.length}</b> types · <b>${p.free_fns.length}</b> fns</div>`;
-    card.onclick = () => { gotoPackage(p.package); };
+      <div class="rk">${ROMAN[i]}</div>
+      <div class="nm">@${p.package}<span>/</span></div>
+      <div class="ro">${esc(role[0])}<br><span style="color:var(--plat-5);font-size:11.5px">${esc(role[1])}</span></div>
+      <div class="ct"><b>${p.types.length}</b> types · <b>${p.free_fns.length}</b> fns</div>`;
+    card.onclick = () => { location.hash = "#reference"; filterPkg(p.package); };
     box.append(card);
   });
 }
 
-function gotoPackage(pkg) {
-  location.hash = "#reference";
-  filterPkg(pkg);
-}
-
 /* ════════════════════════════════════════════════════════════
-   API reference — rendered straight from site/api.json
+   reference
    ════════════════════════════════════════════════════════════ */
 let API = null, apiFilterPkg = "all", apiFilterText = "", apiSel = null;
 
@@ -1328,28 +1371,28 @@ function methodSig(m) { return m.sig.replace(/^fn/, "").trim(); }
 function renderType(p, t) {
   const kindTag = t.kind === "struct" ? "struct" : t.kind === "enum" ? "enum" : "type";
   const params = t.params ? `<span class="params">[${esc(t.params)}]</span>` : "";
-  let html = `<div class="path">@${p.package} · ${esc(t.name)}</div>
+  let html = `<div class="hdr-banner">Defined in module <b>@${p.package}</b></div>
+    <div class="path">@${p.package} · ${esc(t.name)}</div>
     <div class="awrap"><div class="apitype">${esc(t.name)}${params}</div><div class="apikind">${kindTag}</div></div>`;
   if (t.impls && t.impls.length)
     html += `<div class="impls">${t.impls.map(i => `<span class="i">${esc(i)}</span>`).join("")}</div>`;
 
   let doc = "";
-  if (t.fields && t.fields.length) {
-    doc += `<h5>fields</h5><pre>${esc(t.fields.join("\n"))}</pre>`;
-  }
-  if (t.variants && t.variants.length) {
-    doc += `<h5>variants</h5><pre>${esc(t.variants.join("\n"))}</pre>`;
-  }
-  if (t.alias) {
-    doc += `<h5>definition</h5><pre>type ${esc(t.name)} = ${esc(t.alias)}</pre>`;
-  }
+  if (t.fields && t.fields.length) doc += `<h5>Fields</h5><pre>${esc(t.fields.join("\n"))}</pre>`;
+  if (t.variants && t.variants.length) doc += `<h5>Variants</h5><pre>${esc(t.variants.join("\n"))}</pre>`;
+  if (t.alias) doc += `<h5>Definition</h5><pre>type ${esc(t.name)} = ${esc(t.alias)}</pre>`;
   if (t.members && t.members.length) {
     const rows = t.members.map(m =>
       `<tr><td class="mn">${esc(m.name)}</td><td class="sig">${esc(methodSig(m))}</td></tr>`).join("");
-    doc += `<h5>methods · ${t.members.length}</h5>
-      <table><thead><tr><th>method</th><th>signature</th></tr></thead><tbody>${rows}</tbody></table>`;
+    doc += `<h5>Methods · ${t.members.length}</h5>
+      <table><thead><tr><th>Method</th><th>Signature</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
   if (!doc) doc = `<p class="note" style="margin-top:22px">No public members are exposed by name.</p>`;
+  const sibs = (p.types || []).filter(x => x.name !== t.name).slice(0, 10);
+  if (sibs.length) {
+    doc += `<h5>See also</h5><div class="seealso" data-pkg="${p.package}">` +
+      sibs.map(x => `<button data-t="${esc(x.name)}" type="button">${esc(x.name)}</button>`).join("") + `</div>`;
+  }
   return html + `<div class="apidoc">${doc}</div>`;
 }
 
@@ -1357,15 +1400,15 @@ function renderFree(p, filter) {
   const f = p.free_fns.filter(x => !filter || (x.name + " " + x.sig).toLowerCase().includes(filter));
   const l = p.lets.filter(x => !filter || x.name.toLowerCase().includes(filter));
   let html = `<div class="path">@${p.package}</div>
-    <div class="awrap"><div class="apitype">free functions</div><div class="apikind">package</div></div>`;
+    <div class="awrap"><div class="apitype">Free functions</div><div class="apikind">package</div></div>`;
   let doc = "";
   if (f.length) {
-    doc += `<h5>functions · ${f.length}</h5><table><thead><tr><th>function</th><th>signature</th></tr></thead><tbody>` +
+    doc += `<h5>Functions · ${f.length}</h5><table><thead><tr><th>Function</th><th>Signature</th></tr></thead><tbody>` +
       f.map(x => `<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.sig.replace(/^fn/, ""))}</td></tr>`).join("") +
       `</tbody></table>`;
   }
   if (l.length) {
-    doc += `<h5>constants · ${l.length}</h5><table><thead><tr><th>name</th><th>type</th></tr></thead><tbody>` +
+    doc += `<h5>Constants · ${l.length}</h5><table><thead><tr><th>Name</th><th>Type</th></tr></thead><tbody>` +
       l.map(x => `<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.type)}</td></tr>`).join("") +
       `</tbody></table>`;
   }
@@ -1387,8 +1430,7 @@ function buildPkgChips() {
 function typeMatches(p, t, q) {
   if (!q) return true;
   if (t.name.toLowerCase().includes(q)) return true;
-  if ((t.members || []).some(m => m.name.toLowerCase().includes(q))) return true;
-  return false;
+  return (t.members || []).some(m => m.name.toLowerCase().includes(q));
 }
 
 function buildTypeList() {
@@ -1400,22 +1442,23 @@ function buildTypeList() {
     if (apiFilterPkg !== "all" && p.package !== apiFilterPkg) return;
     const types = p.types.filter(t => typeMatches(p, t, q));
     if (!types.length) return;
-    box.append(el("div", "pkghead", `@${p.package} · ${types.length}`));
+    box.append(el("div", "ph", `@${p.package} · ${types.length}`));
     types.forEach(t => {
       shown++;
       const b = el("button", "titem" + (apiSel && apiSel.pkg === p.package && apiSel.type === t.name ? " on" : ""));
-      b.innerHTML = `<span>${esc(t.name)}</span><span class="k">${t.kind === "struct" ? "s" : t.kind === "enum" ? "e" : "t"}</span>`;
+      b.dataset.type = t.name;
+      b.innerHTML = `<span>${esc(t.name)}</span><span class="k">${t.kind === "struct" ? "struct" : t.kind === "enum" ? "enum" : "type"}</span>`;
       b.onclick = () => showType(p, t, b);
       box.append(b);
     });
     if (apiFilterPkg === "all" && !q) {
       const b = el("button", "titem" + (apiSel && apiSel.pkg === p.package && apiSel.type === null ? " on" : ""));
-      b.innerHTML = `<span style="color:var(--dim)">free functions</span><span class="k">ƒ</span>`;
+      b.innerHTML = `<span style="color:var(--plat-6)">free functions</span><span class="k">fn</span>`;
       b.onclick = () => showFree(p, b);
       box.append(b);
     }
   });
-  if (!shown) box.innerHTML = `<div class="empty" style="color:var(--dim);font-family:var(--mono);font-size:12px;padding:10px">no match</div>`;
+  if (!shown) box.innerHTML = `<div class="none">no match</div>`;
   $("#refMeta").textContent = `${shown} types · generated from pkg.generated.mbti`;
 }
 
@@ -1437,19 +1480,26 @@ function filterPkg(pkg) {
   apiFilterPkg = pkg;
   buildPkgChips();
   buildTypeList();
-  const first = $("#apiList .titem");
-  if (first) {
-    const p = API.packages.find(x => pkg === "all" ? true : x.package === pkg);
-    if (p) {
-      const q = apiFilterText.toLowerCase();
-      const t = p.types.find(t => typeMatches(p, t, q));
-      if (t) $("#apiPane").innerHTML = renderType(p, t);
-    }
+  const p = API.packages.find(x => pkg === "all" ? true : x.package === pkg);
+  if (p) {
+    const q = apiFilterText.toLowerCase();
+    const t = p.types.find(t => typeMatches(p, t, q));
+    if (t) $("#apiPane").innerHTML = renderType(p, t);
   }
 }
 
 function setupReference(api) {
   API = api;
+  $("#apiPane").addEventListener("click", e => {
+    const b = e.target.closest(".seealso button");
+    if (!b) return;
+    const pkg = b.closest(".seealso").dataset.pkg;
+    const p = API.packages.find(x => x.package === pkg);
+    const t = p && p.types.find(x => x.name === b.dataset.t);
+    if (!t) return;
+    showType(p, t, $("#apiList .titem[data-type='" + CSS.escape(b.dataset.t) + "']"));
+    $("#apiPane").scrollIntoView({ block: "nearest" });
+  });
   buildPkgChips();
   buildTypeList();
   const p0 = api.packages.find(x => x.package === "map") || api.packages[0];
@@ -1467,7 +1517,7 @@ function setupReference(api) {
 }
 
 /* ════════════════════════════════════════════════════════════
-   install panel
+   instruction
    ════════════════════════════════════════════════════════════ */
 const INSTALL = {
   mod: `<span class="c-cm">// moon.mod</span>
@@ -1500,28 +1550,11 @@ function setupInstall() {
       $("#installCode").innerHTML = INSTALL[t.dataset.tab];
     };
   });
-  $("#copyAdd").onclick = async () => {
-    try {
-      await navigator.clipboard.writeText("moon add moonbitstack/moonstl");
-      $("#copyAdd").textContent = "copied";
-      setTimeout(() => ($("#copyAdd").textContent = "copy"), 1600);
-    } catch { $("#copyAdd").textContent = "⌘C"; }
-  };
 }
 
 /* ════════════════════════════════════════════════════════════
    boot
    ════════════════════════════════════════════════════════════ */
-async function heroPlate() {
-  const bars = $("#heroBars");
-  const r = call("segment", { set: [3, 1, 4, 1, 5] });
-  const vals = (r && r.values) || [3, 1, 4, 1, 5];
-  const mx = Math.max(1, ...vals);
-  bars.innerHTML = vals.map((v, i) =>
-    `<div class="bar" style="height:${Math.max(8, v / mx * 100)}%;animation-delay:${i * 70}ms"><span class="v">${v}</span></div>`).join("");
-  $("#plateTotal").textContent = "total " + (r.total ?? "—");
-}
-
 async function boot() {
   setupInstall();
 
@@ -1532,25 +1565,24 @@ async function boot() {
   if (api) {
     buildPackages(api);
     setupReference(api);
+    const types = api.packages.reduce((n, p) => n + p.types.length, 0);
+    $("#statTypes").textContent = String(types);
+    $("#statFamilies").textContent = String(api.packages.length);
   }
 
   try {
     await bootWasm();
     setStatus("live", `wasm-gc · ${(MOD.bytes / 1024).toFixed(0)} KB · live`);
-    $("#plateSize").textContent = `${(MOD.bytes / 1024).toFixed(0)} KB`;
-    $("#plateLoad").textContent = `${MOD.load.toFixed(0)} ms`;
-    $("#plateDemos").textContent = String(MOD.demos);
-    $("#plateCall").textContent = `run("segment", [3,1,4,1,5])`;
+    $("#modAssay").textContent = `wasm-gc · ${(MOD.bytes / 1024).toFixed(0)} KB · loaded in ${MOD.load < 1500 ? Math.round(MOD.load) + " ms" : "—"}`;
+    $("#statSpecimens").textContent = String(MOD.demos);
     setupBench();
-    await heroPlate();
   } catch (e) {
     console.error(e);
     setStatus("err", "wasm-gc · unavailable");
     $("#canvas").innerHTML = `<div class="err">the WebAssembly module did not load: ${esc(e.message)}<br><br>
-      serve this directory over HTTP (it needs to fetch moonstl.wasm) — for example
-      <span style="color:var(--amber)">python -m http.server</span>.</div>`;
-    $("#heroBars").innerHTML = "";
-    $("#plateLoad").textContent = "—";
+      serve this directory over HTTP (it fetches moonstl.wasm) — for example
+      <span style="color:#c9b98f">python -m http.server</span>.</div>`;
+    $("#modAssay").textContent = "wasm-gc · unavailable";
   }
 }
 
