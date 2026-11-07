@@ -41,6 +41,22 @@ body::after{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   background:radial-gradient(120% 90% at 50% 45%,transparent 40%,rgba(0,0,0,.5) 100%);
 }
+/* ══════════════════════ selection ══════════════════════ */
+/* The page is an instrument, not a document: dragging should move, not smear
+   a highlight across headings and plates. Code stays selectable, and so does
+   the recorded result — those are things a reader copies out. */
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+pre,code,kbd,samp,
+.apidoc table,
+.calls pre,
+.codecard pre,
+.sheet .sheet-body,
+.sheet .sheet-body *,
+input,textarea{
+  -webkit-user-select:text;user-select:text;-webkit-touch-callout:default;
+}
+input,textarea{cursor:text}
+a{-webkit-touch-callout:default}
 /* ══════════════════════ scrollbars ══════════════════════ */
 ::-webkit-scrollbar{width:11px;height:11px}
 ::-webkit-scrollbar-track{background:#120d08}
