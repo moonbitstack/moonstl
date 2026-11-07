@@ -21,6 +21,8 @@
   a:hover{text-decoration:underline}
   code,pre{font-family:var(--mono)}
   .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  img,svg,video,pre,table{max-width:100%}
+  pre{overflow:auto}
   .mono{font-family:var(--mono)}
   .muted{color:var(--muted)} .dim{color:var(--dim)}
 
@@ -92,7 +94,9 @@
   .chip .x{cursor:pointer;color:var(--dim);font-size:14px;line-height:1;padding:0 3px}
   .chip .x:hover{color:var(--err)}
   .chip.str{padding:4px 10px}
-  .addrow{display:flex;gap:8px}
+  .chip.hi{border-color:var(--accent);background:rgba(110,168,254,.14);color:var(--accent)}
+  .addrow{display:flex;gap:7px;flex-wrap:wrap}
+  .addrow input{min-width:90px}
   .addrow input{flex:1;font-family:var(--mono);font-size:13px;background:var(--code);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 11px}
   .addrow input:focus{outline:none;border-color:var(--accent)}
   .mini{font:inherit;font-size:12.5px;font-weight:600;background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:8px 12px;cursor:pointer}
@@ -147,7 +151,7 @@
 
   /* reference */
   .ref{display:grid;grid-template-columns:270px 1fr;gap:22px;align-items:start}
-  .ref .side{position:sticky;top:76px}
+  .ref .side{position:sticky;top:76px;max-height:calc(100vh - 96px);overflow:auto;padding-right:8px;scrollbar-width:thin}
   .search{width:100%;font:inherit;font-size:14px;background:var(--surface);border:1px solid var(--border2);color:var(--text);border-radius:10px;padding:10px 13px;margin-bottom:14px}
   .search:focus{outline:none;border-color:var(--accent)}
   .pkggrp{margin-bottom:16px}
@@ -194,7 +198,29 @@
   footer .live-note{display:flex;align-items:center;gap:8px;color:var(--accent2)}
   footer .live-note .dot{width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite}
 
-  @media(max-width:860px){h1{font-size:38px}.ref{grid-template-columns:1fr}.ref .side{position:static}.stats{gap:22px}}
+  @media(max-width:860px){
+    h1{font-size:38px}
+    .lead{font-size:17px}
+    .ref{grid-template-columns:1fr}
+    .ref .side{position:static;max-height:none;overflow:visible;padding-right:0}
+    .stats{gap:22px}
+  }
+  @media(max-width:700px){
+    .wrap{padding:0 16px}
+    .top .wrap{flex-wrap:wrap;height:auto;padding:10px 16px;gap:8px}
+    .top nav{margin-left:0;order:3;width:100%;overflow-x:auto;gap:2px;scrollbar-width:none}
+    .top nav::-webkit-scrollbar{display:none}
+    .top nav a{padding:6px 9px;font-size:13px;white-space:nowrap}
+    .live{order:2}
+    h1{font-size:31px}
+    .lead{font-size:15.5px}
+    section{padding:44px 0}
+    .sec-head{flex-wrap:wrap;gap:8px}
+    .sec-head h2{font-size:24px}
+    .stat .k{font-size:24px}
+    .hero-card{max-width:100%}
+    .lab{grid-template-columns:1fr}
+  }
 </style>
 </head>
 <body>
@@ -245,7 +271,7 @@
       <button class="btn primary" id="runAll">▶ Run everything</button>
       <span class="hint" id="labHint">23 structures &amp; algorithms, one compiled bundle</span>
     </div>
-    <div class="lab" id="lab"></div>
+    <div class="lab" id="labGrid"></div>
   </div>
 </section>
 
@@ -482,10 +508,12 @@ const DEMOS = {
     render:r=>{
       if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
       const t=r.text||"", p=r.pattern||"", hits=new Set(r.hits||[]);
-      let html="";
-      for(let i=0;i<t.length;i++){
-        if(hits.has(i)) html+=`<span class="hit">${esc(t.slice(i,i+p.length))}</span>`;
-        else html+=esc(t[i]);
+      let html="", i=0;
+      while(i<t.length){
+        if(hits.has(i) && p.length>0){
+          html+=`<span class="hit">${esc(t.slice(i,i+p.length))}</span>`;
+          i+=p.length;
+        } else { html+=esc(t[i]); i++; }
       }
       return `<div class="textvis">${html}</div>
       <div class="muted" style="font-size:12.5px;margin-top:10px">found at ${esc(JSON.stringify(r.hits||[]))} · one pass, O(n+m)</div>`;
@@ -587,8 +615,15 @@ const DEMOS = {
     render:r=>{
       if(r.__err)return `<div class="err">${esc(r.__err)}</div>`;
       const iv=r.intervals||[], ov=r.overlap||[];
-      return `<div class="chips">${iv.map((v,i)=>`<span class="chip str">${i%2===0?"[":v+(i%2===1?" ]":"")}</span>`).join("")}</div>
-      <div class="muted" style="font-size:12.5px;margin-top:12px">overlap with [${r.q?.[0]},${r.q?.[1]}]: <span class="mono">${esc(JSON.stringify(ov))}</span></div>`;
+      const found=new Set();
+      for(let i=0;i+1<ov.length;i+=2) found.add(ov[i]+"|"+ov[i+1]);
+      let chips="";
+      for(let i=0;i+1<iv.length;i+=2){
+        const hit=found.has(iv[i]+"|"+iv[i+1]);
+        chips+=`<span class="chip ${hit?"hi":""}">[${iv[i]}, ${iv[i+1]}]</span>`;
+      }
+      return `<div class="chips">${chips||'<span class="out-empty">no intervals</span>'}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:12px">query [<b>${r.q?.[0]}, ${r.q?.[1]}</b>] · ${ov.length/2} overlapping ${ov.length?"(highlighted)":""}</div>`;
     }
   },
   cuckoo: {
@@ -684,9 +719,9 @@ function chipList(state, key, mode){
   const wrap = el("div");
   const chips = el("div","chips");
   const row = el("div","addrow");
-  const inp = el("input"); inp.placeholder = mode==="number" ? "add a number, Enter" : "add a word, Enter";
+  const inp = el("input"); inp.placeholder = mode==="number" ? "add number" : "add word";
   const add = el("button","mini","+ add");
-  const rand = el("button","mini ghost","randomize");
+  const rand = el("button","mini ghost","rand");
   const clear = el("button","mini ghost","clear");
   function refresh(){
     chips.innerHTML = "";
@@ -708,8 +743,9 @@ function chipList(state, key, mode){
   add.onclick = fromInput;
   rand.onclick = ()=>{ state[key] = mode==="number" ? randInts(rint(3,8),1,12) : randWords(rint(3,6)); refresh(); };
   clear.onclick = ()=>{ state[key]=[]; refresh(); };
-  row.append(inp,add);
-  wrap.append(chips,row);
+  row.append(inp, add, rand, clear);
+  wrap.append(chips, row);
+  refresh();
   return wrap;
 }
 
@@ -786,7 +822,7 @@ function buildControls(demo){
 }
 
 // ---------- build the lab ----------
-const lab=$("#lab");
+const lab=$("#labGrid");
 const ORDER=["indexmap","trie","lru","heap","radix","segment","fenwick","interval","disjoint","bloom","cuckoo","countmin","theta","kmp","aho","suffix","diff","phf","phf_ordered","ring","gap","bitset","perms"];
 ORDER.forEach(name=>{
   const d=DEMOS[name];
@@ -866,39 +902,33 @@ function renderType(p, t){
     <div class="apitype">${esc(t.name)}${params}</div>
     <div class="apikind">${kindTag}</div>`;
   if(t.impls&&t.impls.length) body+=`<div class="impls">${t.impls.map(i=>`<span class="i">${esc(i)}</span>`).join("")}</div>`;
-  const doc=el("div","apidoc");
-  if(t.fields&&t.fields.length){
-    doc.append(el("h5",null,"fields"));
-    doc.append(`<pre>${esc(t.fields.join("\n"))}</pre>`);
-  }
-  if(t.variants&&t.variants.length){
-    doc.append(el("h5",null,"variants"));
-    doc.append(`<pre>${esc(t.variants.join("\n"))}</pre>`);
-  }
-  if(t.alias){ doc.append(el("h5",null,"definition")); doc.append(`<pre>type ${esc(t.name)} = ${esc(t.alias)}</pre>`); }
+  body+='<div class="apidoc">';
+  if(t.fields&&t.fields.length) body+=`<h5>fields</h5><pre>${esc(t.fields.join("\n"))}</pre>`;
+  if(t.variants&&t.variants.length) body+=`<h5>variants</h5><pre>${esc(t.variants.join("\n"))}</pre>`;
+  if(t.alias) body+=`<h5>definition</h5><pre>type ${esc(t.name)} = ${esc(t.alias)}</pre>`;
   if(t.members&&t.members.length){
-    doc.append(el("h5",null,`methods (${t.members.length})`));
-    let rows=t.members.map(m=>`<tr><td class="mn">${esc(m.name)}</td><td class="sig">${esc(methodSig(m))}</td></tr>`).join("");
-    doc.append(`<table><thead><tr><th>method</th><th>signature</th></tr></thead><tbody>${rows}</tbody></table>`);
+    const rows=t.members.map(m=>`<tr><td class="mn">${esc(m.name)}</td><td class="sig">${esc(methodSig(m))}</td></tr>`).join("");
+    body+=`<h5>methods (${t.members.length})</h5><table><thead><tr><th>method</th><th>signature</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
   if(t.members?.length===0 && !(t.fields||t.variants||t.alias)?.length){
-    doc.append('<p class="note">No public members exposed by name.</p>');
+    body+='<p class="note">No public members exposed by name.</p>';
   }
-  body+=doc.outerHTML;
+  body+='</div>';
   apiPane.innerHTML=body;
 }
 function renderFree(p, filter=""){
-  const f=p.free_fns.filter(f=>!filter||(f.name+ " "+f.sig).toLowerCase().includes(filter.toLowerCase()));
-  const l=p.lets.filter(l=>!filter||l.name.toLowerCase().includes(filter.toLowerCase()));
-  let html=`<div class="path">@${p.package}</div><div class="apitype">free functions &amp; constants</div><div class="apikind">package</div>`;
-  const doc=el("div","apidoc");
-  if(f.length){ doc.append(el("h5",null,`functions (${f.length})`));
-    doc.append(`<table><thead><tr><th>function</th><th>signature</th></tr></thead><tbody>${f.map(x=>`<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.sig.replace(/^fn/,""))}</td></tr>`).join("")}</tbody></table>`); }
-  if(l.length){ doc.append(el("h5",null,`constants (${l.length})`));
-    doc.append(`<table><thead><tr><th>name</th><th>type</th></tr></thead><tbody>${l.map(x=>`<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.type)}</td></tr>`).join("")}</tbody></table>`); }
-  if(!f.length&&!l.length) doc.append('<p class="note">None in this package.</p>');
-  html+=doc.outerHTML;
-  apiPane.innerHTML=html;
+  const f=p.free_fns.filter(x=>!filter||(x.name+" "+x.sig).toLowerCase().includes(filter.toLowerCase()));
+  const l=p.lets.filter(x=>!filter||x.name.toLowerCase().includes(filter.toLowerCase()));
+  let body=`<div class="path">@${p.package}</div><div class="apitype">free functions &amp; constants</div><div class="apikind">package</div><div class="apidoc">`;
+  if(f.length){
+    body+=`<h5>functions (${f.length})</h5><table><thead><tr><th>function</th><th>signature</th></tr></thead><tbody>${f.map(x=>`<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.sig.replace(/^fn/,""))}</td></tr>`).join("")}</tbody></table>`;
+  }
+  if(l.length){
+    body+=`<h5>constants (${l.length})</h5><table><thead><tr><th>name</th><th>type</th></tr></thead><tbody>${l.map(x=>`<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.type)}</td></tr>`).join("")}</tbody></table>`;
+  }
+  if(!f.length&&!l.length) body+='<p class="note">None in this package.</p>';
+  body+='</div>';
+  apiPane.innerHTML=body;
 }
 function buildPkgList(filter=""){
   pkgList.innerHTML="";
