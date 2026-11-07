@@ -233,6 +233,29 @@ test {
 }
 ```
 
+## Conformance
+
+The behaviour of the structures is pinned to the result two independent
+reference implementations produce for the same inputs. The values are computed
+once and replayed, so a change that drifts from the reference fails the suite
+rather than passing quietly. Probabilistic structures are held to the bound
+their construction promises instead of to one implementation's bits.
+
+| Package | What the reference pins |
+|:--|:--|
+| `seq` | ring-buffer overwrite, bit-vector rank and select, gap-buffer edits, list splices |
+| `map` | counter counts and `most_common`, flat-set order and index, index-map positions, range-set gaps |
+| `heap` | pop order of the d-ary, pairing and fibonacci heaps, min-max alternation, radix pop order |
+| `tree` | fenwick and segment range sums, disjoint-set components, treap in-order |
+| `cache` | lru and lfu eviction, the deadline an entry drops at |
+| `sketch` | count-min within its error, hyperloglog within three standard errors, t-digest near the true quantile, bloom free of false negatives |
+| `text` | kmp and aho-corasick occurrences, the z-function, suffix order, the matcher ratio |
+| `phf` | the map answers its key set, the ordered map gives each key its index |
+| `algo` | bisect on every probe, the generators in enumeration order, selection, merge, prefix and rotate |
+
+Every check passes. The vectors and the two generators that agree on them live
+in `scripts/`.
+
 ## Checks
 
 ```
