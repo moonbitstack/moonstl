@@ -6801,6 +6801,11 @@
               "kind": "method"
             },
             {
+              "name": "from_layout",
+              "sig": "fn<K : PhfKey, V> from_layout(PhfLayout, Array[(K, V)]) -> Self[K, V] raise @spec.Refused",
+              "kind": "method"
+            },
+            {
               "name": "get",
               "sig": "fn<K : PhfKey + Eq, V> get(Self[K, V], K) -> V?",
               "kind": "method"
@@ -6857,6 +6862,11 @@
               "kind": "method"
             },
             {
+              "name": "from_layout",
+              "sig": "fn<K : PhfKey> from_layout(PhfLayout, Array[K]) -> Self[K] raise @spec.Refused",
+              "kind": "method"
+            },
+            {
               "name": "get_index",
               "sig": "fn<K> get_index(Self[K], Int32) -> K?",
               "kind": "method"
@@ -6907,6 +6917,11 @@
             {
               "name": "contains",
               "sig": "fn<K : PhfKey + Eq> contains(Self[K], K) -> Bool",
+              "kind": "method"
+            },
+            {
+              "name": "from_layout",
+              "sig": "fn<K : PhfKey> from_layout(PhfLayout, Array[K]) -> Self[K] raise @spec.Refused",
               "kind": "method"
             },
             {
