@@ -36,6 +36,7 @@ test {
 | `sketch` | `BloomFilter`, `CuckooFilter`, `CountMinSketch`, `HyperLogLog`, `ThetaSketch`, `TDigest` |
 | `text` | `Kmp`, `BoyerMoore`, `AhoCorasick`, `SuffixArray`, `SuffixAutomaton`, `SequenceMatcher`, the diff formats, `Rope` |
 | `phf` | `PhfMap`, `PhfSet`, `PhfOrderedMap`, `PhfOrderedSet`, `PhfBuilder` |
+| `cmd/phfgen` | the generator behind `#phf.map` and its three siblings |
 | `algo` | searching, selection, partitioning, merging and lazy adaptors over `ArrayView` and `Iter`, plus the combinatoric generators |
 
 The module root re-exports the types of these packages, so one import is enough
@@ -209,6 +210,44 @@ test {
 A `phf` table hashes its keys once, while it is built, so a lookup is a single
 comparison; the layout is a plain value, which is what lets a generated module
 carry one as a literal.
+
+`#phf.map`, `#phf.ordered_map`, `#phf.set` and `#phf.ordered_set` go on a
+top-level `let` holding a written-out list. The generator lays the table out
+while the program is built; the list stays as it is and the table reads it.
+
+<!-- nocheck -->
+```moonbit
+#phf.ordered_map
+let keywords : Array[(String, Token)] = [("fn", Fn), ("let", Let), ("match", Match)]
+
+fn token(word : String) -> Token? {
+  keywords_phf.get(word)
+}
+```
+
+The keys are literal `String`, `Int`, `Int64` or `UInt64` values; the values are
+any expressions. The table is `keywords_phf`, public when the list is.
+`name="..."` renames it, and `build="search"`, `"quick"` or `"minimal"` with
+`seed="N"` set the layout as `PhfOptions` does. A list changed without running
+the generator again either still fits its layout or stops the program at start-up
+with the reason; `--check` catches it in CI.
+
+The generator wires in as a dev_build rule, in `moon.mod`:
+
+<!-- nocheck -->
+```
+rule(name: "phf", command: "moonx moonbitstack/moonstl/cmd/phfgen -C \"$mod_dir\" \"$input\" -o \"$output\"")
+```
+
+and in the `moon.pkg` of the package, which imports `moonbitstack/moonstl/phf`:
+
+<!-- nocheck -->
+```
+dev_build(rule: "phf", input: "keywords.mbt", output: "keywords.g.mbt")
+formatter(ignore: [ "keywords.g.mbt" ])
+```
+
+`src/examples/keywords` is a working copy of both files.
 
 ## Names, order and failure
 

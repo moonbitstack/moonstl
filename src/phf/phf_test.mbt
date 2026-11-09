@@ -130,3 +130,45 @@ test "phf set and ordered variants" {
   @test.assert_eq(map.get("b"), Some(2))
   @test.assert_eq(map.get_index(0), Some(("c", 3)))
 }
+
+///|
+test "each table rebuilds from a layout and the entries it was built from" {
+  let entries = [("loop", 1), ("while", 2), ("for", 3), ("match", 4)]
+  let keys = entries.map(entry => entry.0)
+  let builder : @phf.PhfBuilder[String, Int32] = @phf.PhfBuilder::new()
+  for entry in entries {
+    builder.entry(entry.0, entry.1)
+  }
+  let layout = builder.build().layout()
+  let map = @phf.PhfOrderedMap::from_layout(layout, entries)
+  let set = @phf.PhfSet::from_layout(layout, keys)
+  let ordered = @phf.PhfOrderedSet::from_layout(layout, keys)
+  for i, entry in entries {
+    @test.assert_eq(map.index(entry.0), Some(i))
+    @test.assert_eq(map.get(entry.0), Some(entry.1))
+    @test.assert_eq(set.contains(entry.0), true)
+    @test.assert_eq(ordered.index(entry.0), Some(i))
+  }
+  @test.assert_eq(map.index("if"), None)
+  @test.assert_eq(set.contains("if"), false)
+  @test.assert_eq(ordered.index("if"), None)
+}
+
+///|
+test "a layout that cannot hold the entries is refused" {
+  let builder : @phf.PhfBuilder[String, Unit] = @phf.PhfBuilder::new()
+  builder.entry("x", ())
+  builder.entry("y", ())
+  let layout = builder.build().layout()
+  fn refused(keys : Array[String]) -> Bool {
+    try {
+      ignore(@phf.PhfSet::from_layout(layout, keys))
+      false
+    } catch {
+      _ => true
+    }
+  }
+  @test.assert_eq(refused(["x", "y"]), false)
+  @test.assert_eq(refused(["x", "y", "z"]), true)
+  @test.assert_eq(refused(["x", "x"]), true)
+}

@@ -91,6 +91,7 @@ pub struct PhfOrderedMap[K, V] {
   map : PhfMap[K, V]
 }
 pub fn[K : PhfKey + Eq, V] PhfOrderedMap::contains(Self[K, V], K) -> Bool
+pub fn[K : PhfKey, V] PhfOrderedMap::from_layout(PhfLayout, Array[(K, V)]) -> Self[K, V] raise @spec.Refused
 pub fn[K : PhfKey + Eq, V] PhfOrderedMap::get(Self[K, V], K) -> V?
 pub fn[K, V] PhfOrderedMap::get_index(Self[K, V], Int32) -> (K, V)?
 pub fn[K : PhfKey + Eq, V] PhfOrderedMap::index(Self[K, V], K) -> Int32?
@@ -104,6 +105,7 @@ pub struct PhfOrderedSet[K] {
   map : PhfMap[K, Unit]
 }
 pub fn[K : PhfKey + Eq] PhfOrderedSet::contains(Self[K], K) -> Bool
+pub fn[K : PhfKey] PhfOrderedSet::from_layout(PhfLayout, Array[K]) -> Self[K] raise @spec.Refused
 pub fn[K] PhfOrderedSet::get_index(Self[K], Int32) -> K?
 pub fn[K : PhfKey + Eq] PhfOrderedSet::index(Self[K], K) -> Int32?
 pub fn[K] PhfOrderedSet::is_empty(Self[K]) -> Bool
@@ -120,6 +122,7 @@ pub struct PhfSet[K] {
   map : PhfMap[K, Unit]
 }
 pub fn[K : PhfKey + Eq] PhfSet::contains(Self[K], K) -> Bool
+pub fn[K : PhfKey] PhfSet::from_layout(PhfLayout, Array[K]) -> Self[K] raise @spec.Refused
 pub fn[K] PhfSet::get_index(Self[K], Int32) -> K?
 pub fn[K] PhfSet::is_empty(Self[K]) -> Bool
 pub fn[K] PhfSet::iter(Self[K]) -> Iter[K]

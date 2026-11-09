@@ -54,6 +54,10 @@ jobs:
             fi
           done
 
+      - name: the generated phf table is up to date
+        if: runner.os == 'Linux'
+        run: moon run src/cmd/phfgen --target native -- -C . src/examples/keywords/keywords.mbt -o src/examples/keywords/keywords.g.mbt --check
+
       - name: lint (fmt is clean)
         run: |
           moon fmt && git diff --exit-code

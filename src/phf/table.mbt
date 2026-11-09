@@ -88,22 +88,24 @@ pub fn[K : PhfKey + Eq, V] PhfMap::get_key_value(
 }
 
 ///|
-fn[K : PhfKey + Eq, V] PhfMap::get_entry(
-  self : PhfMap[K, V],
-  key : K,
-) -> (K, V)? {
+/// Where `key` sits among the entries, which is also the position it was
+/// declared in.
+fn[K : PhfKey + Eq, V] PhfMap::position(self : PhfMap[K, V], key : K) -> Int32? {
   let hash = phf_hash(PhfKey::to_bytes(key), self.layout.salt)
   let bucket = phf_bucket(hash, self.layout.buckets)
   let slot = slot_for(self.layout, hash, bucket)
   match self.index.lookup(slot) {
-    Some(at) =>
-      if self.keys[at] == key {
-        Some((self.keys[at], self.values[at]))
-      } else {
-        None
-      }
-    None => None
+    Some(at) if self.keys[at] == key => Some(at)
+    _ => None
   }
+}
+
+///|
+fn[K : PhfKey + Eq, V] PhfMap::get_entry(
+  self : PhfMap[K, V],
+  key : K,
+) -> (K, V)? {
+  self.position(key).map(at => (self.keys[at], self.values[at]))
 }
 
 ///|
@@ -346,6 +348,16 @@ pub fn[K : PhfKey, V] PhfBuilder::build_set(
 }
 
 ///|
+/// A set from a layout and its keys, refused when the layout does not describe
+/// them; what `#phf.set` generates.
+pub fn[K : PhfKey] PhfSet::from_layout(
+  layout : PhfLayout,
+  keys : Array[K],
+) -> PhfSet[K] raise @spec.Refused {
+  { map: PhfMap::from_layout(layout, keys.map(key => (key, ()))), }
+}
+
+///|
 pub fn[K : PhfKey + Eq] PhfSet::contains(self : PhfSet[K], key : K) -> Bool {
   self.map.contains(key)
 }
@@ -401,6 +413,16 @@ pub fn[K : PhfKey, V] PhfBuilder::build_ordered(
 }
 
 ///|
+/// An ordered map from a layout and its entries in declaration order, refused
+/// when the layout does not describe them; what `#phf.ordered_map` generates.
+pub fn[K : PhfKey, V] PhfOrderedMap::from_layout(
+  layout : PhfLayout,
+  entries : Array[(K, V)],
+) -> PhfOrderedMap[K, V] raise @spec.Refused {
+  { map: PhfMap::from_layout(layout, entries), }
+}
+
+///|
 pub fn[K : PhfKey + Eq, V] PhfOrderedMap::get(
   self : PhfOrderedMap[K, V],
   key : K,
@@ -422,25 +444,7 @@ pub fn[K : PhfKey + Eq, V] PhfOrderedMap::index(
   self : PhfOrderedMap[K, V],
   key : K,
 ) -> Int32? {
-  match self.map.get_entry(key) {
-    Some(entry) => {
-      // The entries are stored in declaration order, so a found entry's key
-      // names that position.
-      let mut at = -1
-      for i, held in self.map.keys() {
-        if held == entry.0 {
-          at = i
-          break
-        }
-      }
-      if at < 0 {
-        None
-      } else {
-        Some(at)
-      }
-    }
-    None => None
-  }
+  self.map.position(key)
 }
 
 ///|
@@ -490,6 +494,16 @@ pub fn[K : PhfKey, V] PhfBuilder::build_ordered_set(
 }
 
 ///|
+/// An ordered set from a layout and its keys in declaration order, refused when
+/// the layout does not describe them; what `#phf.ordered_set` generates.
+pub fn[K : PhfKey] PhfOrderedSet::from_layout(
+  layout : PhfLayout,
+  keys : Array[K],
+) -> PhfOrderedSet[K] raise @spec.Refused {
+  { map: PhfMap::from_layout(layout, keys.map(key => (key, ()))), }
+}
+
+///|
 pub fn[K : PhfKey + Eq] PhfOrderedSet::contains(
   self : PhfOrderedSet[K],
   key : K,
@@ -502,23 +516,7 @@ pub fn[K : PhfKey + Eq] PhfOrderedSet::index(
   self : PhfOrderedSet[K],
   key : K,
 ) -> Int32? {
-  match self.map.get_entry(key) {
-    Some(entry) => {
-      let mut at = -1
-      for i, held in self.map.keys() {
-        if held == entry.0 {
-          at = i
-          break
-        }
-      }
-      if at < 0 {
-        None
-      } else {
-        Some(at)
-      }
-    }
-    None => None
-  }
+  self.map.position(key)
 }
 
 ///|

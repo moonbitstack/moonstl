@@ -1,0 +1,9 @@
+// Keywords looked up through `#phf.ordered_map`. `keywords.g.mbt` comes from
+// `cmd/phfgen`; a project wires it as a dev_build rule.
+import {
+  "moonbitstack/moonstl/phf",
+}
+
+pkgtype(kind: "executable")
+
+formatter(ignore: [ "keywords.g.mbt" ])

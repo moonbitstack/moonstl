@@ -1,0 +1,19 @@
+// The generator behind `#phf.map` and its three siblings: a perfect hash table
+// laid out from a literal list at build time. moonx runs it as a dev_build rule;
+// see the README.
+supported_targets = "+native+wasm"
+
+pkgtype(kind: "executable")
+
+import {
+  "moonbitstack/moonstl/phf",
+  "moonbitstack/moonstl/spec",
+  "moonbitstack/moonast/quote",
+  "moonbitstack/moonast/attr",
+  "moonbitstack/moonast/gen",
+  "moonbitstack/moonast/cli",
+  "moonbitlang/parser/attribute",
+  "moonbitlang/parser/syntax",
+  "moonbitlang/core/env",
+  "moonbitlang/async",
+}

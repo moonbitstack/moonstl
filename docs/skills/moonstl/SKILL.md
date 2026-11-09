@@ -99,6 +99,10 @@ have to change in place take an `Array` and say `_in_place`:
 - `text`: `Kmp`, `BoyerMoore`, `AhoCorasick`, `SuffixArray`, `SuffixAutomaton`,
   `SequenceMatcher` and the diff formats, `Rope`.
 - `phf`: `PhfBuilder` and the four tables whose hash is computed at build time.
+  `#phf.map`, `#phf.ordered_map`, `#phf.set` and `#phf.ordered_set` on a
+  top-level `let` with a literal list generate `<name>_phf` through
+  `moonx moonbitstack/moonstl/cmd/phfgen` as a dev_build rule; keys are literal
+  `String`, `Int`, `Int64` or `UInt64`, values any expression.
 
 ## Rules worth knowing
 
