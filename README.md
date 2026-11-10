@@ -8,10 +8,6 @@ family.
 compiled to WebAssembly, the ten package families, and an API reference
 generated from the interfaces: <https://moonbitstack.github.io/moonstl>.
 
-**Live showcase** — a workbench of twenty-three structures running this module
-compiled to WebAssembly, the ten package families, and an API reference
-generated from the interfaces: <https://moonbitstack.github.io/moonstl>.
-
 ```moonbit
 ///|
 test {
@@ -174,6 +170,31 @@ test {
   @test.assert_eq(tree.query(1, 4), 6)
 }
 ```
+
+A `DisjointSet` starts with every element alone: `union` joins the sets of two
+elements and `connected` answers whether two are already in one. `copy` takes
+the whole structure with it, so a copy merges further while the original stays
+where it was.
+
+```moonbit
+///|
+test {
+  let sets : @tree.DisjointSet = @tree.DisjointSet::new()
+  for _ in 0..<4 {
+    let _ = sets.add()
+  }
+  let _ = sets.union(0, 1)
+  let twin = sets.copy()
+  let _ = twin.union(2, 3)
+  @test.assert_eq(twin.set_count(), 2)
+  @test.assert_eq(sets.set_count(), 3)
+  @test.assert_eq(sets.component_size(3), 1)
+}
+```
+
+`DisjointSetMap` does the same for keys of any type: a key is interned to an
+index the first time it is seen, so `union`, `connected` and `find` take the
+keys themselves and the indices stay out of sight.
 
 ## Sketches, strings and perfect hashes
 

@@ -15,6 +15,7 @@ moon add moonbitstack/moonstl
 import {
   "moonbitstack/moonstl/map",
   "moonbitstack/moonstl/cache",
+  "moonbitstack/moonstl/tree",
   "moonbitstack/moonstl/algo",
 }
 ```
@@ -84,6 +85,25 @@ have to change in place take an `Array` and say `_in_place`:
 `next_permutation_in_place`. The generators (`Permutations`, `Combinations`,
 `Powerset`, `Product`, `GrayCode`) are structs with `next()` and `iter()`.
 
+## Merge sets and keep a snapshot
+
+`DisjointSet` numbers its elements, `DisjointSetMap` takes keys and interns them;
+both `copy` into a structure that owns its arrays, so a copy merges on its own.
+
+```moonbit
+fn merge_pairs(count : Int32) -> (Int32, Int32) {
+  let sets : @tree.DisjointSet = @tree.DisjointSet::new()
+  for _ in 0..<count {
+    let _ = sets.add()
+  }
+  let twin = sets.copy()
+  for start in 0..<(count / 2) {
+    let _ = twin.union(2 * start, 2 * start + 1)
+  }
+  (sets.set_count(), twin.set_count())
+}
+```
+
 ## Everything else in one line each
 
 - `seq`: `RingBuffer` (ceiling, overwrite-or-refuse), `SlotMap`/`DenseSlotMap`
@@ -92,8 +112,9 @@ have to change in place take an `Array` and say `_in_place`:
   with O(1) splice and split.
 - `heap`: `DaryHeap`, `IndexHeap` (handles, `update`/`remove_at`), `PairingHeap`,
   `FibonacciHeap` (`decrease_key`), `MinMaxHeap`, `RadixHeap` (monotone keys).
-- `tree`: `DisjointSet`, `SegmentTree`, `LazySegmentTree`, `Fenwick`,
-  `IntervalTree`, `OrderStatisticTree`, `SkipList`, `Treap`, `ArenaTree`.
+- `tree`: `DisjointSet` and `DisjointSetMap` (union-find; `copy` is independent
+  of its origin), `SegmentTree`, `LazySegmentTree`, `Fenwick`, `IntervalTree`,
+  `OrderStatisticTree`, `SkipList`, `Treap`, `ArenaTree`.
 - `sketch`: `BloomFilter`, `CuckooFilter`, `CountMinSketch`, `HyperLogLog`,
   `ThetaSketch`, `TDigest`, each with `encode`/`decode`.
 - `text`: `Kmp`, `BoyerMoore`, `AhoCorasick`, `SuffixArray`, `SuffixAutomaton`,
