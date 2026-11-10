@@ -286,9 +286,13 @@ fn disjoint(input : String) -> String raise {
   for i in 0..<pairs {
     let _ = d.union(unions[2 * i], unions[2 * i + 1])
   }
+  // The copy takes one more union, the original keeps the components it had.
+  let twin = d.copy()
+  let _ = twin.union(0, n - 1)
   let out : Map[String, @cjson.Json] = Map([])
   out["sets"] = @cjson.Json::array(d.to_sets().map(s => jints(s)))
   out["count"] = @cjson.Json::number(d.set_count().to_double())
+  out["copy_count"] = @cjson.Json::number(twin.set_count().to_double())
   @json.dumps(@cjson.Json::object(out))
 }
 

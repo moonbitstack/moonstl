@@ -649,10 +649,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
     </div>
 
     <div class="conf-foot">
-      <div><b>260</b> tests per backend</div>
+      <div><b>4</b> backends, one suite</div>
       <div><b>9</b> families replay vectors</div>
       <div><b>0</b> self-written expectations</div>
-      <div><b>108</b> types documented</div>
+      <div><b id="footTypes">—</b> types documented</div>
     </div>
   </div>
 </section>
@@ -915,14 +915,14 @@ const DEMOS = {
   },
   disjoint: {
     pkg: "tree", title: "Disjoint set", desc: "union–find components", family: "tree",
-    api: ["let d = @tree.DisjointSet::new()", "d.add()", "d.union(a, b)  /  d.connected(a, b)  /  d.to_sets()"],
+    api: ["let d = @tree.DisjointSet::new()", "d.add()", "d.union(a, b)  /  d.connected(a, b)  /  d.to_sets()", "d.copy()   // an independent structure"],
     state: { n: 5, set: [0, 1, 1, 2, 2, 3, 4] },
     input: () => ({ n: DEMOS.disjoint.state.n, set: DEMOS.disjoint.state.set }),
     render(r) {
       if (r.__err) return `<div class="err">${esc(r.__err)}</div>`;
       const s = r.sets || [];
       return `<div class="groups">${s.map(g => `<div class="g">${g.map(x => `<b>${x}</b>`).join("")}</div>`).join("")}</div>
-      <div class="note">${r.count} component${r.count === 1 ? "" : "s"} after the union chain · union by rank with path compression</div>`;
+      <div class="note">${r.count} component${r.count === 1 ? "" : "s"} here · <b>${r.copy_count}</b> in a copy that took one more union · union by rank with path compression</div>`;
     }
   },
   bloom: {
@@ -1555,14 +1555,14 @@ function setupReference(api) {
    instruction
    ════════════════════════════════════════════════════════════ */
 const INSTALL = {
-  mod: `<span class="c-cm">// moon.mod</span>
+  mod: v => `<span class="c-cm">// moon.mod</span>
 name = <span class="c-str">"your-app"</span>
 version = <span class="c-str">"0.1.0"</span>
 
 import {
-  <span class="c-str">"moonbitstack/moonstl@0.1.0"</span>,
+  <span class="c-str">"moonbitstack/moonstl${v ? "@" + v : ""}"</span>,
 }`,
-  src: `<span class="c-cm">// src/main/moon.pkg</span>
+  src: () => `<span class="c-cm">// src/main/moon.pkg</span>
 import {
   <span class="c-str">"moonbitstack/moonstl/map"</span> @map,
   <span class="c-str">"moonbitstack/moonstl/heap"</span> @heap,
@@ -1576,13 +1576,14 @@ import {
 }`
 };
 
-function setupInstall() {
-  $("#installCode").innerHTML = INSTALL.mod;
+function setupInstall(version) {
+  const code = tab => INSTALL[tab](version);
+  $("#installCode").innerHTML = code("mod");
   document.querySelectorAll(".tab").forEach(t => {
     t.onclick = () => {
       document.querySelectorAll(".tab").forEach(x => x.classList.remove("on"));
       t.classList.add("on");
-      $("#installCode").innerHTML = INSTALL[t.dataset.tab];
+      $("#installCode").innerHTML = code(t.dataset.tab);
     };
   });
 }
@@ -1598,17 +1599,18 @@ function probe(ok, detail) {
 }
 
 async function boot() {
-  setupInstall();
-
   let api = null;
   try { api = await (await fetch("api.json", { cache: "no-cache" })).json(); }
   catch (e) { console.error("api.json", e); }
+
+  setupInstall(api ? api.version : "");
 
   if (api) {
     buildPackages(api);
     setupReference(api);
     const types = api.packages.reduce((n, p) => n + p.types.length, 0);
     $("#statTypes").textContent = String(types);
+    $("#footTypes").textContent = String(types);
     $("#statFamilies").textContent = String(api.packages.length);
   }
 

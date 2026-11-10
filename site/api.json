@@ -1,4 +1,5 @@
 {
+  "version": "0.1.2",
   "packages": [
     {
       "package": "spec",
@@ -4006,6 +4007,11 @@
               "kind": "method"
             },
             {
+              "name": "clear",
+              "sig": "fn clear(Self) -> Unit",
+              "kind": "method"
+            },
+            {
               "name": "component_size",
               "sig": "fn component_size(Self, Int32) -> Int32",
               "kind": "method"
@@ -4016,8 +4022,18 @@
               "kind": "method"
             },
             {
+              "name": "copy",
+              "sig": "fn copy(Self) -> Self",
+              "kind": "method"
+            },
+            {
               "name": "find",
               "sig": "fn find(Self, Int32) -> Int32",
+              "kind": "method"
+            },
+            {
+              "name": "is_empty",
+              "sig": "fn is_empty(Self) -> Bool",
               "kind": "method"
             },
             {
@@ -4064,6 +4080,11 @@
           "params": "K",
           "members": [
             {
+              "name": "clear",
+              "sig": "fn<K> clear(Self[K]) -> Unit",
+              "kind": "method"
+            },
+            {
               "name": "component_size",
               "sig": "fn<K : Hash + Eq> component_size(Self[K], K) -> Int32",
               "kind": "method"
@@ -4074,6 +4095,11 @@
               "kind": "method"
             },
             {
+              "name": "copy",
+              "sig": "fn<K> copy(Self[K]) -> Self[K]",
+              "kind": "method"
+            },
+            {
               "name": "find",
               "sig": "fn<K : Hash + Eq> find(Self[K], K) -> K?",
               "kind": "method"
@@ -4081,6 +4107,11 @@
             {
               "name": "intern",
               "sig": "fn<K : Hash + Eq> intern(Self[K], K) -> Int32",
+              "kind": "method"
+            },
+            {
+              "name": "is_empty",
+              "sig": "fn<K> is_empty(Self[K]) -> Bool",
               "kind": "method"
             },
             {

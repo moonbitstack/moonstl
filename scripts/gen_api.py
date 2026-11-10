@@ -13,6 +13,8 @@ from pathlib import Path
 
 SRC = Path(__file__).resolve().parent.parent / "src"
 OUT = Path(__file__).resolve().parent.parent / "site" / "api.json"
+MOD = Path(__file__).resolve().parent.parent / "moon.mod"
+VERSION = re.compile(r'^version\s*=\s*"([^"]+)"', re.M)
 
 # Human-facing package order and one-line descriptions for the page.
 PKG_META = {
@@ -186,7 +188,8 @@ def parse_pkg(pkg: str):
 
 
 def main():
-    out = {"packages": []}
+    version = VERSION.search(MOD.read_text(encoding="utf-8")).group(1)
+    out = {"version": version, "packages": []}
     for pkg in PKG_ORDER:
         data = parse_pkg(pkg)
         if not data:
