@@ -116,6 +116,26 @@ pub fn DisjointSet::length(self : DisjointSet) -> Int32 {
 }
 
 ///|
+pub fn DisjointSet::is_empty(self : DisjointSet) -> Bool {
+  self.parents.is_empty()
+}
+
+///|
+pub fn DisjointSet::clear(self : DisjointSet) -> Unit {
+  self.parents.clear()
+  self.sizes.clear()
+  self.sets = 0
+}
+
+///|
+/// An independent copy. Both sides own their own arrays, so a union or an added
+/// element in one leaves the other as it was, and the path that `find` flattens
+/// is flattened in one of them only.
+pub fn DisjointSet::copy(self : DisjointSet) -> DisjointSet {
+  { parents: self.parents.copy(), sizes: self.sizes.copy(), sets: self.sets, }
+}
+
+///|
 /// Every set as the array of its members, representatives first.
 pub fn DisjointSet::to_sets(self : DisjointSet) -> Array[Array[Int32]] {
   let by_root : Map[Int32, Int32] = Map([])
@@ -229,6 +249,29 @@ pub fn[K] DisjointSetMap::set_count(self : DisjointSetMap[K]) -> Int32 {
 ///|
 pub fn[K] DisjointSetMap::length(self : DisjointSetMap[K]) -> Int32 {
   self.keys.length()
+}
+
+///|
+pub fn[K] DisjointSetMap::is_empty(self : DisjointSetMap[K]) -> Bool {
+  self.keys.is_empty()
+}
+
+///|
+pub fn[K] DisjointSetMap::clear(self : DisjointSetMap[K]) -> Unit {
+  self.indices.clear()
+  self.sets.clear()
+  self.keys.clear()
+}
+
+///|
+/// An independent copy: the keys and the union-find under them are both new, so
+/// a union on either side leaves the other as it was.
+pub fn[K] DisjointSetMap::copy(self : DisjointSetMap[K]) -> DisjointSetMap[K] {
+  {
+    indices: self.indices.copy(),
+    sets: self.sets.copy(),
+    keys: self.keys.copy(),
+  }
 }
 
 ///|

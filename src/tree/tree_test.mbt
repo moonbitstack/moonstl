@@ -42,6 +42,93 @@ test "disjoint set map: keys are interned" {
 }
 
 ///|
+test "disjoint set: a copy stands on its own" {
+  let sets : @tree.DisjointSet = @tree.DisjointSet::new()
+  for _ in 0..<6 {
+    let _ = sets.add()
+  }
+  @test.assert_eq(sets.union(0, 1), true)
+  @test.assert_eq(sets.union(2, 3), true)
+  let twin = sets.copy()
+  @test.assert_eq(twin.length(), 6)
+  @test.assert_eq(twin.set_count(), 4)
+  @test.assert_eq(twin.connected(0, 1), true)
+  // a union on the copy leaves the original apart
+  @test.assert_eq(twin.union(0, 2), true)
+  @test.assert_eq(twin.component_size(3), 4)
+  @test.assert_eq(sets.component_size(3), 2)
+  @test.assert_eq(sets.connected(0, 2), false)
+  @test.assert_eq(sets.set_count(), 4)
+  // a union on the original leaves the copy alone
+  @test.assert_eq(sets.union(4, 5), true)
+  @test.assert_eq(sets.component_size(4), 2)
+  @test.assert_eq(twin.component_size(4), 1)
+  @test.assert_eq(twin.connected(4, 5), false)
+  @test.assert_eq(twin.set_count(), 3)
+  // an element added to one is unknown to the other
+  let extra = twin.add()
+  @test.assert_eq(extra, 6)
+  @test.assert_eq(twin.length(), 7)
+  @test.assert_eq(sets.length(), 6)
+  @test.assert_eq(sets.find(6), -1)
+  // the copy of an empty set is still empty
+  let empty = @tree.DisjointSet::new().copy()
+  @test.assert_eq(empty.is_empty(), true)
+  @test.assert_eq(empty.set_count(), 0)
+}
+
+///|
+test "disjoint set: clear returns it to empty" {
+  let sets : @tree.DisjointSet = @tree.DisjointSet::new()
+  let _ = sets.add()
+  let _ = sets.add()
+  @test.assert_eq(sets.is_empty(), false)
+  sets.clear()
+  @test.assert_eq(sets.is_empty(), true)
+  @test.assert_eq(sets.length(), 0)
+  @test.assert_eq(sets.set_count(), 0)
+  @test.assert_eq(sets.to_sets().length(), 0)
+  // a cleared set takes new elements from zero
+  @test.assert_eq(sets.add(), 0)
+}
+
+///|
+test "disjoint set map: a copy unions its own keys" {
+  let sets : @tree.DisjointSetMap[String] = @tree.DisjointSetMap::new()
+  @test.assert_eq(sets.union("a", "b"), true)
+  let twin = sets.copy()
+  @test.assert_eq(twin.length(), 2)
+  @test.assert_eq(twin.set_count(), 1)
+  // a union on the copy interns its key there only
+  @test.assert_eq(twin.union("b", "c"), true)
+  @test.assert_eq(twin.length(), 3)
+  @test.assert_eq(twin.component_size("a"), 3)
+  @test.assert_eq(twin.find("c"), twin.find("a"))
+  @test.assert_eq(sets.component_size("a"), 2)
+  @test.assert_eq(sets.find("c"), None)
+  @test.assert_eq(sets.set_count(), 1)
+  // a union on the original leaves the copy alone, and the other way round
+  @test.assert_eq(sets.union("d", "a"), true)
+  @test.assert_eq(sets.length(), 3)
+  @test.assert_eq(sets.find("d"), sets.find("a"))
+  @test.assert_eq(twin.length(), 3)
+  @test.assert_eq(twin.find("d"), None)
+  @test.assert_eq(twin.set_count(), 1)
+}
+
+///|
+test "disjoint set map: clear drops the keys and the sets" {
+  let sets : @tree.DisjointSetMap[String] = @tree.DisjointSetMap::new()
+  let _ = sets.union("a", "b")
+  @test.assert_eq(sets.is_empty(), false)
+  sets.clear()
+  @test.assert_eq(sets.is_empty(), true)
+  @test.assert_eq(sets.length(), 0)
+  @test.assert_eq(sets.set_count(), 0)
+  @test.assert_eq(sets.find("a"), None)
+}
+
+///|
 test "segment tree: sum, point write and first crossing" {
   let rng : TreeRng = { state: 0x2545f4914f6cdd1d, }
   let values : Array[Int32] = []

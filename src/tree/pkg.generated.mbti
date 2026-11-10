@@ -56,9 +56,12 @@ pub struct DisjointSet {
   mut sets : Int32
 }
 pub fn DisjointSet::add(Self) -> Int32
+pub fn DisjointSet::clear(Self) -> Unit
 pub fn DisjointSet::component_size(Self, Int32) -> Int32
 pub fn DisjointSet::connected(Self, Int32, Int32) -> Bool
+pub fn DisjointSet::copy(Self) -> Self
 pub fn DisjointSet::find(Self, Int32) -> Int32
+pub fn DisjointSet::is_empty(Self) -> Bool
 pub fn DisjointSet::length(Self) -> Int32
 pub fn DisjointSet::new() -> Self
 pub fn DisjointSet::set_count(Self) -> Int32
@@ -71,10 +74,13 @@ pub struct DisjointSetMap[K] {
   sets : DisjointSet
   keys : Array[K]
 }
+pub fn[K] DisjointSetMap::clear(Self[K]) -> Unit
 pub fn[K : Hash + Eq] DisjointSetMap::component_size(Self[K], K) -> Int32
 pub fn[K : Hash + Eq] DisjointSetMap::connected(Self[K], K, K) -> Bool
+pub fn[K] DisjointSetMap::copy(Self[K]) -> Self[K]
 pub fn[K : Hash + Eq] DisjointSetMap::find(Self[K], K) -> K?
 pub fn[K : Hash + Eq] DisjointSetMap::intern(Self[K], K) -> Int32
+pub fn[K] DisjointSetMap::is_empty(Self[K]) -> Bool
 pub fn[K] DisjointSetMap::length(Self[K]) -> Int32
 pub fn[K : Hash + Eq] DisjointSetMap::new() -> Self[K]
 pub fn[K] DisjointSetMap::set_count(Self[K]) -> Int32
