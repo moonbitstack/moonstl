@@ -1,6 +1,6 @@
 name = "moonbitstack/moonstl"
 
-version = "0.1.2"
+version = "0.1.3"
 
 readme = "README.md"
 
@@ -77,7 +77,7 @@ source = "src"
 
 import {
   "moonbitstack/moonseed@0.1.3",
-  "moonbitstack/moonast@0.2.7",
+  "moonbitstack/moonast@0.2.8",
   "moonbitlang/parser@0.4.7",
   "moonbitlang/async@0.22.5",
 }
