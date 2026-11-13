@@ -11,9 +11,10 @@ let keywords_phf_layout : @phf.PhfLayout = {
 }
 
 ///|
-let keywords_phf : @phf.PhfOrderedMap[String, Token] = try {
-  @phf.PhfOrderedMap::from_layout(keywords_phf_layout, keywords)
-} catch{
+let keywords_phf : @phf.PhfOrderedMap[String, Token] = @phf.PhfOrderedMap::from_layout(
+  keywords_phf_layout,
+  keywords,
+) catch {
   _ => {
     abort(
       "keywords_phf: the layout no longer fits `keywords`; run the #phf generator again",

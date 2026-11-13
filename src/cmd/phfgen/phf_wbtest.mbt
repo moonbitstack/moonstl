@@ -62,7 +62,7 @@ test "a map's layout is the one the builder makes at run time" {
   assert_true(
     code.contains(
       flat(
-        "pub let keywords_phf : @phf.PhfMap[String, @tok.Kind] = try { @phf.PhfMap::from_layout(keywords_phf_layout, keywords) }",
+        "pub let keywords_phf : @phf.PhfMap[String, @tok.Kind] = @phf.PhfMap::from_layout(keywords_phf_layout, keywords)",
       ),
     ),
   )
@@ -80,7 +80,7 @@ test "escaped keys are hashed as the program holds them" {
   assert_true(
     code.contains(
       flat(
-        "let words_phf : @phf.PhfSet[String] = try { @phf.PhfSet::from_layout(words_phf_layout, words) }",
+        "let words_phf : @phf.PhfSet[String] = @phf.PhfSet::from_layout(words_phf_layout, words)",
       ),
     ),
   )
@@ -124,7 +124,7 @@ test "the options set the name and the layout" {
   assert_true(
     code.contains(
       flat(
-        "let table : @phf.PhfOrderedMap[String, Int] = try { @phf.PhfOrderedMap::from_layout(table_layout, pairs) }",
+        "let table : @phf.PhfOrderedMap[String, Int] = @phf.PhfOrderedMap::from_layout(table_layout, pairs)",
       ),
     ),
   )
