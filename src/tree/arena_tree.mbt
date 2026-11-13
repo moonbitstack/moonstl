@@ -51,6 +51,7 @@ pub struct ArenaTree[T] {
 }
 
 ///|
+/// An empty tree.
 pub fn[T] ArenaTree::new() -> ArenaTree[T] {
   {
     values: [],
@@ -187,6 +188,7 @@ pub fn[T] ArenaTree::add(self : ArenaTree[T], value : T) -> TreeId {
 }
 
 ///|
+/// Adds a child at the end of `parent`'s children and returns its id; a parent that is no longer in the tree yields the null id.
 pub fn[T] ArenaTree::add_child(
   self : ArenaTree[T],
   parent : TreeId,
@@ -201,6 +203,7 @@ pub fn[T] ArenaTree::add_child(
 }
 
 ///|
+/// Adds a child at the front of `parent`'s children and returns its id; a parent that is no longer in the tree yields the null id.
 pub fn[T] ArenaTree::prepend_child(
   self : ArenaTree[T],
   parent : TreeId,
@@ -215,6 +218,7 @@ pub fn[T] ArenaTree::prepend_child(
 }
 
 ///|
+/// Adds a sibling just after `sibling` and returns its id; a sibling that is no longer in the tree yields the null id.
 pub fn[T] ArenaTree::insert_after(
   self : ArenaTree[T],
   sibling : TreeId,
@@ -239,6 +243,7 @@ pub fn[T] ArenaTree::insert_after(
 }
 
 ///|
+/// Adds a sibling just before `sibling` and returns its id; a sibling that is no longer in the tree yields the null id.
 pub fn[T] ArenaTree::insert_before(
   self : ArenaTree[T],
   sibling : TreeId,
@@ -265,6 +270,7 @@ pub fn[T] ArenaTree::insert_before(
 }
 
 ///|
+/// The value behind `id`, or `None` when the id names nothing.
 pub fn[T] ArenaTree::get(self : ArenaTree[T], id : TreeId) -> T? {
   if self.alive(id) {
     self.values[id.index]
@@ -274,6 +280,7 @@ pub fn[T] ArenaTree::get(self : ArenaTree[T], id : TreeId) -> T? {
 }
 
 ///|
+/// Replaces the value behind `id` and reports whether the id named a node.
 pub fn[T] ArenaTree::set(self : ArenaTree[T], id : TreeId, value : T) -> Bool {
   if self.alive(id) {
     self.values[id.index] = Some(value)
@@ -284,11 +291,13 @@ pub fn[T] ArenaTree::set(self : ArenaTree[T], id : TreeId, value : T) -> Bool {
 }
 
 ///|
+/// Whether `id` names a node.
 pub fn[T] ArenaTree::contains(self : ArenaTree[T], id : TreeId) -> Bool {
   self.alive(id)
 }
 
 ///|
+/// The parent of `id`, or `None` when it is the root or names nothing.
 pub fn[T] ArenaTree::parent(self : ArenaTree[T], id : TreeId) -> TreeId? {
   if !self.alive(id) || self.parents[id.index] < 0 {
     None
@@ -298,6 +307,7 @@ pub fn[T] ArenaTree::parent(self : ArenaTree[T], id : TreeId) -> TreeId? {
 }
 
 ///|
+/// The first child of `id`, or `None` when it has none.
 pub fn[T] ArenaTree::first_child(self : ArenaTree[T], id : TreeId) -> TreeId? {
   if !self.alive(id) || self.first_child[id.index] < 0 {
     None
@@ -307,6 +317,7 @@ pub fn[T] ArenaTree::first_child(self : ArenaTree[T], id : TreeId) -> TreeId? {
 }
 
 ///|
+/// The sibling after `id`, or `None` when it is the last child.
 pub fn[T] ArenaTree::next_sibling(self : ArenaTree[T], id : TreeId) -> TreeId? {
   if !self.alive(id) || self.next[id.index] < 0 {
     None
@@ -316,6 +327,7 @@ pub fn[T] ArenaTree::next_sibling(self : ArenaTree[T], id : TreeId) -> TreeId? {
 }
 
 ///|
+/// The sibling before `id`, or `None` when it is the first child.
 pub fn[T] ArenaTree::previous_sibling(
   self : ArenaTree[T],
   id : TreeId,
@@ -584,11 +596,13 @@ pub fn[T] ArenaTree::length(self : ArenaTree[T]) -> Int32 {
 }
 
 ///|
+/// Whether the tree holds no node.
 pub fn[T] ArenaTree::is_empty(self : ArenaTree[T]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// Removes every node; the ids issued before it name nothing afterwards.
 pub fn[T] ArenaTree::clear(self : ArenaTree[T]) -> Unit {
   self.values.clear()
   self.generations.clear()
@@ -603,6 +617,7 @@ pub fn[T] ArenaTree::clear(self : ArenaTree[T]) -> Unit {
 }
 
 ///|
+/// A copy that owns its arrays: an edit to either tree leaves the other alone, and an id names the same node in both.
 pub fn[T] ArenaTree::copy(self : ArenaTree[T]) -> ArenaTree[T] {
   {
     values: self.values.copy(),

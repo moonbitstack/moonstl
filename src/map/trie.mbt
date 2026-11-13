@@ -22,6 +22,7 @@ pub struct Trie[T] {
 }
 
 ///|
+/// An empty trie, holding no key.
 pub fn[T] Trie::new() -> Trie[T] {
   { children: [Map([])], values: [None], entries: 0, }
 }
@@ -71,6 +72,7 @@ fn[T] Trie::walk(self : Trie[T], key : StringView) -> Int32? {
 }
 
 ///|
+/// The value stored under `key`, or `None` when `key` is not a stored word.
 pub fn[T] Trie::get(self : Trie[T], key : StringView) -> T? {
   match self.walk(key) {
     Some(node) => self.values[node]
@@ -79,6 +81,7 @@ pub fn[T] Trie::get(self : Trie[T], key : StringView) -> T? {
 }
 
 ///|
+/// Whether `key` is a stored word; a prefix of one is not.
 pub fn[T] Trie::contains(self : Trie[T], key : StringView) -> Bool {
   self.get(key) is Some(_)
 }
@@ -186,6 +189,7 @@ pub fn[T] Trie::iter(self : Trie[T]) -> Iter[(String, T)] {
 }
 
 ///|
+/// Every stored word and its value, in the depth-first order the trie walks.
 pub fn[T] Trie::to_array(self : Trie[T]) -> Array[(String, T)] {
   let found : Array[(String, T)] = []
   self.collect(0, "", found)
@@ -199,11 +203,13 @@ pub fn[T] Trie::length(self : Trie[T]) -> Int32 {
 }
 
 ///|
+/// Whether no word is stored.
 pub fn[T] Trie::is_empty(self : Trie[T]) -> Bool {
   self.entries == 0
 }
 
 ///|
+/// Removes every word, leaving the root.
 pub fn[T] Trie::clear(self : Trie[T]) -> Unit {
   self.children.clear()
   self.children.push(Map([]))
@@ -213,6 +219,7 @@ pub fn[T] Trie::clear(self : Trie[T]) -> Unit {
 }
 
 ///|
+/// A copy that shares nothing with the original: a write to either is invisible to the other.
 pub fn[T] Trie::copy(self : Trie[T]) -> Trie[T] {
   let children : Array[Map[Char, Int32]] = []
   for node in self.children {

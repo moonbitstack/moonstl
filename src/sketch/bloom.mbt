@@ -21,6 +21,7 @@ pub extend BloomOptions with Eq::{equal, not_equal}
 pub extend BloomOptions with Debug::{to_repr}
 
 ///|
+/// The defaults: a false-positive rate of one in a hundred, the rate Guava and Redis ship, and a fixed bit array.
 pub let bloom_options : BloomOptions = {
   false_positive_rate: 0.01,
   growth: Fixed,
@@ -507,6 +508,7 @@ pub fn[T] BloomFilter::encode(self : BloomFilter[T]) -> Bytes {
 }
 
 ///|
+/// Reads a filter back from the bytes `encode` wrote, refusing anything that is not one of its states.
 pub fn[T] BloomFilter::decode(
   view : BytesView,
 ) -> BloomFilter[T] raise @spec.Refused {

@@ -50,6 +50,7 @@ pub struct ExpiringCache[K, V] {
 }
 
 ///|
+/// A cache holding at most `capacity` entries, each living for `ttl` in the units `now` returns. The clock is the caller's, so a test can move time without waiting; a capacity of zero or less raises `Refused::Capacity`.
 pub fn[K, V] ExpiringCache::new(
   ttl~ : Int64,
   capacity~ : Int32,
@@ -352,6 +353,7 @@ pub fn[K : Hash + Eq, V] ExpiringCache::set_expire(
 }
 
 ///|
+/// Removes the entry under `key`, expired or not, and returns the value it held.
 pub fn[K : Hash + Eq, V] ExpiringCache::remove(
   self : ExpiringCache[K, V],
   key : K,
@@ -367,6 +369,7 @@ pub fn[K : Hash + Eq, V] ExpiringCache::remove(
 }
 
 ///|
+/// Whether `key` is in the cache and has not reached its deadline.
 pub fn[K : Hash + Eq, V] ExpiringCache::contains(
   self : ExpiringCache[K, V],
   key : K,
@@ -400,6 +403,7 @@ pub fn[K : Hash + Eq, V] ExpiringCache::length(
 }
 
 ///|
+/// Whether no live entry is left, reading the clock through `now`.
 pub fn[K : Hash + Eq, V] ExpiringCache::is_empty(
   self : ExpiringCache[K, V],
 ) -> Bool {
@@ -407,11 +411,13 @@ pub fn[K : Hash + Eq, V] ExpiringCache::is_empty(
 }
 
 ///|
+/// How many entries the cache holds before it drops one.
 pub fn[K, V] ExpiringCache::capacity(self : ExpiringCache[K, V]) -> Int32 {
   self.capacity
 }
 
 ///|
+/// Removes every entry, expired or not.
 pub fn[K, V] ExpiringCache::clear(self : ExpiringCache[K, V]) -> Unit {
   self.index.clear()
   self.slots.clear()
@@ -440,6 +446,7 @@ pub fn[K : Hash + Eq, V] ExpiringCache::iter(
 }
 
 ///|
+/// The keys of the live entries, least recently used first.
 pub fn[K : Hash + Eq, V] ExpiringCache::keys(
   self : ExpiringCache[K, V],
 ) -> Iter[K] {
@@ -447,6 +454,7 @@ pub fn[K : Hash + Eq, V] ExpiringCache::keys(
 }
 
 ///|
+/// The values of the live entries, least recently used first.
 pub fn[K : Hash + Eq, V] ExpiringCache::values(
   self : ExpiringCache[K, V],
 ) -> Iter[V] {
@@ -454,6 +462,7 @@ pub fn[K : Hash + Eq, V] ExpiringCache::values(
 }
 
 ///|
+/// The hit, miss and eviction counters; an entry that expires counts as neither a hit nor a miss until it is looked up.
 pub fn[K, V] ExpiringCache::stats(self : ExpiringCache[K, V]) -> CacheStats {
   { hits: 0L, misses: 0L, evictions: self.evictions, }
 }

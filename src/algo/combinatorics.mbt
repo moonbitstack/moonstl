@@ -102,6 +102,7 @@ pub fn[T] Permutations::next(self : Permutations[T]) -> Array[T]? {
 }
 
 ///|
+/// The permutations as a lazy iterator, in the order Python's `itertools.permutations` produces them.
 pub fn[T] Permutations::iter(self : Permutations[T]) -> Iter[Array[T]] {
   Iter::new(() => self.next())
 }
@@ -133,6 +134,7 @@ pub struct Combinations[T] {
 }
 
 ///|
+/// A generator of the `k`-element combinations of `pool`, in the order Python's `itertools.combinations` produces them.
 pub fn[T] Combinations::new(pool : ArrayView[T], k~ : Int32) -> Combinations[T] {
   let items = pool.to_owned()
   let indices : Array[Int32] = []
@@ -143,6 +145,7 @@ pub fn[T] Combinations::new(pool : ArrayView[T], k~ : Int32) -> Combinations[T] 
 }
 
 ///|
+/// The next combination, or `None` once every one has been produced.
 pub fn[T] Combinations::next(self : Combinations[T]) -> Array[T]? {
   if self.done {
     return None
@@ -181,6 +184,7 @@ pub fn[T] Combinations::next(self : Combinations[T]) -> Array[T]? {
 }
 
 ///|
+/// The combinations as a lazy iterator.
 pub fn[T] Combinations::iter(self : Combinations[T]) -> Iter[Array[T]] {
   Iter::new(() => self.next())
 }
@@ -206,6 +210,7 @@ pub struct CombinationsWithReplacement[T] {
 }
 
 ///|
+/// A generator of the `k`-element combinations of `pool` taken with repetition, in the order Python's `itertools.combinations_with_replacement` produces them.
 pub fn[T] CombinationsWithReplacement::new(
   pool : ArrayView[T],
   k~ : Int32,
@@ -219,6 +224,7 @@ pub fn[T] CombinationsWithReplacement::new(
 }
 
 ///|
+/// The next combination, or `None` once every one has been produced.
 pub fn[T] CombinationsWithReplacement::next(
   self : CombinationsWithReplacement[T],
 ) -> Array[T]? {
@@ -258,6 +264,7 @@ pub fn[T] CombinationsWithReplacement::next(
 }
 
 ///|
+/// The combinations as a lazy iterator.
 pub fn[T] CombinationsWithReplacement::iter(
   self : CombinationsWithReplacement[T],
 ) -> Iter[Array[T]] {
@@ -283,6 +290,7 @@ pub struct Product[T] {
 }
 
 ///|
+/// A generator of the Cartesian product of the pools, the last pool varying fastest, as Python's `itertools.product` produces it.
 pub fn[T] Product::new(pools : ArrayView[ArrayView[T]]) -> Product[T] {
   let copied : Array[Array[T]] = []
   let digits : Array[Int32] = []
@@ -299,6 +307,7 @@ pub fn[T] Product::new(pools : ArrayView[ArrayView[T]]) -> Product[T] {
 }
 
 ///|
+/// The next tuple of the product, or `None` once every tuple has been produced.
 pub fn[T] Product::next(self : Product[T]) -> Array[T]? {
   if self.done {
     return None
@@ -329,6 +338,7 @@ pub fn[T] Product::next(self : Product[T]) -> Array[T]? {
 }
 
 ///|
+/// The product as a lazy iterator.
 pub fn[T] Product::iter(self : Product[T]) -> Iter[Array[T]] {
   Iter::new(() => self.next())
 }
@@ -350,12 +360,14 @@ pub struct Powerset[T] {
 }
 
 ///|
+/// A generator of every subset of `pool`, ordered by size and then by position, as Python's `itertools.combinations` walks one size at a time.
 pub fn[T] Powerset::new(pool : ArrayView[T]) -> Powerset[T] {
   let items = pool.to_owned()
   { inner: Combinations::new(items[:], k=0), pool: items, size: 0, }
 }
 
 ///|
+/// The next subset, or `None` once every subset has been produced.
 pub fn[T] Powerset::next(self : Powerset[T]) -> Array[T]? {
   while true {
     match self.inner.next() {
@@ -373,6 +385,7 @@ pub fn[T] Powerset::next(self : Powerset[T]) -> Array[T]? {
 }
 
 ///|
+/// The subsets as a lazy iterator.
 pub fn[T] Powerset::iter(self : Powerset[T]) -> Iter[Array[T]] {
   Iter::new(() => self.next())
 }
@@ -399,11 +412,13 @@ pub struct GrayCode {
 }
 
 ///|
+/// A generator of the `bits`-wide Gray code, starting at all zeros.
 pub fn GrayCode::new(bits : Int32) -> GrayCode {
   { bits: if bits < 0 { 0 } else { bits }, step: 0, done: false, }
 }
 
 ///|
+/// The next code word, or `None` once all `2^bits` words have been produced; each step flips one bit.
 pub fn GrayCode::next(self : GrayCode) -> Array[Bool]? {
   if self.done {
     return None
@@ -428,6 +443,7 @@ pub fn GrayCode::next(self : GrayCode) -> Array[Bool]? {
 }
 
 ///|
+/// The code words as a lazy iterator.
 pub fn GrayCode::iter(self : GrayCode) -> Iter[Array[Bool]] {
   Iter::new(() => self.next())
 }

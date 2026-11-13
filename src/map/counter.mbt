@@ -18,6 +18,7 @@ pub struct Counter[K] {
 }
 
 ///|
+/// A counter with room for `capacity` keys, laid out from `hash_seed`.
 pub fn[K] Counter::new(
   capacity~ : Int32 = 0,
   hash_seed~ : Int32 = @spec.hash_seed(),
@@ -53,11 +54,13 @@ pub fn[K : Hash + Eq] Counter::incr_by(
 }
 
 ///|
+/// Subtracts one from `key`'s count and drops the key once its count reaches zero, returning the count it holds afterwards.
 pub fn[K : Hash + Eq] Counter::decr(self : Counter[K], key : K) -> Int32 {
   self.incr_by(key, -1)
 }
 
 ///|
+/// Subtracts `amount` from `key`'s count and drops the key once its count reaches zero or below, returning the count it holds afterwards.
 pub fn[K : Hash + Eq] Counter::decr_by(
   self : Counter[K],
   key : K,
@@ -161,26 +164,31 @@ pub fn[K : Hash + Eq] Counter::subtract_in_place(
 }
 
 ///|
+/// The keys and their counts in insertion order.
 pub fn[K] Counter::iter(self : Counter[K]) -> Iter[(K, Int32)] {
   self.map.iter()
 }
 
 ///|
+/// The keys in insertion order.
 pub fn[K] Counter::keys(self : Counter[K]) -> Iter[K] {
   self.map.keys()
 }
 
 ///|
+/// The number of distinct keys counted.
 pub fn[K] Counter::length(self : Counter[K]) -> Int32 {
   self.map.length()
 }
 
 ///|
+/// Whether no key is counted.
 pub fn[K] Counter::is_empty(self : Counter[K]) -> Bool {
   self.map.is_empty()
 }
 
 ///|
+/// Keeps the keys `f` accepts with their counts and drops the rest.
 pub fn[K : Hash + Eq] Counter::retain(
   self : Counter[K],
   f : (K, Int32) -> Bool,
@@ -201,17 +209,20 @@ pub fn[K : Hash + Eq] Counter::retain(
 }
 
 ///|
+/// Drops every key and its count.
 pub fn[K] Counter::clear(self : Counter[K]) -> Unit {
   self.map.clear()
   self.total_count = 0L
 }
 
 ///|
+/// A copy that owns its table: a change to either counter is invisible to the other.
 pub fn[K] Counter::copy(self : Counter[K]) -> Counter[K] {
   { map: self.map.copy(), total_count: self.total_count, }
 }
 
 ///|
+/// The keys and their counts in insertion order, as a new array.
 pub fn[K] Counter::to_array(self : Counter[K]) -> Array[(K, Int32)] {
   self.map.to_array()
 }

@@ -22,6 +22,7 @@ pub struct MultiMap[K, V] {
 pub type MultiSet[K] = MultiMap[K, Unit]
 
 ///|
+/// A multimap with room for `capacity` values, its key table laid out from `hash_seed`.
 pub fn[K, V] MultiMap::new(
   capacity~ : Int32 = 0,
   hash_seed~ : Int32 = @spec.hash_seed(),
@@ -30,6 +31,7 @@ pub fn[K, V] MultiMap::new(
 }
 
 ///|
+/// Adds `value` under `key`, keeping the values of a key in the order they were added.
 pub fn[K : Hash + Eq, V] MultiMap::insert(
   self : MultiMap[K, V],
   key : K,
@@ -59,6 +61,7 @@ pub fn[K : Hash + Eq, V] MultiMap::get(
 }
 
 ///|
+/// The values under `key`, in the order they were added; a key that is absent yields nothing.
 pub fn[K : Hash + Eq, V] MultiMap::iter_values(
   self : MultiMap[K, V],
   key : K,
@@ -77,6 +80,7 @@ pub fn[K : Hash + Eq, V] MultiMap::iter_values(
 }
 
 ///|
+/// Whether `key` has at least one value.
 pub fn[K : Hash + Eq, V] MultiMap::contains(
   self : MultiMap[K, V],
   key : K,
@@ -85,6 +89,7 @@ pub fn[K : Hash + Eq, V] MultiMap::contains(
 }
 
 ///|
+/// Whether `value` is one of the values under `key`.
 pub fn[K : Hash + Eq, V : Eq] MultiMap::contains_entry(
   self : MultiMap[K, V],
   key : K,
@@ -146,6 +151,7 @@ pub fn[K, V] MultiMap::key_count(self : MultiMap[K, V]) -> Int32 {
 }
 
 ///|
+/// Whether no value is stored under any key.
 pub fn[K, V] MultiMap::is_empty(self : MultiMap[K, V]) -> Bool {
   self.total == 0
 }
@@ -172,23 +178,27 @@ pub fn[K, V] MultiMap::iter(self : MultiMap[K, V]) -> Iter[(K, V)] {
 }
 
 ///|
+/// Every value paired with its key, in key order and then in the order the values were added.
 pub fn[K, V] MultiMap::iter2(self : MultiMap[K, V]) -> Iter2[K, V] {
   let walk = self.iter()
   Iter2::new(() => walk.next(), size_hint=self.total)
 }
 
 ///|
+/// The keys in the order they were first added.
 pub fn[K, V] MultiMap::keys(self : MultiMap[K, V]) -> Iter[K] {
   self.map.keys()
 }
 
 ///|
+/// Removes every key and every value.
 pub fn[K, V] MultiMap::clear(self : MultiMap[K, V]) -> Unit {
   self.map.clear()
   self.total = 0
 }
 
 ///|
+/// A copy that owns its arrays: a change to either multimap is invisible to the other.
 pub fn[K : Hash + Eq, V] MultiMap::copy(
   self : MultiMap[K, V],
 ) -> MultiMap[K, V] {
@@ -260,6 +270,7 @@ pub struct SortedMultiMap[K, V] {
 pub type SortedMultiSet[K] = SortedMultiMap[K, Unit]
 
 ///|
+/// An empty multimap that keeps its entries in key order.
 pub fn[K, V] SortedMultiMap::new() -> SortedMultiMap[K, V] {
   { entries: [], }
 }
@@ -308,6 +319,7 @@ fn[K : Compare, V] SortedMultiMap::lower_bound(
 }
 
 ///|
+/// Adds `value` under `key`; the entry goes where key order puts it, and equal keys keep the values in the order they were added.
 pub fn[K : Compare, V : Compare] SortedMultiMap::insert(
   self : SortedMultiMap[K, V],
   key : K,
@@ -333,6 +345,7 @@ pub fn[K : Compare, V] SortedMultiMap::get(
 }
 
 ///|
+/// Whether `key` has at least one value.
 pub fn[K : Compare, V] SortedMultiMap::contains(
   self : SortedMultiMap[K, V],
   key : K,
@@ -389,16 +402,19 @@ pub fn[K : Compare, V] SortedMultiMap::range(
 }
 
 ///|
+/// The smallest entry, or `None` when the map is empty.
 pub fn[K, V] SortedMultiMap::first(self : SortedMultiMap[K, V]) -> (K, V)? {
   self.entries.get(0)
 }
 
 ///|
+/// The largest entry, or `None` when the map is empty.
 pub fn[K, V] SortedMultiMap::last(self : SortedMultiMap[K, V]) -> (K, V)? {
   self.entries.get(self.entries.length() - 1)
 }
 
 ///|
+/// Removes and returns the smallest entry.
 pub fn[K, V] SortedMultiMap::pop_first(self : SortedMultiMap[K, V]) -> (K, V)? {
   if self.entries.length() == 0 {
     None
@@ -408,11 +424,13 @@ pub fn[K, V] SortedMultiMap::pop_first(self : SortedMultiMap[K, V]) -> (K, V)? {
 }
 
 ///|
+/// Removes and returns the largest entry.
 pub fn[K, V] SortedMultiMap::pop_last(self : SortedMultiMap[K, V]) -> (K, V)? {
   self.entries.pop()
 }
 
 ///|
+/// Every entry in key order, and within one key in the order the values were added.
 pub fn[K, V] SortedMultiMap::iter(self : SortedMultiMap[K, V]) -> Iter[(K, V)] {
   let mut cursor = 0
   Iter::new(() => {
@@ -427,6 +445,7 @@ pub fn[K, V] SortedMultiMap::iter(self : SortedMultiMap[K, V]) -> Iter[(K, V)] {
 }
 
 ///|
+/// How many entries, counting one per value, the map holds.
 pub fn[K, V] SortedMultiMap::length(self : SortedMultiMap[K, V]) -> Int32 {
   self.entries.length()
 }
@@ -449,16 +468,19 @@ pub fn[K : Compare, V] SortedMultiMap::key_count(
 }
 
 ///|
+/// Whether no value is stored under any key.
 pub fn[K, V] SortedMultiMap::is_empty(self : SortedMultiMap[K, V]) -> Bool {
   self.entries.length() == 0
 }
 
 ///|
+/// Removes every entry.
 pub fn[K, V] SortedMultiMap::clear(self : SortedMultiMap[K, V]) -> Unit {
   self.entries.clear()
 }
 
 ///|
+/// A copy that owns its array: a change to either multimap is invisible to the other.
 pub fn[K, V] SortedMultiMap::copy(
   self : SortedMultiMap[K, V],
 ) -> SortedMultiMap[K, V] {
@@ -466,6 +488,7 @@ pub fn[K, V] SortedMultiMap::copy(
 }
 
 ///|
+/// Every entry in key order, as a new array.
 pub fn[K, V] SortedMultiMap::to_array(
   self : SortedMultiMap[K, V],
 ) -> Array[(K, V)] {

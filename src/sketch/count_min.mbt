@@ -102,6 +102,7 @@ pub fn[T : Hash] CountMinSketch::insert_by(
 }
 
 ///|
+/// How many times `key` was added, as far as the counters can tell; the answer never falls short of the true count.
 pub fn[T : Hash] CountMinSketch::estimate(
   self : CountMinSketch[T],
   item : T,
@@ -122,26 +123,31 @@ pub fn[T : Hash] CountMinSketch::estimate(
 }
 
 ///|
+/// How many items were added altogether.
 pub fn[T] CountMinSketch::total(self : CountMinSketch[T]) -> Int64 {
   self.total
 }
 
 ///|
+/// How many counters each row holds.
 pub fn[T] CountMinSketch::width(self : CountMinSketch[T]) -> Int32 {
   self.width
 }
 
 ///|
+/// How many rows of counters the sketch holds.
 pub fn[T] CountMinSketch::depth(self : CountMinSketch[T]) -> Int32 {
   self.depth
 }
 
 ///|
+/// Whether nothing has been added.
 pub fn[T] CountMinSketch::is_empty(self : CountMinSketch[T]) -> Bool {
   self.total == 0L
 }
 
 ///|
+/// Sets every counter back to zero.
 pub fn[T] CountMinSketch::clear(self : CountMinSketch[T]) -> Unit {
   for i in 0..<self.counters.length() {
     self.counters[i] = 0
@@ -165,6 +171,7 @@ pub fn[T] CountMinSketch::merge(
 }
 
 ///|
+/// A copy that owns its counters: an add to either sketch leaves the other alone.
 pub fn[T] CountMinSketch::copy(self : CountMinSketch[T]) -> CountMinSketch[T] {
   {
     seed: self.seed,
@@ -176,6 +183,7 @@ pub fn[T] CountMinSketch::copy(self : CountMinSketch[T]) -> CountMinSketch[T] {
 }
 
 ///|
+/// The sketch as bytes, in the format this module reads back with `decode`.
 pub fn[T] CountMinSketch::encode(self : CountMinSketch[T]) -> Bytes {
   let writer = Writer::new()
   writer.write_header(MAGIC_COUNT_MIN)
@@ -190,6 +198,7 @@ pub fn[T] CountMinSketch::encode(self : CountMinSketch[T]) -> Bytes {
 }
 
 ///|
+/// Reads a sketch back from the bytes `encode` wrote, refusing anything that is not one of its states.
 pub fn[T] CountMinSketch::decode(
   view : BytesView,
 ) -> CountMinSketch[T] raise @spec.Refused {

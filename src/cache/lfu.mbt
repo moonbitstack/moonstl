@@ -48,6 +48,7 @@ pub struct LfuCache[K, V] {
 }
 
 ///|
+/// A cache holding at most `capacity` entries and dropping the least frequently used one to make room, breaking a tie by recency. `on_evict` sees every entry the policy drops; a capacity of zero or less raises `Refused::Capacity`.
 pub fn[K, V] LfuCache::new(
   capacity~ : Int32,
   on_evict? : (K, V) -> Unit,
@@ -185,6 +186,7 @@ fn[K, V] LfuCache::promote(self : LfuCache[K, V], slot : Int32) -> Unit {
 }
 
 ///|
+/// The value under `key`, counting a hit and raising the key's frequency by one; a miss counts too.
 pub fn[K : Hash + Eq, V] LfuCache::get(self : LfuCache[K, V], key : K) -> V? {
   match self.index.get(key) {
     Some(slot) => {
@@ -209,6 +211,7 @@ pub fn[K : Hash + Eq, V] LfuCache::peek(self : LfuCache[K, V], key : K) -> V? {
 }
 
 ///|
+/// Stores `value` under `key`, starting its frequency at one, and returns the entry the insert displaced: the pair it replaced when the key was already present, the pair the policy dropped otherwise.
 pub fn[K : Hash + Eq, V] LfuCache::set(
   self : LfuCache[K, V],
   key : K,
@@ -245,6 +248,7 @@ pub fn[K : Hash + Eq, V] LfuCache::take(self : LfuCache[K, V], key : K) -> V? {
 }
 
 ///|
+/// Removes the entry under `key`, which is not an eviction: `on_evict` is not called and the counter does not move.
 pub fn[K : Hash + Eq, V] LfuCache::remove(self : LfuCache[K, V], key : K) -> V? {
   match self.index.remove(key) {
     Some(slot) => {
@@ -257,6 +261,7 @@ pub fn[K : Hash + Eq, V] LfuCache::remove(self : LfuCache[K, V], key : K) -> V? 
 }
 
 ///|
+/// Whether `key` is in the cache, without counting a hit or raising its frequency.
 pub fn[K : Hash + Eq, V] LfuCache::contains(
   self : LfuCache[K, V],
   key : K,
@@ -278,6 +283,7 @@ pub fn[K : Hash + Eq, V] LfuCache::frequency(
 }
 
 ///|
+/// Changes how many entries the cache holds, dropping by frequency until it fits; a capacity of zero or less raises `Refused::Capacity`.
 pub fn[K : Hash + Eq, V] LfuCache::resize_capacity(
   self : LfuCache[K, V],
   capacity~ : Int32,
@@ -292,6 +298,7 @@ pub fn[K : Hash + Eq, V] LfuCache::resize_capacity(
 }
 
 ///|
+/// The entries in the order their keys were added; `frequency` reads the count that decides eviction.
 pub fn[K, V] LfuCache::iter(self : LfuCache[K, V]) -> Iter[(K, V)] {
   let pairs = self.index.to_array()
   let mut cursor = 0
@@ -307,31 +314,37 @@ pub fn[K, V] LfuCache::iter(self : LfuCache[K, V]) -> Iter[(K, V)] {
 }
 
 ///|
+/// The keys in the order they were added.
 pub fn[K, V] LfuCache::keys(self : LfuCache[K, V]) -> Iter[K] {
   self.index.keys()
 }
 
 ///|
+/// The values in the order their keys were added.
 pub fn[K, V] LfuCache::values(self : LfuCache[K, V]) -> Iter[V] {
   self.iter().map(pair => pair.1)
 }
 
 ///|
+/// How many entries the cache holds.
 pub fn[K, V] LfuCache::length(self : LfuCache[K, V]) -> Int32 {
   self.index.length()
 }
 
 ///|
+/// How many entries the cache holds before it drops one.
 pub fn[K, V] LfuCache::capacity(self : LfuCache[K, V]) -> Int32 {
   self.capacity
 }
 
 ///|
+/// Whether the cache holds no entry.
 pub fn[K, V] LfuCache::is_empty(self : LfuCache[K, V]) -> Bool {
   self.index.is_empty()
 }
 
 ///|
+/// Removes every entry and resets every frequency.
 pub fn[K, V] LfuCache::clear(self : LfuCache[K, V]) -> Unit {
   self.index.clear()
   self.slots.clear()
@@ -342,6 +355,7 @@ pub fn[K, V] LfuCache::clear(self : LfuCache[K, V]) -> Unit {
 }
 
 ///|
+/// A copy whose entries, frequencies and order stand on their own: a lookup in either cache leaves the other where it was.
 pub fn[K, V] LfuCache::copy(self : LfuCache[K, V]) -> LfuCache[K, V] {
   let slots : Array[LfuNode[K, V]?] = []
   for slot in self.slots {
@@ -378,6 +392,7 @@ pub fn[K, V] LfuCache::copy(self : LfuCache[K, V]) -> LfuCache[K, V] {
 }
 
 ///|
+/// The hit, miss and eviction counters, each moved by the operation that names it.
 pub fn[K, V] LfuCache::stats(self : LfuCache[K, V]) -> CacheStats {
   { hits: self.hits, misses: self.misses, evictions: self.evictions, }
 }

@@ -20,6 +20,7 @@ pub struct BiMap[K, V] {
 }
 
 ///|
+/// An empty bijection, with room for `capacity` pairs and its tables laid out from `hash_seed`.
 pub fn[K, V] BiMap::new(
   capacity~ : Int32 = 0,
   hash_seed~ : Int32 = @spec.hash_seed(),
@@ -83,6 +84,7 @@ pub fn[K : Hash + Eq, V : Hash + Eq] BiMap::set_new(
 }
 
 ///|
+/// The value `key` is mapped to, or `None`.
 pub fn[K : Hash + Eq, V] BiMap::get(self : BiMap[K, V], key : K) -> V? {
   self.forward.get(key)
 }
@@ -94,6 +96,7 @@ pub fn[K, V : Hash + Eq] BiMap::get_key(self : BiMap[K, V], value : V) -> K? {
 }
 
 ///|
+/// Whether `key` is on the key side.
 pub fn[K : Hash + Eq, V] BiMap::contains_key(
   self : BiMap[K, V],
   key : K,
@@ -102,6 +105,7 @@ pub fn[K : Hash + Eq, V] BiMap::contains_key(
 }
 
 ///|
+/// Whether `value` is on the value side.
 pub fn[K, V : Hash + Eq] BiMap::contains_value(
   self : BiMap[K, V],
   value : V,
@@ -110,6 +114,7 @@ pub fn[K, V : Hash + Eq] BiMap::contains_value(
 }
 
 ///|
+/// Removes the pair whose key is `key` from both sides and returns it.
 pub fn[K : Hash + Eq, V : Hash + Eq] BiMap::remove_key(
   self : BiMap[K, V],
   key : K,
@@ -124,6 +129,7 @@ pub fn[K : Hash + Eq, V : Hash + Eq] BiMap::remove_key(
 }
 
 ///|
+/// Removes the pair whose value is `value` from both sides and returns it.
 pub fn[K : Hash + Eq, V : Hash + Eq] BiMap::remove_value(
   self : BiMap[K, V],
   value : V,
@@ -138,37 +144,44 @@ pub fn[K : Hash + Eq, V : Hash + Eq] BiMap::remove_value(
 }
 
 ///|
+/// How many pairs the bijection holds.
 pub fn[K, V] BiMap::length(self : BiMap[K, V]) -> Int32 {
   self.forward.length()
 }
 
 ///|
+/// Whether the bijection holds no pair.
 pub fn[K, V] BiMap::is_empty(self : BiMap[K, V]) -> Bool {
   self.forward.is_empty()
 }
 
 ///|
+/// The pairs in insertion order.
 pub fn[K, V] BiMap::iter(self : BiMap[K, V]) -> Iter[(K, V)] {
   self.forward.iter()
 }
 
 ///|
+/// The keys in insertion order.
 pub fn[K, V] BiMap::keys(self : BiMap[K, V]) -> Iter[K] {
   self.forward.keys()
 }
 
 ///|
+/// The values, in the order their keys were inserted.
 pub fn[K, V] BiMap::values(self : BiMap[K, V]) -> Iter[V] {
   self.forward.values()
 }
 
 ///|
+/// Removes every pair from both sides.
 pub fn[K, V] BiMap::clear(self : BiMap[K, V]) -> Unit {
   self.forward.clear()
   self.backward.clear()
 }
 
 ///|
+/// A copy that owns both tables: a change to either bijection is invisible to the other.
 pub fn[K, V] BiMap::copy(self : BiMap[K, V]) -> BiMap[K, V] {
   { forward: self.forward.copy(), backward: self.backward.copy(), }
 }

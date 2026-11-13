@@ -33,11 +33,13 @@ pub struct PairingHeap[T] {
 }
 
 ///|
+/// An empty heap popping from the `order` end, `Min` by default.
 pub fn[T : Compare] PairingHeap::new(order~ : Order = Min) -> PairingHeap[T] {
   PairingHeap::new_by(cmp=order_comparator(order))
 }
 
 ///|
+/// An empty heap ordered by `cmp`, which reports the smaller of two elements as negative.
 pub fn[T] PairingHeap::new_by(cmp~ : (T, T) -> Int32) -> PairingHeap[T] {
   {
     cmp,
@@ -164,6 +166,7 @@ fn[T] PairingHeap::merge_pairs(self : PairingHeap[T], first : Int32) -> Int32 {
 }
 
 ///|
+/// Adds `value` and returns the handle that keeps naming it, whatever else the heap does.
 pub fn[T] PairingHeap::insert(self : PairingHeap[T], value : T) -> HeapKey[T] {
   let node = self.alloc(value)
   self.root = self.meld(self.root, node)
@@ -172,6 +175,7 @@ pub fn[T] PairingHeap::insert(self : PairingHeap[T], value : T) -> HeapKey[T] {
 }
 
 ///|
+/// The element the order puts first, or `None` when the heap is empty.
 pub fn[T] PairingHeap::peek(self : PairingHeap[T]) -> T? {
   if self.root < 0 {
     None
@@ -181,6 +185,7 @@ pub fn[T] PairingHeap::peek(self : PairingHeap[T]) -> T? {
 }
 
 ///|
+/// Removes and returns the element the order puts first, or `None` when the heap is empty.
 pub fn[T] PairingHeap::pop(self : PairingHeap[T]) -> T? {
   if self.root < 0 {
     return None
@@ -222,6 +227,7 @@ fn[T] PairingHeap::locate(self : PairingHeap[T], key : HeapKey[T]) -> Int32? {
 }
 
 ///|
+/// The value behind `key`, or `None` when the handle no longer names an entry.
 pub fn[T] PairingHeap::get(self : PairingHeap[T], key : HeapKey[T]) -> T? {
   match self.locate(key) {
     Some(node) => self.values[node]
@@ -230,6 +236,7 @@ pub fn[T] PairingHeap::get(self : PairingHeap[T], key : HeapKey[T]) -> T? {
 }
 
 ///|
+/// Whether `key` still names an entry.
 pub fn[T] PairingHeap::contains(
   self : PairingHeap[T],
   key : HeapKey[T],
@@ -254,6 +261,7 @@ fn[T] PairingHeap::lift_out(self : PairingHeap[T], node : Int32) -> T {
 }
 
 ///|
+/// Replaces the value behind `key` and puts the entry back where the new value belongs; reports whether the handle named an entry at all.
 pub fn[T] PairingHeap::update(
   self : PairingHeap[T],
   key : HeapKey[T],
@@ -274,6 +282,7 @@ pub fn[T] PairingHeap::update(
 }
 
 ///|
+/// Removes the entry `key` names and returns its value, leaving the rest of the heap ordered.
 pub fn[T] PairingHeap::remove_at(self : PairingHeap[T], key : HeapKey[T]) -> T? {
   match self.locate(key) {
     Some(node) => Some(self.lift_out(node))
@@ -282,16 +291,19 @@ pub fn[T] PairingHeap::remove_at(self : PairingHeap[T], key : HeapKey[T]) -> T? 
 }
 
 ///|
+/// How many entries the heap holds.
 pub fn[T] PairingHeap::length(self : PairingHeap[T]) -> Int32 {
   self.len
 }
 
 ///|
+/// Whether the heap holds no entry.
 pub fn[T] PairingHeap::is_empty(self : PairingHeap[T]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// Removes every entry; the handles issued before it name nothing afterwards.
 pub fn[T] PairingHeap::clear(self : PairingHeap[T]) -> Unit {
   self.values.clear()
   self.children.clear()
@@ -304,6 +316,7 @@ pub fn[T] PairingHeap::clear(self : PairingHeap[T]) -> Unit {
 }
 
 ///|
+/// The values in slot order, which is not the order they pop in.
 pub fn[T] PairingHeap::to_array(self : PairingHeap[T]) -> Array[T] {
   let out : Array[T] = []
   for value in self.values {
@@ -315,6 +328,7 @@ pub fn[T] PairingHeap::to_array(self : PairingHeap[T]) -> Array[T] {
 }
 
 ///|
+/// Empties the heap and returns its values in pop order.
 pub fn[T] PairingHeap::into_sorted_array(self : PairingHeap[T]) -> Array[T] {
   let out : Array[T] = []
   while self.len > 0 {
@@ -327,6 +341,7 @@ pub fn[T] PairingHeap::into_sorted_array(self : PairingHeap[T]) -> Array[T] {
 }
 
 ///|
+/// Takes every entry of `other` into this heap and empties `other`; the handles issued by the other heap do not carry over.
 pub fn[T] PairingHeap::merge(
   self : PairingHeap[T],
   other : PairingHeap[T],

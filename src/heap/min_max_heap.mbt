@@ -35,11 +35,13 @@ pub struct MinMaxHeap[T] {
 }
 
 ///|
+/// An empty heap that answers from both ends of the order.
 pub fn[T : Compare] MinMaxHeap::new() -> MinMaxHeap[T] {
   { cmp: order_comparator(Min), items: [], }
 }
 
 ///|
+/// An empty heap ordered by `cmp`, which reports the smaller of two elements as negative.
 pub fn[T] MinMaxHeap::new_by(cmp~ : (T, T) -> Int32) -> MinMaxHeap[T] {
   { cmp, items: [], }
 }
@@ -183,17 +185,20 @@ fn[T] MinMaxHeap::bubble_up(self : MinMaxHeap[T], start : Int32) -> Unit {
 }
 
 ///|
+/// Adds `value` to the heap.
 pub fn[T] MinMaxHeap::push(self : MinMaxHeap[T], value : T) -> Unit {
   self.items.push(value)
   self.bubble_up(self.items.length() - 1)
 }
 
 ///|
+/// The smallest element, or `None` when the heap is empty.
 pub fn[T] MinMaxHeap::peek_min(self : MinMaxHeap[T]) -> T? {
   self.items.get(0)
 }
 
 ///|
+/// The largest element, or `None` when the heap is empty.
 pub fn[T] MinMaxHeap::peek_max(self : MinMaxHeap[T]) -> T? {
   let size = self.items.length()
   if size == 0 {
@@ -213,6 +218,7 @@ pub fn[T] MinMaxHeap::peek_max(self : MinMaxHeap[T]) -> T? {
 }
 
 ///|
+/// Removes and returns the smallest element, or `None` when the heap is empty.
 pub fn[T] MinMaxHeap::pop_min(self : MinMaxHeap[T]) -> T? {
   let size = self.items.length()
   if size == 0 {
@@ -228,6 +234,7 @@ pub fn[T] MinMaxHeap::pop_min(self : MinMaxHeap[T]) -> T? {
 }
 
 ///|
+/// Removes and returns the largest element, or `None` when the heap is empty.
 pub fn[T] MinMaxHeap::pop_max(self : MinMaxHeap[T]) -> T? {
   let size = self.items.length()
   if size == 0 {
@@ -247,26 +254,31 @@ pub fn[T] MinMaxHeap::pop_max(self : MinMaxHeap[T]) -> T? {
 }
 
 ///|
+/// How many entries the heap holds.
 pub fn[T] MinMaxHeap::length(self : MinMaxHeap[T]) -> Int32 {
   self.items.length()
 }
 
 ///|
+/// Whether the heap holds no entry.
 pub fn[T] MinMaxHeap::is_empty(self : MinMaxHeap[T]) -> Bool {
   self.items.length() == 0
 }
 
 ///|
+/// Removes every entry.
 pub fn[T] MinMaxHeap::clear(self : MinMaxHeap[T]) -> Unit {
   self.items.clear()
 }
 
 ///|
+/// The elements in heap order, which is neither ascending nor descending.
 pub fn[T] MinMaxHeap::to_array(self : MinMaxHeap[T]) -> Array[T] {
   self.items.copy()
 }
 
 ///|
+/// A copy that owns its array: a change to either heap is invisible to the other.
 pub fn[T] MinMaxHeap::copy(self : MinMaxHeap[T]) -> MinMaxHeap[T] {
   { cmp: self.cmp, items: self.items.copy(), }
 }

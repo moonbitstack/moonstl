@@ -23,6 +23,7 @@ pub struct FlatMultiMap[K, V] {
 pub type FlatMultiSet[K] = FlatMultiMap[K, Unit]
 
 ///|
+/// An empty multimap whose entries live in one run sorted by key and then by value, with room for `capacity` of them.
 pub fn[K, V] FlatMultiMap::new(capacity~ : Int32 = 0) -> FlatMultiMap[K, V] {
   let entries : Array[(K, V)] = []
   if capacity > 0 {
@@ -77,6 +78,7 @@ fn[K : Compare, V] FlatMultiMap::lower_pos(
 }
 
 ///|
+/// Adds `value` under `key` in sorted position; a pair that is already there is not added twice.
 pub fn[K : Compare, V : Compare] FlatMultiMap::insert(
   self : FlatMultiMap[K, V],
   key : K,
@@ -87,6 +89,7 @@ pub fn[K : Compare, V : Compare] FlatMultiMap::insert(
 }
 
 ///|
+/// The values under `key`, ascending.
 pub fn[K : Compare, V] FlatMultiMap::get(
   self : FlatMultiMap[K, V],
   key : K,
@@ -101,6 +104,7 @@ pub fn[K : Compare, V] FlatMultiMap::get(
 }
 
 ///|
+/// How many values are stored under `key`.
 pub fn[K : Compare, V] FlatMultiMap::count(
   self : FlatMultiMap[K, V],
   key : K,
@@ -115,6 +119,7 @@ pub fn[K : Compare, V] FlatMultiMap::count(
 }
 
 ///|
+/// Whether `key` has at least one value.
 pub fn[K : Compare, V] FlatMultiMap::contains(
   self : FlatMultiMap[K, V],
   key : K,
@@ -167,6 +172,7 @@ pub fn[K : Compare, V : Compare] FlatMultiMap::remove_entry(
 }
 
 ///|
+/// Every entry whose key is from `start` up to `end`, in order.
 pub fn[K : Compare, V] FlatMultiMap::range(
   self : FlatMultiMap[K, V],
   start~ : K,
@@ -186,16 +192,19 @@ pub fn[K : Compare, V] FlatMultiMap::range(
 }
 
 ///|
+/// The smallest entry, or `None` when the map is empty.
 pub fn[K, V] FlatMultiMap::first(self : FlatMultiMap[K, V]) -> (K, V)? {
   self.entries.get(0)
 }
 
 ///|
+/// The largest entry, or `None` when the map is empty.
 pub fn[K, V] FlatMultiMap::last(self : FlatMultiMap[K, V]) -> (K, V)? {
   self.entries.get(self.entries.length() - 1)
 }
 
 ///|
+/// Removes and returns the smallest entry.
 pub fn[K, V] FlatMultiMap::pop_first(self : FlatMultiMap[K, V]) -> (K, V)? {
   if self.entries.length() == 0 {
     None
@@ -205,11 +214,13 @@ pub fn[K, V] FlatMultiMap::pop_first(self : FlatMultiMap[K, V]) -> (K, V)? {
 }
 
 ///|
+/// Removes and returns the largest entry.
 pub fn[K, V] FlatMultiMap::pop_last(self : FlatMultiMap[K, V]) -> (K, V)? {
   self.entries.pop()
 }
 
 ///|
+/// Every entry in key order, and within one key in value order.
 pub fn[K, V] FlatMultiMap::iter(self : FlatMultiMap[K, V]) -> Iter[(K, V)] {
   let mut cursor = 0
   Iter::new(() => {
@@ -224,11 +235,13 @@ pub fn[K, V] FlatMultiMap::iter(self : FlatMultiMap[K, V]) -> Iter[(K, V)] {
 }
 
 ///|
+/// How many entries, counting one per value, the map holds.
 pub fn[K, V] FlatMultiMap::length(self : FlatMultiMap[K, V]) -> Int32 {
   self.entries.length()
 }
 
 ///|
+/// The number of distinct keys.
 pub fn[K : Compare, V] FlatMultiMap::key_count(
   self : FlatMultiMap[K, V],
 ) -> Int32 {
@@ -245,16 +258,19 @@ pub fn[K : Compare, V] FlatMultiMap::key_count(
 }
 
 ///|
+/// Whether no value is stored under any key.
 pub fn[K, V] FlatMultiMap::is_empty(self : FlatMultiMap[K, V]) -> Bool {
   self.entries.length() == 0
 }
 
 ///|
+/// Removes every entry, keeping the room the run has.
 pub fn[K, V] FlatMultiMap::clear(self : FlatMultiMap[K, V]) -> Unit {
   self.entries.clear()
 }
 
 ///|
+/// A copy that owns its array: a change to either multimap is invisible to the other.
 pub fn[K, V] FlatMultiMap::copy(
   self : FlatMultiMap[K, V],
 ) -> FlatMultiMap[K, V] {
@@ -262,6 +278,7 @@ pub fn[K, V] FlatMultiMap::copy(
 }
 
 ///|
+/// Every entry in key order, as a new array.
 pub fn[K, V] FlatMultiMap::to_array(self : FlatMultiMap[K, V]) -> Array[(K, V)] {
   self.entries.copy()
 }

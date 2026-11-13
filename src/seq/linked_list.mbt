@@ -31,11 +31,13 @@ pub struct LinkedList[T] {
 }
 
 ///|
+/// An empty list.
 pub fn[T] LinkedList::new() -> LinkedList[T] {
   { head: None, tail: None, len: 0, }
 }
 
 ///|
+/// Appends an element at the tail.
 pub fn[T] LinkedList::push_back(self : LinkedList[T], value : T) -> Unit {
   let node : LinkedListNode[T] = { value, prev: self.tail, next: None, }
   match self.tail {
@@ -47,6 +49,7 @@ pub fn[T] LinkedList::push_back(self : LinkedList[T], value : T) -> Unit {
 }
 
 ///|
+/// Puts an element at the head.
 pub fn[T] LinkedList::push_front(self : LinkedList[T], value : T) -> Unit {
   let node : LinkedListNode[T] = { value, prev: None, next: self.head, }
   match self.head {
@@ -58,6 +61,7 @@ pub fn[T] LinkedList::push_front(self : LinkedList[T], value : T) -> Unit {
 }
 
 ///|
+/// Removes the head element and returns it, or `None` when the list is empty.
 pub fn[T] LinkedList::pop_front(self : LinkedList[T]) -> T? {
   match self.head {
     Some(node) => {
@@ -75,6 +79,7 @@ pub fn[T] LinkedList::pop_front(self : LinkedList[T]) -> T? {
 }
 
 ///|
+/// Removes the tail element and returns it, or `None` when the list is empty.
 pub fn[T] LinkedList::pop_back(self : LinkedList[T]) -> T? {
   match self.tail {
     Some(node) => {
@@ -92,6 +97,7 @@ pub fn[T] LinkedList::pop_back(self : LinkedList[T]) -> T? {
 }
 
 ///|
+/// The head element, or `None` when the list is empty.
 pub fn[T] LinkedList::front(self : LinkedList[T]) -> T? {
   match self.head {
     Some(node) => Some(node.value)
@@ -100,6 +106,7 @@ pub fn[T] LinkedList::front(self : LinkedList[T]) -> T? {
 }
 
 ///|
+/// The tail element, or `None` when the list is empty.
 pub fn[T] LinkedList::back(self : LinkedList[T]) -> T? {
   match self.tail {
     Some(node) => Some(node.value)
@@ -108,6 +115,7 @@ pub fn[T] LinkedList::back(self : LinkedList[T]) -> T? {
 }
 
 ///|
+/// The element at `index`, or `None` past the last one; the walk is linear.
 pub fn[T] LinkedList::get(self : LinkedList[T], index : Int32) -> T? {
   match self.node_at(index) {
     Some(node) => Some(node.value)
@@ -138,6 +146,7 @@ fn[T] LinkedList::node_at(
 }
 
 ///|
+/// Inserts an element so that it takes `index`; an index at or past the end appends.
 pub fn[T] LinkedList::insert_at(
   self : LinkedList[T],
   index : Int32,
@@ -170,6 +179,7 @@ pub fn[T] LinkedList::insert_at(
 }
 
 ///|
+/// Removes and returns the element at `index`, or `None` past the last one.
 pub fn[T] LinkedList::remove_at(self : LinkedList[T], index : Int32) -> T? {
   match self.node_at(index) {
     Some(node) => {
@@ -269,16 +279,19 @@ pub fn[T] LinkedList::split_off(
 }
 
 ///|
+/// How many elements the list holds.
 pub fn[T] LinkedList::length(self : LinkedList[T]) -> Int32 {
   self.len
 }
 
 ///|
+/// Whether the list holds no element.
 pub fn[T] LinkedList::is_empty(self : LinkedList[T]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// The elements from head to tail.
 pub fn[T] LinkedList::iter(self : LinkedList[T]) -> Iter[T] {
   let mut node = self.head
   Iter::new(() => {
@@ -293,6 +306,7 @@ pub fn[T] LinkedList::iter(self : LinkedList[T]) -> Iter[T] {
 }
 
 ///|
+/// The elements from tail to head.
 pub fn[T] LinkedList::rev_iter(self : LinkedList[T]) -> Iter[T] {
   let mut node = self.tail
   Iter::new(() => {
@@ -307,6 +321,7 @@ pub fn[T] LinkedList::rev_iter(self : LinkedList[T]) -> Iter[T] {
 }
 
 ///|
+/// The elements from head to tail, as a new array.
 pub fn[T] LinkedList::to_array(self : LinkedList[T]) -> Array[T] {
   let out : Array[T] = []
   for value in self.iter() {
@@ -316,6 +331,7 @@ pub fn[T] LinkedList::to_array(self : LinkedList[T]) -> Array[T] {
 }
 
 ///|
+/// Removes every element.
 pub fn[T] LinkedList::clear(self : LinkedList[T]) -> Unit {
   let mut node = self.head
   while node is Some(current) {

@@ -22,6 +22,7 @@ pub struct GapBuffer[T] {
 }
 
 ///|
+/// An empty buffer with room for `capacity` elements.
 pub fn[T] GapBuffer::new(capacity~ : Int32 = 0) -> GapBuffer[T] {
   let before : Array[T] = []
   if capacity > 0 {
@@ -31,6 +32,7 @@ pub fn[T] GapBuffer::new(capacity~ : Int32 = 0) -> GapBuffer[T] {
 }
 
 ///|
+/// A buffer holding the elements written out, in their order.
 pub fn[T] GapBuffer::from_array(
   values : ArrayView[T],
   capacity~ : Int32 = 0,
@@ -78,6 +80,7 @@ pub fn[T] GapBuffer::insert(
 }
 
 ///|
+/// Removes the element at `index` and returns it, or `None` past the last element.
 pub fn[T] GapBuffer::remove(self : GapBuffer[T], index : Int32) -> T? {
   if index < 0 || index >= self.length() {
     return None
@@ -91,6 +94,7 @@ pub fn[T] GapBuffer::remove(self : GapBuffer[T], index : Int32) -> T? {
 }
 
 ///|
+/// The element at `index`, or `None` past the last one.
 pub fn[T] GapBuffer::get(self : GapBuffer[T], index : Int32) -> T? {
   let front = self.before.length()
   if index < 0 {
@@ -108,6 +112,7 @@ pub fn[T] GapBuffer::get(self : GapBuffer[T], index : Int32) -> T? {
 }
 
 ///|
+/// The element at `index`; aborts past the last one, as an array does.
 pub fn[T] GapBuffer::at(self : GapBuffer[T], index : Int32) -> T {
   match self.get(index) {
     Some(value) => value
@@ -116,6 +121,7 @@ pub fn[T] GapBuffer::at(self : GapBuffer[T], index : Int32) -> T {
 }
 
 ///|
+/// Replaces the element at `index`, or appends when the index is the end of the buffer.
 pub fn[T] GapBuffer::set(self : GapBuffer[T], index : Int32, value : T) -> Bool {
   match self.get(index) {
     Some(_) => {
@@ -132,16 +138,19 @@ pub fn[T] GapBuffer::set(self : GapBuffer[T], index : Int32, value : T) -> Bool 
 }
 
 ///|
+/// How many elements the buffer holds.
 pub fn[T] GapBuffer::length(self : GapBuffer[T]) -> Int32 {
   self.before.length() + self.after.length()
 }
 
 ///|
+/// Whether the buffer holds no element.
 pub fn[T] GapBuffer::is_empty(self : GapBuffer[T]) -> Bool {
   self.length() == 0
 }
 
 ///|
+/// The elements from the first to the last.
 pub fn[T] GapBuffer::iter(self : GapBuffer[T]) -> Iter[T] {
   let mut cursor = 0
   Iter::new(() => {
@@ -155,6 +164,7 @@ pub fn[T] GapBuffer::iter(self : GapBuffer[T]) -> Iter[T] {
 }
 
 ///|
+/// The elements in order, as a new array.
 pub fn[T] GapBuffer::to_array(self : GapBuffer[T]) -> Array[T] {
   let out : Array[T] = []
   for value in self.before {
@@ -167,12 +177,14 @@ pub fn[T] GapBuffer::to_array(self : GapBuffer[T]) -> Array[T] {
 }
 
 ///|
+/// Removes every element.
 pub fn[T] GapBuffer::clear(self : GapBuffer[T]) -> Unit {
   self.before.clear()
   self.after.clear()
 }
 
 ///|
+/// A copy that owns its array: a change to either buffer is invisible to the other.
 pub fn[T] GapBuffer::copy(self : GapBuffer[T]) -> GapBuffer[T] {
   { before: self.before.copy(), after: self.after.copy(), }
 }

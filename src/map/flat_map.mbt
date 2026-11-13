@@ -35,6 +35,7 @@ pub struct FlatMap[K, V] {
 }
 
 ///|
+/// An empty map whose entries live in one sorted run, with room for `capacity` of them.
 pub fn[K, V] FlatMap::new(capacity~ : Int32 = 0) -> FlatMap[K, V] {
   let keys : Array[K] = []
   let values : Array[V] = []
@@ -84,6 +85,7 @@ pub fn[K : Compare, V] FlatMap::index_of(
 }
 
 ///|
+/// The value under `key`, or `None`; the lookup is a binary search over the sorted keys.
 pub fn[K : Compare, V] FlatMap::get(self : FlatMap[K, V], key : K) -> V? {
   match self.index_of(key) {
     Ok(at) => Some(self.values[at])
@@ -92,11 +94,13 @@ pub fn[K : Compare, V] FlatMap::get(self : FlatMap[K, V], key : K) -> V? {
 }
 
 ///|
+/// Whether `key` has an entry.
 pub fn[K : Compare, V] FlatMap::contains(self : FlatMap[K, V], key : K) -> Bool {
   self.index_of(key) is Ok(_)
 }
 
 ///|
+/// Stores `value` under `key`, inserting the key in order, and returns the value it replaced.
 pub fn[K : Compare, V] FlatMap::set(
   self : FlatMap[K, V],
   key : K,
@@ -117,6 +121,7 @@ pub fn[K : Compare, V] FlatMap::set(
 }
 
 ///|
+/// The entry at position `index` in key order, or `None` when the position is past the last one.
 pub fn[K, V] FlatMap::get_index(self : FlatMap[K, V], index : Int32) -> (K, V)? {
   if index < 0 || index >= self.keys.length() {
     None
@@ -126,6 +131,7 @@ pub fn[K, V] FlatMap::get_index(self : FlatMap[K, V], index : Int32) -> (K, V)? 
 }
 
 ///|
+/// Removes `key` and returns the value it held, closing the gap in the run.
 pub fn[K : Compare, V] FlatMap::remove(self : FlatMap[K, V], key : K) -> V? {
   match self.index_of(key) {
     Ok(at) => {
@@ -156,16 +162,19 @@ pub fn[K : Compare, V] FlatMap::range(
 }
 
 ///|
+/// The entry with the smallest key, or `None` when the map is empty.
 pub fn[K, V] FlatMap::first(self : FlatMap[K, V]) -> (K, V)? {
   self.get_index(0)
 }
 
 ///|
+/// The entry with the largest key, or `None` when the map is empty.
 pub fn[K, V] FlatMap::last(self : FlatMap[K, V]) -> (K, V)? {
   self.get_index(self.keys.length() - 1)
 }
 
 ///|
+/// Removes and returns the entry with the smallest key.
 pub fn[K, V] FlatMap::pop_first(self : FlatMap[K, V]) -> (K, V)? {
   if self.keys.length() == 0 {
     None
@@ -176,6 +185,7 @@ pub fn[K, V] FlatMap::pop_first(self : FlatMap[K, V]) -> (K, V)? {
 }
 
 ///|
+/// Removes and returns the entry with the largest key.
 pub fn[K, V] FlatMap::pop_last(self : FlatMap[K, V]) -> (K, V)? {
   if self.keys.length() == 0 {
     return None
@@ -186,6 +196,7 @@ pub fn[K, V] FlatMap::pop_last(self : FlatMap[K, V]) -> (K, V)? {
 }
 
 ///|
+/// The entries in key order.
 pub fn[K, V] FlatMap::iter(self : FlatMap[K, V]) -> Iter[(K, V)] {
   let mut cursor = 0
   Iter::new(() => {
@@ -200,6 +211,7 @@ pub fn[K, V] FlatMap::iter(self : FlatMap[K, V]) -> Iter[(K, V)] {
 }
 
 ///|
+/// The keys in order.
 pub fn[K, V] FlatMap::keys(self : FlatMap[K, V]) -> Iter[K] {
   let mut cursor = 0
   Iter::new(() => {
@@ -214,6 +226,7 @@ pub fn[K, V] FlatMap::keys(self : FlatMap[K, V]) -> Iter[K] {
 }
 
 ///|
+/// The values in key order.
 pub fn[K, V] FlatMap::values(self : FlatMap[K, V]) -> Iter[V] {
   let mut cursor = 0
   Iter::new(() => {
@@ -228,16 +241,19 @@ pub fn[K, V] FlatMap::values(self : FlatMap[K, V]) -> Iter[V] {
 }
 
 ///|
+/// How many entries the map holds.
 pub fn[K, V] FlatMap::length(self : FlatMap[K, V]) -> Int32 {
   self.keys.length()
 }
 
 ///|
+/// How many entries the run has room for before it grows.
 pub fn[K, V] FlatMap::capacity(self : FlatMap[K, V]) -> Int32 {
   self.keys.capacity()
 }
 
 ///|
+/// Makes room for `capacity` entries in one allocation, so the inserts that follow do not grow the run again.
 pub fn[K, V] FlatMap::reserve_capacity(
   self : FlatMap[K, V],
   capacity~ : Int32,
@@ -247,23 +263,27 @@ pub fn[K, V] FlatMap::reserve_capacity(
 }
 
 ///|
+/// Releases the room past the last entry.
 pub fn[K, V] FlatMap::shrink_to_fit(self : FlatMap[K, V]) -> Unit {
   self.keys.shrink_to_fit()
   self.values.shrink_to_fit()
 }
 
 ///|
+/// Whether the map holds no entry.
 pub fn[K, V] FlatMap::is_empty(self : FlatMap[K, V]) -> Bool {
   self.keys.length() == 0
 }
 
 ///|
+/// Removes every entry, keeping the room the run has.
 pub fn[K, V] FlatMap::clear(self : FlatMap[K, V]) -> Unit {
   self.keys.clear()
   self.values.clear()
 }
 
 ///|
+/// A copy that owns its arrays: a change to either map is invisible to the other.
 pub fn[K, V] FlatMap::copy(self : FlatMap[K, V]) -> FlatMap[K, V] {
   { keys: self.keys.copy(), values: self.values.copy(), }
 }
@@ -309,6 +329,7 @@ pub struct FlatSet[K] {
 }
 
 ///|
+/// An empty set whose values live in one sorted run, with room for `capacity` of them.
 pub fn[K] FlatSet::new(capacity~ : Int32 = 0) -> FlatSet[K] {
   let keys : Array[K] = []
   if capacity > 0 {
@@ -318,6 +339,7 @@ pub fn[K] FlatSet::new(capacity~ : Int32 = 0) -> FlatSet[K] {
 }
 
 ///|
+/// A set holding the values written out, in order and without repeats.
 pub fn[K : Compare] FlatSet::from_array(values : ArrayView[K]) -> FlatSet[K] {
   let sorted = values.to_owned()
   sorted.sort()
@@ -355,11 +377,13 @@ pub fn[K : Compare] FlatSet::insert(self : FlatSet[K], key : K) -> Bool {
 }
 
 ///|
+/// Whether `value` is in the set; the lookup is a binary search over the sorted run.
 pub fn[K : Compare] FlatSet::contains(self : FlatSet[K], key : K) -> Bool {
   self.index_of(key) is Ok(_)
 }
 
 ///|
+/// Removes `value`, closing the gap in the run, and reports whether it was there.
 pub fn[K : Compare] FlatSet::remove(self : FlatSet[K], key : K) -> Bool {
   match self.index_of(key) {
     Ok(at) => {
@@ -371,11 +395,13 @@ pub fn[K : Compare] FlatSet::remove(self : FlatSet[K], key : K) -> Bool {
 }
 
 ///|
+/// The value at position `index` in order, or `None` when the position is past the last one.
 pub fn[K] FlatSet::get_index(self : FlatSet[K], index : Int32) -> K? {
   self.keys.get(index)
 }
 
 ///|
+/// The values from `start` up to `end`, in order.
 pub fn[K : Compare] FlatSet::range(
   self : FlatSet[K],
   start~ : K,
@@ -394,16 +420,19 @@ pub fn[K : Compare] FlatSet::range(
 }
 
 ///|
+/// The smallest value, or `None` when the set is empty.
 pub fn[K] FlatSet::first(self : FlatSet[K]) -> K? {
   self.keys.get(0)
 }
 
 ///|
+/// The largest value, or `None` when the set is empty.
 pub fn[K] FlatSet::last(self : FlatSet[K]) -> K? {
   self.keys.get(self.keys.length() - 1)
 }
 
 ///|
+/// Removes and returns the smallest value.
 pub fn[K] FlatSet::pop_first(self : FlatSet[K]) -> K? {
   if self.keys.length() == 0 {
     None
@@ -413,11 +442,13 @@ pub fn[K] FlatSet::pop_first(self : FlatSet[K]) -> K? {
 }
 
 ///|
+/// Removes and returns the largest value.
 pub fn[K] FlatSet::pop_last(self : FlatSet[K]) -> K? {
   self.keys.pop()
 }
 
 ///|
+/// The values in order.
 pub fn[K] FlatSet::iter(self : FlatSet[K]) -> Iter[K] {
   let mut cursor = 0
   Iter::new(() => {
@@ -432,21 +463,25 @@ pub fn[K] FlatSet::iter(self : FlatSet[K]) -> Iter[K] {
 }
 
 ///|
+/// The values in order, as a new array.
 pub fn[K] FlatSet::to_array(self : FlatSet[K]) -> Array[K] {
   self.keys.copy()
 }
 
 ///|
+/// How many values the set holds.
 pub fn[K] FlatSet::length(self : FlatSet[K]) -> Int32 {
   self.keys.length()
 }
 
 ///|
+/// How many values the run has room for before it grows.
 pub fn[K] FlatSet::capacity(self : FlatSet[K]) -> Int32 {
   self.keys.capacity()
 }
 
 ///|
+/// Makes room for `capacity` values in one allocation.
 pub fn[K] FlatSet::reserve_capacity(
   self : FlatSet[K],
   capacity~ : Int32,
@@ -455,21 +490,25 @@ pub fn[K] FlatSet::reserve_capacity(
 }
 
 ///|
+/// Releases the room past the last value.
 pub fn[K] FlatSet::shrink_to_fit(self : FlatSet[K]) -> Unit {
   self.keys.shrink_to_fit()
 }
 
 ///|
+/// Whether the set holds no value.
 pub fn[K] FlatSet::is_empty(self : FlatSet[K]) -> Bool {
   self.keys.length() == 0
 }
 
 ///|
+/// Removes every value, keeping the room the run has.
 pub fn[K] FlatSet::clear(self : FlatSet[K]) -> Unit {
   self.keys.clear()
 }
 
 ///|
+/// A copy that owns its array: a change to either set is invisible to the other.
 pub fn[K] FlatSet::copy(self : FlatSet[K]) -> FlatSet[K] {
   { keys: self.keys.copy(), }
 }

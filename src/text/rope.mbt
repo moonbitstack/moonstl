@@ -29,11 +29,13 @@ pub struct Rope {
 }
 
 ///|
+/// An empty rope.
 pub fn Rope::new() -> Rope {
   { chunks: [], starts: [0], }
 }
 
 ///|
+/// A rope holding `text` as one chunk.
 pub fn Rope::from_string(text : StringView) -> Rope {
   let chunks : Array[String] = []
   if text.length() > 0 {
@@ -62,6 +64,7 @@ pub fn Rope::length(self : Rope) -> Int32 {
 }
 
 ///|
+/// Whether the rope holds no text.
 pub fn Rope::is_empty(self : Rope) -> Bool {
   self.length() == 0
 }
@@ -145,6 +148,7 @@ pub fn Rope::insert(self : Rope, offset : Int32, text : StringView) -> Unit {
 }
 
 ///|
+/// Adds `text` at the end; the same as inserting at `length`.
 pub fn Rope::append(self : Rope, text : StringView) -> Unit {
   self.insert(self.length(), text)
 }
@@ -262,6 +266,7 @@ pub fn Rope::char_length(self : Rope) -> Int32 {
 }
 
 ///|
+/// The characters in order, one per code point rather than per code unit.
 pub fn Rope::chars(self : Rope) -> Iter[Char] {
   let units = self.to_string()
   units.iter()
@@ -313,6 +318,7 @@ pub fn Rope::lines(self : Rope) -> Iter[StringView] {
 }
 
 ///|
+/// The whole text, flattened into one string.
 pub fn Rope::to_string(self : Rope) -> String {
   let out = StringBuilder()
   for chunk in self.chunks {
@@ -322,6 +328,7 @@ pub fn Rope::to_string(self : Rope) -> String {
 }
 
 ///|
+/// Writes the text into `out` chunk by chunk, without flattening it first.
 pub fn Rope::write_to(self : Rope, out : StringBuilder) -> Unit {
   for chunk in self.chunks {
     out.write_string(chunk)
@@ -338,11 +345,13 @@ pub fn Rope::split_off(self : Rope, offset : Int32) -> Rope {
 }
 
 ///|
+/// A copy that owns its chunks: an edit to either rope leaves the other alone.
 pub fn Rope::copy(self : Rope) -> Rope {
   { chunks: self.chunks.copy(), starts: self.starts.copy(), }
 }
 
 ///|
+/// Removes all text, leaving an empty rope.
 pub fn Rope::clear(self : Rope) -> Unit {
   self.chunks.clear()
   self.starts = [0]
@@ -367,16 +376,19 @@ pub struct RopeView {
 }
 
 ///|
+/// How many UTF-16 code units the view covers.
 pub fn RopeView::length(self : RopeView) -> Int32 {
   self.end - self.start
 }
 
 ///|
+/// How many characters the view covers, which is fewer than the code units when the text carries surrogate pairs.
 pub fn RopeView::char_length(self : RopeView) -> Int32 {
   self.to_string().iter().count()
 }
 
 ///|
+/// A view of the part from `start` up to `end`, clamped to what this view already covers.
 pub fn RopeView::slice(
   self : RopeView,
   start~ : Int32,
@@ -388,6 +400,7 @@ pub fn RopeView::slice(
 }
 
 ///|
+/// The part of the text the view covers, as a new string.
 pub fn RopeView::to_string(self : RopeView) -> String {
   let out = StringBuilder()
   let mut offset = 0
@@ -414,11 +427,13 @@ pub fn RopeView::to_string(self : RopeView) -> String {
 }
 
 ///|
+/// The characters the view covers, in order.
 pub fn RopeView::chars(self : RopeView) -> Iter[Char] {
   self.to_string().iter()
 }
 
 ///|
+/// The lines the view covers, without their line breaks.
 pub fn RopeView::lines(self : RopeView) -> Iter[StringView] {
   self.to_rope().lines()
 }
@@ -447,11 +462,13 @@ pub struct RopeBuilder {
 }
 
 ///|
+/// An empty builder.
 pub fn RopeBuilder::new() -> RopeBuilder {
   { chunks: [], }
 }
 
 ///|
+/// Adds text to the end of what the builder has gathered.
 pub fn RopeBuilder::append(self : RopeBuilder, text : StringView) -> Unit {
   if text.length() > 0 {
     self.chunks.push(text.to_owned())
@@ -459,6 +476,7 @@ pub fn RopeBuilder::append(self : RopeBuilder, text : StringView) -> Unit {
 }
 
 ///|
+/// The rope the builder has gathered.
 pub fn RopeBuilder::finish(self : RopeBuilder) -> Rope {
   let rope : Rope = { chunks: self.chunks.copy(), starts: [0], }
   rope.reindex()

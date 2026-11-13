@@ -64,6 +64,7 @@ pub fn Opcode::tag(self : Opcode) -> String {
 }
 
 ///|
+/// Where the block starts in the first sequence.
 pub fn Opcode::a1(self : Opcode) -> Int32 {
   match self {
     Equal(a1~, ..) | Replace(a1~, ..) | Delete(a1~, ..) | Insert(a1~, ..) => a1
@@ -71,6 +72,7 @@ pub fn Opcode::a1(self : Opcode) -> Int32 {
 }
 
 ///|
+/// Where the block ends in the first sequence, exclusive.
 pub fn Opcode::a2(self : Opcode) -> Int32 {
   match self {
     Equal(a2~, ..) | Replace(a2~, ..) | Delete(a2~, ..) | Insert(a2~, ..) => a2
@@ -78,6 +80,7 @@ pub fn Opcode::a2(self : Opcode) -> Int32 {
 }
 
 ///|
+/// Where the block starts in the second sequence.
 pub fn Opcode::b1(self : Opcode) -> Int32 {
   match self {
     Equal(b1~, ..) | Replace(b1~, ..) | Delete(b1~, ..) | Insert(b1~, ..) => b1
@@ -85,6 +88,7 @@ pub fn Opcode::b1(self : Opcode) -> Int32 {
 }
 
 ///|
+/// Where the block ends in the second sequence, exclusive.
 pub fn Opcode::b2(self : Opcode) -> Int32 {
   match self {
     Equal(b2~, ..) | Replace(b2~, ..) | Delete(b2~, ..) | Insert(b2~, ..) => b2
@@ -118,6 +122,7 @@ pub struct SequenceMatcher[T] {
 }
 
 ///|
+/// A matcher over the two sequences; `options` decides what is junk and, for text, which lines or characters count as such.
 pub fn[T : Hash + Eq] SequenceMatcher::new(
   a : ArrayView[T],
   b : ArrayView[T],

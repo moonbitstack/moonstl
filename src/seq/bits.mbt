@@ -46,6 +46,7 @@ pub struct BitVec {
 }
 
 ///|
+/// An empty bit vector with room for `capacity` bits.
 pub fn BitVec::new(capacity~ : Int32 = 0) -> BitVec {
   let words : Array[UInt64] = []
   if capacity > 0 {
@@ -55,6 +56,7 @@ pub fn BitVec::new(capacity~ : Int32 = 0) -> BitVec {
 }
 
 ///|
+/// Appends one bit at the end.
 pub fn BitVec::push(self : BitVec, value : Bool) -> Unit {
   if self.bits % 64 == 0 {
     self.words.push(0)
@@ -70,6 +72,7 @@ pub fn BitVec::push(self : BitVec, value : Bool) -> Unit {
 }
 
 ///|
+/// Removes the last bit and returns it, or `None` when the vector is empty.
 pub fn BitVec::pop(self : BitVec) -> Bool? {
   if self.bits == 0 {
     return None
@@ -85,6 +88,7 @@ pub fn BitVec::pop(self : BitVec) -> Bool? {
 }
 
 ///|
+/// The bit at `index`, or `None` past the last bit.
 pub fn BitVec::get(self : BitVec, index : Int32) -> Bool? {
   if index < 0 || index >= self.bits {
     None
@@ -94,6 +98,7 @@ pub fn BitVec::get(self : BitVec, index : Int32) -> Bool? {
 }
 
 ///|
+/// The bit at `index`; aborts past the last bit, as an array does.
 pub fn BitVec::at(self : BitVec, index : Int32) -> Bool {
   match self.get(index) {
     Some(value) => value
@@ -118,16 +123,19 @@ pub fn BitVec::set(self : BitVec, index : Int32, value : Bool) -> Unit {
 }
 
 ///|
+/// How many bits the vector holds.
 pub fn BitVec::length(self : BitVec) -> Int32 {
   self.bits
 }
 
 ///|
+/// Whether the vector holds no bit.
 pub fn BitVec::is_empty(self : BitVec) -> Bool {
   self.bits == 0
 }
 
 ///|
+/// How many of the bits are set.
 pub fn BitVec::count_ones(self : BitVec) -> Int32 {
   popcount_upto(self.words, self.words.length())
 }
@@ -158,6 +166,7 @@ pub fn BitVec::resize(self : BitVec, length : Int32) -> Unit {
 }
 
 ///|
+/// The bits from the first to the last.
 pub fn BitVec::iter(self : BitVec) -> Iter[Bool] {
   let mut cursor = 0
   Iter::new(() => {
@@ -179,12 +188,14 @@ pub fn BitVec::blocks(self : BitVec) -> ArrayView[UInt64] {
 }
 
 ///|
+/// Removes every bit, keeping the room the words have.
 pub fn BitVec::clear(self : BitVec) -> Unit {
   self.words.clear()
   self.bits = 0
 }
 
 ///|
+/// A copy that owns its words: a change to either vector is invisible to the other.
 pub fn BitVec::copy(self : BitVec) -> BitVec {
   { words: self.words.copy(), bits: self.bits, }
 }
@@ -233,6 +244,7 @@ pub struct BitSet {
 }
 
 ///|
+/// An empty set with room for `capacity` bits.
 pub fn BitSet::new(capacity~ : Int32 = 0) -> BitSet {
   let words : Array[UInt64] = []
   if capacity > 0 {
@@ -267,6 +279,7 @@ pub fn BitSet::insert(self : BitSet, index : Int32) -> Bool {
 }
 
 ///|
+/// Clears the bit at `index` and reports whether it was set.
 pub fn BitSet::remove(self : BitSet, index : Int32) -> Bool {
   if index < 0 || word_of(index) >= self.words.length() {
     return false
@@ -282,6 +295,7 @@ pub fn BitSet::remove(self : BitSet, index : Int32) -> Bool {
 }
 
 ///|
+/// Whether the bit at `index` is set.
 pub fn BitSet::contains(self : BitSet, index : Int32) -> Bool {
   if index < 0 || word_of(index) >= self.words.length() {
     false
@@ -342,6 +356,7 @@ pub fn BitSet::length(self : BitSet) -> Int32 {
 }
 
 ///|
+/// Whether no bit is set.
 pub fn BitSet::is_empty(self : BitSet) -> Bool {
   for word in self.words {
     if word != 0 {
@@ -374,6 +389,7 @@ pub fn BitSet::iter(self : BitSet) -> Iter[Int32] {
 }
 
 ///|
+/// The indices of the set bits, ascending.
 pub fn BitSet::to_array(self : BitSet) -> Array[Int32] {
   let out : Array[Int32] = []
   for index in self.iter() {
@@ -383,6 +399,7 @@ pub fn BitSet::to_array(self : BitSet) -> Array[Int32] {
 }
 
 ///|
+/// A new set holding the bits set in either, without touching the two.
 pub fn BitSet::union(self : BitSet, other : BitSet) -> BitSet {
   let result : BitSet = { words: [], }
   for i in 0..<self.words.length() {
@@ -399,6 +416,7 @@ pub fn BitSet::union(self : BitSet, other : BitSet) -> BitSet {
 }
 
 ///|
+/// A new set holding the bits set in both.
 pub fn BitSet::intersection(self : BitSet, other : BitSet) -> BitSet {
   let result : BitSet = { words: [], }
   for i in 0..<self.words.length() {
@@ -412,6 +430,7 @@ pub fn BitSet::intersection(self : BitSet, other : BitSet) -> BitSet {
 }
 
 ///|
+/// A new set holding the bits set here and not in `other`.
 pub fn BitSet::difference(self : BitSet, other : BitSet) -> BitSet {
   let result : BitSet = { words: [], }
   for i in 0..<self.words.length() {
@@ -425,6 +444,7 @@ pub fn BitSet::difference(self : BitSet, other : BitSet) -> BitSet {
 }
 
 ///|
+/// A new set holding the bits set in exactly one of the two.
 pub fn BitSet::symmetric_difference(self : BitSet, other : BitSet) -> BitSet {
   let result : BitSet = { words: [], }
   let width = if self.words.length() > other.words.length() {
@@ -441,6 +461,7 @@ pub fn BitSet::symmetric_difference(self : BitSet, other : BitSet) -> BitSet {
 }
 
 ///|
+/// Sets the bits `other` has, growing this set when `other` reaches further.
 pub fn BitSet::union_in_place(self : BitSet, other : BitSet) -> Unit {
   for i in 0..<other.words.length() {
     if i < self.words.length() {
@@ -452,6 +473,7 @@ pub fn BitSet::union_in_place(self : BitSet, other : BitSet) -> Unit {
 }
 
 ///|
+/// Clears the bits `other` does not have.
 pub fn BitSet::intersection_in_place(self : BitSet, other : BitSet) -> Unit {
   for i in 0..<self.words.length() {
     if i < other.words.length() {
@@ -463,6 +485,7 @@ pub fn BitSet::intersection_in_place(self : BitSet, other : BitSet) -> Unit {
 }
 
 ///|
+/// Clears the bits `other` has.
 pub fn BitSet::difference_in_place(self : BitSet, other : BitSet) -> Unit {
   for i in 0..<self.words.length() {
     if i < other.words.length() {
@@ -472,6 +495,7 @@ pub fn BitSet::difference_in_place(self : BitSet, other : BitSet) -> Unit {
 }
 
 ///|
+/// Whether every bit set here is set in `other`.
 pub fn BitSet::is_subset(self : BitSet, other : BitSet) -> Bool {
   for i in 0..<self.words.length() {
     let held = if i < other.words.length() { other.words[i] } else { 0 }
@@ -483,11 +507,13 @@ pub fn BitSet::is_subset(self : BitSet, other : BitSet) -> Bool {
 }
 
 ///|
+/// Whether every bit set in `other` is set here.
 pub fn BitSet::is_superset(self : BitSet, other : BitSet) -> Bool {
   other.is_subset(self)
 }
 
 ///|
+/// Whether the two sets share no set bit.
 pub fn BitSet::is_disjoint(self : BitSet, other : BitSet) -> Bool {
   let width = if self.words.length() < other.words.length() {
     self.words.length()
@@ -503,11 +529,13 @@ pub fn BitSet::is_disjoint(self : BitSet, other : BitSet) -> Bool {
 }
 
 ///|
+/// Clears every bit, keeping the room the words have.
 pub fn BitSet::clear(self : BitSet) -> Unit {
   self.words.clear()
 }
 
 ///|
+/// A copy that owns its words: a change to either set is invisible to the other.
 pub fn BitSet::copy(self : BitSet) -> BitSet {
   { words: self.words.copy(), }
 }

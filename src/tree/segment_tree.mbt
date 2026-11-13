@@ -53,6 +53,7 @@ pub fn[T] SegmentTree::new(
 }
 
 ///|
+/// A tree over the values written out, combining them with `op` at construction.
 pub fn[T] SegmentTree::from_array(
   values : ArrayView[T],
   op~ : (T, T) -> T,
@@ -75,11 +76,13 @@ pub fn[T] SegmentTree::from_array(
 }
 
 ///|
+/// How many leaves the tree covers.
 pub fn[T] SegmentTree::length(self : SegmentTree[T]) -> Int32 {
   self.size
 }
 
 ///|
+/// The value at `index`, or `None` past the last leaf.
 pub fn[T] SegmentTree::get(self : SegmentTree[T], index : Int32) -> T? {
   if index < 0 || index >= self.size {
     None
@@ -89,6 +92,7 @@ pub fn[T] SegmentTree::get(self : SegmentTree[T], index : Int32) -> T? {
 }
 
 ///|
+/// Replaces the value at `index` and brings the nodes above it up to date; reports whether the index was in range.
 pub fn[T] SegmentTree::set(
   self : SegmentTree[T],
   index : Int32,
@@ -138,6 +142,7 @@ pub fn[T] SegmentTree::query(
 }
 
 ///|
+/// The combination of every leaf, which is the answer to `query(0, length)`.
 pub fn[T] SegmentTree::query_all(self : SegmentTree[T]) -> T {
   self.nodes[1]
 }
@@ -170,6 +175,7 @@ pub fn[T] SegmentTree::first_where(
 }
 
 ///|
+/// The leaves in order, as a new array.
 pub fn[T] SegmentTree::to_array(self : SegmentTree[T]) -> Array[T] {
   let out : Array[T] = []
   for i in 0..<self.size {
@@ -179,6 +185,7 @@ pub fn[T] SegmentTree::to_array(self : SegmentTree[T]) -> Array[T] {
 }
 
 ///|
+/// A copy that owns its nodes and the combining function: a change to either tree leaves the other alone.
 pub fn[T] SegmentTree::copy(self : SegmentTree[T]) -> SegmentTree[T] {
   {
     op: self.op,
@@ -222,6 +229,7 @@ pub struct LazySegmentTree[T, F] {
 }
 
 ///|
+/// An empty tree of `length` leaves, each holding `identity`, ready for range updates.
 pub fn[T, F] LazySegmentTree::new(
   length~ : Int32,
   op~ : (T, T) -> T,
@@ -241,6 +249,7 @@ pub fn[T, F] LazySegmentTree::new(
 }
 
 ///|
+/// A tree over the values written out, with the range update the other arguments describe.
 pub fn[T, F] LazySegmentTree::from_array(
   values : ArrayView[T],
   op~ : (T, T) -> T,
@@ -337,6 +346,7 @@ fn[T, F] LazySegmentTree::update_range(
 }
 
 ///|
+/// Applies `update` to every leaf from `start` up to `end`, leaving the answer to any later query correct.
 pub fn[T, F] LazySegmentTree::range_update(
   self : LazySegmentTree[T, F],
   start : Int32,
@@ -373,6 +383,7 @@ fn[T, F] LazySegmentTree::collect(
 }
 
 ///|
+/// The combination of the leaves from `start` up to `end`, with the updates that cover them already applied.
 pub fn[T, F] LazySegmentTree::query(
   self : LazySegmentTree[T, F],
   start : Int32,
@@ -387,6 +398,7 @@ pub fn[T, F] LazySegmentTree::query(
 }
 
 ///|
+/// The value at `index` after the updates that cover it, or `None` past the last leaf.
 pub fn[T, F] LazySegmentTree::get(
   self : LazySegmentTree[T, F],
   index : Int32,
@@ -399,6 +411,7 @@ pub fn[T, F] LazySegmentTree::get(
 }
 
 ///|
+/// Replaces the value at `index`, keeping the updates that cover it.
 pub fn[T, F] LazySegmentTree::set(
   self : LazySegmentTree[T, F],
   index : Int32,
@@ -443,6 +456,7 @@ pub struct Fenwick[T] {
 }
 
 ///|
+/// A Fenwick tree of `length` zeros.
 pub fn[T : Default] Fenwick::new(length~ : Int32) -> Fenwick[T] {
   let size = if length < 0 { 0 } else { length }
   let tree : Array[T] = []
@@ -455,6 +469,7 @@ pub fn[T : Default] Fenwick::new(length~ : Int32) -> Fenwick[T] {
 }
 
 ///|
+/// A Fenwick tree over the values written out, with the prefix sums ready.
 pub fn[T : Add + Sub + Default] Fenwick::from_array(
   values : ArrayView[T],
 ) -> Fenwick[T] {
@@ -466,6 +481,7 @@ pub fn[T : Add + Sub + Default] Fenwick::from_array(
 }
 
 ///|
+/// Adds `delta` at `index`, which is the one point update a Fenwick tree supports.
 pub fn[T : Add] Fenwick::add(
   self : Fenwick[T],
   index : Int32,
@@ -515,6 +531,7 @@ pub fn[T : Add + Sub + Default] Fenwick::range_sum(
 }
 
 ///|
+/// The value at `index`, or `None` past the last one.
 pub fn[T] Fenwick::get(self : Fenwick[T], index : Int32) -> T? {
   if index < 0 || index >= self.length_ {
     None
@@ -524,6 +541,7 @@ pub fn[T] Fenwick::get(self : Fenwick[T], index : Int32) -> T? {
 }
 
 ///|
+/// Replaces the value at `index` by adding the difference, so the prefix sums stay right.
 pub fn[T : Add + Sub] Fenwick::set(
   self : Fenwick[T],
   index : Int32,
@@ -539,6 +557,7 @@ pub fn[T : Add + Sub] Fenwick::set(
 }
 
 ///|
+/// How many positions the tree covers.
 pub fn[T] Fenwick::length(self : Fenwick[T]) -> Int32 {
   self.length_
 }

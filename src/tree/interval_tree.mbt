@@ -49,11 +49,13 @@ pub struct IntervalTree[K, V] {
 }
 
 ///|
+/// An empty tree of intervals ordered by start.
 pub fn[K : Compare, V] IntervalTree::new() -> IntervalTree[K, V] {
   IntervalTree::new_by(cmp=(a, b) => a.compare(b))
 }
 
 ///|
+/// An empty tree of intervals ordered by `cmp` over their starts.
 pub fn[K, V] IntervalTree::new_by(cmp~ : (K, K) -> Int32) -> IntervalTree[K, V] {
   {
     cmp,
@@ -136,6 +138,7 @@ fn[K, V] IntervalTree::position_of(
 }
 
 ///|
+/// Adds the interval from `start` up to `end`, holding `value`, and returns the key that names it.
 pub fn[K, V] IntervalTree::insert(
   self : IntervalTree[K, V],
   start~ : K,
@@ -176,6 +179,7 @@ fn[K, V] IntervalTree::locate(
 }
 
 ///|
+/// The interval `key` names — its start, its end and its value — or `None` when the key names nothing.
 pub fn[K, V] IntervalTree::get(
   self : IntervalTree[K, V],
   key : IntervalKey[K],
@@ -188,6 +192,7 @@ pub fn[K, V] IntervalTree::get(
 }
 
 ///|
+/// Removes the interval `key` names and returns it.
 pub fn[K, V] IntervalTree::remove(
   self : IntervalTree[K, V],
   key : IntervalKey[K],
@@ -281,16 +286,19 @@ pub fn[K, V] IntervalTree::iter(self : IntervalTree[K, V]) -> Iter[(K, K, V)] {
 }
 
 ///|
+/// How many intervals the tree holds.
 pub fn[K, V] IntervalTree::length(self : IntervalTree[K, V]) -> Int32 {
   self.len
 }
 
 ///|
+/// Whether the tree holds no interval.
 pub fn[K, V] IntervalTree::is_empty(self : IntervalTree[K, V]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// Removes every interval; the keys issued before it name nothing afterwards.
 pub fn[K, V] IntervalTree::clear(self : IntervalTree[K, V]) -> Unit {
   self.starts.clear()
   self.ends.clear()
@@ -303,6 +311,7 @@ pub fn[K, V] IntervalTree::clear(self : IntervalTree[K, V]) -> Unit {
 }
 
 ///|
+/// A copy that owns its arrays: a change to either tree leaves the other alone, and a key names the same interval in both.
 pub fn[K, V] IntervalTree::copy(
   self : IntervalTree[K, V],
 ) -> IntervalTree[K, V] {

@@ -54,6 +54,7 @@ pub struct CuckooFilter[T] {
 }
 
 ///|
+/// A filter sized for `expected_items`, with the fingerprint width and bucket size `cuckoo_options` sets; a size or a rate it cannot use raises `Refused`.
 pub fn[T] CuckooFilter::new(
   expected_items~ : Int32,
   cuckoo_options~ : CuckooOptions = cuckoo_options,
@@ -151,6 +152,7 @@ pub fn[T : Hash] CuckooFilter::insert(self : CuckooFilter[T], item : T) -> Bool 
 }
 
 ///|
+/// Whether `item` may have been added: `true` means it was added or the filter is wrong, `false` means it certainly was not.
 pub fn[T : Hash] CuckooFilter::may_contain(
   self : CuckooFilter[T],
   item : T,
@@ -212,21 +214,25 @@ pub fn[T] CuckooFilter::estimated_false_positive_rate(
 }
 
 ///|
+/// How many items were added.
 pub fn[T] CuckooFilter::length(self : CuckooFilter[T]) -> Int64 {
   self.items
 }
 
 ///|
+/// Whether nothing has been added.
 pub fn[T] CuckooFilter::is_empty(self : CuckooFilter[T]) -> Bool {
   self.items == 0L
 }
 
 ///|
+/// How many items the filter can hold before an insert has nowhere to go.
 pub fn[T] CuckooFilter::capacity(self : CuckooFilter[T]) -> Int32 {
   self.buckets * self.bucket_size
 }
 
 ///|
+/// Empties every bucket.
 pub fn[T] CuckooFilter::clear(self : CuckooFilter[T]) -> Unit {
   for i in 0..<self.slots.length() {
     self.slots[i] = 0
@@ -235,6 +241,7 @@ pub fn[T] CuckooFilter::clear(self : CuckooFilter[T]) -> Unit {
 }
 
 ///|
+/// A copy that owns its buckets: an add to either filter leaves the other alone.
 pub fn[T] CuckooFilter::copy(self : CuckooFilter[T]) -> CuckooFilter[T] {
   {
     seed: self.seed,
@@ -248,6 +255,7 @@ pub fn[T] CuckooFilter::copy(self : CuckooFilter[T]) -> CuckooFilter[T] {
 }
 
 ///|
+/// The filter as bytes, in the format this module reads back with `decode`.
 pub fn[T] CuckooFilter::encode(self : CuckooFilter[T]) -> Bytes {
   let writer = Writer::new()
   writer.write_header(MAGIC_CUCKOO)
@@ -263,6 +271,7 @@ pub fn[T] CuckooFilter::encode(self : CuckooFilter[T]) -> Bytes {
 }
 
 ///|
+/// Reads a filter back from the bytes `encode` wrote, refusing anything that is not one of its states.
 pub fn[T] CuckooFilter::decode(
   view : BytesView,
 ) -> CuckooFilter[T] raise @spec.Refused {

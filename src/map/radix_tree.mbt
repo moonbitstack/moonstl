@@ -60,6 +60,7 @@ pub struct RadixTree[T] {
 }
 
 ///|
+/// An empty tree, holding no key.
 pub fn[T] RadixTree::new() -> RadixTree[T] {
   { labels: [[]], children: [Map([])], values: [None], entries: 0, }
 }
@@ -165,6 +166,7 @@ fn[T] RadixTree::walk(
 }
 
 ///|
+/// The value stored under `key`, or `None`.
 pub fn[T] RadixTree::get(self : RadixTree[T], key : StringView) -> T? {
   let chars = radix_chars(key)
   let (node, at) = self.walk(chars)
@@ -176,11 +178,13 @@ pub fn[T] RadixTree::get(self : RadixTree[T], key : StringView) -> T? {
 }
 
 ///|
+/// Whether `key` is stored.
 pub fn[T] RadixTree::contains(self : RadixTree[T], key : StringView) -> Bool {
   self.get(key) is Some(_)
 }
 
 ///|
+/// Whether some stored key begins with `prefix`.
 pub fn[T] RadixTree::contains_prefix(
   self : RadixTree[T],
   prefix : StringView,
@@ -321,6 +325,7 @@ pub fn[T] RadixTree::iter_prefix(
 }
 
 ///|
+/// Every stored key that begins with `prefix`, in tree order.
 pub fn[T] RadixTree::keys_with_prefix(
   self : RadixTree[T],
   prefix : StringView,
@@ -359,11 +364,13 @@ fn[T] RadixTree::count_under(self : RadixTree[T], node : Int32) -> Int32 {
 }
 
 ///|
+/// Every stored key and its value, in tree order.
 pub fn[T] RadixTree::iter(self : RadixTree[T]) -> Iter[(String, T)] {
   self.iter_prefix("")
 }
 
 ///|
+/// Every stored key and its value, in tree order, as a new array.
 pub fn[T] RadixTree::to_array(self : RadixTree[T]) -> Array[(String, T)] {
   let found : Array[(String, T)] = []
   self.collect(0, "", found)
@@ -371,16 +378,19 @@ pub fn[T] RadixTree::to_array(self : RadixTree[T]) -> Array[(String, T)] {
 }
 
 ///|
+/// How many keys are stored.
 pub fn[T] RadixTree::length(self : RadixTree[T]) -> Int32 {
   self.entries
 }
 
 ///|
+/// Whether no key is stored.
 pub fn[T] RadixTree::is_empty(self : RadixTree[T]) -> Bool {
   self.entries == 0
 }
 
 ///|
+/// Removes every key, leaving the root.
 pub fn[T] RadixTree::clear(self : RadixTree[T]) -> Unit {
   self.labels.clear()
   self.labels.push([])
@@ -392,6 +402,7 @@ pub fn[T] RadixTree::clear(self : RadixTree[T]) -> Unit {
 }
 
 ///|
+/// A copy that shares nothing with the original: a write to either is invisible to the other.
 pub fn[T] RadixTree::copy(self : RadixTree[T]) -> RadixTree[T] {
   let labels : Array[Array[Char]] = []
   for label in self.labels {

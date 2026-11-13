@@ -36,6 +36,7 @@ pub struct RadixHeap[T] {
 }
 
 ///|
+/// An empty monotone heap, with no last key to be monotone against yet.
 pub fn[T] RadixHeap::new() -> RadixHeap[T] {
   let buckets : Array[Array[(UInt64, T)]] = []
   for _ in 0..<65 {
@@ -65,6 +66,7 @@ pub fn[T] RadixHeap::push(
 }
 
 ///|
+/// The key the next pop would return, or `None` when the heap is empty.
 pub fn[T] RadixHeap::peek_key(self : RadixHeap[T]) -> UInt64? {
   match self.peek_entry() {
     Some(entry) => Some(entry.0)
@@ -106,6 +108,7 @@ fn[T] RadixHeap::peek_entry(self : RadixHeap[T]) -> (UInt64, T)? {
 }
 
 ///|
+/// Removes and returns the smallest key with its value, or `None` when the heap is empty; the key becomes the floor the next insert must not go below.
 pub fn[T] RadixHeap::pop_min(self : RadixHeap[T]) -> (UInt64, T)? {
   match self.peek_entry() {
     Some(entry) => {
@@ -119,16 +122,19 @@ pub fn[T] RadixHeap::pop_min(self : RadixHeap[T]) -> (UInt64, T)? {
 }
 
 ///|
+/// How many entries the heap holds.
 pub fn[T] RadixHeap::length(self : RadixHeap[T]) -> Int32 {
   self.len
 }
 
 ///|
+/// Whether the heap holds no entry.
 pub fn[T] RadixHeap::is_empty(self : RadixHeap[T]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// Removes every entry and forgets the last key it popped.
 pub fn[T] RadixHeap::clear(self : RadixHeap[T]) -> Unit {
   for i in 0..<self.buckets.length() {
     self.buckets[i] = []

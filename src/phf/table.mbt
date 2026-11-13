@@ -73,6 +73,7 @@ pub fn[K : PhfKey, V] PhfMap::from_layout(
 }
 
 ///|
+/// The value stored under `key`, or `None`; the hash is already in the layout, so the lookup is one probe and one comparison.
 pub fn[K : PhfKey + Eq, V] PhfMap::get(self : PhfMap[K, V], key : K) -> V? {
   self.get_entry(key).map(entry => entry.1)
 }
@@ -109,6 +110,7 @@ fn[K : PhfKey + Eq, V] PhfMap::get_entry(
 }
 
 ///|
+/// Whether `key` is one of the table's keys.
 pub fn[K : PhfKey + Eq, V] PhfMap::contains(
   self : PhfMap[K, V],
   key : K,
@@ -117,6 +119,7 @@ pub fn[K : PhfKey + Eq, V] PhfMap::contains(
 }
 
 ///|
+/// The key the table holds that compares equal to `key`, or `None`; a lookup by a borrowed form hands back the owned one.
 pub fn[K : PhfKey + Eq, V] PhfMap::get_key(self : PhfMap[K, V], key : K) -> K? {
   match self.get_entry(key) {
     Some(entry) => Some(entry.0)
@@ -136,6 +139,7 @@ pub fn[K, V] PhfMap::get_index(self : PhfMap[K, V], index : Int32) -> (K, V)? {
 }
 
 ///|
+/// The keys in layout order, which is neither insertion order nor sorted order.
 pub fn[K, V] PhfMap::keys(self : PhfMap[K, V]) -> Iter[K] {
   let mut cursor = 0
   Iter::new(() => {
@@ -150,6 +154,7 @@ pub fn[K, V] PhfMap::keys(self : PhfMap[K, V]) -> Iter[K] {
 }
 
 ///|
+/// The values in layout order.
 pub fn[K, V] PhfMap::values(self : PhfMap[K, V]) -> Iter[V] {
   let mut cursor = 0
   Iter::new(() => {
@@ -164,6 +169,7 @@ pub fn[K, V] PhfMap::values(self : PhfMap[K, V]) -> Iter[V] {
 }
 
 ///|
+/// The entries in layout order.
 pub fn[K, V] PhfMap::iter(self : PhfMap[K, V]) -> Iter[(K, V)] {
   let mut cursor = 0
   Iter::new(() => {
@@ -178,21 +184,25 @@ pub fn[K, V] PhfMap::iter(self : PhfMap[K, V]) -> Iter[(K, V)] {
 }
 
 ///|
+/// How many entries the table holds.
 pub fn[K, V] PhfMap::length(self : PhfMap[K, V]) -> Int32 {
   self.keys.length()
 }
 
 ///|
+/// Whether the table holds no entry.
 pub fn[K, V] PhfMap::is_empty(self : PhfMap[K, V]) -> Bool {
   self.keys.length() == 0
 }
 
 ///|
+/// A copy of the layout the table was built from, which is what a generated module carries as a literal.
 pub fn[K, V] PhfMap::layout(self : PhfMap[K, V]) -> PhfLayout {
   copy_layout(self.layout)
 }
 
 ///|
+/// A copy that owns its entries: a change to either table is invisible to the other. The layout is shared, and it never changes.
 pub fn[K, V] PhfMap::copy(self : PhfMap[K, V]) -> PhfMap[K, V] {
   {
     layout: copy_layout(self.layout),
@@ -229,6 +239,7 @@ pub struct PhfBuilder[K, V] {
 }
 
 ///|
+/// A builder that lays keys out under `phf_options`.
 pub fn[K, V] PhfBuilder::new(
   phf_options~ : PhfOptions = phf_options,
 ) -> PhfBuilder[K, V] {
@@ -236,6 +247,7 @@ pub fn[K, V] PhfBuilder::new(
 }
 
 ///|
+/// Adds a key with its value, refusing a key the builder already holds with `Refused::DuplicateValue`.
 pub fn[K : PhfKey, V] PhfBuilder::entry(
   self : PhfBuilder[K, V],
   key : K,
@@ -273,6 +285,7 @@ pub fn[K : PhfKey, V] PhfBuilder::build(
 }
 
 ///|
+/// How many keys the builder holds.
 pub fn[K, V] PhfBuilder::length(self : PhfBuilder[K, V]) -> Int32 {
   self.keys.length()
 }
@@ -336,6 +349,7 @@ pub struct PhfSet[K] {
 }
 
 ///|
+/// Lays the keys out and returns a set of them; the values the builder was given are dropped.
 pub fn[K : PhfKey, V] PhfBuilder::build_set(
   self : PhfBuilder[K, V],
 ) -> PhfSet[K] raise @spec.Refused {
@@ -358,26 +372,31 @@ pub fn[K : PhfKey] PhfSet::from_layout(
 }
 
 ///|
+/// Whether `key` is one of the set's keys.
 pub fn[K : PhfKey + Eq] PhfSet::contains(self : PhfSet[K], key : K) -> Bool {
   self.map.contains(key)
 }
 
 ///|
+/// The keys in layout order.
 pub fn[K] PhfSet::iter(self : PhfSet[K]) -> Iter[K] {
   self.map.keys()
 }
 
 ///|
+/// How many keys the set holds.
 pub fn[K] PhfSet::length(self : PhfSet[K]) -> Int32 {
   self.map.length()
 }
 
 ///|
+/// Whether the set holds no key.
 pub fn[K] PhfSet::is_empty(self : PhfSet[K]) -> Bool {
   self.map.is_empty()
 }
 
 ///|
+/// The key at position `index` in layout order, or `None` past the last one.
 pub fn[K] PhfSet::get_index(self : PhfSet[K], index : Int32) -> K? {
   match self.map.get_index(index) {
     Some(entry) => Some(entry.0)
@@ -406,6 +425,7 @@ pub struct PhfOrderedMap[K, V] {
 }
 
 ///|
+/// Lays the keys out and returns a table that keeps the order the entries were added in.
 pub fn[K : PhfKey, V] PhfBuilder::build_ordered(
   self : PhfBuilder[K, V],
 ) -> PhfOrderedMap[K, V] raise @spec.Refused {
@@ -423,6 +443,7 @@ pub fn[K : PhfKey, V] PhfOrderedMap::from_layout(
 }
 
 ///|
+/// The value stored under `key`, or `None`.
 pub fn[K : PhfKey + Eq, V] PhfOrderedMap::get(
   self : PhfOrderedMap[K, V],
   key : K,
@@ -431,6 +452,7 @@ pub fn[K : PhfKey + Eq, V] PhfOrderedMap::get(
 }
 
 ///|
+/// Whether `key` is one of the table's keys.
 pub fn[K : PhfKey + Eq, V] PhfOrderedMap::contains(
   self : PhfOrderedMap[K, V],
   key : K,
@@ -448,6 +470,7 @@ pub fn[K : PhfKey + Eq, V] PhfOrderedMap::index(
 }
 
 ///|
+/// The entry at position `index` in insertion order, or `None` past the last one.
 pub fn[K, V] PhfOrderedMap::get_index(
   self : PhfOrderedMap[K, V],
   index : Int32,
@@ -456,26 +479,31 @@ pub fn[K, V] PhfOrderedMap::get_index(
 }
 
 ///|
+/// The entries in insertion order.
 pub fn[K, V] PhfOrderedMap::iter(self : PhfOrderedMap[K, V]) -> Iter[(K, V)] {
   self.map.iter()
 }
 
 ///|
+/// The keys in insertion order.
 pub fn[K, V] PhfOrderedMap::keys(self : PhfOrderedMap[K, V]) -> Iter[K] {
   self.map.keys()
 }
 
 ///|
+/// The values in insertion order.
 pub fn[K, V] PhfOrderedMap::values(self : PhfOrderedMap[K, V]) -> Iter[V] {
   self.map.values()
 }
 
 ///|
+/// How many entries the table holds.
 pub fn[K, V] PhfOrderedMap::length(self : PhfOrderedMap[K, V]) -> Int32 {
   self.map.length()
 }
 
 ///|
+/// Whether the table holds no entry.
 pub fn[K, V] PhfOrderedMap::is_empty(self : PhfOrderedMap[K, V]) -> Bool {
   self.map.is_empty()
 }
@@ -487,6 +515,7 @@ pub struct PhfOrderedSet[K] {
 }
 
 ///|
+/// Lays the keys out and returns a set that keeps the order the keys were added in.
 pub fn[K : PhfKey, V] PhfBuilder::build_ordered_set(
   self : PhfBuilder[K, V],
 ) -> PhfOrderedSet[K] raise @spec.Refused {
@@ -504,6 +533,7 @@ pub fn[K : PhfKey] PhfOrderedSet::from_layout(
 }
 
 ///|
+/// Whether `key` is one of the set's keys.
 pub fn[K : PhfKey + Eq] PhfOrderedSet::contains(
   self : PhfOrderedSet[K],
   key : K,
@@ -512,6 +542,7 @@ pub fn[K : PhfKey + Eq] PhfOrderedSet::contains(
 }
 
 ///|
+/// The position `key` was added at, or `None` when the set does not hold it.
 pub fn[K : PhfKey + Eq] PhfOrderedSet::index(
   self : PhfOrderedSet[K],
   key : K,
@@ -520,6 +551,7 @@ pub fn[K : PhfKey + Eq] PhfOrderedSet::index(
 }
 
 ///|
+/// The key at position `index` in insertion order, or `None` past the last one.
 pub fn[K] PhfOrderedSet::get_index(
   self : PhfOrderedSet[K],
   index : Int32,
@@ -531,16 +563,19 @@ pub fn[K] PhfOrderedSet::get_index(
 }
 
 ///|
+/// The keys in insertion order.
 pub fn[K] PhfOrderedSet::iter(self : PhfOrderedSet[K]) -> Iter[K] {
   self.map.keys()
 }
 
 ///|
+/// How many keys the set holds.
 pub fn[K] PhfOrderedSet::length(self : PhfOrderedSet[K]) -> Int32 {
   self.map.length()
 }
 
 ///|
+/// Whether the set holds no key.
 pub fn[K] PhfOrderedSet::is_empty(self : PhfOrderedSet[K]) -> Bool {
   self.map.is_empty()
 }

@@ -60,6 +60,7 @@ pub struct ArcCache[K, V] {
 }
 
 ///|
+/// A cache holding at most `capacity` entries, balancing recency against frequency as it watches which of the two it was missing. `on_evict` sees every entry the policy drops; a capacity of zero or less raises `Refused::Capacity`.
 pub fn[K, V] ArcCache::new(
   capacity~ : Int32,
   on_evict? : (K, V) -> Unit,
@@ -262,6 +263,7 @@ pub fn[K : Hash + Eq, V] ArcCache::contains(
 }
 
 ///|
+/// The value under `key`, counting a hit and moving the entry into the frequent list; a miss counts too.
 pub fn[K : Hash + Eq, V] ArcCache::get(self : ArcCache[K, V], key : K) -> V? {
   match self.index.get(key) {
     Some(slot) => {
@@ -356,6 +358,7 @@ pub fn[K : Hash + Eq, V] ArcCache::set(
 }
 
 ///|
+/// Removes the entry under `key`, which is not an eviction: `on_evict` is not called and the counter does not move.
 pub fn[K : Hash + Eq, V] ArcCache::remove(self : ArcCache[K, V], key : K) -> V? {
   match self.index.get(key) {
     Some(slot) => {
@@ -387,6 +390,7 @@ pub fn[K, V] ArcCache::lists(
 }
 
 ///|
+/// The entries of the recent list and then of the frequent list, most recently used first within each.
 pub fn[K, V] ArcCache::iter(self : ArcCache[K, V]) -> Iter[(K, V)] {
   let mut cursor = self.heads[arc_t1]
   let mut phase = arc_t1
@@ -412,31 +416,37 @@ pub fn[K, V] ArcCache::iter(self : ArcCache[K, V]) -> Iter[(K, V)] {
 }
 
 ///|
+/// The keys in the order `iter` walks them.
 pub fn[K, V] ArcCache::keys(self : ArcCache[K, V]) -> Iter[K] {
   self.iter().map(pair => pair.0)
 }
 
 ///|
+/// The values in the order `iter` walks them.
 pub fn[K, V] ArcCache::values(self : ArcCache[K, V]) -> Iter[V] {
   self.iter().map(pair => pair.1)
 }
 
 ///|
+/// How many entries the cache holds, both lists together.
 pub fn[K, V] ArcCache::length(self : ArcCache[K, V]) -> Int32 {
   self.sizes[arc_t1] + self.sizes[arc_t2]
 }
 
 ///|
+/// How many entries the cache holds before it drops one.
 pub fn[K, V] ArcCache::capacity(self : ArcCache[K, V]) -> Int32 {
   self.capacity
 }
 
 ///|
+/// Whether the cache holds no entry.
 pub fn[K, V] ArcCache::is_empty(self : ArcCache[K, V]) -> Bool {
   self.length() == 0
 }
 
 ///|
+/// Removes every entry from both lists and from the two ghost lists.
 pub fn[K, V] ArcCache::clear(self : ArcCache[K, V]) -> Unit {
   self.index.clear()
   self.slots.clear()
@@ -450,6 +460,7 @@ pub fn[K, V] ArcCache::clear(self : ArcCache[K, V]) -> Unit {
 }
 
 ///|
+/// A copy whose lists and entries stand on their own: a lookup in either cache leaves the other where it was.
 pub fn[K, V] ArcCache::copy(self : ArcCache[K, V]) -> ArcCache[K, V] {
   let slots : Array[ArcNode[K, V]?] = []
   for slot in self.slots {
@@ -484,6 +495,7 @@ pub fn[K, V] ArcCache::copy(self : ArcCache[K, V]) -> ArcCache[K, V] {
 }
 
 ///|
+/// The hit, miss and eviction counters, each moved by the operation that names it.
 pub fn[K, V] ArcCache::stats(self : ArcCache[K, V]) -> CacheStats {
   { hits: self.hits, misses: self.misses, evictions: self.evictions, }
 }

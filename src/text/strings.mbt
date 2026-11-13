@@ -152,6 +152,7 @@ pub struct SuffixArray {
 }
 
 ///|
+/// The suffix array of `text`: the offset of every suffix, sorted by the suffix.
 pub fn SuffixArray::new(text : StringView) -> SuffixArray {
   let n = text.length()
   let order : Array[Int32] = []
@@ -304,11 +305,13 @@ fn SuffixArray::compare_prefix(
 }
 
 ///|
+/// How many suffixes the array holds, which is the length of the text.
 pub fn SuffixArray::length(self : SuffixArray) -> Int32 {
   self.order.length()
 }
 
 ///|
+/// The text the array was built from.
 pub fn SuffixArray::text(self : SuffixArray) -> String {
   self.text_
 }
@@ -343,6 +346,7 @@ pub struct SuffixAutomaton {
 }
 
 ///|
+/// The suffix automaton of `text`, which answers occurrence questions about it in time proportional to the pattern.
 pub fn SuffixAutomaton::new(text : StringView) -> SuffixAutomaton {
   let automaton : SuffixAutomaton = {
     text_: text.to_owned(),
@@ -449,6 +453,7 @@ fn SuffixAutomaton::walk(
 }
 
 ///|
+/// Whether `pattern` occurs in the text.
 pub fn SuffixAutomaton::contains(
   self : SuffixAutomaton,
   pattern : StringView,
@@ -457,6 +462,7 @@ pub fn SuffixAutomaton::contains(
 }
 
 ///|
+/// How many times `pattern` occurs in the text, overlaps counted.
 pub fn SuffixAutomaton::count_occurrences(
   self : SuffixAutomaton,
   pattern : StringView,
@@ -468,11 +474,13 @@ pub fn SuffixAutomaton::count_occurrences(
 }
 
 ///|
+/// The length of the text in code units.
 pub fn SuffixAutomaton::length(self : SuffixAutomaton) -> Int32 {
   self.text_.length()
 }
 
 ///|
+/// The text the automaton was built from.
 pub fn SuffixAutomaton::text(self : SuffixAutomaton) -> String {
   self.text_
 }

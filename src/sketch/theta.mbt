@@ -27,6 +27,7 @@ pub struct ThetaSketch[T] {
 }
 
 ///|
+/// An empty sketch keeping at most `nominal_entries` hashes, drawn from `hash_seed`; a size of zero or less raises `Refused::Capacity`.
 pub fn[T] ThetaSketch::new(
   nominal_entries~ : Int32 = 4096,
   hash_seed~ : Int32 = @spec.hash_seed(),
@@ -58,6 +59,7 @@ fn[T] ThetaSketch::position_of(self : ThetaSketch[T], hash : UInt64) -> Int32 {
 }
 
 ///|
+/// Records `item` if its hash falls under the current threshold, lowering the threshold when the sketch is full.
 pub fn[T : Hash] ThetaSketch::add(self : ThetaSketch[T], item : T) -> Unit {
   let hash = hash_with_seed(item, self.seed)
   if hash >= self.theta {
@@ -91,16 +93,19 @@ pub fn[T] ThetaSketch::estimate(self : ThetaSketch[T]) -> Double {
 }
 
 ///|
+/// How many hashes the sketch keeps before it lowers its threshold.
 pub fn[T] ThetaSketch::nominal_entries(self : ThetaSketch[T]) -> Int32 {
   self.nominal
 }
 
 ///|
+/// Whether nothing has been added.
 pub fn[T] ThetaSketch::is_empty(self : ThetaSketch[T]) -> Bool {
   self.hashes.length() == 0
 }
 
 ///|
+/// The current threshold: hashes at or above it are dropped, and the fraction kept is what the estimate divides by.
 pub fn[T] ThetaSketch::theta(self : ThetaSketch[T]) -> UInt64 {
   self.theta
 }
@@ -198,6 +203,7 @@ pub fn[T] ThetaSketch::a_not_b(
 }
 
 ///|
+/// A copy that owns its hashes: an add to either sketch leaves the other alone.
 pub fn[T] ThetaSketch::copy(self : ThetaSketch[T]) -> ThetaSketch[T] {
   {
     seed: self.seed,
@@ -208,6 +214,7 @@ pub fn[T] ThetaSketch::copy(self : ThetaSketch[T]) -> ThetaSketch[T] {
 }
 
 ///|
+/// The sketch as bytes, in the format this module reads back with `decode`.
 pub fn[T] ThetaSketch::encode(self : ThetaSketch[T]) -> Bytes {
   let writer = Writer::new()
   writer.write_header(MAGIC_THETA)
@@ -221,6 +228,7 @@ pub fn[T] ThetaSketch::encode(self : ThetaSketch[T]) -> Bytes {
 }
 
 ///|
+/// Reads a sketch back from the bytes `encode` wrote, refusing anything that is not one of its states.
 pub fn[T] ThetaSketch::decode(
   view : BytesView,
 ) -> ThetaSketch[T] raise @spec.Refused {

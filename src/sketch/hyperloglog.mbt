@@ -60,6 +60,7 @@ pub fn[T] HyperLogLog::new(
 }
 
 ///|
+/// Records `item` in the registers; adding the same item twice changes nothing.
 pub fn[T : Hash] HyperLogLog::add(self : HyperLogLog[T], item : T) -> Unit {
   let hash = hash_with_seed(item, self.seed)
   let bucket = (hash >> (64 - self.precision)).to_uint().reinterpret_as_int()
@@ -89,6 +90,7 @@ fn hll_alpha(registers : Int32) -> Double {
 }
 
 ///|
+/// How many distinct items have been added, as an estimate with a standard error near `1.04 / sqrt(2^precision)`.
 pub fn[T] HyperLogLog::estimate(self : HyperLogLog[T]) -> Double {
   let count = self.registers.length().to_double()
   let mut sum = 0.0
@@ -129,11 +131,13 @@ pub fn[T] HyperLogLog::merge(
 }
 
 ///|
+/// The number of bits the sketch reads from each hash.
 pub fn[T] HyperLogLog::precision(self : HyperLogLog[T]) -> Int32 {
   self.precision
 }
 
 ///|
+/// Whether nothing has been added.
 pub fn[T] HyperLogLog::is_empty(self : HyperLogLog[T]) -> Bool {
   for register in self.registers {
     if register != 0 {
@@ -144,6 +148,7 @@ pub fn[T] HyperLogLog::is_empty(self : HyperLogLog[T]) -> Bool {
 }
 
 ///|
+/// Sets every register back to zero.
 pub fn[T] HyperLogLog::clear(self : HyperLogLog[T]) -> Unit {
   for i in 0..<self.registers.length() {
     self.registers[i] = 0
@@ -151,6 +156,7 @@ pub fn[T] HyperLogLog::clear(self : HyperLogLog[T]) -> Unit {
 }
 
 ///|
+/// A copy that owns its registers: an add to either sketch leaves the other alone.
 pub fn[T] HyperLogLog::copy(self : HyperLogLog[T]) -> HyperLogLog[T] {
   {
     seed: self.seed,
@@ -160,6 +166,7 @@ pub fn[T] HyperLogLog::copy(self : HyperLogLog[T]) -> HyperLogLog[T] {
 }
 
 ///|
+/// The sketch as bytes, in the format this module reads back with `decode`.
 pub fn[T] HyperLogLog::encode(self : HyperLogLog[T]) -> Bytes {
   let writer = Writer::new()
   writer.write_header(MAGIC_HYPERLOGLOG)
@@ -172,6 +179,7 @@ pub fn[T] HyperLogLog::encode(self : HyperLogLog[T]) -> Bytes {
 }
 
 ///|
+/// Reads a sketch back from the bytes `encode` wrote, refusing anything that is not one of its states.
 pub fn[T] HyperLogLog::decode(
   view : BytesView,
 ) -> HyperLogLog[T] raise @spec.Refused {

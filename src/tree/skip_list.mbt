@@ -55,6 +55,7 @@ pub struct SkipList[T] {
 }
 
 ///|
+/// An empty list ordered ascending by the element's own order, with the level and density `skip_list_options` sets.
 pub fn[T : Compare] SkipList::new(
   skip_list_options~ : SkipListOptions = skip_list_options,
 ) -> SkipList[T] {
@@ -62,6 +63,7 @@ pub fn[T : Compare] SkipList::new(
 }
 
 ///|
+/// An empty list ordered by `cmp`, with the level and density `skip_list_options` sets.
 pub fn[T] SkipList::new_by(
   cmp~ : (T, T) -> Int32,
   skip_list_options~ : SkipListOptions = skip_list_options,
@@ -198,6 +200,7 @@ pub fn[T] SkipList::insert(self : SkipList[T], value : T) -> Bool {
 }
 
 ///|
+/// Whether `value` is in the list.
 pub fn[T] SkipList::contains(self : SkipList[T], value : T) -> Bool {
   let levels = self.nexts[0].length()
   let previous : Array[Int32] = []
@@ -212,6 +215,7 @@ pub fn[T] SkipList::contains(self : SkipList[T], value : T) -> Bool {
 }
 
 ///|
+/// Removes `value` and reports whether it was there.
 pub fn[T] SkipList::remove(self : SkipList[T], value : T) -> Bool {
   let levels = self.nexts[0].length()
   let previous : Array[Int32] = []
@@ -283,11 +287,13 @@ pub fn[T] SkipList::select(self : SkipList[T], index : Int32) -> T? {
 }
 
 ///|
+/// The smallest element, or `None` when the list is empty.
 pub fn[T] SkipList::first(self : SkipList[T]) -> T? {
   self.values[self.nexts[0][0]]
 }
 
 ///|
+/// The largest element, or `None` when the list is empty.
 pub fn[T] SkipList::last(self : SkipList[T]) -> T? {
   if self.len == 0 {
     return None
@@ -326,6 +332,7 @@ pub fn[T] SkipList::range(self : SkipList[T], start : T, end : T) -> Iter[T] {
 }
 
 ///|
+/// The elements ascending.
 pub fn[T] SkipList::iter(self : SkipList[T]) -> Iter[T] {
   let mut node = self.nexts[0][0]
   Iter::new(() => {
@@ -340,6 +347,7 @@ pub fn[T] SkipList::iter(self : SkipList[T]) -> Iter[T] {
 }
 
 ///|
+/// The elements ascending, as a new array.
 pub fn[T] SkipList::to_array(self : SkipList[T]) -> Array[T] {
   let out : Array[T] = []
   for value in self.iter() {
@@ -349,16 +357,19 @@ pub fn[T] SkipList::to_array(self : SkipList[T]) -> Array[T] {
 }
 
 ///|
+/// How many elements the list holds.
 pub fn[T] SkipList::length(self : SkipList[T]) -> Int32 {
   self.len
 }
 
 ///|
+/// Whether the list holds no element.
 pub fn[T] SkipList::is_empty(self : SkipList[T]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// Removes every element, leaving the list at its initial height.
 pub fn[T] SkipList::clear(self : SkipList[T]) -> Unit {
   let levels = self.nexts[0].length()
   for level in 0..<levels {

@@ -55,6 +55,7 @@ pub struct RangeMap[K, V] {
 }
 
 ///|
+/// An empty range map whose policy for an overlapping insert is `overlap`: `Overwrite` cuts the existing ranges back, `Refuse` raises `Refused::Overlap`, `KeepFirst` drops the incoming one.
 pub fn[K, V] RangeMap::new(overlap~ : Overlap = Overwrite) -> RangeMap[K, V] {
   { ranges: [], overlap, }
 }
@@ -96,6 +97,7 @@ fn[K : Compare, V] RangeMap::find(self : RangeMap[K, V], key : K) -> Int32? {
 }
 
 ///|
+/// The value covering `key`, or `None` when no range does.
 pub fn[K : Compare, V] RangeMap::get(self : RangeMap[K, V], key : K) -> V? {
   match self.find(key) {
     Some(at) => Some(self.ranges[at].2)
@@ -104,6 +106,7 @@ pub fn[K : Compare, V] RangeMap::get(self : RangeMap[K, V], key : K) -> V? {
 }
 
 ///|
+/// The range covering `key` — its start, its end and its value — or `None`.
 pub fn[K : Compare, V] RangeMap::get_range(
   self : RangeMap[K, V],
   key : K,
@@ -268,21 +271,25 @@ pub fn[K, V] RangeMap::gaps(self : RangeMap[K, V]) -> Iter[(K, K)] {
 }
 
 ///|
+/// How many ranges the map holds.
 pub fn[K, V] RangeMap::length(self : RangeMap[K, V]) -> Int32 {
   self.ranges.length()
 }
 
 ///|
+/// Whether the map holds no range.
 pub fn[K, V] RangeMap::is_empty(self : RangeMap[K, V]) -> Bool {
   self.ranges.length() == 0
 }
 
 ///|
+/// Removes every range, keeping the overlap policy.
 pub fn[K, V] RangeMap::clear(self : RangeMap[K, V]) -> Unit {
   self.ranges.clear()
 }
 
 ///|
+/// A copy that owns its array: a change to either map is invisible to the other.
 pub fn[K, V] RangeMap::copy(self : RangeMap[K, V]) -> RangeMap[K, V] {
   { ranges: self.ranges.copy(), overlap: self.overlap, }
 }
@@ -338,6 +345,7 @@ pub struct RangeSet[K] {
 }
 
 ///|
+/// An empty range set whose policy for an overlapping insert is `overlap`.
 pub fn[K] RangeSet::new(overlap~ : Overlap = Overwrite) -> RangeSet[K] {
   { ranges: [], overlap, }
 }
@@ -358,6 +366,7 @@ fn[K : Compare] RangeSet::lower_pos(self : RangeSet[K], key : K) -> Int32 {
 }
 
 ///|
+/// Whether `key` is covered by a range.
 pub fn[K : Compare] RangeSet::contains(self : RangeSet[K], key : K) -> Bool {
   let at = self.lower_pos(key)
   let candidate = if at < self.ranges.length() &&
@@ -373,6 +382,7 @@ pub fn[K : Compare] RangeSet::contains(self : RangeSet[K], key : K) -> Bool {
 }
 
 ///|
+/// Adds the range from `start` up to `end`, merging it with the ranges it touches.
 pub fn[K : Compare] RangeSet::insert(
   self : RangeSet[K],
   start~ : K,
@@ -430,6 +440,7 @@ pub fn[K : Compare] RangeSet::insert(
 }
 
 ///|
+/// The ranges that meet the span from `start` up to `end`, in order.
 pub fn[K : Compare] RangeSet::overlapping(
   self : RangeSet[K],
   start~ : K,
@@ -454,6 +465,7 @@ pub fn[K : Compare] RangeSet::overlapping(
 }
 
 ///|
+/// Removes the span from `start` up to `end`, cutting the ranges that cover it.
 pub fn[K : Compare] RangeSet::remove(
   self : RangeSet[K],
   start~ : K,
@@ -479,6 +491,7 @@ pub fn[K : Compare] RangeSet::remove(
 }
 
 ///|
+/// The ranges, in order.
 pub fn[K] RangeSet::ranges(self : RangeSet[K]) -> Iter[(K, K)] {
   let mut cursor = 0
   Iter::new(() => {
@@ -493,6 +506,7 @@ pub fn[K] RangeSet::ranges(self : RangeSet[K]) -> Iter[(K, K)] {
 }
 
 ///|
+/// The spans between one range and the next, in order.
 pub fn[K] RangeSet::gaps(self : RangeSet[K]) -> Iter[(K, K)] {
   let mut cursor = 0
   Iter::new(() => {
@@ -507,21 +521,25 @@ pub fn[K] RangeSet::gaps(self : RangeSet[K]) -> Iter[(K, K)] {
 }
 
 ///|
+/// How many ranges the set holds.
 pub fn[K] RangeSet::length(self : RangeSet[K]) -> Int32 {
   self.ranges.length()
 }
 
 ///|
+/// Whether the set holds no range.
 pub fn[K] RangeSet::is_empty(self : RangeSet[K]) -> Bool {
   self.ranges.length() == 0
 }
 
 ///|
+/// Removes every range, keeping the overlap policy.
 pub fn[K] RangeSet::clear(self : RangeSet[K]) -> Unit {
   self.ranges.clear()
 }
 
 ///|
+/// A copy that owns its array: a change to either set is invisible to the other.
 pub fn[K] RangeSet::copy(self : RangeSet[K]) -> RangeSet[K] {
   { ranges: self.ranges.copy(), overlap: self.overlap, }
 }

@@ -43,11 +43,13 @@ pub struct OrderStatisticTree[T] {
 }
 
 ///|
+/// An empty tree ordered ascending by the element's own order.
 pub fn[T : Compare] OrderStatisticTree::new() -> OrderStatisticTree[T] {
   OrderStatisticTree::new_by(cmp=(a, b) => a.compare(b))
 }
 
 ///|
+/// An empty tree ordered by `cmp`, which reports the smaller of two elements as negative.
 pub fn[T] OrderStatisticTree::new_by(
   cmp~ : (T, T) -> Int32,
 ) -> OrderStatisticTree[T] {
@@ -166,6 +168,7 @@ fn[T] OrderStatisticTree::insert_at(
 }
 
 ///|
+/// Adds `key` and reports whether it was new; a key already in the tree is left alone.
 pub fn[T] OrderStatisticTree::insert(
   self : OrderStatisticTree[T],
   key : T,
@@ -226,6 +229,7 @@ fn[T] OrderStatisticTree::merge(
 }
 
 ///|
+/// Removes `key` and reports whether it was there.
 pub fn[T] OrderStatisticTree::remove(
   self : OrderStatisticTree[T],
   key : T,
@@ -239,6 +243,7 @@ pub fn[T] OrderStatisticTree::remove(
 }
 
 ///|
+/// Whether `key` is in the tree.
 pub fn[T] OrderStatisticTree::contains(
   self : OrderStatisticTree[T],
   key : T,
@@ -300,6 +305,7 @@ pub fn[T] OrderStatisticTree::rank(
 }
 
 ///|
+/// How many keys in the tree are smaller than `key`.
 pub fn[T] OrderStatisticTree::count_less(
   self : OrderStatisticTree[T],
   key : T,
@@ -325,6 +331,7 @@ pub fn[T] OrderStatisticTree::count_range(
 }
 
 ///|
+/// The smallest key, or `None` when the tree is empty.
 pub fn[T] OrderStatisticTree::first(self : OrderStatisticTree[T]) -> T? {
   if self.root < 0 {
     return None
@@ -337,6 +344,7 @@ pub fn[T] OrderStatisticTree::first(self : OrderStatisticTree[T]) -> T? {
 }
 
 ///|
+/// The largest key, or `None` when the tree is empty.
 pub fn[T] OrderStatisticTree::last(self : OrderStatisticTree[T]) -> T? {
   if self.root < 0 {
     return None
@@ -363,6 +371,7 @@ fn[T] OrderStatisticTree::collect(
 }
 
 ///|
+/// The keys ascending.
 pub fn[T] OrderStatisticTree::iter(self : OrderStatisticTree[T]) -> Iter[T] {
   let out : Array[T] = []
   self.collect(self.root, out)
@@ -379,6 +388,7 @@ pub fn[T] OrderStatisticTree::iter(self : OrderStatisticTree[T]) -> Iter[T] {
 }
 
 ///|
+/// The keys from `start` up to `end`, ascending.
 pub fn[T] OrderStatisticTree::range(
   self : OrderStatisticTree[T],
   start : T,
@@ -403,16 +413,19 @@ pub fn[T] OrderStatisticTree::range(
 }
 
 ///|
+/// How many keys the tree holds.
 pub fn[T] OrderStatisticTree::length(self : OrderStatisticTree[T]) -> Int32 {
   self.len
 }
 
 ///|
+/// Whether the tree holds no key.
 pub fn[T] OrderStatisticTree::is_empty(self : OrderStatisticTree[T]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// Removes every key.
 pub fn[T] OrderStatisticTree::clear(self : OrderStatisticTree[T]) -> Unit {
   self.keys.clear()
   self.left.clear()
@@ -424,6 +437,7 @@ pub fn[T] OrderStatisticTree::clear(self : OrderStatisticTree[T]) -> Unit {
 }
 
 ///|
+/// The keys ascending, as a new array.
 pub fn[T] OrderStatisticTree::to_array(
   self : OrderStatisticTree[T],
 ) -> Array[T] {
@@ -433,6 +447,7 @@ pub fn[T] OrderStatisticTree::to_array(
 }
 
 ///|
+/// A copy that owns its arrays: a change to either tree leaves the other alone.
 pub fn[T] OrderStatisticTree::copy(
   self : OrderStatisticTree[T],
 ) -> OrderStatisticTree[T] {
@@ -478,11 +493,13 @@ pub struct Treap[K, V] {
 }
 
 ///|
+/// An empty tree ordered ascending by the key's own order.
 pub fn[K : Compare, V] Treap::new() -> Treap[K, V] {
   Treap::new_by(cmp=(a, b) => a.compare(b))
 }
 
 ///|
+/// An empty tree ordered by `cmp`, which reports the smaller of two keys as negative.
 pub fn[K, V] Treap::new_by(cmp~ : (K, K) -> Int32) -> Treap[K, V] {
   {
     cmp,
@@ -573,6 +590,7 @@ fn[K, V] Treap::set_at(
 }
 
 ///|
+/// Stores `value` under `key` and returns the value it replaced.
 pub fn[K, V] Treap::set(self : Treap[K, V], key : K, value : V) -> V? {
   let old : Ref[V?] = Ref(None)
   self.root = self.set_at(self.root, key, value, old)
@@ -583,6 +601,7 @@ pub fn[K, V] Treap::set(self : Treap[K, V], key : K, value : V) -> V? {
 }
 
 ///|
+/// The value under `key`, or `None`.
 pub fn[K, V] Treap::get(self : Treap[K, V], key : K) -> V? {
   let mut node = self.root
   while node >= 0 {
@@ -596,6 +615,7 @@ pub fn[K, V] Treap::get(self : Treap[K, V], key : K) -> V? {
 }
 
 ///|
+/// Whether `key` has a value.
 pub fn[K, V] Treap::contains(self : Treap[K, V], key : K) -> Bool {
   self.get(key) is Some(_)
 }
@@ -641,6 +661,7 @@ fn[K, V] Treap::remove_at(
 }
 
 ///|
+/// Removes `key` and returns the value it held.
 pub fn[K, V] Treap::remove(self : Treap[K, V], key : K) -> V? {
   let removed : Ref[V?] = Ref(None)
   self.root = self.remove_at(self.root, key, removed)
@@ -691,6 +712,7 @@ fn[K, V] Treap::collect(
 }
 
 ///|
+/// The entries in key order, as a new array.
 pub fn[K, V] Treap::to_array(self : Treap[K, V]) -> Array[(K, V)] {
   let out : Array[(K, V)] = []
   self.collect(self.root, out)
@@ -698,6 +720,7 @@ pub fn[K, V] Treap::to_array(self : Treap[K, V]) -> Array[(K, V)] {
 }
 
 ///|
+/// The entries in key order.
 pub fn[K, V] Treap::iter(self : Treap[K, V]) -> Iter[(K, V)] {
   let out = self.to_array()
   let mut cursor = 0
@@ -713,6 +736,7 @@ pub fn[K, V] Treap::iter(self : Treap[K, V]) -> Iter[(K, V)] {
 }
 
 ///|
+/// The entries whose key is from `start` up to `end`, in key order.
 pub fn[K, V] Treap::range(
   self : Treap[K, V],
   start : K,
@@ -737,6 +761,7 @@ pub fn[K, V] Treap::range(
 }
 
 ///|
+/// The entry with the smallest key, or `None` when the tree is empty.
 pub fn[K, V] Treap::first(self : Treap[K, V]) -> (K, V)? {
   if self.root < 0 {
     return None
@@ -749,6 +774,7 @@ pub fn[K, V] Treap::first(self : Treap[K, V]) -> (K, V)? {
 }
 
 ///|
+/// The entry with the largest key, or `None` when the tree is empty.
 pub fn[K, V] Treap::last(self : Treap[K, V]) -> (K, V)? {
   if self.root < 0 {
     return None
@@ -761,16 +787,19 @@ pub fn[K, V] Treap::last(self : Treap[K, V]) -> (K, V)? {
 }
 
 ///|
+/// How many entries the tree holds.
 pub fn[K, V] Treap::length(self : Treap[K, V]) -> Int32 {
   self.len
 }
 
 ///|
+/// Whether the tree holds no entry.
 pub fn[K, V] Treap::is_empty(self : Treap[K, V]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// Removes every entry.
 pub fn[K, V] Treap::clear(self : Treap[K, V]) -> Unit {
   self.keys.clear()
   self.values.clear()

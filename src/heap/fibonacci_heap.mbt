@@ -32,6 +32,7 @@ pub struct FibonacciHeap[T] {
 }
 
 ///|
+/// An empty heap popping from the `order` end, `Min` by default.
 pub fn[T : Compare] FibonacciHeap::new(
   order~ : Order = Min,
 ) -> FibonacciHeap[T] {
@@ -39,6 +40,7 @@ pub fn[T : Compare] FibonacciHeap::new(
 }
 
 ///|
+/// An empty heap ordered by `cmp`, which reports the smaller of two elements as negative.
 pub fn[T] FibonacciHeap::new_by(cmp~ : (T, T) -> Int32) -> FibonacciHeap[T] {
   {
     cmp,
@@ -139,6 +141,7 @@ fn[T] FibonacciHeap::precedes(
 }
 
 ///|
+/// Adds `value` and returns the handle that keeps naming it, whatever else the heap does.
 pub fn[T] FibonacciHeap::insert(
   self : FibonacciHeap[T],
   value : T,
@@ -157,6 +160,7 @@ pub fn[T] FibonacciHeap::insert(
 }
 
 ///|
+/// The element the order puts first, or `None` when the heap is empty.
 pub fn[T] FibonacciHeap::peek(self : FibonacciHeap[T]) -> T? {
   if self.min < 0 {
     None
@@ -195,6 +199,7 @@ fn[T] FibonacciHeap::promote_children(
 }
 
 ///|
+/// Removes and returns the element the order puts first, or `None` when the heap is empty.
 pub fn[T] FibonacciHeap::pop(self : FibonacciHeap[T]) -> T? {
   if self.min < 0 {
     return None
@@ -329,6 +334,7 @@ fn[T] FibonacciHeap::locate(
 }
 
 ///|
+/// The value behind `key`, or `None` when the handle no longer names an entry.
 pub fn[T] FibonacciHeap::get(self : FibonacciHeap[T], key : HeapKey[T]) -> T? {
   match self.locate(key) {
     Some(node) => self.values[node]
@@ -337,6 +343,7 @@ pub fn[T] FibonacciHeap::get(self : FibonacciHeap[T], key : HeapKey[T]) -> T? {
 }
 
 ///|
+/// Whether `key` still names an entry.
 pub fn[T] FibonacciHeap::contains(
   self : FibonacciHeap[T],
   key : HeapKey[T],
@@ -400,6 +407,7 @@ pub fn[T] FibonacciHeap::update(
 }
 
 ///|
+/// Removes the entry `key` names and returns its value, leaving the rest of the heap ordered.
 pub fn[T] FibonacciHeap::remove_at(
   self : FibonacciHeap[T],
   key : HeapKey[T],
@@ -433,16 +441,19 @@ pub fn[T] FibonacciHeap::remove_at(
 }
 
 ///|
+/// How many entries the heap holds.
 pub fn[T] FibonacciHeap::length(self : FibonacciHeap[T]) -> Int32 {
   self.len
 }
 
 ///|
+/// Whether the heap holds no entry.
 pub fn[T] FibonacciHeap::is_empty(self : FibonacciHeap[T]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// Removes every entry; the handles issued before it name nothing afterwards.
 pub fn[T] FibonacciHeap::clear(self : FibonacciHeap[T]) -> Unit {
   self.values.clear()
   self.parents.clear()
@@ -458,6 +469,7 @@ pub fn[T] FibonacciHeap::clear(self : FibonacciHeap[T]) -> Unit {
 }
 
 ///|
+/// The values in slot order, which is not the order they pop in.
 pub fn[T] FibonacciHeap::to_array(self : FibonacciHeap[T]) -> Array[T] {
   let out : Array[T] = []
   for value in self.values {
@@ -469,6 +481,7 @@ pub fn[T] FibonacciHeap::to_array(self : FibonacciHeap[T]) -> Array[T] {
 }
 
 ///|
+/// Empties the heap and returns its values in pop order.
 pub fn[T] FibonacciHeap::into_sorted_array(self : FibonacciHeap[T]) -> Array[T] {
   let out : Array[T] = []
   while self.len > 0 {
@@ -481,6 +494,7 @@ pub fn[T] FibonacciHeap::into_sorted_array(self : FibonacciHeap[T]) -> Array[T] 
 }
 
 ///|
+/// Takes every entry of `other` into this heap and empties `other`; the handles issued by the other heap do not carry over.
 pub fn[T] FibonacciHeap::merge(
   self : FibonacciHeap[T],
   other : FibonacciHeap[T],

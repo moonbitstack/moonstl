@@ -41,6 +41,7 @@ pub struct LruCache[K, V] {
 }
 
 ///|
+/// A cache holding at most `capacity` entries and dropping the least recently used one to make room. `on_evict` sees every entry the policy drops; a capacity of zero or less raises `Refused::Capacity`.
 pub fn[K, V] LruCache::new(
   capacity~ : Int32,
   on_evict? : (K, V) -> Unit,
@@ -244,6 +245,7 @@ pub fn[K : Hash + Eq, V] LruCache::remove(self : LruCache[K, V], key : K) -> V? 
 }
 
 ///|
+/// Whether `key` is in the cache, without counting a hit or changing the order.
 pub fn[K : Hash + Eq, V] LruCache::contains(
   self : LruCache[K, V],
   key : K,
@@ -283,31 +285,37 @@ pub fn[K, V] LruCache::iter(self : LruCache[K, V]) -> Iter[(K, V)] {
 }
 
 ///|
+/// The keys, least recently used first.
 pub fn[K, V] LruCache::keys(self : LruCache[K, V]) -> Iter[K] {
   self.iter().map(pair => pair.0)
 }
 
 ///|
+/// The values, least recently used first.
 pub fn[K, V] LruCache::values(self : LruCache[K, V]) -> Iter[V] {
   self.iter().map(pair => pair.1)
 }
 
 ///|
+/// How many entries the cache holds.
 pub fn[K, V] LruCache::length(self : LruCache[K, V]) -> Int32 {
   self.index.length()
 }
 
 ///|
+/// How many entries the cache holds before it drops one.
 pub fn[K, V] LruCache::capacity(self : LruCache[K, V]) -> Int32 {
   self.capacity
 }
 
 ///|
+/// Whether the cache holds no entry.
 pub fn[K, V] LruCache::is_empty(self : LruCache[K, V]) -> Bool {
   self.index.is_empty()
 }
 
 ///|
+/// Removes every entry; `on_evict` does not see them, since this is the caller's own doing.
 pub fn[K, V] LruCache::clear(self : LruCache[K, V]) -> Unit {
   self.index.clear()
   self.slots.clear()
@@ -317,6 +325,7 @@ pub fn[K, V] LruCache::clear(self : LruCache[K, V]) -> Unit {
 }
 
 ///|
+/// A copy whose entries and order stand on their own: a lookup in either cache leaves the other where it was.
 pub fn[K, V] LruCache::copy(self : LruCache[K, V]) -> LruCache[K, V] {
   let slots : Array[LruNode[K, V]?] = []
   for slot in self.slots {
@@ -348,6 +357,7 @@ pub fn[K, V] LruCache::copy(self : LruCache[K, V]) -> LruCache[K, V] {
 }
 
 ///|
+/// The hit, miss and eviction counters, which `get` moves and `peek` does not.
 pub fn[K, V] LruCache::stats(self : LruCache[K, V]) -> CacheStats {
   { hits: self.hits, misses: self.misses, evictions: self.evictions, }
 }

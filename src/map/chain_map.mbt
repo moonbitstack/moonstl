@@ -52,6 +52,7 @@ pub fn[K, V] ChainMap::parent(self : ChainMap[K, V]) -> ChainMap[K, V]? {
 }
 
 ///|
+/// The value of `key` from the first map in the chain that holds it.
 pub fn[K : Hash + Eq, V] ChainMap::get(self : ChainMap[K, V], key : K) -> V? {
   for map in self.chain {
     match map.get(key) {
@@ -85,6 +86,7 @@ pub fn[K : Hash + Eq, V] ChainMap::remove(
 }
 
 ///|
+/// Whether any map in the chain holds `key`.
 pub fn[K : Hash + Eq, V] ChainMap::contains(
   self : ChainMap[K, V],
   key : K,
@@ -143,6 +145,7 @@ pub fn[K : Hash + Eq, V] ChainMap::flatten(self : ChainMap[K, V]) -> Map[K, V] {
 }
 
 ///|
+/// A copy whose maps are copies: a write through it leaves the original chain alone.
 pub fn[K, V] ChainMap::copy(self : ChainMap[K, V]) -> ChainMap[K, V] {
   let chain : Array[Map[K, V]] = []
   for map in self.chain {

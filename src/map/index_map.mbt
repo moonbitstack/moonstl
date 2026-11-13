@@ -53,6 +53,7 @@ pub fn[K, V] IndexMap::new(
 }
 
 ///|
+/// A map holding the entries written out, in the order given. A key that appears twice keeps its first position and takes the last value.
 pub fn[K : Hash + Eq, V] IndexMap::from_array(
   entries : ArrayView[(K, V)],
   hash_seed~ : Int32 = @spec.hash_seed(),
@@ -68,6 +69,7 @@ pub fn[K : Hash + Eq, V] IndexMap::from_array(
 }
 
 ///|
+/// A map holding the entries the iterator yields, in the order they arrive.
 pub fn[K : Hash + Eq, V] IndexMap::from_iter(
   entries : Iter[(K, V)],
   hash_seed~ : Int32 = @spec.hash_seed(),
@@ -222,6 +224,7 @@ pub fn[K : Hash + Eq, V] IndexMap::set_default(
 }
 
 ///|
+/// The value under `key`, or `None` when no entry has it.
 pub fn[K : Hash + Eq, V] IndexMap::get(self : IndexMap[K, V], key : K) -> V? {
   match self.find(key) {
     Some(index) => Some(self.entries[index].1)
@@ -243,6 +246,7 @@ pub fn[K : Hash + Eq, V] IndexMap::get_key_value(
 }
 
 ///|
+/// Whether `key` has an entry.
 pub fn[K : Hash + Eq, V] IndexMap::contains(
   self : IndexMap[K, V],
   key : K,
@@ -251,6 +255,7 @@ pub fn[K : Hash + Eq, V] IndexMap::contains(
 }
 
 ///|
+/// The entry at position `index`, or `None` when the position is past the last one.
 pub fn[K, V] IndexMap::get_index(
   self : IndexMap[K, V],
   index : Int32,
@@ -259,6 +264,7 @@ pub fn[K, V] IndexMap::get_index(
 }
 
 ///|
+/// The position `key` sits at, or `None` when it has no entry.
 pub fn[K : Hash + Eq, V] IndexMap::get_index_of(
   self : IndexMap[K, V],
   key : K,
@@ -267,6 +273,7 @@ pub fn[K : Hash + Eq, V] IndexMap::get_index_of(
 }
 
 ///|
+/// The position, key and value of `key`, read in one lookup.
 pub fn[K : Hash + Eq, V] IndexMap::get_full(
   self : IndexMap[K, V],
   key : K,
@@ -339,6 +346,7 @@ pub fn[K, V] IndexMap::shift_remove_index(
 }
 
 ///|
+/// Removes `key` the way `swap_remove` does and hands back the value it held.
 pub fn[K : Hash + Eq, V] IndexMap::remove(self : IndexMap[K, V], key : K) -> V? {
   match self.find(key) {
     Some(index) => {
@@ -350,6 +358,7 @@ pub fn[K : Hash + Eq, V] IndexMap::remove(self : IndexMap[K, V], key : K) -> V? 
 }
 
 ///|
+/// Removes `key` by moving the last entry into its position, so the entries stay dense and the cost is O(1). The positions of the entries after the hole therefore change.
 pub fn[K : Hash + Eq, V] IndexMap::swap_remove(
   self : IndexMap[K, V],
   key : K,
@@ -358,6 +367,7 @@ pub fn[K : Hash + Eq, V] IndexMap::swap_remove(
 }
 
 ///|
+/// Removes `key` by shifting every later entry down one position, so the positions that remain are the ones they were; O(n).
 pub fn[K : Hash + Eq, V] IndexMap::shift_remove(
   self : IndexMap[K, V],
   key : K,
@@ -407,6 +417,7 @@ pub fn[K, V] IndexMap::move_index(
 }
 
 ///|
+/// Exchanges the entries at two positions. Both keys keep their slots in the table, so this costs a swap and not a rehash; an index that is out of range leaves the map as it was.
 pub fn[K, V] IndexMap::swap_indices(
   self : IndexMap[K, V],
   a : Int32,
@@ -454,6 +465,7 @@ pub fn[K : Compare, V] IndexMap::sort_keys(self : IndexMap[K, V]) -> Unit {
 }
 
 ///|
+/// Reorders the entries by `cmp`, which sees the whole entry rather than only its key, and renumbers the positions.
 pub fn[K, V] IndexMap::sort_by(
   self : IndexMap[K, V],
   cmp : ((K, V), (K, V)) -> Int32,
@@ -462,6 +474,7 @@ pub fn[K, V] IndexMap::sort_by(
 }
 
 ///|
+/// Reorders the entries by a projection of the key and renumbers the positions.
 pub fn[K, V, R : Compare] IndexMap::sort_by_key(
   self : IndexMap[K, V],
   project~ : (K) -> R,
@@ -500,32 +513,38 @@ pub fn[K, V] IndexMap::range(
 }
 
 ///|
+/// The entries in position order.
 pub fn[K, V] IndexMap::iter(self : IndexMap[K, V]) -> Iter[(K, V)] {
   self.range(start=0, len=self.entries.length())
 }
 
 ///|
+/// The keys and the values in position order, as a two-part iterator.
 pub fn[K, V] IndexMap::iter2(self : IndexMap[K, V]) -> Iter2[K, V] {
   let walk = self.iter()
   Iter2::new(() => walk.next(), size_hint=self.length())
 }
 
 ///|
+/// The keys in position order.
 pub fn[K, V] IndexMap::keys(self : IndexMap[K, V]) -> Iter[K] {
   self.iter().map(entry => entry.0)
 }
 
 ///|
+/// The values in position order.
 pub fn[K, V] IndexMap::values(self : IndexMap[K, V]) -> Iter[V] {
   self.iter().map(entry => entry.1)
 }
 
 ///|
+/// How many entries the map holds.
 pub fn[K, V] IndexMap::length(self : IndexMap[K, V]) -> Int32 {
   self.entries.length()
 }
 
 ///|
+/// Whether the map holds no entry.
 pub fn[K, V] IndexMap::is_empty(self : IndexMap[K, V]) -> Bool {
   self.entries.length() == 0
 }
@@ -537,6 +556,7 @@ pub fn[K, V] IndexMap::capacity(self : IndexMap[K, V]) -> Int32 {
 }
 
 ///|
+/// Lays the table out again with room for `capacity` entries, so the inserts that follow do not rehash.
 pub fn[K, V] IndexMap::reserve_capacity(
   self : IndexMap[K, V],
   capacity~ : Int32,
@@ -567,11 +587,13 @@ pub fn[K, V] IndexMap::reserve_capacity(
 }
 
 ///|
+/// Lays the table out again at the smallest size that holds the entries, dropping the slots removals left behind.
 pub fn[K, V] IndexMap::shrink_to_fit(self : IndexMap[K, V]) -> Unit {
   self.rebuild()
 }
 
 ///|
+/// Removes every entry, keeping the seed the map was made with.
 pub fn[K, V] IndexMap::clear(self : IndexMap[K, V]) -> Unit {
   self.entries.clear()
   self.hashes.clear()
@@ -604,6 +626,7 @@ pub fn[K, V] IndexMap::retain(
 }
 
 ///|
+/// Keeps the first `length` entries and drops the rest; a length past the end leaves the map alone.
 pub fn[K, V] IndexMap::truncate(self : IndexMap[K, V], length : Int32) -> Unit {
   let keep = if length < 0 { 0 } else { length }
   if keep >= self.entries.length() {
@@ -634,6 +657,7 @@ pub fn[K : Hash + Eq, V] IndexMap::split_off(
 }
 
 ///|
+/// A copy that owns its arrays: a change to either map is invisible to the other.
 pub fn[K, V] IndexMap::copy(self : IndexMap[K, V]) -> IndexMap[K, V] {
   {
     entries: self.entries.copy(),
@@ -647,6 +671,7 @@ pub fn[K, V] IndexMap::copy(self : IndexMap[K, V]) -> IndexMap[K, V] {
 }
 
 ///|
+/// The entries in position order, as a new array.
 pub fn[K, V] IndexMap::to_array(self : IndexMap[K, V]) -> Array[(K, V)] {
   self.entries.copy()
 }

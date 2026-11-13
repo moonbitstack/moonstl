@@ -66,6 +66,7 @@ pub struct Slab[T] {
 }
 
 ///|
+/// An empty slab with room for `capacity` values.
 pub fn[T] Slab::new(capacity~ : Int32 = 0) -> Slab[T] {
   let values : Array[T?] = []
   if capacity > 0 {
@@ -92,6 +93,7 @@ pub fn[T] Slab::insert(self : Slab[T], value : T) -> Int32 {
 }
 
 ///|
+/// The value at `index`, or `None` when that slot holds nothing.
 pub fn[T] Slab::get(self : Slab[T], index : Int32) -> T? {
   match self.values.get(index) {
     Some(value) => value
@@ -100,6 +102,7 @@ pub fn[T] Slab::get(self : Slab[T], index : Int32) -> T? {
 }
 
 ///|
+/// The value at `index`; aborts when the slot holds nothing, as an array does past its end.
 pub fn[T] Slab::at(self : Slab[T], index : Int32) -> T {
   match self.get(index) {
     Some(value) => value
@@ -108,6 +111,7 @@ pub fn[T] Slab::at(self : Slab[T], index : Int32) -> T {
 }
 
 ///|
+/// Replaces the value at `index` and reports whether the slot held one; a free slot is left alone.
 pub fn[T] Slab::set(self : Slab[T], index : Int32, value : T) -> Bool {
   match self.get(index) {
     Some(_) => {
@@ -119,6 +123,7 @@ pub fn[T] Slab::set(self : Slab[T], index : Int32, value : T) -> Bool {
 }
 
 ///|
+/// Empties the slot and hands back the value; the next `insert` reuses the slot, so a stale index reaches the new occupant.
 pub fn[T] Slab::remove(self : Slab[T], index : Int32) -> T? {
   match self.get(index) {
     Some(value) => {
@@ -132,11 +137,13 @@ pub fn[T] Slab::remove(self : Slab[T], index : Int32) -> T? {
 }
 
 ///|
+/// Whether `index` names a slot that holds a value.
 pub fn[T] Slab::contains(self : Slab[T], index : Int32) -> Bool {
   self.get(index) is Some(_)
 }
 
 ///|
+/// How many values the slab holds.
 pub fn[T] Slab::length(self : Slab[T]) -> Int32 {
   self.len
 }
@@ -148,11 +155,13 @@ pub fn[T] Slab::capacity(self : Slab[T]) -> Int32 {
 }
 
 ///|
+/// Whether the slab holds no value.
 pub fn[T] Slab::is_empty(self : Slab[T]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// The values in slot order, skipping the free slots.
 pub fn[T] Slab::iter(self : Slab[T]) -> Iter[T] {
   let mut cursor = 0
   Iter::new(() => {
@@ -170,6 +179,7 @@ pub fn[T] Slab::iter(self : Slab[T]) -> Iter[T] {
 }
 
 ///|
+/// The occupied indices, ascending.
 pub fn[T] Slab::keys(self : Slab[T]) -> Iter[Int32] {
   let mut cursor = 0
   Iter::new(() => {
@@ -186,6 +196,7 @@ pub fn[T] Slab::keys(self : Slab[T]) -> Iter[Int32] {
 }
 
 ///|
+/// Removes every value and returns every slot to the free list.
 pub fn[T] Slab::clear(self : Slab[T]) -> Unit {
   self.values.clear()
   self.free.clear()
@@ -193,6 +204,7 @@ pub fn[T] Slab::clear(self : Slab[T]) -> Unit {
 }
 
 ///|
+/// A copy that owns its arrays: a change to either slab is invisible to the other.
 pub fn[T] Slab::copy(self : Slab[T]) -> Slab[T] {
   { values: self.values.copy(), free: self.free.copy(), len: self.len, }
 }
@@ -210,6 +222,7 @@ pub struct SlotMap[T] {
 }
 
 ///|
+/// An empty map with room for `capacity` values.
 pub fn[T] SlotMap::new(capacity~ : Int32 = 0) -> SlotMap[T] {
   let values : Array[T?] = []
   let generations : Array[UInt32] = []
@@ -221,6 +234,7 @@ pub fn[T] SlotMap::new(capacity~ : Int32 = 0) -> SlotMap[T] {
 }
 
 ///|
+/// Stores `value` in a free slot and returns the key that names it, carrying the slot's generation.
 pub fn[T] SlotMap::insert(self : SlotMap[T], value : T) -> SlotKey[T] {
   match self.free.pop() {
     Some(index) => {
@@ -238,6 +252,7 @@ pub fn[T] SlotMap::insert(self : SlotMap[T], value : T) -> SlotKey[T] {
 }
 
 ///|
+/// The value `key` names, or `None` when the slot is empty or has been reused since the key was issued.
 pub fn[T] SlotMap::get(self : SlotMap[T], key : SlotKey[T]) -> T? {
   if key.index < 0 || key.index >= self.values.length() {
     return None
@@ -249,6 +264,7 @@ pub fn[T] SlotMap::get(self : SlotMap[T], key : SlotKey[T]) -> T? {
 }
 
 ///|
+/// The value `key` names; aborts when the key is stale or the slot is empty.
 pub fn[T] SlotMap::at(self : SlotMap[T], key : SlotKey[T]) -> T {
   match self.get(key) {
     Some(value) => value
@@ -257,6 +273,7 @@ pub fn[T] SlotMap::at(self : SlotMap[T], key : SlotKey[T]) -> T {
 }
 
 ///|
+/// Replaces the value `key` names and reports whether the key still named one.
 pub fn[T] SlotMap::set(self : SlotMap[T], key : SlotKey[T], value : T) -> Bool {
   match self.get(key) {
     Some(_) => {
@@ -268,6 +285,7 @@ pub fn[T] SlotMap::set(self : SlotMap[T], key : SlotKey[T], value : T) -> Bool {
 }
 
 ///|
+/// Empties the slot and hands back the value; the generation moves on, so `key` cannot reach whatever is inserted there next.
 pub fn[T] SlotMap::remove(self : SlotMap[T], key : SlotKey[T]) -> T? {
   match self.get(key) {
     Some(value) => {
@@ -282,26 +300,31 @@ pub fn[T] SlotMap::remove(self : SlotMap[T], key : SlotKey[T]) -> T? {
 }
 
 ///|
+/// Whether `key` still names a value.
 pub fn[T] SlotMap::contains(self : SlotMap[T], key : SlotKey[T]) -> Bool {
   self.get(key) is Some(_)
 }
 
 ///|
+/// How many values the map holds.
 pub fn[T] SlotMap::length(self : SlotMap[T]) -> Int32 {
   self.len
 }
 
 ///|
+/// How many slots the map has room for before it grows.
 pub fn[T] SlotMap::capacity(self : SlotMap[T]) -> Int32 {
   self.values.length()
 }
 
 ///|
+/// Whether the map holds no value.
 pub fn[T] SlotMap::is_empty(self : SlotMap[T]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// The keys of the occupied slots, ascending by slot.
 pub fn[T] SlotMap::keys(self : SlotMap[T]) -> Iter[SlotKey[T]] {
   let mut cursor = 0
   Iter::new(() => {
@@ -321,6 +344,7 @@ pub fn[T] SlotMap::keys(self : SlotMap[T]) -> Iter[SlotKey[T]] {
 }
 
 ///|
+/// The values in slot order, skipping the empty slots.
 pub fn[T] SlotMap::iter(self : SlotMap[T]) -> Iter[T] {
   let mut cursor = 0
   Iter::new(() => {
@@ -338,6 +362,7 @@ pub fn[T] SlotMap::iter(self : SlotMap[T]) -> Iter[T] {
 }
 
 ///|
+/// Every occupied key and its value, in slot order.
 pub fn[T] SlotMap::iter2(self : SlotMap[T]) -> Iter2[SlotKey[T], T] {
   let keys = self.keys()
   Iter2::new(() => {
@@ -349,6 +374,7 @@ pub fn[T] SlotMap::iter2(self : SlotMap[T]) -> Iter2[SlotKey[T], T] {
 }
 
 ///|
+/// Keeps the entries `f` accepts and removes the rest.
 pub fn[T] SlotMap::retain(
   self : SlotMap[T],
   f : (SlotKey[T], T) -> Bool,
@@ -362,6 +388,7 @@ pub fn[T] SlotMap::retain(
 }
 
 ///|
+/// Removes every value and returns every slot to the free list, generations included.
 pub fn[T] SlotMap::clear(self : SlotMap[T]) -> Unit {
   self.values.clear()
   self.generations.clear()
@@ -370,6 +397,7 @@ pub fn[T] SlotMap::clear(self : SlotMap[T]) -> Unit {
 }
 
 ///|
+/// A copy that owns its arrays: keys issued by either map keep naming the same values in it.
 pub fn[T] SlotMap::copy(self : SlotMap[T]) -> SlotMap[T] {
   {
     values: self.values.copy(),
@@ -397,6 +425,7 @@ pub struct DenseSlotMap[T] {
 }
 
 ///|
+/// An empty map with room for `capacity` values, keeping the values dense as well as the slots.
 pub fn[T] DenseSlotMap::new(capacity~ : Int32 = 0) -> DenseSlotMap[T] {
   let values : Array[T?] = []
   let generations : Array[UInt32] = []
@@ -410,6 +439,7 @@ pub fn[T] DenseSlotMap::new(capacity~ : Int32 = 0) -> DenseSlotMap[T] {
 }
 
 ///|
+/// Stores `value` and returns the key that names it; the value joins the dense run in insertion order.
 pub fn[T] DenseSlotMap::insert(self : DenseSlotMap[T], value : T) -> SlotKey[T] {
   let slot = match self.free.pop() {
     Some(slot) => {
@@ -430,6 +460,7 @@ pub fn[T] DenseSlotMap::insert(self : DenseSlotMap[T], value : T) -> SlotKey[T] 
 }
 
 ///|
+/// The value `key` names, or `None` when the slot is empty or has been reused since the key was issued.
 pub fn[T] DenseSlotMap::get(self : DenseSlotMap[T], key : SlotKey[T]) -> T? {
   if key.index < 0 || key.index >= self.values.length() {
     return None
@@ -441,6 +472,7 @@ pub fn[T] DenseSlotMap::get(self : DenseSlotMap[T], key : SlotKey[T]) -> T? {
 }
 
 ///|
+/// The value `key` names; aborts when the key is stale or the slot is empty.
 pub fn[T] DenseSlotMap::at(self : DenseSlotMap[T], key : SlotKey[T]) -> T {
   match self.get(key) {
     Some(value) => value
@@ -449,6 +481,7 @@ pub fn[T] DenseSlotMap::at(self : DenseSlotMap[T], key : SlotKey[T]) -> T {
 }
 
 ///|
+/// Replaces the value `key` names and reports whether the key still named one.
 pub fn[T] DenseSlotMap::set(
   self : DenseSlotMap[T],
   key : SlotKey[T],
@@ -464,6 +497,7 @@ pub fn[T] DenseSlotMap::set(
 }
 
 ///|
+/// Empties the slot and hands back the value; the last value moves into its place in the dense run, so iteration order changes.
 pub fn[T] DenseSlotMap::remove(self : DenseSlotMap[T], key : SlotKey[T]) -> T? {
   match self.get(key) {
     Some(value) => {
@@ -488,6 +522,7 @@ pub fn[T] DenseSlotMap::remove(self : DenseSlotMap[T], key : SlotKey[T]) -> T? {
 }
 
 ///|
+/// Whether `key` still names a value.
 pub fn[T] DenseSlotMap::contains(
   self : DenseSlotMap[T],
   key : SlotKey[T],
@@ -496,16 +531,19 @@ pub fn[T] DenseSlotMap::contains(
 }
 
 ///|
+/// How many values the map holds.
 pub fn[T] DenseSlotMap::length(self : DenseSlotMap[T]) -> Int32 {
   self.len
 }
 
 ///|
+/// How many slots the map has room for before it grows.
 pub fn[T] DenseSlotMap::capacity(self : DenseSlotMap[T]) -> Int32 {
   self.values.length()
 }
 
 ///|
+/// Whether the map holds no value.
 pub fn[T] DenseSlotMap::is_empty(self : DenseSlotMap[T]) -> Bool {
   self.len == 0
 }
@@ -526,6 +564,7 @@ pub fn[T] DenseSlotMap::iter(self : DenseSlotMap[T]) -> Iter[T] {
 }
 
 ///|
+/// The keys of the occupied slots, in insertion order.
 pub fn[T] DenseSlotMap::keys(self : DenseSlotMap[T]) -> Iter[SlotKey[T]] {
   let mut cursor = 0
   Iter::new(() => {
@@ -544,6 +583,7 @@ pub fn[T] DenseSlotMap::keys(self : DenseSlotMap[T]) -> Iter[SlotKey[T]] {
 }
 
 ///|
+/// Every occupied key and its value, in insertion order.
 pub fn[T] DenseSlotMap::iter2(self : DenseSlotMap[T]) -> Iter2[SlotKey[T], T] {
   let mut cursor = 0
   Iter2::new(() => {
@@ -565,6 +605,7 @@ pub fn[T] DenseSlotMap::iter2(self : DenseSlotMap[T]) -> Iter2[SlotKey[T], T] {
 }
 
 ///|
+/// The values in insertion order, as a new array.
 pub fn[T] DenseSlotMap::to_array(self : DenseSlotMap[T]) -> Array[T] {
   let out : Array[T] = []
   for value in self.iter() {
@@ -574,6 +615,7 @@ pub fn[T] DenseSlotMap::to_array(self : DenseSlotMap[T]) -> Array[T] {
 }
 
 ///|
+/// Removes every value and returns every slot to the free list.
 pub fn[T] DenseSlotMap::clear(self : DenseSlotMap[T]) -> Unit {
   self.values.clear()
   self.generations.clear()
@@ -584,6 +626,7 @@ pub fn[T] DenseSlotMap::clear(self : DenseSlotMap[T]) -> Unit {
 }
 
 ///|
+/// A copy that owns its arrays: a change to either map is invisible to the other.
 pub fn[T] DenseSlotMap::copy(self : DenseSlotMap[T]) -> DenseSlotMap[T] {
   {
     values: self.values.copy(),
@@ -606,6 +649,7 @@ pub struct SecondaryMap[T] {
 }
 
 ///|
+/// An empty side table, with no slots until `resize` says how many the owning map has.
 pub fn[T] SecondaryMap::new() -> SecondaryMap[T] {
   { values: [], slots: 0, }
 }
@@ -626,6 +670,7 @@ pub fn[T] SecondaryMap::resize(
 }
 
 ///|
+/// The value at the slot `key` names, or `None` when that slot holds nothing.
 pub fn[T] SecondaryMap::get(self : SecondaryMap[T], key : SlotKey[T]) -> T? {
   if key.index < 0 || key.index >= self.slots {
     return None
@@ -634,6 +679,7 @@ pub fn[T] SecondaryMap::get(self : SecondaryMap[T], key : SlotKey[T]) -> T? {
 }
 
 ///|
+/// The value at the slot `key` names; aborts when the slot holds nothing.
 pub fn[T] SecondaryMap::at(self : SecondaryMap[T], key : SlotKey[T]) -> T {
   match self.get(key) {
     Some(value) => value
@@ -642,6 +688,7 @@ pub fn[T] SecondaryMap::at(self : SecondaryMap[T], key : SlotKey[T]) -> T {
 }
 
 ///|
+/// Stores `value` at the slot `key` names, refusing a slot past the size `resize` was given.
 pub fn[T] SecondaryMap::set(
   self : SecondaryMap[T],
   key : SlotKey[T],
@@ -654,6 +701,7 @@ pub fn[T] SecondaryMap::set(
 }
 
 ///|
+/// Empties the slot `key` names and hands back the value.
 pub fn[T] SecondaryMap::remove(self : SecondaryMap[T], key : SlotKey[T]) -> T? {
   match self.get(key) {
     Some(value) => {
@@ -665,6 +713,7 @@ pub fn[T] SecondaryMap::remove(self : SecondaryMap[T], key : SlotKey[T]) -> T? {
 }
 
 ///|
+/// Whether the slot `key` names holds a value.
 pub fn[T] SecondaryMap::contains(
   self : SecondaryMap[T],
   key : SlotKey[T],
@@ -673,6 +722,7 @@ pub fn[T] SecondaryMap::contains(
 }
 
 ///|
+/// How many slots hold a value.
 pub fn[T] SecondaryMap::length(self : SecondaryMap[T]) -> Int32 {
   let mut count = 0
   for value in self.values {
@@ -684,6 +734,7 @@ pub fn[T] SecondaryMap::length(self : SecondaryMap[T]) -> Int32 {
 }
 
 ///|
+/// Whether no slot holds a value.
 pub fn[T] SecondaryMap::is_empty(self : SecondaryMap[T]) -> Bool {
   self.length() == 0
 }
@@ -707,6 +758,7 @@ pub fn[T] SecondaryMap::iter(self : SecondaryMap[T]) -> Iter[T] {
 }
 
 ///|
+/// Empties every slot, keeping the size `resize` set.
 pub fn[T] SecondaryMap::clear(self : SecondaryMap[T]) -> Unit {
   for i in 0..<self.values.length() {
     self.values[i] = None
@@ -714,6 +766,7 @@ pub fn[T] SecondaryMap::clear(self : SecondaryMap[T]) -> Unit {
 }
 
 ///|
+/// A copy that owns its array: a change to either table is invisible to the other.
 pub fn[T] SecondaryMap::copy(self : SecondaryMap[T]) -> SecondaryMap[T] {
   { values: self.values.copy(), slots: self.slots, }
 }

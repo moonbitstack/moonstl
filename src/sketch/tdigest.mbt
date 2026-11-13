@@ -29,6 +29,7 @@ pub struct TDigest {
 }
 
 ///|
+/// An empty digest with the given `compression` — higher keeps more centroids and answers more precisely; a value outside the range the digest accepts raises `Refused`.
 pub fn TDigest::new(
   compression~ : Double = 100.0,
 ) -> TDigest raise @spec.Refused {
@@ -47,6 +48,7 @@ pub fn TDigest::new(
 }
 
 ///|
+/// Adds one value with weight one.
 pub fn TDigest::add(self : TDigest, value : Double) -> Unit {
   if value != value {
     // A not-a-number would poison every centroid it joined.
@@ -71,6 +73,7 @@ pub fn TDigest::add(self : TDigest, value : Double) -> Unit {
 }
 
 ///|
+/// Adds `value` with the weight `weight`, which is how a merged sample keeps its proportions.
 pub fn TDigest::add_weighted(
   self : TDigest,
   value : Double,
@@ -145,21 +148,25 @@ pub fn TDigest::compress(self : TDigest) -> Unit {
 }
 
 ///|
+/// The total weight the digest holds.
 pub fn TDigest::count(self : TDigest) -> Double {
   self.count_
 }
 
 ///|
+/// The smallest value added, or zero when nothing has been.
 pub fn TDigest::minimum(self : TDigest) -> Double {
   self.minimum
 }
 
 ///|
+/// The largest value added, or zero when nothing has been.
 pub fn TDigest::maximum(self : TDigest) -> Double {
   self.maximum
 }
 
 ///|
+/// Whether nothing has been added.
 pub fn TDigest::is_empty(self : TDigest) -> Bool {
   self.count_ == 0.0
 }
@@ -239,6 +246,7 @@ pub fn TDigest::cdf(self : TDigest, value : Double) -> Double {
 }
 
 ///|
+/// Drops every centroid, keeping the compression.
 pub fn TDigest::clear(self : TDigest) -> Unit {
   self.means.clear()
   self.weights.clear()
@@ -249,6 +257,7 @@ pub fn TDigest::clear(self : TDigest) -> Unit {
 }
 
 ///|
+/// A copy that owns its centroids: an add to either digest leaves the other alone.
 pub fn TDigest::copy(self : TDigest) -> TDigest {
   {
     compression: self.compression,
@@ -287,6 +296,7 @@ pub fn TDigest::merge(self : TDigest, other : TDigest) -> Unit {
 }
 
 ///|
+/// The digest as bytes, in the format this module reads back with `decode`.
 pub fn TDigest::encode(self : TDigest) -> Bytes {
   let writer = Writer::new()
   writer.write_header(MAGIC_TDIGEST)
@@ -302,6 +312,7 @@ pub fn TDigest::encode(self : TDigest) -> Bytes {
 }
 
 ///|
+/// Reads a digest back from the bytes `encode` wrote, refusing anything that is not one of its states.
 pub fn TDigest::decode(view : BytesView) -> TDigest raise @spec.Refused {
   let reader = Reader::new(view)
   reader.read_header(MAGIC_TDIGEST)

@@ -27,11 +27,13 @@ pub struct IndexHeap[T] {
 }
 
 ///|
+/// An empty heap popping from the `order` end, `Min` by default, with a position for every key it holds.
 pub fn[T : Compare] IndexHeap::new(order~ : Order = Min) -> IndexHeap[T] {
   IndexHeap::new_by(cmp=order_comparator(order))
 }
 
 ///|
+/// An empty heap ordered by `cmp`, which reports the smaller of two elements as negative.
 pub fn[T] IndexHeap::new_by(cmp~ : (T, T) -> Int32) -> IndexHeap[T] {
   {
     cmp,
@@ -139,6 +141,7 @@ fn[T] IndexHeap::position_of(self : IndexHeap[T], key : HeapKey[T]) -> Int32? {
 }
 
 ///|
+/// The value behind `key`, or `None` when the handle no longer names an entry.
 pub fn[T] IndexHeap::get(self : IndexHeap[T], key : HeapKey[T]) -> T? {
   match self.position_of(key) {
     Some(_) => self.values[key.index]
@@ -147,6 +150,7 @@ pub fn[T] IndexHeap::get(self : IndexHeap[T], key : HeapKey[T]) -> T? {
 }
 
 ///|
+/// Whether `key` still names an entry.
 pub fn[T] IndexHeap::contains(self : IndexHeap[T], key : HeapKey[T]) -> Bool {
   self.position_of(key) is Some(_)
 }
@@ -171,6 +175,7 @@ pub fn[T] IndexHeap::update(
 }
 
 ///|
+/// The element the order puts first, or `None` when the heap is empty.
 pub fn[T] IndexHeap::peek(self : IndexHeap[T]) -> T? {
   if self.heap.length() == 0 {
     None
@@ -180,6 +185,7 @@ pub fn[T] IndexHeap::peek(self : IndexHeap[T]) -> T? {
 }
 
 ///|
+/// Removes and returns the element the order puts first, or `None` when the heap is empty.
 pub fn[T] IndexHeap::pop(self : IndexHeap[T]) -> T? {
   if self.heap.length() == 0 {
     return None
@@ -211,6 +217,7 @@ fn[T] IndexHeap::detach_at(self : IndexHeap[T], at : Int32) -> Unit {
 }
 
 ///|
+/// Removes the entry `key` names and returns its value, leaving the rest of the heap ordered.
 pub fn[T] IndexHeap::remove_at(self : IndexHeap[T], key : HeapKey[T]) -> T? {
   match self.position_of(key) {
     Some(at) => {
@@ -223,16 +230,19 @@ pub fn[T] IndexHeap::remove_at(self : IndexHeap[T], key : HeapKey[T]) -> T? {
 }
 
 ///|
+/// How many entries the heap holds.
 pub fn[T] IndexHeap::length(self : IndexHeap[T]) -> Int32 {
   self.len
 }
 
 ///|
+/// Whether the heap holds no entry.
 pub fn[T] IndexHeap::is_empty(self : IndexHeap[T]) -> Bool {
   self.len == 0
 }
 
 ///|
+/// Removes every entry; the handles issued before it name nothing afterwards.
 pub fn[T] IndexHeap::clear(self : IndexHeap[T]) -> Unit {
   self.values.clear()
   self.generations.clear()
@@ -243,6 +253,7 @@ pub fn[T] IndexHeap::clear(self : IndexHeap[T]) -> Unit {
 }
 
 ///|
+/// The entries in heap order, which is not the order they pop in.
 pub fn[T] IndexHeap::to_array(self : IndexHeap[T]) -> Array[T] {
   let out : Array[T] = []
   for value in self.values {
@@ -267,6 +278,7 @@ pub fn[T] IndexHeap::into_sorted_array(self : IndexHeap[T]) -> Array[T] {
 }
 
 ///|
+/// A copy whose entries and handles stand on their own: a handle issued by either heap names the same value in it.
 pub fn[T] IndexHeap::copy(self : IndexHeap[T]) -> IndexHeap[T] {
   {
     cmp: self.cmp,

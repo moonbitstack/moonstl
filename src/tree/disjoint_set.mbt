@@ -24,6 +24,7 @@ pub struct DisjointSet {
 }
 
 ///|
+/// A union-find with no element in it.
 pub fn DisjointSet::new() -> DisjointSet {
   { parents: [], sizes: [], sets: 0, }
 }
@@ -74,6 +75,7 @@ pub fn DisjointSet::union(self : DisjointSet, a : Int32, b : Int32) -> Bool {
 }
 
 ///|
+/// Whether two elements are in the same set; an element that was never added is in no set.
 pub fn DisjointSet::connected(self : DisjointSet, a : Int32, b : Int32) -> Bool {
   let root_a = self.find(a)
   root_a >= 0 && root_a == self.find(b)
@@ -105,6 +107,7 @@ pub fn DisjointSet::set_size(self : DisjointSet, root : Int32) -> Int32 {
 }
 
 ///|
+/// How many sets the elements are split into.
 pub fn DisjointSet::set_count(self : DisjointSet) -> Int32 {
   self.sets
 }
@@ -116,11 +119,13 @@ pub fn DisjointSet::length(self : DisjointSet) -> Int32 {
 }
 
 ///|
+/// Whether no element has been added.
 pub fn DisjointSet::is_empty(self : DisjointSet) -> Bool {
   self.parents.is_empty()
 }
 
 ///|
+/// Removes every element, leaving a union-find with none.
 pub fn DisjointSet::clear(self : DisjointSet) -> Unit {
   self.parents.clear()
   self.sizes.clear()
@@ -172,6 +177,7 @@ pub struct DisjointSetMap[K] {
 }
 
 ///|
+/// A union-find over keys, with no key interned yet.
 pub fn[K : Hash + Eq] DisjointSetMap::new() -> DisjointSetMap[K] {
   { indices: Map([]), sets: DisjointSet::new(), keys: [], }
 }
@@ -194,6 +200,7 @@ pub fn[K : Hash + Eq] DisjointSetMap::intern(
 }
 
 ///|
+/// Joins the sets of two keys, interning either if it is new, and reports whether they were apart.
 pub fn[K : Hash + Eq] DisjointSetMap::union(
   self : DisjointSetMap[K],
   a : K,
@@ -205,6 +212,7 @@ pub fn[K : Hash + Eq] DisjointSetMap::union(
 }
 
 ///|
+/// Whether two keys are in the same set; a key that was never interned is in no set.
 pub fn[K : Hash + Eq] DisjointSetMap::connected(
   self : DisjointSetMap[K],
   a : K,
@@ -216,6 +224,7 @@ pub fn[K : Hash + Eq] DisjointSetMap::connected(
 }
 
 ///|
+/// The key that represents the set holding `key`, or `None` when the key was never interned.
 pub fn[K : Hash + Eq] DisjointSetMap::find(
   self : DisjointSetMap[K],
   key : K,
@@ -242,21 +251,25 @@ pub fn[K : Hash + Eq] DisjointSetMap::component_size(
 }
 
 ///|
+/// How many sets the keys are split into.
 pub fn[K] DisjointSetMap::set_count(self : DisjointSetMap[K]) -> Int32 {
   self.sets.set_count()
 }
 
 ///|
+/// How many keys have been interned.
 pub fn[K] DisjointSetMap::length(self : DisjointSetMap[K]) -> Int32 {
   self.keys.length()
 }
 
 ///|
+/// Whether no key has been interned.
 pub fn[K] DisjointSetMap::is_empty(self : DisjointSetMap[K]) -> Bool {
   self.keys.is_empty()
 }
 
 ///|
+/// Removes every key, leaving a union-find with none.
 pub fn[K] DisjointSetMap::clear(self : DisjointSetMap[K]) -> Unit {
   self.indices.clear()
   self.sets.clear()

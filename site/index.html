@@ -379,6 +379,16 @@ section.band:last-of-type{padding-bottom:20px}
 .apidoc td.mn{font-family:var(--mono);color:var(--champagne);white-space:nowrap}
 .apidoc td.sig{font-family:var(--mono);font-size:11.5px;color:var(--plat-3);word-break:break-word}
 .apidoc .note{color:var(--plat-4);font-family:var(--serif);font-size:13px;font-style:italic}
+/* the prose a declaration carries, lifted from its /// block */
+.prose{margin:20px 0 4px;max-width:74ch}
+.prose p{margin:0 0 10px;color:var(--plat-2);font-size:13px;line-height:1.78}
+.prose p:last-child{margin-bottom:0}
+.prose code,.mdoc code{font-family:var(--mono);font-size:11.5px;color:var(--champagne);background:rgba(201,185,143,.08);padding:1px 4px}
+.prose pre,.docpre{margin:12px 0;padding:12px 14px;background:rgba(0,0,0,.34);border:1px solid var(--line);font-family:var(--mono);font-size:11.5px;line-height:1.75;color:var(--plat-3);overflow:auto;white-space:pre}
+.mdoc{margin-top:6px;color:var(--plat-4);font-size:12px;line-height:1.7;font-family:var(--sans)}
+.mdoc code{font-size:11px}
+.apidoc tr.derived td.mn{color:var(--plat-5)}
+.apidoc tr.derived .mdoc{color:var(--plat-5)}
 /* ══════════════════════ install ══════════════════════ */
 .inst{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:start}
 .codecard{border:1px solid var(--line-2);background:rgba(0,0,0,.34)}
@@ -1403,8 +1413,39 @@ let API = null, apiFilterPkg = "all", apiFilterText = "", apiSel = null;
 
 function methodSig(m) { return m.sig.replace(/^fn/, "").trim(); }
 
+/* The reference prints the /// block the declaration carries: paragraphs, the
+   `code` spans inside them, and the fenced example if there is one. */
+function inlineMd(text) {
+  return esc(text)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+}
+
+function docHtml(text) {
+  if (!text) return "";
+  let out = "";
+  for (const raw of text.split(/\n{2,}/)) {
+    const block = raw.trim();
+    if (!block) continue;
+    if (block.startsWith("```")) {
+      const lines = block.split("\n");
+      const body = lines.slice(1, lines[lines.length - 1].trim().startsWith("```") ? -1 : undefined).join("\n");
+      out += `<pre class="docpre">${esc(body)}</pre>`;
+    } else {
+      out += `<p>${inlineMd(block).replace(/\n/g, " ")}</p>`;
+    }
+  }
+  return out ? `<div class="prose">${out}</div>` : "";
+}
+
+function methodRow(m) {
+  const doc = m.doc ? `<div class="mdoc">${inlineMd(m.doc)}</div>` : "";
+  return `<tr${m.derived ? ' class="derived"' : ""}><td class="mn">${esc(m.name)}</td>` +
+    `<td class="sig">${esc(methodSig(m))}${doc}</td></tr>`;
+}
+
 function renderType(p, t) {
-  const kindTag = t.kind === "struct" ? "struct" : t.kind === "enum" ? "enum" : "type";
+  const kindTag = t.kind === "error" ? "error" : t.kind === "enum" ? "enum" : t.kind === "struct" ? "struct" : "type";
   const params = t.params ? `<span class="params">[${esc(t.params)}]</span>` : "";
   let html = `<div class="hdr-banner">Defined in module <b>@${p.package}</b></div>
     <div class="path">@${p.package} · ${esc(t.name)}</div>
@@ -1412,15 +1453,14 @@ function renderType(p, t) {
   if (t.impls && t.impls.length)
     html += `<div class="impls">${t.impls.map(i => `<span class="i">${esc(i)}</span>`).join("")}</div>`;
 
-  let doc = "";
+  let doc = docHtml(t.doc);
   if (t.fields && t.fields.length) doc += `<h5>Fields</h5><pre>${esc(t.fields.join("\n"))}</pre>`;
   if (t.variants && t.variants.length) doc += `<h5>Variants</h5><pre>${esc(t.variants.join("\n"))}</pre>`;
   if (t.alias) doc += `<h5>Definition</h5><pre>type ${esc(t.name)} = ${esc(t.alias)}</pre>`;
   if (t.members && t.members.length) {
-    const rows = t.members.map(m =>
-      `<tr><td class="mn">${esc(m.name)}</td><td class="sig">${esc(methodSig(m))}</td></tr>`).join("");
+    const rows = t.members.map(methodRow).join("");
     doc += `<h5>Methods · ${t.members.length}</h5>
-      <table><thead><tr><th>Method</th><th>Signature</th></tr></thead><tbody>${rows}</tbody></table>`;
+      <table><thead><tr><th>Method</th><th>Signature and what it does</th></tr></thead><tbody>${rows}</tbody></table>`;
   }
   if (!doc) doc = `<p class="note" style="margin-top:22px">No public members are exposed by name.</p>`;
   const sibs = (p.types || []).filter(x => x.name !== t.name).slice(0, 10);
@@ -1432,19 +1472,21 @@ function renderType(p, t) {
 }
 
 function renderFree(p, filter) {
-  const f = p.free_fns.filter(x => !filter || (x.name + " " + x.sig).toLowerCase().includes(filter));
-  const l = p.lets.filter(x => !filter || x.name.toLowerCase().includes(filter));
+  const f = p.free_fns.filter(x => !filter || (x.name + " " + x.sig + " " + (x.doc || "")).toLowerCase().includes(filter));
+  const l = p.lets.filter(x => !filter || (x.name + " " + (x.doc || "")).toLowerCase().includes(filter));
   let html = `<div class="path">@${p.package}</div>
     <div class="awrap"><div class="apitype">Free functions</div><div class="apikind">package</div></div>`;
   let doc = "";
   if (f.length) {
-    doc += `<h5>Functions · ${f.length}</h5><table><thead><tr><th>Function</th><th>Signature</th></tr></thead><tbody>` +
-      f.map(x => `<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.sig.replace(/^fn/, ""))}</td></tr>`).join("") +
+    doc += `<h5>Functions · ${f.length}</h5><table><thead><tr><th>Function</th><th>Signature and what it does</th></tr></thead><tbody>` +
+      f.map(x => `<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.sig.replace(/^fn/, ""))}` +
+        (x.doc ? `<div class="mdoc">${inlineMd(x.doc)}</div>` : "") + `</td></tr>`).join("") +
       `</tbody></table>`;
   }
   if (l.length) {
-    doc += `<h5>Constants · ${l.length}</h5><table><thead><tr><th>Name</th><th>Type</th></tr></thead><tbody>` +
-      l.map(x => `<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.type)}</td></tr>`).join("") +
+    doc += `<h5>Constants · ${l.length}</h5><table><thead><tr><th>Name</th><th>Type and what it is</th></tr></thead><tbody>` +
+      l.map(x => `<tr><td class="mn">${esc(x.name)}</td><td class="sig">${esc(x.type)}` +
+        (x.doc ? `<div class="mdoc">${inlineMd(x.doc)}</div>` : "") + `</td></tr>`).join("") +
       `</tbody></table>`;
   }
   if (!doc) doc = `<p class="note" style="margin-top:22px">Nothing in this package matches.</p>`;
@@ -1465,6 +1507,7 @@ function buildPkgChips() {
 function typeMatches(p, t, q) {
   if (!q) return true;
   if (t.name.toLowerCase().includes(q)) return true;
+  if ((t.doc || "").toLowerCase().includes(q)) return true;
   return (t.members || []).some(m => m.name.toLowerCase().includes(q));
 }
 
