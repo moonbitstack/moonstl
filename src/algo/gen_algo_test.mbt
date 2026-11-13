@@ -152,6 +152,32 @@ let algo_unique : Array[Int32] = [1, 2, 3, 4]
 let algo_dupes : Array[Int32] = [1, 3]
 
 ///|
+/// Every length-3 window of the run, left to right.
+let algo_seq_windows : Array[Array[Int32]] = [
+  [3, 1, 4],
+  [1, 4, 1],
+  [4, 1, 5],
+  [1, 5, 9],
+  [5, 9, 2],
+  [9, 2, 6],
+  [2, 6, 5],
+  [6, 5, 3],
+  [5, 3, 5],
+]
+
+///|
+/// reservoir_sample(k=3, seed=1) over the run.
+let algo_sample_1 : Array[Int32] = [2, 6, 4]
+
+///|
+/// reservoir_sample(k=3, seed=7) over the run.
+let algo_sample_7 : Array[Int32] = [9, 1, 6]
+
+///|
+/// reservoir_sample(k=3, seed=2685821657736338717) over the run.
+let algo_sample_2545f4914f6cdd1d : Array[Int32] = [1, 3, 5]
+
+///|
 test "differential: bisect matches the reference" {
   for p in 0..<60 {
     @test.assert_eq(@algo.bisect_left(algo_sorted[:], p), algo_bisect_left[p])
@@ -229,4 +255,27 @@ test "differential: dedup and run queries" {
   @test.assert_eq(@algo.mismatch([1, 2, 3][:], [1, 2, 4][:]), Some((2, 2)))
   @test.assert_eq(@algo.find_run([1, 4, 7, 1, 4, 9][:], [1, 4][:]), Some(0))
   @test.assert_eq(@algo.clamp(12, min=0, max=10), 10)
+}
+
+///|
+test "differential: windows match the reference slices" {
+  @test.assert_eq(@algo.windows(algo_seq[:], 3).to_array(), algo_seq_windows)
+  @test.assert_eq(@algo.windows(algo_seq[:], 11).to_array().length(), 1)
+  @test.assert_eq(@algo.windows(algo_seq[:], 12).to_array().length(), 0)
+}
+
+///|
+test "differential: a seeded draw matches the reference" {
+  @test.assert_eq(
+    @algo.reservoir_sample(algo_seq[:].iter(), k=3, seed=1UL),
+    algo_sample_1,
+  )
+  @test.assert_eq(
+    @algo.reservoir_sample(algo_seq[:].iter(), k=3, seed=7UL),
+    algo_sample_7,
+  )
+  @test.assert_eq(
+    @algo.reservoir_sample(algo_seq[:].iter(), k=3, seed=0x2545f4914f6cdd1dUL),
+    algo_sample_2545f4914f6cdd1d,
+  )
 }

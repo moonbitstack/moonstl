@@ -31,6 +31,43 @@ from vector_format import data, test, ints, str_arr, char_arr, float_arr, fscala
 SORTED_12 = [1, 2, 2, 3, 5, 5, 5, 8, 13, 21, 34, 55]
 SEQ_VALUES = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5]
 
+UINT64_MASK = (1 << 64) - 1
+
+
+def _splitmix(state):
+    state = (state + 0x9E3779B97F4A7C15) & UINT64_MASK
+    z = state
+    z = ((z ^ (z >> 30)) * 0xBF58476D1CE4E5B9) & UINT64_MASK
+    z = ((z ^ (z >> 27)) * 0x94D049BB133111EB) & UINT64_MASK
+    return state, z ^ (z >> 31)
+
+
+def reservoir_sample(values, k, seed):
+    """The draw `reservoir_sample` specifies: Algorithm R over SplitMix64.
+
+    There is no standard-library sampler to compare against, so this is the
+    algorithm written out a second time, in a second language, from the same
+    stated rules; the statistical claim is checked by the library's own tests.
+    """
+    out = []
+    state = seed & UINT64_MASK
+    seen = 0
+    for x in values:
+        if len(out) < k:
+            out.append(x)
+        else:
+            state, z = _splitmix(state)
+            bound = seen + 1
+            limit = UINT64_MASK - UINT64_MASK % bound
+            while z >= limit:
+                state, z = _splitmix(state)
+            slot = z % bound
+            if slot < k:
+                out[slot] = x
+        seen += 1
+    return out
+
+
 
 def gen_algo(src_root, vec_root):
     d, t = [], []
@@ -126,6 +163,29 @@ def gen_algo(src_root, vec_root):
         "@test.assert_eq(@algo.mismatch([1, 2, 3][:], [1, 2, 4][:]), Some((2, 2)))",
         "@test.assert_eq(@algo.find_run([1, 4, 7, 1, 4, 9][:], [1, 4][:]), Some(0))",
         "@test.assert_eq(@algo.clamp(12, min=0, max=10), 10)",
+    ]))
+
+    windows3 = [SEQ_VALUES[i:i + 3] for i in range(len(SEQ_VALUES) - 2)]
+    d.append(data("algo_seq_windows", "Array[Array[Int32]]", arr_of_arr(windows3), windows3,
+                  "Every length-3 window of the run, left to right."))
+    t.append(test("differential: windows match the reference slices", [
+        "@test.assert_eq(@algo.windows(algo_seq[:], 3).to_array(), algo_seq_windows)",
+        "@test.assert_eq(@algo.windows(algo_seq[:], 11).to_array().length(), 1)",
+        "@test.assert_eq(@algo.windows(algo_seq[:], 12).to_array().length(), 0)",
+    ]))
+
+    for seed in (1, 7, 0x2545F4914F6CDD1D):
+        drawn = reservoir_sample(SEQ_VALUES, 3, seed)
+        name = "algo_sample_%x" % seed
+        d.append(data(name, "Array[Int32]", ints(drawn), drawn,
+                      "reservoir_sample(k=3, seed=%d) over the run." % seed))
+    t.append(test("differential: a seeded draw matches the reference", [
+        "@test.assert_eq(@algo.reservoir_sample(algo_seq[:].iter(), k=3, seed=1UL), algo_sample_1)",
+        "@test.assert_eq(@algo.reservoir_sample(algo_seq[:].iter(), k=3, seed=7UL), algo_sample_7)",
+        "@test.assert_eq(",
+        "  @algo.reservoir_sample(algo_seq[:].iter(), k=3, seed=0x2545f4914f6cdd1dUL),",
+        "  algo_sample_2545f4914f6cdd1d,",
+        ")",
     ]))
 
     return vf.write("algo", d, t, src_root, vec_root)

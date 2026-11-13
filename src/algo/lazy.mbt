@@ -76,6 +76,45 @@ pub fn[T] chunk_by(it : Iter[T], same : (T, T) -> Bool) -> Iter[Array[T]] {
 }
 
 ///|
+/// Every contiguous window of `size` elements, left to right: `n - size + 1`
+/// windows for a run of `n`, each overlapping the one before it by all but one
+/// element. A size that is not positive, or longer than the run, yields
+/// nothing.
+///
+/// ```mbt check
+/// test {
+///   let run : Array[Int32] = [1, 2, 3, 4, 5]
+///   assert_eq(@algo.windows(run[:], 3).to_array(), [
+///     [1, 2, 3],
+///     [2, 3, 4],
+///     [3, 4, 5],
+///   ])
+///   assert_eq(@algo.windows(run[:], 5).to_array().length(), 1)
+///   assert_eq(@algo.windows(run[:], 6).to_array().length(), 0)
+/// }
+/// ```
+pub fn[T] windows(a : ArrayView[T], size : Int32) -> Iter[Array[T]] {
+  let n = a.length()
+  let mut start = 0
+  if size <= 0 || size > n {
+    return Iter::empty()
+  }
+  Iter::new(fn() {
+    if start + size > n {
+      return None
+    }
+    let window : Array[T] = []
+    let mut i = 0
+    while i < size {
+      window.push(a[start + i])
+      i = i + 1
+    }
+    start = start + 1
+    Some(window)
+  })
+}
+
+///|
 /// Every window of `size` elements taken with wraparound, starting at each
 /// index: `n` windows for a run of `n`. A non-positive size or an empty run
 /// yields nothing. A window longer than the run repeats elements.

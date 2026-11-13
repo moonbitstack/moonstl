@@ -296,3 +296,126 @@ test "randomised: nth element agrees with sorting" {
     ignore(round)
   }
 }
+
+///|
+test "windows: every contiguous run of the size, in order" {
+  let run : Array[Int32] = [1, 2, 3, 4, 5]
+  @test.assert_eq(@algo.windows(run[:], 1).to_array(), [[1], [2], [3], [4], [5]])
+  @test.assert_eq(@algo.windows(run[:], 2).to_array(), [
+    [1, 2],
+    [2, 3],
+    [3, 4],
+    [4, 5],
+  ])
+  @test.assert_eq(@algo.windows(run[:], 3).to_array(), [
+    [1, 2, 3],
+    [2, 3, 4],
+    [3, 4, 5],
+  ])
+  @test.assert_eq(@algo.windows(run[:], 5).to_array(), [[1, 2, 3, 4, 5]])
+  @test.assert_eq(@algo.windows(run[:], 6).to_array().length(), 0)
+  @test.assert_eq(@algo.windows(run[:], 0).to_array().length(), 0)
+  @test.assert_eq(@algo.windows(run[:], -2).to_array().length(), 0)
+  let empty : Array[Int32] = []
+  @test.assert_eq(@algo.windows(empty[:], 1).to_array().length(), 0)
+}
+
+///|
+test "windows: the run is read as it is, and stays as it was" {
+  let run : Array[Int32] = [7, 8, 9]
+  let windows = @algo.windows(run[:], 2).to_array()
+  @test.assert_eq(windows, [[7, 8], [8, 9]])
+  @test.assert_eq(run, [7, 8, 9])
+  // a window is a copy: changing one leaves the run and the other windows alone
+  windows[0][0] = 0
+  @test.assert_eq(run, [7, 8, 9])
+  @test.assert_eq(windows[1], [8, 9])
+}
+
+///|
+test "reservoir: a draw of the whole stream keeps it in order" {
+  let run : Array[Int32] = [10, 20, 30, 40, 50]
+  @test.assert_eq(@algo.reservoir_sample(run.iter(), k=5, seed=7UL), [
+    10, 20, 30, 40, 50,
+  ])
+  @test.assert_eq(@algo.reservoir_sample(run.iter(), k=99, seed=7UL), [
+    10, 20, 30, 40, 50,
+  ])
+}
+
+///|
+test "reservoir: an empty draw and an empty stream" {
+  let run : Array[Int32] = [1, 2, 3]
+  @test.assert_eq(@algo.reservoir_sample(run.iter(), k=0, seed=1UL).length(), 0)
+  @test.assert_eq(
+    @algo.reservoir_sample(run.iter(), k=-3, seed=1UL).length(),
+    0,
+  )
+  let empty : Array[Int32] = []
+  @test.assert_eq(
+    @algo.reservoir_sample(empty[:].iter(), k=4, seed=1UL).length(),
+    0,
+  )
+}
+
+///|
+test "reservoir: the same seed draws the same sample" {
+  let run : Array[Int32] = []
+  for i in 0..<64 {
+    run.push(i)
+  }
+  @test.assert_eq(
+    @algo.reservoir_sample(run[:].iter(), k=8, seed=0x2545f4914f6cdd1dUL),
+    @algo.reservoir_sample(run[:].iter(), k=8, seed=0x2545f4914f6cdd1dUL),
+  )
+  // a different seed is a different draw; over eight slots a collision is
+  // possible but a run of two seeds that agree everywhere is not
+  let a = @algo.reservoir_sample(run[:].iter(), k=8, seed=1UL)
+  let b = @algo.reservoir_sample(run[:].iter(), k=8, seed=2UL)
+  @test.assert_not_eq(a, b)
+}
+
+///|
+test "reservoir: a sample holds stream elements, each at most once" {
+  let run : Array[Int32] = []
+  for i in 0..<20 {
+    run.push(i)
+  }
+  for seed in 0..<50 {
+    let drawn = @algo.reservoir_sample(
+      run[:].iter(),
+      k=6,
+      seed=seed.to_uint64(),
+    )
+    @test.assert_eq(drawn.length(), 6)
+    let seen : Array[Bool] = []
+    for _ in 0..<20 {
+      seen.push(false)
+    }
+    for x in drawn {
+      @test.assert_eq(x >= 0 && x < 20, true)
+      @test.assert_eq(seen[x], false)
+      seen[x] = true
+    }
+  }
+}
+
+///|
+test "reservoir: every element is drawn about k/n of the time" {
+  // 8 elements, 2 slots, 4000 seeds: each element should land in about 1000
+  // draws, with a standard deviation near 27. The bounds below are more than
+  // five deviations wide, so a real bias fails here and noise does not.
+  let run : Array[Int32] = [0, 1, 2, 3, 4, 5, 6, 7]
+  let counts : Array[Int32] = []
+  for _ in 0..<8 {
+    counts.push(0)
+  }
+  for seed in 0..<4000 {
+    for x in @algo.reservoir_sample(run[:].iter(), k=2, seed=seed.to_uint64()) {
+      counts[x] = counts[x] + 1
+    }
+  }
+  for x in 0..<8 {
+    @test.assert_eq(counts[x] > 850 && counts[x] < 1150, true)
+  }
+}

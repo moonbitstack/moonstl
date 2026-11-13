@@ -117,6 +117,8 @@ pub fn[T : Compare] prev_permutation_in_place(Array[T]) -> Bool
 
 pub fn[T : Eq] replace_in_place(Array[T], T, T) -> Int32
 
+pub fn[T] reservoir_sample(Iter[T], k~ : Int32, seed? : UInt64) -> Array[T]
+
 pub fn[T] rotate(ArrayView[T], mid~ : Int32) -> Array[T]
 
 pub fn[T] rotate_in_place(Array[T], mid~ : Int32) -> Unit
@@ -144,6 +146,8 @@ pub fn[T] tee(Iter[T]) -> (Iter[T], Iter[T])
 pub fn[T] tree_reduce(Iter[T], (T, T) -> T) -> T?
 
 pub fn[T : Hash + Eq] unique(ArrayView[T]) -> Array[T]
+
+pub fn[T] windows(ArrayView[T], Int32) -> Iter[Array[T]]
 
 pub fn[T] windows_circular(ArrayView[T], Int32) -> Iter[Array[T]]
 

@@ -110,6 +110,36 @@ The combinatoric generators are structs with `next()` and `iter()`, and they
 enumerate in the order Python's `itertools` produces, so a reader can check one
 against the other.
 
+Windows walk a run in overlapping slices; `chunks` walks it in disjoint ones.
+Both are lazy, so a long run is read one window at a time.
+
+```moonbit
+///|
+test {
+  let run : Array[Int32] = [1, 2, 3, 4]
+  @test.assert_eq(@algo.windows(run[:], 2).to_array(), [[1, 2], [2, 3], [3, 4]])
+}
+```
+
+`reservoir_sample` draws `k` elements from a stream whose length is not known in
+advance, in one pass, with every element equally likely to be among them. The
+draw is a function of the stream and the seed, so a fixed seed replays the same
+sample; without one the process-wide seed is used.
+
+```moonbit
+///|
+test {
+  let readings : Array[Int32] = [4, 8, 15, 16, 23, 42]
+  let drawn = @algo.reservoir_sample(readings[:].iter(), k=2, seed=5UL)
+  @test.assert_eq(drawn.length(), 2)
+  @test.assert_eq(
+    drawn,
+    @algo.reservoir_sample(readings[:].iter(), k=2, seed=5UL),
+  )
+}
+```
+
+
 ```moonbit
 ///|
 test {
@@ -319,10 +349,13 @@ their construction promises instead of to one implementation's bits.
 | `sketch` | count-min within its error, hyperloglog within three standard errors, t-digest near the true quantile, bloom free of false negatives |
 | `text` | kmp and aho-corasick occurrences, the z-function, suffix order, the matcher ratio |
 | `phf` | the map answers its key set, the ordered map gives each key its index |
-| `algo` | bisect on every probe, the generators in enumeration order, selection, merge, prefix and rotate |
+| `algo` | bisect on every probe, the generators in enumeration order, selection, merge, prefix and rotate, window slicing, the seeded draw |
 
 Every check passes. The vectors and the two generators that agree on them live
-in `scripts/`.
+in `scripts/`. A draw is pinned twice over: a fixed seed has to reproduce the
+same sample in both reference implementations, and the library's own test holds
+the draw to its uniformity — over 4000 seeds every element lands in the sample
+within the binomial spread of `k / n`.
 
 ## Checks
 

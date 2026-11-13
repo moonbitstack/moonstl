@@ -85,6 +85,19 @@ have to change in place take an `Array` and say `_in_place`:
 `next_permutation_in_place`. The generators (`Permutations`, `Combinations`,
 `Powerset`, `Product`, `GrayCode`) are structs with `next()` and `iter()`.
 
+`windows` walks a run in overlapping slices, `chunks` in disjoint ones; both are
+lazy. `reservoir_sample` draws `k` elements from a stream of unknown length, each
+equally likely, in one pass:
+
+```moonbit
+fn thin(readings : Iter[Int32]) -> Array[Int32] {
+  @algo.reservoir_sample(readings, k=8, seed=42UL)
+}
+```
+
+Pass `seed` whenever the draw has to repeat; without it the process-wide seed is
+used, so the sample differs between runs.
+
 ## Merge sets and keep a snapshot
 
 `DisjointSet` numbers its elements, `DisjointSetMap` takes keys and interns them;

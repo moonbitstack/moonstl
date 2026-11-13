@@ -213,6 +213,45 @@ fn gen_algo(items: &mut Vec<Item>) {
     items.push(("algo_merged".into(), list_of_ints(&merged)));
     items.push(("algo_unique".into(), list_of_ints(&[1, 2, 3, 4])));
     items.push(("algo_dupes".into(), list_of_ints(&[1, 3])));
+    let windows3: Vec<Vec<i64>> = (0..seq.len() - 2).map(|i| seq[i..i + 3].to_vec()).collect();
+    items.push(("algo_seq_windows".into(), perm_value(&windows3)));
+    for seed in [1u64, 7, 0x2545F4914F6CDD1D] {
+        let drawn = reservoir_sample(&seq, 3, seed);
+        items.push((format!("algo_sample_{:x}", seed), list_of_ints(&drawn)));
+    }
+}
+
+/// The draw `reservoir_sample` specifies: Algorithm R over SplitMix64, written
+/// out from the same stated rules as the Python generator.
+fn reservoir_sample(values: &[i64], k: usize, seed: u64) -> Vec<i64> {
+    let mut out: Vec<i64> = Vec::new();
+    let mut state = seed;
+    let mut seen: u64 = 0;
+    for &x in values {
+        if out.len() < k {
+            out.push(x);
+        } else {
+            let bound = seen + 1;
+            let limit = u64::MAX - u64::MAX % bound;
+            let mut z;
+            loop {
+                state = state.wrapping_add(0x9E3779B97F4A7C15);
+                let mut t = state;
+                t = (t ^ (t >> 30)).wrapping_mul(0xBF58476D1CE4E5B9);
+                t = (t ^ (t >> 27)).wrapping_mul(0x94D049BB133111EB);
+                z = t ^ (t >> 31);
+                if z < limit {
+                    break;
+                }
+            }
+            let slot = (z % bound) as usize;
+            if slot < k {
+                out[slot] = x;
+            }
+        }
+        seen += 1;
+    }
+    out
 }
 
 fn perm_value(rows: &Vec<Vec<i64>>) -> Value {
