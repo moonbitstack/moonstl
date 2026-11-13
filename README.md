@@ -4,9 +4,16 @@ Data structures and algorithms for MoonBit: the containers, caches and sequence
 algorithms that the core library leaves out, in one module with one package per
 family.
 
-**Live showcase** — a workbench of twenty-three structures running this module
+[Workbench](https://moonbitstack.github.io/moonstl) ·
+[Guide](https://moonbitstack.github.io/moonstl/guide.html) ·
+[Reference](https://moonbitstack.github.io/moonstl#reference) ·
+[mooncakes](https://mooncakes.io/docs/moonbitstack/moonstl)
+
+The showcase is a workbench of twenty-three structures running this module
 compiled to WebAssembly, the ten package families, and an API reference
-generated from the interfaces: <https://moonbitstack.github.io/moonstl>.
+generated from the interfaces and the prose their declarations carry. The guide
+walks the library one step at a time, and every snippet in it is compiled and
+run before it is published.
 
 ```moonbit
 ///|

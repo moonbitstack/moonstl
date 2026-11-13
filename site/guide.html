@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23151009'/%3E%3Crect x='8' y='8' width='16' height='16' fill='none' stroke='%23e9e6df' stroke-width='1'/%3E%3Cpath d='M16 10l4 6-4 6-4-6z' fill='%23c9b98f'/%3E%3C/svg%3E">
+<title>The Guide — MoonBit STL</title>
+<meta name="description" content="A step-by-step tour of the moonstl containers, caches, sketches, text structures and algorithms, with the answer each snippet produces.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="strip">
+  <div class="wrap strip-in">
+    <a class="brand" href="index.html" aria-label="MoonBit STL">
+      <span class="mark"><i></i></span><b>MoonBit <em>STL</em></b>
+    </a>
+    <div class="strip-right">
+      <span class="edition">Vol. I &nbsp;·&nbsp; MMXXVI &nbsp;·&nbsp; The MoonBit Standard Library</span>
+    </div>
+  </div>
+</div>
+
+<header class="masthead" id="top">
+  <div class="wrap">
+    <div class="rule2"></div>
+    <h1 class="wordmark">The&nbsp;<span>Guide</span></h1>
+    <p class="subtitle">A Step-by-Step Tour of the Atlas</p>
+    <nav>
+      <a href="index.html#workbench">Workbench</a>
+      <a href="guide.html" aria-current="page">Guide</a>
+      <a href="index.html#families">Families</a>
+      <a href="index.html#conformance">Assay</a>
+      <a href="index.html#reference">Reference</a>
+      <a href="index.html#install">Install</a>
+    </nav>
+    <div class="rule2" style="margin-top:22px"></div>
+    <div class="damask" aria-hidden="true">
+      <svg viewBox="0 0 1200 26" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="steel" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#4d473e"/><stop offset=".22" stop-color="#cfc9bb"/>
+            <stop offset=".34" stop-color="#6d6558"/><stop offset=".5" stop-color="#efece3"/>
+            <stop offset=".62" stop-color="#736c60"/><stop offset=".8" stop-color="#d8d2c4"/>
+            <stop offset="1" stop-color="#4d473e"/>
+          </linearGradient>
+        </defs>
+        <g fill="none" stroke="url(#steel)" stroke-width="1.4">
+          <path d="M0 9 C 120 2, 240 16, 360 9 S 600 2, 720 9 S 960 16, 1080 9 S 1200 4, 1200 9"/>
+          <path d="M0 14 C 120 7, 240 21, 360 14 S 600 7, 720 14 S 960 21, 1080 14 S 1200 9, 1200 14" opacity=".75"/>
+          <path d="M0 19 C 120 12, 240 26, 360 19 S 600 12, 720 19 S 960 26, 1080 19 S 1200 14, 1200 19" opacity=".5"/>
+          <path d="M0 4 C 120 -3, 240 11, 360 4 S 600 -3, 720 4 S 960 11, 1080 4 S 1200 -1, 1200 4" opacity=".45"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<main class="guide">
+    <section class="gsec gintro">
+      <div class="wrap">
+        <div class="gbody">
+        <p>The atlas read in order: install it, hold entries in order, bound a cache, answer from both ends of a heap, keep ranges, sketch a stream, search text, and reach for the algorithms that save writing a loop. Every snippet on this page is compiled and run before it is published, and the answer under it is the one the snippet produced.</p>
+        </div>
+      </div>
+    </section>
+    <section class="gsec" id="step-1">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step I</div>
+          <h3>Install and the first map</h3>
+          <div class="sub">one module, ten packages</div>
+        </div>
+        <div class="gbody">
+        <p>The module is one dependency. <code>moon add</code> fetches it, and a package import names the family you want; the module root re-exports the same types, so <code>"moonbitstack/moonstl"</code> alone is enough when you want several at once.</p>
+        <pre class="gcode">moon add moonbitstack/moonstl</pre>
+        <pre class="gcode">import {
+  "moonbitstack/moonstl",
+  "moonbitstack/moonstl/map",
+  "moonbitstack/moonstl/algo",
+}</pre>
+        <p>An <code>IndexMap</code> is a hash map that remembers the order its entries arrived in, so it answers by key and by position from the same structure.</p>
+        <pre class="gcode">test {
+  let index : @map.IndexMap[String, Int32] = @map.IndexMap::new()
+  let _ = index.set("a", 1)
+  let _ = index.set("b", 2)
+  @test.assert_eq(index.get("b"), Some(2))
+  @test.assert_eq(index.keys().to_array(), ["a", "b"])
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>get("b")</dt><dd>Some(2)</dd><dt>keys().to_array()</dt><dd>["a", "b"]</dd></dl></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-2">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step II</div>
+          <h3>Where an entry sits</h3>
+          <div class="sub">positions, sorting, removal</div>
+        </div>
+        <div class="gbody">
+        <p>Positions are what the order buys you: <code>get_index</code> reads an entry by position, <code>get_index_of</code> reads a key's position, and the entries can be reordered without touching the table. <code>remove</code> is <code>swap_remove</code> — the last entry takes the hole in O(1), which moves the positions after the hole. A caller that needs the remaining positions to stay put calls <code>shift_remove</code>, which is O(n).</p>
+        <pre class="gcode">test {
+  let run : @map.IndexMap[Int32, String] = @map.IndexMap::new()
+  let _ = run.set(3, "three")
+  let _ = run.set(1, "one")
+  let _ = run.set(2, "two")
+  @test.assert_eq(run.get_index(1), Some((1, "one")))
+  run.sort_keys()
+  @test.assert_eq(run.keys().to_array(), [1, 2, 3])
+  let _ = run.swap_remove(1)
+  @test.assert_eq(run.keys().to_array(), [3, 2])
+  let _ = run.shift_remove(3)
+  @test.assert_eq(run.keys().to_array(), [2])
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>get_index(1)</dt><dd>Some((1, "one"))</dd><dt>after sort_keys()</dt><dd>[1, 2, 3]</dd><dt>after swap_remove(1)</dt><dd>[3, 2]</dd><dt>after shift_remove(3)</dt><dd>[2]</dd></dl></div>
+        <p><code>IndexSet</code> is the same container with no values: it keeps insertion order, hands out positions, and answers <code>intersection</code>, <code>is_subset</code> and <code>is_disjoint</code>. <code>FlatMap</code> keeps its entries in one sorted run instead, which trades O(n) inserts for a cache-friendly walk in key order.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-3">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step III</div>
+          <h3>Counts and layers</h3>
+          <div class="sub">Counter, ChainMap</div>
+        </div>
+        <div class="gbody">
+        <p><code>Counter</code> drops a key when its count reaches zero, so the map holds what was seen rather than what was mentioned. <code>most_common</code> breaks a tie by the order the keys arrived in.</p>
+        <pre class="gcode">test {
+  let counts : @map.Counter[String] = @map.Counter::new()
+  for word in ["to", "be", "to", "do"] {
+    let _ = counts.incr(word)
+  }
+  @test.assert_eq(counts.get("to"), 2)
+  @test.assert_eq(counts.total(), 4L)
+  @test.assert_eq(counts.most_common(n=1), [("to", 2)])
+  let _ = counts.decr("do")
+  @test.assert_eq(counts.length(), 2)
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>get("to")</dt><dd>2</dd><dt>total()</dt><dd>4</dd><dt>most_common(n=1)</dt><dd>[("to", 2)]</dd><dt>after decr("do")</dt><dd>2 keys</dd></dl></div>
+        <p>A <code>ChainMap</code> is a stack of maps read as one: a lookup falls through from the front, and a write always lands in the front map. A child scope sees its parent's settings and shadows them without touching them.</p>
+        <pre class="gcode">test {
+  let base : Map[String, Int32] = Map([])
+  base.set("port", 8080)
+  let chain : @map.ChainMap[String, Int32] = @map.ChainMap::new([base])
+  let child = chain.new_child()
+  child.set("port", 9090)
+  @test.assert_eq(child.get("port"), Some(9090))
+  @test.assert_eq(chain.get("port"), Some(8080))
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>child.get("port")</dt><dd>Some(9090)</dd><dt>chain.get("port")</dt><dd>Some(8080)</dd></dl></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-4">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step IV</div>
+          <h3>Bounded memory</h3>
+          <div class="sub">caches with a policy</div>
+        </div>
+        <div class="gbody">
+        <p>A cache owns a policy, not a data structure: the entries live in one slab of slots and the policy decides which slot is handed back when the capacity is reached. <code>set</code> returns what the insert displaced — the pair it replaced when the key was already there, the pair the policy dropped otherwise.</p>
+        <pre class="gcode">test {
+  let cache : @cache.LruCache[String, Int32] = @cache.LruCache::new(capacity=2)
+  let _ = cache.set("a", 1)
+  let _ = cache.set("b", 2)
+  let _ = cache.get("a")
+  @test.assert_eq(cache.set("c", 3), Some(("b", 2)))
+  @test.assert_eq(cache.keys().to_array(), ["a", "c"])
+  @test.assert_eq(cache.stats().hit_rate(), 1.0)
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>set("c", 3)</dt><dd>Some(("b", 2))</dd><dt>keys()</dt><dd>["a", "c"]</dd><dt>stats().hit_rate()</dt><dd>1.0</dd></dl></div>
+        <p><code>LfuCache</code> drops by access count and breaks a tie by recency; <code>ArcCache</code> moves the share of the cache given to frequent entries as it sees repeats and reports the four list sizes through <code>lists()</code>; <code>ExpiringCache</code> reads no clock of its own — it takes <code>now</code>, and every deadline is in that clock's units. That is what lets a test move time without waiting.</p>
+        <pre class="gcode">test {
+  let mut clock = 0L
+  let cache : @cache.ExpiringCache[String, Int32] = @cache.ExpiringCache::new(
+    ttl=1_000L, capacity=4, now=fn() { clock },
+  )
+  let _ = cache.set("token", 7)
+  @test.assert_eq(cache.get("token"), Some(7))
+  clock = 1_500L
+  @test.assert_eq(cache.get("token"), None)
+  @test.assert_eq(cache.is_empty(), true)
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>get("token") at clock 0</dt><dd>Some(7)</dd><dt>get("token") at clock 1500</dt><dd>None</dd></dl></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-5">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step V</div>
+          <h3>Priority queues</h3>
+          <div class="sub">heaps with handles</div>
+        </div>
+        <div class="gbody">
+        <p>A heap that hands out handles lets an entry be found and moved later. <code>IndexHeap</code> keeps a position for every key it holds, so <code>update</code> and <code>remove_at</code> cost O(log n) rather than a search.</p>
+        <pre class="gcode">test {
+  let heap : @heap.IndexHeap[Int32] = @heap.IndexHeap::new()
+  let slow = heap.insert(9)
+  let _ = heap.insert(4)
+  let _ = heap.insert(7)
+  @test.assert_eq(heap.peek(), Some(4))
+  let _ = heap.update(slow, 1)
+  @test.assert_eq(heap.pop(), Some(1))
+  @test.assert_eq(heap.contains(slow), false)
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>peek()</dt><dd>Some(4)</dd><dt>pop() after update</dt><dd>Some(1)</dd><dt>contains(slow)</dt><dd>false</dd></dl></div>
+        <p>The rest of the family: <code>DaryHeap</code> for a plain array heap, <code>PairingHeap</code> and <code>FibonacciHeap</code> for node-based heaps whose <code>decrease_key</code> costs nothing to undo, <code>MinMaxHeap</code> when both ends are wanted, and <code>RadixHeap</code> for monotone integer keys, which refuses a key below the last one it popped instead of reordering.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-6">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step VI</div>
+          <h3>Ranges and ranks</h3>
+          <div class="sub">segment trees, Fenwick, interval trees</div>
+        </div>
+        <div class="gbody">
+        <p>A segment tree combines an associative operation over a range; a lazy one takes a range update. Both answer in O(log n).</p>
+        <pre class="gcode">test {
+  let tree : @tree.SegmentTree[Int32] = @tree.SegmentTree::from_array(
+    [3, 1, 4, 1, 5], op=(a : Int32, b : Int32) =&gt; a + b, identity=0,
+  )
+  @test.assert_eq(tree.query(1, 4), 6)
+  @test.assert_eq(tree.query_all(), 14)
+  let _ = tree.set(1, 10)
+  @test.assert_eq(tree.query(0, 2), 13)
+  let sums : @tree.Fenwick[Int32] = @tree.Fenwick::from_array([5, 2, 7])
+  @test.assert_eq(sums.prefix_sum(2), 7)
+  sums.add(0, 1)
+  @test.assert_eq(sums.prefix_sum(3), 15)
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>query(1, 4)</dt><dd>6</dd><dt>query_all()</dt><dd>14</dd><dt>query(0, 2) after set</dt><dd>13</dd><dt>prefix_sum(2)</dt><dd>7</dd><dt>prefix_sum(3) after add</dt><dd>15</dd></dl></div>
+        <p>An interval tree answers which spans cover a point, and an order-statistic tree answers by rank as well as by key.</p>
+        <pre class="gcode">test {
+  let spans : @tree.IntervalTree[Int32, String] = @tree.IntervalTree::new()
+  let _ = spans.insert(start=1, end=4, "a")
+  let _ = spans.insert(start=3, end=8, "b")
+  @test.assert_eq(spans.query_point(2), [(1, 4, "a")])
+  @test.assert_eq(spans.query_point(3).length(), 2)
+  let ranks : @tree.OrderStatisticTree[Int32] = @tree.OrderStatisticTree::new()
+  for key in [5, 3, 8, 1] {
+    let _ = ranks.insert(key)
+  }
+  @test.assert_eq(ranks.count_less(5), 2)
+  @test.assert_eq(ranks.select(0), Some(1))
+  @test.assert_eq(ranks.select(2), Some(5))
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>query_point(2)</dt><dd>[(1, 4, "a")]</dd><dt>query_point(3)</dt><dd>2 spans</dd><dt>count_less(5)</dt><dd>2</dd><dt>select(0), select(2)</dt><dd>Some(1), Some(5)</dd></dl></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-7">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step VII</div>
+          <h3>Sets that merge</h3>
+          <div class="sub">union-find</div>
+        </div>
+        <div class="gbody">
+        <p><code>DisjointSet</code> starts with every element alone. <code>union</code> joins two sets and <code>connected</code> answers whether two elements are already in one. <code>copy</code> takes the whole structure with it, so a copy merges further while the original stays where it was.</p>
+        <pre class="gcode">test {
+  let sets : @tree.DisjointSet = @tree.DisjointSet::new()
+  for _ in 0..&lt;6 {
+    let _ = sets.add()
+  }
+  let _ = sets.union(0, 1)
+  let _ = sets.union(1, 2)
+  let _ = sets.union(4, 5)
+  @test.assert_eq(sets.set_count(), 3)
+  @test.assert_eq(sets.connected(0, 2), true)
+  @test.assert_eq(sets.component_size(0), 3)
+  let twin = sets.copy()
+  let _ = twin.union(2, 4)
+  let _ = twin.union(3, 5)
+  @test.assert_eq(twin.set_count(), 1)
+  @test.assert_eq(sets.set_count(), 3)
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>set_count()</dt><dd>3</dd><dt>connected(0, 2)</dt><dd>true</dd><dt>component_size(0)</dt><dd>3</dd><dt>twin.set_count()</dt><dd>1</dd><dt>sets.set_count()</dt><dd>3</dd></dl></div>
+        <p><code>DisjointSetMap</code> does the same for keys of any type: a key is interned to an index the first time it is seen, so <code>union</code>, <code>connected</code> and <code>find</code> take the keys themselves.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-8">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step VIII</div>
+          <h3>When an exact answer costs too much</h3>
+          <div class="sub">sketches</div>
+        </div>
+        <div class="gbody">
+        <p>A sketch trades accuracy for a fixed amount of memory. A Bloom filter has no false negatives; a Count-Min sketch never under-estimates; a HyperLogLog counts distinct items; a t-digest answers quantiles. Each round-trips through its own byte format, so a sketch can be written beside the data it summarises.</p>
+        <pre class="gcode">test {
+  let seen : @sketch.BloomFilter[String] = @sketch.BloomFilter::new(
+    expected_items=1000,
+  )
+  for i in 0..&lt;100 {
+    let _ = seen.insert("key-\{i}")
+  }
+  @test.assert_eq(seen.may_contain("key-42"), true)
+  @test.assert_eq(seen.may_contain("never-added"), false)
+  let bytes = seen.encode()
+  let back = @sketch.BloomFilter::decode(bytes[:])
+  @test.assert_eq(back.may_contain("key-42"), true)
+
+  let counts : @sketch.CountMinSketch[String] = @sketch.CountMinSketch::new()
+  for _ in 0..&lt;5 {
+    counts.insert("a")
+  }
+  @test.assert_eq(counts.estimate("a") &gt;= 5, true)
+  @test.assert_eq(counts.estimate("b"), 0)
+
+  let log : @sketch.HyperLogLog[Int32] = @sketch.HyperLogLog::new(precision=12)
+  for i in 0..&lt;10000 {
+    log.add(i)
+  }
+  let estimate = log.estimate()
+  @test.assert_eq(estimate &gt; 9500.0 &amp;&amp; estimate &lt; 10500.0, true)
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>may_contain("key-42")</dt><dd>true</dd><dt>may_contain("never-added")</dt><dd>false</dd><dt>decoded.may_contain(42)</dt><dd>true</dd><dt>estimate("a")</dt><dd>at least 5</dd><dt>estimate("b")</dt><dd>0</dd><dt>hyperloglog of 10000</dt><dd>within 5% of 10000</dd></dl></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-9">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step IX</div>
+          <h3>Strings and their questions</h3>
+          <div class="sub">matchers, rope, diffs</div>
+        </div>
+        <div class="gbody">
+        <p>One pattern, many patterns, every occurrence, the longest repeated substring: <code>text</code> answers each from a structure built once.</p>
+        <pre class="gcode">test {
+  let kmp = @text.Kmp::new("aba")
+  @test.assert_eq(kmp.search_all("ababa").to_array(), [0, 2])
+  let ac = @text.AhoCorasick::new(["he", "she", "hers"])
+  @test.assert_eq(ac.search_all("ushers").to_array(), [
+    (1, 1), (0, 2), (2, 2),
+  ])
+  let automaton = @text.SuffixAutomaton::new("banana")
+  @test.assert_eq(automaton.count_occurrences("ana"), 2)
+  let array = @text.SuffixArray::new("banana")
+  @test.assert_eq(array.to_array(), [5, 3, 1, 0, 4, 2])
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>Kmp("aba").search_all("ababa")</dt><dd>[0, 2]</dd><dt>AhoCorasick(three patterns)</dt><dd>(1, 1) (0, 2) (2, 2)</dd><dt>count_occurrences("ana")</dt><dd>2</dd><dt>suffix order of "banana"</dt><dd>[5, 3, 1, 0, 4, 2]</dd></dl></div>
+        <p>A <code>Rope</code> holds a document in chunks and remembers where each chunk starts, so an edit near the front does not copy the whole text. Offsets are UTF-16 code units, the unit <code>String</code> counts, and an edit that would split a surrogate pair is refused.</p>
+        <pre class="gcode">test {
+  let rope : @text.Rope = @text.Rope::from_string("the quick brown fox")
+  rope.insert(3, ", ")
+  @test.assert_eq(rope.to_string(), "the,  quick brown fox")
+  @test.assert_eq(rope.length(), 21)
+  rope.edit(start=5, end=11, "slow")
+  @test.assert_eq(rope.to_string(), "the, slow brown fox")
+  @test.assert_eq(rope.line_count(), 1)
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>insert(3, ", ")</dt><dd>"the, quick brown fox"</dd><dt>edit(5..11)</dt><dd>"the, slow brown fox"</dd><dt>line_count()</dt><dd>1</dd></dl></div>
+        <p><code>SequenceMatcher</code> follows the algorithm <code>difflib</code> uses, and the diff formats are written from it, so the output lines up with what Python prints.</p>
+        <pre class="gcode">test {
+  let patch = @text.unified_diff("a\nb\n", "a\nc\n", fromfile="old", tofile="new")
+  @test.assert_eq(patch.contains("--- old"), true)
+  @test.assert_eq(patch.contains("+++ new"), true)
+  @test.assert_eq(patch.contains("-b"), true)
+  @test.assert_eq(patch.contains("+c"), true)
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><pre class="gpatch"><span class="meta">--- old</span>
+<span class="meta">+++ new</span>
+<span class="hunk">@@ -1,2 +1,2 @@</span>
+ a
+<span class="del">-b</span>
+<span class="add">+c</span></pre></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-10">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step X</div>
+          <h3>Loops you do not have to write</h3>
+          <div class="sub">algorithms over runs</div>
+        </div>
+        <div class="gbody">
+        <p>Functions that leave the run alone take an <code>ArrayView[T]</code>; functions that change it take <code>Array[T]</code> and say so with <code>_in_place</code>; everything lazy takes and returns an <code>Iter[T]</code>.</p>
+        <pre class="gcode">test {
+  let run : Array[Int32] = [5, 1, 4, 2]
+  @test.assert_eq(@algo.bisect_left(@algo.sorted(run[:]), 4), 2)
+  @algo.nth_element_in_place(run, 1)
+  @test.assert_eq(run[1], 2)
+  @test.assert_eq(@algo.chunks(run.iter(), 2).to_array().length(), 2)
+  let pairs : @algo.Permutations[Int32] = @algo.Permutations::new(
+    [1, 2, 3], length=2,
+  )
+  @test.assert_eq(pairs.iter().to_array(), [
+    [1, 2], [1, 3], [2, 1], [2, 3], [3, 1], [3, 2],
+  ])
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>bisect_left(sorted, 4)</dt><dd>2</dd><dt>nth_element_in_place(run, 1)</dt><dd>run[1] == 2</dd><dt>chunks(run, 2)</dt><dd>2 chunks</dd><dt>Permutations([1,2,3], len=2)</dt><dd>itertools order</dd></dl></div>
+        <p><code>windows</code> walks a run in overlapping slices and <code>chunks</code> in disjoint ones; both are lazy, so a long run is read one window at a time. <code>reservoir_sample</code> draws <code>k</code> elements from a stream whose length is not known in advance, in one pass, with every element equally likely — pass a <code>seed</code> when the draw has to repeat.</p>
+        <pre class="gcode">test {
+  let run : Array[Int32] = [1, 2, 3, 4, 5]
+  @test.assert_eq(@algo.windows(run[:], 3).to_array(), [
+    [1, 2, 3], [2, 3, 4], [3, 4, 5],
+  ])
+  let drawn = @algo.reservoir_sample(run[:].iter(), k=2, seed=7UL)
+  @test.assert_eq(drawn.length(), 2)
+  @test.assert_eq(drawn, @algo.reservoir_sample(run[:].iter(), k=2, seed=7UL))
+  @test.assert_eq(@algo.reservoir_sample(run[:].iter(), k=9, seed=7UL), run)
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>windows(run, 3)</dt><dd>[[1, 2, 3], [2, 3, 4], [3, 4, 5]]</dd><dt>reservoir_sample(k=2)</dt><dd>two elements, the same two on every run</dd><dt>reservoir_sample(k=9)</dt><dd>[1, 2, 3, 4, 5]</dd></dl></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-11">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step XI</div>
+          <h3>Perfect hashes at build time</h3>
+          <div class="sub">the #phf annotations</div>
+        </div>
+        <div class="gbody">
+        <p>A <code>phf</code> table hashes its keys once, while it is built, so a lookup is a single comparison. The annotation puts that build in the compiler: the list stays as it is written and the generated table reads it.</p>
+        <p>&lt;!-- nocheck --&gt;</p>
+        <pre class="gcode">#phf.ordered_map
+let keywords : Array[(String, Token)] = [("fn", Fn), ("let", Let), ("match", Match)]
+
+fn token(word : String) -&gt; Token? {
+  keywords_phf.get(word)
+}</pre>
+        <p>The keys are literal <code>String</code>, <code>Int</code>, <code>Int64</code> or <code>UInt64</code> values; the values are any expression. The table is <code>keywords_phf</code>, public when the list is; <code>name="..."</code> renames it, and <code>build="search"</code>, <code>"quick"</code> or <code>"minimal"</code> with <code>seed="N"</code> set the layout. A list changed without running the generator again either still fits its layout or stops the program at start-up with the reason.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-12">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step XII</div>
+          <h3>Failure, and the seed</h3>
+          <div class="sub">one error, one seed</div>
+        </div>
+        <div class="gbody">
+        <p>Input that cannot be used is refused with one type, <code>Refused</code>: a capacity of zero, a rate outside <code>(0, 1)</code>, a branching factor below 2, two sketches of different shape asked to combine. A lookup that finds nothing returns <code>None</code> instead, and an out-of-range index aborts as <code>Array</code> does.</p>
+        <pre class="gcode">test {
+  let built : Result[Unit, Int32] = try {
+    let cache : @cache.LruCache[String, Int32] = @cache.LruCache::new(capacity=0)
+    let _ = cache
+    Ok(())
+  } catch {
+    @spec.Refused::Capacity(got~) =&gt; Err(got)
+    _ =&gt; Err(-1)
+  }
+  @test.assert_eq(built, Err(0))
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>LruCache::new(capacity=0)</dt><dd>Refused::Capacity(got=0)</dd></dl></div>
+        <p>Hashed containers take a <code>hash_seed</code>, drawn once per process from the platform's entropy, so a key set chosen to collide in one run does not collide in the next. Pass <code>hash_seed=0</code>, or any fixed value, when a run has to be reproducible. The order of an <code>IndexMap</code> never depends on it.</p>
+        <pre class="gcode">test {
+  let a : @map.IndexMap[String, Int32] = @map.IndexMap::new(hash_seed=0)
+  let b : @map.IndexMap[String, Int32] = @map.IndexMap::new(hash_seed=0)
+  let _ = a.set("x", 1)
+  let _ = b.set("x", 1)
+  @test.assert_eq(a.keys().to_array(), b.keys().to_array())
+  @test.assert_eq(@spec.hash_seed_from(b"moonstl"), @spec.hash_seed_from(b"moonstl"))
+}</pre>
+        <div class="gout"><span class="lbl">answer</span><dl><dt>two maps at hash_seed=0</dt><dd>the same layout, the same order</dd><dt>hash_seed_from(b"moonstl")</dt><dd>the same number on every run</dd></dl></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec" id="step-13">
+      <div class="wrap">
+        <div class="shead">
+          <div class="num">Step XIII</div>
+          <h3>Where to go next</h3>
+          <div class="sub"></div>
+        </div>
+        <div class="gbody">
+        <p>The <a href="index.html#reference">reference</a> lists every public type, method and function with the description it carries in the source. The <a href="index.html#workbench">workbench</a> runs the library compiled to WebAssembly, one specimen at a time. The <a href="index.html#families">packages</a> page says which family holds what. Everything here is also in the <a href="https://github.com/moonbitstack/moonstl">repository</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="gsec">
+      <div class="wrap">
+        <div class="gnext">
+          <a class="btn" href="index.html">The title page</a>
+          <a class="btn" href="index.html#workbench">The workbench</a>
+          <a class="btn solid" href="index.html#reference">The reference</a>
+        </div>
+      </div>
+    </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="rule2"></div>
+    <div class="colophon">
+      <p class="l">Bound in leather and steel, after the manner of the
+        <a href="https://www.sgi.com/tech/stl/" rel="noopener">SGI STL reference</a> and
+        <a href="https://en.cppreference.com/" rel="noopener">cppreference</a>.</p>
+      <p class="l" style="margin-top:8px"><a href="https://github.com/moonbitstack/moonstl" rel="noopener">source</a> ·
+        <a href="https://mooncakes.io/docs/moonbitstack/moonstl" rel="noopener">mooncakes</a> ·
+        <a href="index.html">the title page</a></p>
+      <p class="fine">MoonBit STL · MIT · set in Constantia &amp; Cascadia · checked on three systems</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

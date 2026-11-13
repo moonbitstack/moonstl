@@ -78,7 +78,7 @@ jobs:
       - name: the code in the docs compiles
         if: runner.os == 'Linux'
         run: |
-          python scripts/check_snippets.py
+          python scripts/check_snippets.py README.md site/guide.md docs/skills/moonstl/SKILL.md
 
       - name: the site is in sync and runs
         if: runner.os == 'Linux'

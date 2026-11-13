@@ -43,7 +43,7 @@ jobs:
       - name: stage the public files
         run: |
           mkdir -p dist
-          cp site/index.html site/moonstl.wasm site/api.json dist/
+          cp site/index.html site/guide.html site/style.css site/moonstl.wasm site/api.json dist/
           touch dist/.nojekyll
           ls -la dist
 

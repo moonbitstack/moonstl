@@ -2,8 +2,9 @@
 """CI gate for the showcase site. It proves, without depending on the exact
 moon version that produced the committed module:
 
-  1. the API reference (site/api.json) is in sync with the package interfaces —
-     regenerate it and require no diff;
+  1. the API reference (site/api.json) is in sync with the package interfaces,
+     and the guide (site/guide.html) with its markdown — regenerate both and
+     require no diff;
   2. the bridge compiles to a wasm-gc module and that module exports the two
      functions the page calls (`run`, `names`);
   3. the page itself works — serve site/, open it in a headless browser, and
@@ -182,13 +183,16 @@ def check_page():
 
 
 def main():
-    # 1. API reference must match the interfaces.
+    # 1. The generated pages must match what they are generated from.
     sh([sys.executable, str(ROOT / "scripts" / "gen_api.py")])
-    diff = subprocess.run(["git", "diff", "--exit-code", "--", "site/api.json"], cwd=ROOT)
+    sh([sys.executable, str(ROOT / "scripts" / "gen_guide.py")])
+    diff = subprocess.run(
+        ["git", "diff", "--exit-code", "--", "site/api.json", "site/guide.html"], cwd=ROOT
+    )
     if diff.returncode != 0:
         fail(
-            "site/api.json is out of sync with the package interfaces "
-            "(run scripts/gen_api.py and commit the result)"
+            "a generated page is out of sync (run scripts/gen_api.py and "
+            "scripts/gen_guide.py, then commit the result)"
         )
 
     # 2. Compile the bridge to wasm-gc.
@@ -202,7 +206,7 @@ def main():
     # 3. The page must actually run it.
     check_page()
 
-    print("site check passed: api.json in sync, wasm-gc module builds and exports run/names, page runs it")
+    print("site check passed: api.json and guide.html in sync, wasm-gc module builds and exports run/names, page runs it")
 
 
 if __name__ == "__main__":
