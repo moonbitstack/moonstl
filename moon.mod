@@ -1,6 +1,6 @@
 name = "moonbitstack/moonstl"
 
-version = "0.1.3"
+version = "0.2.0"
 
 readme = "README.md"
 
@@ -76,7 +76,7 @@ description = "Data structures and algorithms the MoonBit core library leaves ou
 source = "src"
 
 import {
-  "moonbitstack/moonseed@0.1.3",
+  "moonbitstack/moonseed@0.2.0",
   "moonbitstack/moonast@0.3.0",
   "moonbitlang/parser@0.4.8",
   "moonbitlang/async@0.22.5",
