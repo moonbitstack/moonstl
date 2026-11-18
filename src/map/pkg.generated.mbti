@@ -219,7 +219,7 @@ pub fn[K, V] IndexMap::copy(Self[K, V]) -> Self[K, V]
 pub fn[K : Eq, V : Eq] IndexMap::equal(Self[K, V], Self[K, V]) -> Bool
 pub fn[K : Hash + Eq, V] IndexMap::from_array(ArrayView[(K, V)], hash_seed? : Int32) -> Self[K, V]
 pub fn[K : Hash + Eq, V] IndexMap::from_iter(Iter[(K, V)], hash_seed? : Int32) -> Self[K, V]
-pub fn[K : Hash + Eq + @json.FromJson, V : @json.FromJson] IndexMap::from_json(@json.Json, @json.JsonPath) -> Self[K, V] raise @json.JsonDecodeError
+pub fn[K : Hash + Eq + @json.FromJson, V : @json.FromJson] IndexMap::from_json(@json.Json, @json.DecodeContext) -> Self[K, V] raise @json.JsonDecodeError
 pub fn[K : Hash + Eq, V] IndexMap::get(Self[K, V], K) -> V?
 pub fn[K : Hash + Eq, V] IndexMap::get_full(Self[K, V], K) -> (Int32, K, V)?
 pub fn[K, V] IndexMap::get_index(Self[K, V], Int32) -> (K, V)?

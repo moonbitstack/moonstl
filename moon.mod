@@ -78,6 +78,6 @@ source = "src"
 import {
   "moonbitstack/moonseed@0.2.0",
   "moonbitstack/moonast@0.3.0",
-  "moonbitlang/parser@0.4.8",
+  "moonbitlang/parser@0.4.9",
   "moonbitlang/async@0.22.5",
 }

@@ -85,7 +85,7 @@ pub(all) struct HeapKey[T] {
   generation : UInt32
 }
 pub fn[T] HeapKey::equal(Self[T], Self[T]) -> Bool
-pub fn[T] HeapKey::from_json(@json.Json, @json.JsonPath) -> Self[T] raise @json.JsonDecodeError
+pub fn[T] HeapKey::from_json(@json.Json, @json.DecodeContext) -> Self[T] raise @json.JsonDecodeError
 pub fn[T] HeapKey::hash(Self[T]) -> Int32
 pub fn[T] HeapKey::hash_combine(Self[T], Hasher) -> Unit
 pub fn[T] HeapKey::not_equal(Self[T], Self[T]) -> Bool

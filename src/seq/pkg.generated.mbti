@@ -243,7 +243,7 @@ pub(all) struct SlotKey[T] {
   generation : UInt32
 }
 pub fn[T : Eq] SlotKey::equal(Self[T], Self[T]) -> Bool
-pub fn[T] SlotKey::from_json(@json.Json, @json.JsonPath) -> Self[T] raise @json.JsonDecodeError
+pub fn[T] SlotKey::from_json(@json.Json, @json.DecodeContext) -> Self[T] raise @json.JsonDecodeError
 pub fn[T : Hash] SlotKey::hash(Self[T]) -> Int32
 pub fn[T : Hash] SlotKey::hash_combine(Self[T], Hasher) -> Unit
 pub fn[T : Eq] SlotKey::not_equal(Self[T], Self[T]) -> Bool
