@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "0.2.1",
   "packages": [
     {
       "package": "spec",
@@ -1343,7 +1343,7 @@
             },
             {
               "name": "from_json",
-              "sig": "fn<T> from_json(@json.Json, @json.JsonPath) -> Self[T] raise @json.JsonDecodeError",
+              "sig": "fn<T> from_json(@json.Json, @json.DecodeContext) -> Self[T] raise @json.JsonDecodeError",
               "kind": "method",
               "doc": "From `FromJson`: reads a value back, refusing a document of the wrong shape.",
               "derived": true
@@ -2834,7 +2834,7 @@
             },
             {
               "name": "from_json",
-              "sig": "fn<K : Hash + Eq + @json.FromJson, V : @json.FromJson> from_json(@json.Json, @json.JsonPath) -> Self[K, V] raise @json.JsonDecodeError",
+              "sig": "fn<K : Hash + Eq + @json.FromJson, V : @json.FromJson> from_json(@json.Json, @json.DecodeContext) -> Self[K, V] raise @json.JsonDecodeError",
               "kind": "method",
               "doc": "From `FromJson`: reads a value back, refusing a document of the wrong shape.",
               "derived": true
@@ -4685,7 +4685,7 @@
             },
             {
               "name": "from_json",
-              "sig": "fn<T> from_json(@json.Json, @json.JsonPath) -> Self[T] raise @json.JsonDecodeError",
+              "sig": "fn<T> from_json(@json.Json, @json.DecodeContext) -> Self[T] raise @json.JsonDecodeError",
               "kind": "method",
               "doc": "From `FromJson`: reads a value back, refusing a document of the wrong shape.",
               "derived": true
